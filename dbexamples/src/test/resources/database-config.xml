@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <!--List of Database Connections goes here  -->
+    <bean id="H2-HRDB" class="org.qamatic.mintleaf.Mintleaf$DatabaseBuilder">
+        <constructor-arg type="org.qamatic.mintleaf.DbType" value="H2"/>
+        <constructor-arg>
+            <bean class="org.qamatic.mintleaf.core.JdbcDriverSource">
+                <property name="driverClassName" value="org.h2.Driver"/>
+                <property name="url" value="jdbc:h2:file:./target/HRDB;mv_store=false;"/>
+                <!--<property name="username" value="${jdbc.username}"/>-->
+                <!--<property name="password" value="${jdbc.password}"/>-->
+            </bean>
+        </constructor-arg>
+    </bean>
+
+    <!--List of schemaVersions goes here-->
+
+
+</beans>

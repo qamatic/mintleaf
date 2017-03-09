@@ -1,0 +1,8 @@
+Manifest-Version: 1.0
+Build-Number: 1.14
+Archiver-Version: Plexus Archiver
+Built-By: senips
+Created-By: Apache Maven
+Build-Jdk: 1.8.0_31
+Main-Class: org.qamatic.mintleaf.MainCli
+

@@ -1,0 +1,15 @@
+databases:
+  - id: abcdb
+    properties:
+        poolSize: '100'
+    type: H2
+    url: ''
+mintleaf:
+    description: 'Database and Schema version configuration file'
+    file version: '1.0'
+schemaVersions:
+  - changeSets:
+      - create schema
+      - load seed data
+    scriptLocation: ./path/*.sql
+    version: '1.0'
