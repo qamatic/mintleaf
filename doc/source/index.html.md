@@ -3,7 +3,7 @@ title: Mintleaf Documentation
  
 toc_footers:  
   - <a href='http://getmintleaf.org'>getmintleaf.org</a>
-  - <a href='https://github.com/senips/mintleaf'>Source @ github</a>
+  - <a href='https://github.com/qamatic/mintleaf'>Source @ github</a>
  
 
 includes:
