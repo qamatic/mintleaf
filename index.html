@@ -476,9 +476,59 @@ It&rsquo;s very easy to add changeset definition on your exising sql files if yo
 </code></pre>
 <h1 id="data-compare">Data compare</h1>
 
-<p>With Mintleaf, you can literally compare two data sets and they need not be a database table. For example you can compare CSV against a database table or list of object against CSV or a database table or vice versa.</p>
+<p>With Mintleaf, you can compare two data sets of any kind and it is not just limited to between two database tables. For example one can compare CSV file against a database table or list of objects against a CSV file or against a database table or vice versa. See advanced section as how to implement your own custom comparer implementation.</p>
 
-<p>However out of the box there are modes are availabe</p>
+<h2 id="comparing-database-two-tables">Comparing database two tables</h2>
+<pre class="highlight java tab-java"><code>
+        <span class="n">DatabaseContext</span> <span class="n">db</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Mintleaf</span><span class="o">.</span><span class="na">DatabaseBuilder</span><span class="o">().</span>
+                <span class="n">withDriverSource</span><span class="o">(</span><span class="n">JdbcDataSource</span><span class="o">.</span><span class="na">class</span><span class="o">).</span>
+                <span class="n">withUrl</span><span class="o">(</span><span class="s">"jdbc:h2:file:./target/H2DbScriptTests;mv_store=false;"</span><span class="o">).</span>
+                <span class="n">build</span><span class="o">();</span>
+
+       <span class="c1">//this db has two tables called USERS and USERS_IMPORTED_TABLE</span>
+       <span class="c1">//tables can come from two different databases too but for this example just one database having two tables</span>
+       <span class="n">FluentJdbc</span> <span class="n">sourceTable</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="na">queryBuilder</span><span class="o">().</span><span class="na">withSql</span><span class="o">(</span><span class="s">"SELECT * FROM HRDB.USERS"</span><span class="o">);</span>
+       <span class="n">FluentJdbc</span> <span class="n">targetTable</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="na">queryBuilder</span><span class="o">().</span><span class="na">withSql</span><span class="o">(</span><span class="s">"SELECT * FROM HRDB.USERS_IMPORTED_TABLE"</span><span class="o">);</span>
+
+       <span class="c1">//so here is how you compare between HRDB.USERS and HRDB.USERS_IMPORTED_TABLE</span>
+
+        <span class="kd">final</span> <span class="n">ConsoleLogger</span> <span class="n">logger</span> <span class="o">=</span> <span class="k">new</span> <span class="n">ConsoleLogger</span><span class="o">();</span>
+        <span class="n">DataComparer</span> <span class="n">dataComparer</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Mintleaf</span><span class="o">.</span><span class="na">ComparerBuilder</span><span class="o">().</span>
+                <span class="n">withSourceTable</span><span class="o">(</span><span class="n">sourceList</span><span class="o">).</span>
+                <span class="n">withTargetTable</span><span class="o">(</span><span class="n">targetListList</span><span class="o">).</span>
+                <span class="n">withMatchingResult</span><span class="o">((</span><span class="n">sourceRow</span><span class="o">,</span> <span class="n">targetRow</span><span class="o">)</span> <span class="o">-&gt;</span> <span class="o">{</span>
+
+                    <span class="c1">//here is where you add your compare criteria and along with you can generate reports as well if you want.</span>
+                    <span class="c1">//you would get here source row, column number, row number and similarly for targetrow so its upto you define the compare criteria</span>
+
+                    <span class="n">String</span> <span class="n">sourceColumnValue</span> <span class="o">=</span> <span class="o">(</span><span class="n">String</span><span class="o">)</span> <span class="n">sourceRow</span><span class="o">.</span><span class="na">Row</span><span class="o">.</span><span class="na">getValue</span><span class="o">(</span><span class="n">sourceRow</span><span class="o">.</span><span class="na">ColumnNumber</span><span class="o">);</span>
+                    <span class="n">String</span> <span class="n">targetColumnValue</span> <span class="o">=</span> <span class="o">(</span><span class="n">String</span><span class="o">)</span> <span class="n">sourceRow</span><span class="o">.</span><span class="na">Row</span><span class="o">.</span><span class="na">getValue</span><span class="o">(</span><span class="n">sourceRow</span><span class="o">.</span><span class="na">ColumnNumber</span><span class="o">);</span>
+
+                    <span class="k">if</span> <span class="o">(</span><span class="n">sourceColumnValue</span><span class="o">.</span><span class="na">equals</span><span class="o">(</span><span class="n">targetColumnValue</span><span class="o">)){</span>
+                        <span class="n">logger</span><span class="o">.</span><span class="na">info</span><span class="o">(</span><span class="s">"matches"</span><span class="o">);</span>
+                    <span class="o">}</span><span class="k">else</span> <span class="o">{</span>
+                        <span class="n">logger</span><span class="o">.</span><span class="na">info</span><span class="o">(</span><span class="s">"no match"</span><span class="o">);</span>
+                    <span class="o">}</span>
+
+                    <span class="c1">//here another way to compare column values in short</span>
+                    <span class="k">if</span> <span class="o">(</span><span class="n">sourceRow</span><span class="o">.</span><span class="na">asString</span><span class="o">().</span><span class="na">equals</span><span class="o">(</span><span class="n">targetRow</span><span class="o">.</span><span class="na">asString</span><span class="o">())</span> <span class="o">){</span>
+                        <span class="n">logger</span><span class="o">.</span><span class="na">info</span><span class="o">(</span><span class="s">"match"</span><span class="o">);</span>
+                    <span class="o">}</span>
+                    <span class="k">else</span>   <span class="o">{</span>
+                        <span class="n">logger</span><span class="o">.</span><span class="na">info</span><span class="o">(</span><span class="s">"no match"</span><span class="o">);</span>
+                    <span class="o">}</span>
+
+                    <span class="c1">//logger.info(String.format("[Source:%s] [Target:%s]", sourceRowState, targetRowState));</span>
+                <span class="o">}).</span>
+                <span class="n">build</span><span class="o">();</span>
+
+
+        <span class="c1">//run data compare</span>
+        <span class="n">dataComparer</span><span class="o">.</span><span class="na">execute</span><span class="o">();</span>   
+
+
+</code></pre>
+<h2 id="compare-csv-and-a-datbase-table">Compare CSV and a datbase table</h2>
 
       </div>
       <div class="dark-box">
