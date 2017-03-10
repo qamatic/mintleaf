@@ -36,7 +36,7 @@ package org.qamatic.mintleaf.core;
 
 import org.qamatic.mintleaf.MintLeafException;
 import org.qamatic.mintleaf.MintLeafLogger;
-import org.qamatic.mintleaf.RowWrapper;
+import org.qamatic.mintleaf.ComparableRow;
 
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
@@ -45,7 +45,7 @@ import java.sql.SQLException;
 /**
  * Created by qamatic on 3/3/16.
  */
-public class ResultSetRowWrapper implements RowWrapper {
+public class ResultSetRowWrapper implements ComparableRow {
 
     private static final MintLeafLogger logger = MintLeafLogger.getLogger(ResultSetRowWrapper.class);
     private ResultSet resultSet;

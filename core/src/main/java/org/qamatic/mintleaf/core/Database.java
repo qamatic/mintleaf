@@ -61,7 +61,7 @@ public class Database implements DbQueries {
 
         FluentJdbc fluentJdbc = driverSource.queryBuilder().withSql(sql).query(new DataRowListener<Object>() {
 
-            public T eachRow(int row, RowWrapper dr) {
+            public T eachRow(int row, ComparableRow dr) {
                 try {
                     rows.add(listener.eachRow(row, dr));
                 } catch (MintLeafException e) {

@@ -36,7 +36,7 @@ package org.qamatic.mintleaf.core;
 
 import org.qamatic.mintleaf.MintLeafException;
 import org.qamatic.mintleaf.RowListWrapper;
-import org.qamatic.mintleaf.RowWrapper;
+import org.qamatic.mintleaf.ComparableRow;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -46,7 +46,7 @@ import java.util.List;
  */
 public class ObjectRowListWrapper implements RowListWrapper {
 
-    private List<RowWrapper> list;
+    private List<ComparableRow> list;
 
     private int current = -1;
 
@@ -66,22 +66,22 @@ public class ObjectRowListWrapper implements RowListWrapper {
     }
 
     @Override
-    public RowWrapper row() throws MintLeafException {
+    public ComparableRow row() throws MintLeafException {
         if (this.current >= this.list.size()) {
             return null;
         }
         return this.list.get(current);
     }
 
-    public List<RowWrapper> getList() {
+    public List<ComparableRow> getList() {
         if (list == null) {
             list = new ArrayList<>();
         }
         return list;
     }
 
-    public void setList(List<? extends RowWrapper> list) {
-        this.list = (List<RowWrapper>) list;
+    public void setList(List<? extends ComparableRow> list) {
+        this.list = (List<ComparableRow>) list;
     }
 
 

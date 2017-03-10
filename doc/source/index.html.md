@@ -290,13 +290,174 @@ Suppose you have a data in a CSV file called abcd.csv and want to load it in to 
  
 #Data compare
 
-With Mintleaf, you can compare two data sets of any kind and it is not just limited to between two database tables. For example one can compare CSV file against a database table or list of objects against a CSV file or against a database table or vice versa. However out of the box implementations are available between for CSV and database tables.  See advanced section as how to implement your own custom comparer implementation.
+With Mintleaf, you can compare two data sets of any kind and it is not just limited to between two database tables. For example one can compare CSV file against a database table or list of objects against a CSV file or against a database table or vice versa. See advanced section as how to implement your own custom comparer implementation.
 
 
 
-## Comparing two lists of objects
+## Comparing two database tables
+
+```java
+
+        DatabaseContext db = new Mintleaf.DatabaseBuilder().
+                withDriverSource(JdbcDataSource.class).
+                withUrl("jdbc:h2:file:./target/H2DbScriptTests;mv_store=false;").
+                build();
+                
+       //this db has two tables called USERS and USERS_IMPORTED_TABLE
+       //tables can come from two different databases too but for this example just one database having two tables
+       FluentJdbc sourceTable = db.queryBuilder().withSql("SELECT * FROM HRDB.USERS");
+       FluentJdbc targetTable = db.queryBuilder().withSql("SELECT * FROM HRDB.USERS_IMPORTED_TABLE");
+       
+       //so here is how you compare between HRDB.USERS and HRDB.USERS_IMPORTED_TABLE
+       
+        final ConsoleLogger logger = new ConsoleLogger();
+        DataComparer dataComparer = new Mintleaf.ComparerBuilder().
+                withSourceTable(sourceList).
+                withTargetTable(targetListList).
+                withMatchingResult((sourceRow, targetRow) -> {
+                    
+                    //here is where you add your compare criteria and along with you can generate reports as well if you want.
+                    //you would get here source row, column number, row number and similarly for targetrow so its upto you define the compare criteria
+                    
+                    String sourceColumnValue = (String) sourceRow.Row.getValue(sourceRow.ColumnNumber);
+                    String targetColumnValue = (String) sourceRow.Row.getValue(sourceRow.ColumnNumber);
+                    
+                    if (sourceColumnValue.equals(targetColumnValue)){
+                        logger.info("matches");
+                    }else {
+                        logger.info("no match");
+                    }
+                    
+                    //here another way to compare column values in short
+                    if (sourceRow.asString().equals(targetRow.asString()) ){
+                        logger.info("match");
+                    }
+                    else   {
+                        logger.info("no match");
+                    }
+                    
+                    //logger.info(String.format("[Source:%s] [Target:%s]", sourceRowState, targetRowState));
+                }).
+                build();
+
+
+        //run data compare
+        dataComparer.execute();   
+
+                
+```
 
 
 
 
 
+## Compare two list of objects
+
+For example you have a pojo class looks like the following.  For simplicity purpose no getter/setters for now but it has just two member columns UserName and Country. 
+
+
+```java   
+   public class User {         
+        public String UserName;
+        public String Country;
+   } 
+    
+```
+
+**now create two different list of Users.** 
+
+```java
+
+    //create a source list of users
+   List<User> sourceUserList = new ArrayList<User> ();
+   sourceUserList.add(new User(){
+                                      {
+                                          UserName = "Tomatoe";
+                                          Country = "USA";
+                                      }
+                                  });
+                                  
+   //create a target list of users to be compared                               
+   List<User> targetUserList = new ArrayList<User> ();
+   targetUserList.add(new User(){
+                                         {
+                                             UserName = "Tomatoe";
+                                             Country = "USA";
+                                         }
+                                     });
+```
+
+
+In order to do compare between _sourceUserList and targetUserList_, you must implement an interface **ComparableRow** on User class.   When you implement **ComparableRow** interface, you will have to override **getMetaData()** and **getValue()** methods as shown below.   Basically you provide column information as opposed a object properties so this way one can easily deal with nest objects and calculated column values manipluated before returning them.  So you can also implemnent some custom auto inferring mechanism like spring beans via annotations is an idea for those who wants it but its is not the scope here and Mintleaf provides complete freedom to the user as how they would like to implement it.  
+
+
+
+```java
+
+        private class User implements ComparableRow {
+    
+            private ColumnMetaDataCollection metaDataCollection;
+    
+            public String UserName;
+            public String Country;
+    
+            @Override
+            public Object getValue(int columnIndex) throws MintLeafException {
+                switch (columnIndex) {
+                    case 0:
+                        return UserName;
+                    case 1:
+                        return Country;
+                }
+                return null;
+            }
+    
+            @Override
+            public ColumnMetaDataCollection getMetaData() throws MintLeafException {
+                if (metaDataCollection == null) {
+                    metaDataCollection = new ColumnMetaDataCollection("USERS");
+                    metaDataCollection.add(new Column("UserName"));
+                    metaDataCollection.add(new Column("Country"));
+                }
+                return metaDataCollection;
+            }
+        }
+
+```
+
+
+Lets see how compare works between sourceUserList and targetUserList,  
+
+
+```java
+
+        //logger
+        final ConsoleLogger logger = new ConsoleLogger();
+        
+        //create comparer
+        DataComparer dataComparer = new Mintleaf.ComparerBuilder().
+                withSourceTable(sourceUserList).
+                withTargetTable(targetUserList).
+                withMatchingResult(new ComparerListener() {
+                    @Override
+                    public void OnCompare(RowState sourceRow, RowState targetRow) throws MintLeafException {
+                        
+                       // logger.info(String.format("[Source:%s] [Target:%s]", sourceRow, targetRow));
+                   
+                        
+                        String sourceColumnValue = sourceRow.Row.getValue(sourceRow.ColumnNumber).toString(); // alternate code: sourceRow.asString();
+                        String targetColumnValue = sourceRow.Row.getValue(sourceRow.ColumnNumber).toString(); // alternate code: targetRow.asString();
+                        if (sourceColumnValue.equals(targetColumnValue)) {
+                        
+                            logger.info("matches");
+                        } else {
+                            logger.info("no match");
+                        }
+
+                    }
+                }).
+                build();
+
+        //compare now
+        dataComparer.execute();
+```

@@ -39,7 +39,7 @@ import org.apache.commons.csv.CSVParser;
 import org.apache.commons.csv.CSVRecord;
 import org.qamatic.mintleaf.DataRowListener;
 import org.qamatic.mintleaf.MintLeafException;
-import org.qamatic.mintleaf.RowWrapper;
+import org.qamatic.mintleaf.ComparableRow;
 
 import java.io.IOException;
 import java.io.Reader;
@@ -66,7 +66,7 @@ public class CsvImportFlavour implements ImportFlavour {
         try {
             parser = getCSVParser();
 
-            final CsvSourceRowWrapperWrapper csvRowWrapper = new CsvSourceRowWrapperWrapper();
+            final CsvSourceRowWrapper csvRowWrapper = new CsvSourceRowWrapper();
             int i = 0;
             for (CSVRecord record : parser) {
                 csvRowWrapper.setRecord(record);
@@ -79,7 +79,7 @@ public class CsvImportFlavour implements ImportFlavour {
     }
 
 
-    private class CsvSourceRowWrapperWrapper implements RowWrapper {
+    private class CsvSourceRowWrapper implements ComparableRow {
         private CSVRecord record;
 
 

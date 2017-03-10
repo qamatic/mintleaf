@@ -59,7 +59,6 @@ public class OrderedListComparator implements DataComparer {
         DataComparer dataComparer = new OrderedListComparator();
         dataComparer.setSourceTable(sourceTable);
         dataComparer.setTargetTable(targetTable);
-        //dataComparer.setComparerListener(new ConsoleComparerListener());
         dataComparer.setRowMatcher(new OrderedColumnMatcher());
         return dataComparer;
     }
@@ -76,11 +75,15 @@ public class OrderedListComparator implements DataComparer {
         return dataComparer;
     }
 
+    protected RowState getRowStateInstance(){
+        return new RowState();
+    }
+
     @Override
     public void execute() throws MintLeafException {
         assertBefore();
-        final RowState sourceRowState = new RowState();
-        final RowState targetRowState = new RowState();
+        final RowState sourceRowState = getRowStateInstance();
+        final RowState targetRowState = getRowStateInstance();
         this.sourceTable.resetAll();
         this.targetTable.resetAll();
         while (this.sourceTable.moveNext()) {

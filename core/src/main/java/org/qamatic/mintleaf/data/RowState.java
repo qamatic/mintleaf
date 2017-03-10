@@ -35,7 +35,7 @@
 package org.qamatic.mintleaf.data;
 
 import org.qamatic.mintleaf.MintLeafException;
-import org.qamatic.mintleaf.RowWrapper;
+import org.qamatic.mintleaf.ComparableRow;
 
 /**
  * Created by qamatic on 3/5/16.
@@ -44,7 +44,7 @@ public class RowState {
     public int ColumnNumber = -1;
     public int RowNumber = -1;
     public int IsSurplusRow;
-    public RowWrapper Row;
+    public ComparableRow Row;
 
     @Override
     public String toString() {

@@ -36,7 +36,7 @@ package org.qamatic.mintleaf.core;
 
 import org.qamatic.mintleaf.MintLeafException;
 import org.qamatic.mintleaf.RowListWrapper;
-import org.qamatic.mintleaf.RowWrapper;
+import org.qamatic.mintleaf.ComparableRow;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -65,7 +65,7 @@ public class ResultSetRowListWrapper implements RowListWrapper {
     }
 
     @Override
-    public RowWrapper row() throws MintLeafException {
+    public ComparableRow row() throws MintLeafException {
         return new ResultSetRowWrapper(list);
     }
 

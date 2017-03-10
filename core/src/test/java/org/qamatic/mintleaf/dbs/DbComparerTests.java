@@ -101,9 +101,19 @@ public class DbComparerTests extends H2TestCase {
         DataComparer dataComparer = new Mintleaf.ComparerBuilder().
                 withSourceTable(sourceList).
                 withTargetTable(targetListList).
-                withMatchingResult((sourceRowState, targetRowState) -> {
-                    actuals.add(String.format("[Source:%s] [Target:%s]", sourceRowState, targetRowState));
+                withMatchingResult((sourceRow, targetRow) -> {
+                    actuals.add(String.format("[Source:%s] [Target:%s]", sourceRow, targetRow));
                     logger.info(actuals.get(actuals.size() - 1));
+
+                    String sourceColumnValue = (String) sourceRow.Row.getValue(sourceRow.ColumnNumber+1);
+                    String targetColumnValue = (String) sourceRow.Row.getValue(sourceRow.ColumnNumber+1);
+
+                    if (sourceColumnValue.equals(targetColumnValue)){
+                        logger.info("matches");
+                    }else {
+                        logger.info("no match");
+                    }
+
                 }).
                 build();
 

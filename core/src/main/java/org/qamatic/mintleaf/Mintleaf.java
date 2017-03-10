@@ -35,7 +35,6 @@
 package org.qamatic.mintleaf;
 
 import org.qamatic.mintleaf.builders.DbContextBuilder;
-import org.qamatic.mintleaf.core.Database;
 import org.qamatic.mintleaf.core.ObjectRowListWrapper;
 import org.qamatic.mintleaf.data.ComparerListener;
 import org.qamatic.mintleaf.data.OrderedColumnMatcher;
@@ -61,7 +60,7 @@ public class Mintleaf {
         private ComparerListener comparerListener;//= new ConsoleComparerListener();
         private RowMatcher rowMatcher = new OrderedColumnMatcher();
 
-        public ComparerBuilder withSourceTable(List<? extends RowWrapper> sourceTable) {
+        public ComparerBuilder withSourceTable(List<? extends ComparableRow> sourceTable) {
             this.sourceTable = new ObjectRowListWrapper() {{
                 setList(sourceTable);
             }};
@@ -73,7 +72,7 @@ public class Mintleaf {
             return this;
         }
 
-        public ComparerBuilder withTargetTable(List<? extends RowWrapper> targetTable) {
+        public ComparerBuilder withTargetTable(List<? extends ComparableRow> targetTable) {
             this.targetTable = new ObjectRowListWrapper() {{
                 setList(targetTable);
             }};

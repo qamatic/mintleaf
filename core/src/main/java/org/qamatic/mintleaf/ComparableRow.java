@@ -35,15 +35,18 @@
 package org.qamatic.mintleaf;
 
 import java.sql.ResultSetMetaData;
+import java.sql.SQLException;
 
 /**
  * Created by qamatic on 3/3/16.
  */
-public interface RowWrapper {
+public interface ComparableRow {
 
     Object getValue(int columnIndex) throws MintLeafException;
 
-    Object getValue(String columnName) throws MintLeafException;
+    default Object getValue(String columnName) throws MintLeafException{
+        return getValue(getIndex(columnName));
+    }
 
     default String asString(String columnName) throws MintLeafException {
         return getValue(columnName).toString();
@@ -53,7 +56,28 @@ public interface RowWrapper {
         return -1;
     }
 
-    int count() throws MintLeafException ;
+    default int getIndex(String columnName) throws MintLeafException {
+        columnName = columnName.toUpperCase();
+        int j = 0;
+        try {
+            for (int i = 0; i < getMetaData().getColumnCount(); i++) {
+                if (getMetaData().getColumnName(i).equalsIgnoreCase(columnName)) {
+                    return i;
+                }
+            }
+        } catch (SQLException e) {
+            throw new MintLeafException(e);
+        }
+        return -1;
+    }
+
+    default int count() throws MintLeafException {
+        try {
+            return getMetaData().getColumnCount();
+        } catch (SQLException e) {
+            throw new MintLeafException(e);
+        }
+    }
 
     ResultSetMetaData getMetaData() throws MintLeafException;
 }

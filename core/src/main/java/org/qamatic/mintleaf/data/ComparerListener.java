@@ -34,6 +34,8 @@
 
 package org.qamatic.mintleaf.data;
 
+import org.qamatic.mintleaf.MintLeafException;
+
 /**
  * Created by qamatic on 3/4/16.
  */
@@ -46,7 +48,7 @@ public interface ComparerListener {
 
     }
 
-    void OnCompare(final RowState sourceRow, final RowState targetRow);
+    void OnCompare(final RowState sourceRow, final RowState targetRow) throws MintLeafException;
 
 
 }

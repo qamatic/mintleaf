@@ -143,7 +143,7 @@ public class ListComparerTests {
     }
 
 
-    private class ListRowWrapper extends Properties implements RowWrapper {
+    private class ListRowWrapper extends Properties implements ComparableRow {
 
         private Properties properties = new Properties();
         private ColumnMetaDataCollection columnMetaDataCollection = new ColumnMetaDataCollection("LIST.USERS") {
@@ -183,11 +183,8 @@ public class ListComparerTests {
         }
     }
 
-    public class UserList extends ArrayList<User> {
 
-    }
-
-    private class User implements RowWrapper {
+    private class User implements ComparableRow {
 
         private ColumnMetaDataCollection metaDataCollection;
 
@@ -206,22 +203,11 @@ public class ListComparerTests {
         }
 
         @Override
-        public Object getValue(String columnName) throws MintLeafException {
-            return getValue(getMetaData().getIndex(columnName));
-
-        }
-
-        @Override
-        public int count() throws MintLeafException {
-            return getMetaData().size();
-        }
-
-        @Override
         public ColumnMetaDataCollection getMetaData() throws MintLeafException {
             if (metaDataCollection == null) {
                 metaDataCollection = new ColumnMetaDataCollection("USERS");
-                metaDataCollection.add(new Column("UserName", Types.VARCHAR));
-                metaDataCollection.add(new Column("Country", Types.VARCHAR));
+                metaDataCollection.add(new Column("UserName"));
+                metaDataCollection.add(new Column("Country"));
             }
             return metaDataCollection;
         }
@@ -230,7 +216,7 @@ public class ListComparerTests {
 
     @Test
     public void compareList() throws SQLException, IOException, MintLeafException {
-        List<User> sourceUserList = new UserList(){
+        List<User> sourceUserList = new ArrayList<User> (){
             {
                 add(new User(){
                     {
@@ -240,7 +226,7 @@ public class ListComparerTests {
                 });
             }
         };
-        List<User> targetUserList = new UserList(){
+        List<User> targetUserList = new ArrayList<User> (){
             {
                 add(new User(){
                     {
@@ -256,15 +242,20 @@ public class ListComparerTests {
                 withTargetTable(targetUserList).
                 withMatchingResult(new ComparerListener() {
                     @Override
-                    public void OnCompare(RowState sourceRow, RowState targetRow) {
-//                        actuals.add(String.format("[Source:%s] [Target:%s]", sourceRowState, targetRowState));
-//                        logger.info(actuals.get(actuals.size() - 1));
+                    public void OnCompare(RowState sourceRow, RowState targetRow) throws MintLeafException {
+
                         logger.info(String.format("[Source:%s] [Target:%s]", sourceRow, targetRow));
-                        try {
-                            assertEquals(sourceRow.asString(), targetRow.asString());
-                        } catch (MintLeafException e) {
-                            e.printStackTrace();
+                        assertEquals(sourceRow.asString(), targetRow.asString());
+
+                        String sourceColumnValue = sourceRow.Row.getValue(sourceRow.ColumnNumber).toString();
+                        String targetColumnValue = sourceRow.Row.getValue(sourceRow.ColumnNumber).toString();
+                        if (sourceColumnValue.equals(targetColumnValue)) {
+
+                            logger.info("matches");
+                        } else {
+                            logger.info("no match");
                         }
+
                     }
                 }).
                 build();
