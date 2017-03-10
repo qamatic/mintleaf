@@ -24,4 +24,5 @@ doc/build/*
 
 .idea
 
+.idea\*
 target
