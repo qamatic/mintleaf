@@ -37,7 +37,7 @@ package org.qamatic.mintleaf.data;
 import org.qamatic.mintleaf.RowWrapper;
 
 /**
- * Created by senips on 3/5/16.
+ * Created by qamatic on 3/5/16.
  */
 public class RowState {
     public int ColumnNumber = -1;

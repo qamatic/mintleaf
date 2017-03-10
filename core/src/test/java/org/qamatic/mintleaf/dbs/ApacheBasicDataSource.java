@@ -39,7 +39,7 @@ import org.qamatic.mintleaf.DbQueries;
 import org.qamatic.mintleaf.DriverSource;
 
 /**
- * Created by senips on 3/5/16.
+ * Created by qamatic on 3/5/16.
  */
 public class ApacheBasicDataSource extends BasicDataSource implements DriverSource {
     private DbQueries dbQueries;

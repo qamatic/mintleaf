@@ -37,7 +37,7 @@ package org.qamatic.mintleaf;
 import java.sql.ResultSetMetaData;
 
 /**
- * Created by senips on 3/3/16.
+ * Created by qamatic on 3/3/16.
  */
 public interface RowWrapper {
 

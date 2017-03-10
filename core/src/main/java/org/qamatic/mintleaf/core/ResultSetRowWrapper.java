@@ -43,7 +43,7 @@ import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 
 /**
- * Created by senips on 3/3/16.
+ * Created by qamatic on 3/3/16.
  */
 public class ResultSetRowWrapper implements RowWrapper {
 

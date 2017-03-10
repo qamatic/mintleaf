@@ -35,7 +35,7 @@
 package org.qamatic.mintleaf;
 
 /**
- * Created by senips on 2/16/16.
+ * Created by qamatic on 2/16/16.
  */
 public class MintLeafException extends Exception {
     public MintLeafException() {

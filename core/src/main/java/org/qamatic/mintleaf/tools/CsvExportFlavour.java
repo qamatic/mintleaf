@@ -44,7 +44,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 /**
- * Created by senips on 2/18/6/16.
+ * Created by qamatic on 2/18/6/16.
  */
 public class CsvExportFlavour implements ExportFlavour {
 

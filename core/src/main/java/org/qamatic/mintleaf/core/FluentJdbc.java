@@ -44,7 +44,7 @@ import java.sql.*;
 import java.util.Calendar;
 
 /**
- * Created by senips on 2/20/16.
+ * Created by qamatic on 2/20/16.
  */
 public class FluentJdbc {
 

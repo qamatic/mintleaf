@@ -37,7 +37,7 @@ package org.qamatic.mintleaf.configuration;
 import javax.xml.bind.annotation.XmlType;
 
 /**
- * Created by senips on 3/6/16.
+ * Created by qamatic on 3/6/16.
  */
 
 @XmlType(propOrder = {"id", "changeSets", "scriptLocation"})

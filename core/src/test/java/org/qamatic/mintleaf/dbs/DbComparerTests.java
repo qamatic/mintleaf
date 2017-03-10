@@ -50,7 +50,7 @@ import static org.junit.Assert.assertEquals;
 
 
 /**
- * Created by senips on 3/5/16.
+ * Created by qamatic on 3/5/16.
  */
 public class DbComparerTests extends H2TestCase {
 

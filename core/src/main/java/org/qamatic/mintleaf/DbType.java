@@ -35,7 +35,7 @@
 package org.qamatic.mintleaf;
 
 /**
- * Created by senips on 1/5/16.
+ * Created by qamatic on 1/5/16.
  */
 public enum DbType {
     H2, MYSQL, ORACLE, MSSQL

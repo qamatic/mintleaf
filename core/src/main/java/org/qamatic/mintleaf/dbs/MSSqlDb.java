@@ -38,7 +38,7 @@ import org.qamatic.mintleaf.DriverSource;
 import org.qamatic.mintleaf.core.Database;
 
 /**
- * Created by senips on 3/6/16.
+ * Created by qamatic on 3/6/16.
  */
 public class MSSqlDb extends Database {
     public MSSqlDb(DriverSource dataSource) {

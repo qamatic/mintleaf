@@ -40,7 +40,7 @@ import java.sql.Connection;
 import java.sql.SQLException;
 
 /**
- * Created by senips on 12/6/15.
+ * Created by qamatic on 12/6/15.
  */
 public interface DatabaseContext {
     DbQueries getDbQueries();

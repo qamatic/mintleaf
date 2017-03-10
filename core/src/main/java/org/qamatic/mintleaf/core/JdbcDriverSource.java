@@ -45,7 +45,7 @@ import java.sql.SQLException;
 import java.util.Properties;
 
 /**
- * Created by senips on 3/3/16.
+ * Created by qamatic on 3/3/16.
  */
 public class JdbcDriverSource implements DriverSource {
 

@@ -47,7 +47,7 @@ import org.qamatic.mintleaf.tools.DbImporter;
 import java.util.List;
 
 /**
- * Created by senips on 3/1/16.
+ * Created by qamatic on 3/1/16.
  */
 public class Mintleaf {
 

@@ -43,7 +43,7 @@ import java.sql.SQLFeatureNotSupportedException;
 import java.util.logging.Logger;
 
 /**
- * Created by senips on 3/5/16.
+ * Created by qamatic on 3/5/16.
  */
 public interface DriverSource extends DataSource, DbSettings {
 

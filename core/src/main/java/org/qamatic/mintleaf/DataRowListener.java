@@ -35,7 +35,7 @@
 package org.qamatic.mintleaf;
 
 /**
- * Created by senips on 3/3/16.
+ * Created by qamatic on 3/3/16.
  */
 public interface DataRowListener<T> {
     T eachRow(int rowNum, RowWrapper row) throws MintLeafException;

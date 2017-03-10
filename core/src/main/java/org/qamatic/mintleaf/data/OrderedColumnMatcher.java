@@ -38,7 +38,7 @@ import org.qamatic.mintleaf.MintLeafException;
 import org.qamatic.mintleaf.RowMatcher;
 
 /**
- * Created by senips on 3/5/16.
+ * Created by qamatic on 3/5/16.
  */
 public class OrderedColumnMatcher implements RowMatcher {
     @Override

@@ -42,7 +42,7 @@ import org.qamatic.mintleaf.core.ObjectRowListWrapper;
 import java.util.List;
 
 /**
- * Created by senips on 3/5/16.
+ * Created by qamatic on 3/5/16.
  */
 public class OrderedListComparator implements DataComparer {
 

@@ -37,7 +37,7 @@ package org.qamatic.mintleaf;
 import org.qamatic.mintleaf.data.ComparerListener;
 
 /**
- * Created by senips on 3/5/16.
+ * Created by qamatic on 3/5/16.
  */
 public interface DataComparer {
 

@@ -41,7 +41,7 @@ import org.qamatic.mintleaf.Mintleaf;
 import org.qamatic.mintleaf.dbs.ApacheBasicDataSource;
 
 /**
- * Created by senips on 3/4/16.
+ * Created by qamatic on 3/4/16.
  */
 public class OracleTestCase {
 

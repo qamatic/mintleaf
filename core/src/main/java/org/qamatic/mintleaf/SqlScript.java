@@ -38,7 +38,7 @@ import java.io.IOException;
 import java.sql.SQLException;
 
 /**
- * Created by senips on 7/16/16.
+ * Created by qamatic on 7/16/16.
  */
 public interface SqlScript {
 

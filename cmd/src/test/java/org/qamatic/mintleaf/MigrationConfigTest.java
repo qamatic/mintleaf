@@ -47,7 +47,7 @@ import static junit.framework.TestCase.assertTrue;
 import static org.junit.Assert.assertEquals;
 
 /**
- * Created by senips on 5/6/16.
+ * Created by qamatic on 5/6/16.
  */
 public class MigrationConfigTest {
 

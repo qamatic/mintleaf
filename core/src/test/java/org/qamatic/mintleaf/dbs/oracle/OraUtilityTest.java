@@ -50,7 +50,7 @@ import static junit.framework.TestCase.assertTrue;
 import static org.junit.Assert.assertEquals;
 
 /**
- * Created by senips on 3/4/16.
+ * Created by qamatic on 3/4/16.
  */
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class OraUtilityTest extends OracleTestCase {

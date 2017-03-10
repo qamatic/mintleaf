@@ -51,7 +51,7 @@ import java.util.regex.Pattern;
 import static org.junit.Assert.*;
 
 /**
- * Created by senips on 3/6/16.
+ * Created by qamatic on 3/6/16.
  */
 public class ImportExportTests extends H2TestCase {
 

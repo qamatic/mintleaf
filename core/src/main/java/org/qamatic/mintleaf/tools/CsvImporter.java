@@ -45,7 +45,7 @@ import java.io.IOException;
 import java.sql.SQLException;
 
 /**
- * Created by senips on 3/6/16.
+ * Created by qamatic on 3/6/16.
  */
 public class CsvImporter extends ImpExpBase implements DataAction {
 

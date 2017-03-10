@@ -41,7 +41,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by senips on 3/6/16.
+ * Created by qamatic on 3/6/16.
  */
 @XmlType(propOrder = {"id", "type", "url", "username", "password", "connectionProperties"})
 public class DbConnectionInfo {

@@ -44,7 +44,7 @@ import java.io.IOException;
 import java.sql.SQLException;
 
 /**
- * Created by senips on 3/6/16.
+ * Created by qamatic on 3/6/16.
  */
 public class DbImporter extends ImpExpBase implements DataAction {
     private static final MintLeafLogger logger = MintLeafLogger.getLogger(DbImporter.class);

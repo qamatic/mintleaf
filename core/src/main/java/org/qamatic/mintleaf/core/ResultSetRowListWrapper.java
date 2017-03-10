@@ -42,7 +42,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 /**
- * Created by senips on 3/4/16.
+ * Created by qamatic on 3/4/16.
  */
 public class ResultSetRowListWrapper implements RowListWrapper {
 

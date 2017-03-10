@@ -38,7 +38,7 @@ import org.qamatic.mintleaf.*;
 import org.qamatic.mintleaf.core.JdbcDriverSource;
 
 /**
- * Created by senips on 3/6/16.
+ * Created by qamatic on 3/6/16.
  */
 public abstract class DriverSourceBuilder {
 

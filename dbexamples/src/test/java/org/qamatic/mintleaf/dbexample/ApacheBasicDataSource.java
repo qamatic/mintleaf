@@ -37,7 +37,7 @@ import org.apache.commons.dbcp.BasicDataSource;
 import org.qamatic.mintleaf.DriverSource;
 
 /**
- * Created by senips on 3/5/17.
+ * Created by qamatic on 3/5/17.
  */
 public class ApacheBasicDataSource extends BasicDataSource implements DriverSource {
 

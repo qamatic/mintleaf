@@ -39,7 +39,7 @@ import org.qamatic.mintleaf.MintLeafException;
 import java.sql.ResultSet;
 
 /**
- * Created by senips on 2/18/6/16.
+ * Created by qamatic on 2/18/6/16.
  */
 public interface ExportFlavour {
 

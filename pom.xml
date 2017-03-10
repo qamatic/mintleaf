@@ -27,7 +27,7 @@
 
     <developers>
         <developer>
-            <id>senips</id>
+            <id>qamatic</id>
             <name>Buvan</name>
             <email>qamatic@gmail.com</email>
             <roles>
@@ -39,7 +39,7 @@
 
     <issueManagement>
         <system>GitHub Issue Tracker</system>
-        <url>https://github.com/senips/mintleaf/issues</url>
+        <url>https://github.com/qamatic/mintleaf/issues</url>
     </issueManagement>
 
     <properties>
@@ -61,9 +61,9 @@
     </distributionManagement>
 
     <scm>
-        <connection>scm:git:https://github.com/senips/mintleaf.git</connection>
-        <url>https://github.com/senips/mintleaf</url>
-        <developerConnection>scm:git:https://github.com/senips/mintleaf.git</developerConnection>
+        <connection>scm:git:https://github.com/qamatic/mintleaf.git</connection>
+        <url>https://github.com/qamatic/mintleaf</url>
+        <developerConnection>scm:git:https://github.com/qamatic/mintleaf.git</developerConnection>
         <tag>v1.8.5-SNAPSHOT</tag>
     </scm>
 

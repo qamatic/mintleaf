@@ -37,7 +37,7 @@ package org.qamatic.mintleaf;
 import org.apache.commons.cli.*;
 
 /**
- * Created by senips on 2/18/6/16.
+ * Created by qamatic on 2/18/6/16.
  */
 public class MainCli {
 

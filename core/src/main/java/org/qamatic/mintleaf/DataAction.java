@@ -35,7 +35,7 @@
 package org.qamatic.mintleaf;
 
 /**
- * Created by senips on 3/6/16.
+ * Created by qamatic on 3/6/16.
  */
 public interface DataAction {
     void execute() throws MintLeafException;

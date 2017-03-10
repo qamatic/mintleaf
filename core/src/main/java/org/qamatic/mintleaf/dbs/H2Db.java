@@ -44,7 +44,7 @@ import java.sql.SQLException;
 import java.util.regex.Pattern;
 
 /**
- * Created by senips on 3/6/16.
+ * Created by qamatic on 3/6/16.
  */
 public class H2Db extends Database {
     public H2Db(DriverSource dataSource) {

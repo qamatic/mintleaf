@@ -39,7 +39,7 @@ import org.qamatic.mintleaf.data.ComparerListener;
 import org.qamatic.mintleaf.data.RowState;
 
 /**
- * Created by senips on 2/18/6/16.
+ * Created by qamatic on 2/18/6/16.
  */
 public interface RowMatcher {
 

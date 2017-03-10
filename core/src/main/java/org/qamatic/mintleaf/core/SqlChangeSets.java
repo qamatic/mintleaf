@@ -40,7 +40,7 @@ import java.io.IOException;
 import java.sql.SQLException;
 
 /**
- * Created by senips on 7/18/16.
+ * Created by qamatic on 7/18/16.
  */
 public class SqlChangeSets extends BaseSqlScript {
 
