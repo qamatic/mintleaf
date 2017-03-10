@@ -22,7 +22,8 @@ Welcome to the Mintleaf! Mintleaf is a light weight framework tool helps you to 
 - Transfer/Copy data between datbases
 - Nothing more but to use Plain old SQL that you know of
 
-**_Before we deep dive into the Mintleaf, lets look at what migration means and how it works._**
+![Mintleaf](/images/mintleaf.png)  
+
 
 ## Migration at a glance
 Database migraton refers to the management of incremental, reversible changes to relational database schemas. A schema migration is performed on a database whenever it is necessary to update or revert that database's schema to some newer or older version.  Look at the below diagram which shows you the schema changes over a period of time during a Agile Software Developement Life Cycle.   Every schema changes during a developement sprint will be applied to QA Databases and Prod Database at the end of sprint release.  
@@ -364,29 +365,6 @@ For example you have a pojo class looks like the following.  For simplicity purp
     
 ```
 
-**now create two different list of Users.** 
-
-```java
-
-    //create a source list of users
-   List<User> sourceUserList = new ArrayList<User> ();
-   sourceUserList.add(new User(){
-                                      {
-                                          UserName = "Tomatoe";
-                                          Country = "USA";
-                                      }
-                                  });
-                                  
-   //create a target list of users to be compared                               
-   List<User> targetUserList = new ArrayList<User> ();
-   targetUserList.add(new User(){
-                                         {
-                                             UserName = "Tomatoe";
-                                             Country = "USA";
-                                         }
-                                     });
-```
-
 
 In order to do compare between _sourceUserList and targetUserList_, you must implement an interface **ComparableRow** on User class.   When you implement **ComparableRow** interface, you will have to override **getMetaData()** and **getValue()** methods as shown below.   Basically you provide column information as opposed a object properties so this way one can easily deal with nest objects and calculated column values manipluated before returning them.  So you can also implemnent some custom auto inferring mechanism like spring beans via annotations is an idea for those who wants it but its is not the scope here and Mintleaf provides complete freedom to the user as how they would like to implement it.  
 
@@ -426,6 +404,30 @@ In order to do compare between _sourceUserList and targetUserList_, you must imp
 ```
 
 
+**now create two different list of Users and populate with some data.** 
+
+```java
+
+    //create a source list of users
+   List<User> sourceUserList = new ArrayList<User> ();
+   sourceUserList.add(new User(){
+                                      {
+                                          UserName = "Tomatoe";
+                                          Country = "USA";
+                                      }
+                                  });
+                                  
+   //create a target list of users to be compared                               
+   List<User> targetUserList = new ArrayList<User> ();
+   targetUserList.add(new User(){
+                                         {
+                                             UserName = "Tomatoe";
+                                             Country = "USA";
+                                         }
+                                     });
+```
+
+
 Lets see how compare works between sourceUserList and targetUserList,  
 
 
@@ -447,7 +449,8 @@ Lets see how compare works between sourceUserList and targetUserList,
                         
                         String sourceColumnValue = sourceRow.Row.getValue(sourceRow.ColumnNumber).toString(); // alternate code: sourceRow.asString();
                         String targetColumnValue = sourceRow.Row.getValue(sourceRow.ColumnNumber).toString(); // alternate code: targetRow.asString();
-                        if (sourceColumnValue.equals(targetColumnValue)) {
+                        
+                        if (sourceColumnValue.equals(targetColumnValue)) { //alternate code: if (sourceRow.asString().equals(targetRow.asString())) {
                         
                             logger.info("matches");
                         } else {
