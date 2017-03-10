@@ -24,5 +24,6 @@ doc/build/*
 
 .idea
 
-.idea\*
 target
+
+dependency-redu*
