@@ -528,8 +528,99 @@ It&rsquo;s very easy to add changeset definition on your exising sql files if yo
 
 
 </code></pre>
-<h2 id="compare-csv-and-a-datbase-table">Compare CSV and a datbase table</h2>
+<h2 id="compare-two-list-of-objects">Compare two list of objects</h2>
 
+<p>For example you have a pojo class looks like the following.  For simplicity purpose no getter/setters for now but it has just two member columns UserName and Country. </p>
+<pre class="highlight java tab-java"><code>   <span class="kd">public</span> <span class="kd">class</span> <span class="nc">User</span> <span class="o">{</span>         
+        <span class="kd">public</span> <span class="n">String</span> <span class="n">UserName</span><span class="o">;</span>
+        <span class="kd">public</span> <span class="n">String</span> <span class="n">Country</span><span class="o">;</span>
+   <span class="o">}</span> 
+
+</code></pre>
+<p><strong>now create two different list of Users.</strong> </p>
+<pre class="highlight java tab-java"><code>
+    <span class="c1">//create a source list of users</span>
+   <span class="n">List</span><span class="o">&lt;</span><span class="n">User</span><span class="o">&gt;</span> <span class="n">sourceUserList</span> <span class="o">=</span> <span class="k">new</span> <span class="n">ArrayList</span><span class="o">&lt;</span><span class="n">User</span><span class="o">&gt;</span> <span class="o">();</span>
+   <span class="n">sourceUserList</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="k">new</span> <span class="n">User</span><span class="o">(){</span>
+                                      <span class="o">{</span>
+                                          <span class="n">UserName</span> <span class="o">=</span> <span class="s">"Tomatoe"</span><span class="o">;</span>
+                                          <span class="n">Country</span> <span class="o">=</span> <span class="s">"USA"</span><span class="o">;</span>
+                                      <span class="o">}</span>
+                                  <span class="o">});</span>
+
+   <span class="c1">//create a target list of users to be compared                               </span>
+   <span class="n">List</span><span class="o">&lt;</span><span class="n">User</span><span class="o">&gt;</span> <span class="n">targetUserList</span> <span class="o">=</span> <span class="k">new</span> <span class="n">ArrayList</span><span class="o">&lt;</span><span class="n">User</span><span class="o">&gt;</span> <span class="o">();</span>
+   <span class="n">targetUserList</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="k">new</span> <span class="n">User</span><span class="o">(){</span>
+                                         <span class="o">{</span>
+                                             <span class="n">UserName</span> <span class="o">=</span> <span class="s">"Tomatoe"</span><span class="o">;</span>
+                                             <span class="n">Country</span> <span class="o">=</span> <span class="s">"USA"</span><span class="o">;</span>
+                                         <span class="o">}</span>
+                                     <span class="o">});</span>
+</code></pre>
+<p>In order to do compare between <em>sourceUserList and targetUserList</em>, you must implement an interface <strong>ComparableRow</strong> on User class.   When you implement <strong>ComparableRow</strong> interface, you will have to override <strong>getMetaData()</strong> and <strong>getValue()</strong> methods as shown below.   Basically you provide column information as opposed a object properties so this way one can easily deal with nest objects and calculated column values manipluated before returning them.  So you can also implemnent some custom auto inferring mechanism like spring beans via annotations is an idea for those who wants it but its is not the scope here and Mintleaf provides complete freedom to the user as how they would like to implement it.  </p>
+<pre class="highlight java tab-java"><code>
+        <span class="kd">private</span> <span class="kd">class</span> <span class="nc">User</span> <span class="kd">implements</span> <span class="n">ComparableRow</span> <span class="o">{</span>
+
+            <span class="kd">private</span> <span class="n">ColumnMetaDataCollection</span> <span class="n">metaDataCollection</span><span class="o">;</span>
+
+            <span class="kd">public</span> <span class="n">String</span> <span class="n">UserName</span><span class="o">;</span>
+            <span class="kd">public</span> <span class="n">String</span> <span class="n">Country</span><span class="o">;</span>
+
+            <span class="nd">@Override</span>
+            <span class="kd">public</span> <span class="n">Object</span> <span class="nf">getValue</span><span class="o">(</span><span class="kt">int</span> <span class="n">columnIndex</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">MintLeafException</span> <span class="o">{</span>
+                <span class="k">switch</span> <span class="o">(</span><span class="n">columnIndex</span><span class="o">)</span> <span class="o">{</span>
+                    <span class="k">case</span> <span class="mi">0</span><span class="o">:</span>
+                        <span class="k">return</span> <span class="n">UserName</span><span class="o">;</span>
+                    <span class="k">case</span> <span class="mi">1</span><span class="o">:</span>
+                        <span class="k">return</span> <span class="n">Country</span><span class="o">;</span>
+                <span class="o">}</span>
+                <span class="k">return</span> <span class="kc">null</span><span class="o">;</span>
+            <span class="o">}</span>
+
+            <span class="nd">@Override</span>
+            <span class="kd">public</span> <span class="n">ColumnMetaDataCollection</span> <span class="nf">getMetaData</span><span class="o">()</span> <span class="kd">throws</span> <span class="n">MintLeafException</span> <span class="o">{</span>
+                <span class="k">if</span> <span class="o">(</span><span class="n">metaDataCollection</span> <span class="o">==</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
+                    <span class="n">metaDataCollection</span> <span class="o">=</span> <span class="k">new</span> <span class="n">ColumnMetaDataCollection</span><span class="o">(</span><span class="s">"USERS"</span><span class="o">);</span>
+                    <span class="n">metaDataCollection</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="k">new</span> <span class="n">Column</span><span class="o">(</span><span class="s">"UserName"</span><span class="o">));</span>
+                    <span class="n">metaDataCollection</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="k">new</span> <span class="n">Column</span><span class="o">(</span><span class="s">"Country"</span><span class="o">));</span>
+                <span class="o">}</span>
+                <span class="k">return</span> <span class="n">metaDataCollection</span><span class="o">;</span>
+            <span class="o">}</span>
+        <span class="o">}</span>
+
+</code></pre>
+<p>Lets see how compare works between sourceUserList and targetUserList,  </p>
+<pre class="highlight java tab-java"><code>
+        <span class="c1">//logger</span>
+        <span class="kd">final</span> <span class="n">ConsoleLogger</span> <span class="n">logger</span> <span class="o">=</span> <span class="k">new</span> <span class="n">ConsoleLogger</span><span class="o">();</span>
+
+        <span class="c1">//create comparer</span>
+        <span class="n">DataComparer</span> <span class="n">dataComparer</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Mintleaf</span><span class="o">.</span><span class="na">ComparerBuilder</span><span class="o">().</span>
+                <span class="n">withSourceTable</span><span class="o">(</span><span class="n">sourceUserList</span><span class="o">).</span>
+                <span class="n">withTargetTable</span><span class="o">(</span><span class="n">targetUserList</span><span class="o">).</span>
+                <span class="n">withMatchingResult</span><span class="o">(</span><span class="k">new</span> <span class="n">ComparerListener</span><span class="o">()</span> <span class="o">{</span>
+                    <span class="nd">@Override</span>
+                    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">OnCompare</span><span class="o">(</span><span class="n">RowState</span> <span class="n">sourceRow</span><span class="o">,</span> <span class="n">RowState</span> <span class="n">targetRow</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">MintLeafException</span> <span class="o">{</span>
+
+                       <span class="c1">// logger.info(String.format("[Source:%s] [Target:%s]", sourceRow, targetRow));</span>
+
+
+                        <span class="n">String</span> <span class="n">sourceColumnValue</span> <span class="o">=</span> <span class="n">sourceRow</span><span class="o">.</span><span class="na">Row</span><span class="o">.</span><span class="na">getValue</span><span class="o">(</span><span class="n">sourceRow</span><span class="o">.</span><span class="na">ColumnNumber</span><span class="o">).</span><span class="na">toString</span><span class="o">();</span> <span class="c1">// alternate code: sourceRow.asString();</span>
+                        <span class="n">String</span> <span class="n">targetColumnValue</span> <span class="o">=</span> <span class="n">sourceRow</span><span class="o">.</span><span class="na">Row</span><span class="o">.</span><span class="na">getValue</span><span class="o">(</span><span class="n">sourceRow</span><span class="o">.</span><span class="na">ColumnNumber</span><span class="o">).</span><span class="na">toString</span><span class="o">();</span> <span class="c1">// alternate code: targetRow.asString();</span>
+                        <span class="k">if</span> <span class="o">(</span><span class="n">sourceColumnValue</span><span class="o">.</span><span class="na">equals</span><span class="o">(</span><span class="n">targetColumnValue</span><span class="o">))</span> <span class="o">{</span>
+
+                            <span class="n">logger</span><span class="o">.</span><span class="na">info</span><span class="o">(</span><span class="s">"matches"</span><span class="o">);</span>
+                        <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
+                            <span class="n">logger</span><span class="o">.</span><span class="na">info</span><span class="o">(</span><span class="s">"no match"</span><span class="o">);</span>
+                        <span class="o">}</span>
+
+                    <span class="o">}</span>
+                <span class="o">}).</span>
+                <span class="n">build</span><span class="o">();</span>
+
+        <span class="c1">//compare now</span>
+        <span class="n">dataComparer</span><span class="o">.</span><span class="na">execute</span><span class="o">();</span>
+</code></pre>
       </div>
       <div class="dark-box">
       </div>
