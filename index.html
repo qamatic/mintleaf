@@ -237,7 +237,7 @@
 <li>Nothing more but to use Plain old SQL that you know of</li>
 </ul>
 
-<p><strong><em>Before we deep dive into the Mintleaf, lets look at what migration means and how it works.</em></strong></p>
+<p><img src="images/mintleaf.png" alt="Mintleaf" />  </p>
 
 <h2 id="migration-at-a-glance">Migration at a glance</h2>
 
@@ -537,26 +537,6 @@ It&rsquo;s very easy to add changeset definition on your exising sql files if yo
    <span class="o">}</span> 
 
 </code></pre>
-<p><strong>now create two different list of Users.</strong> </p>
-<pre class="highlight java tab-java"><code>
-    <span class="c1">//create a source list of users</span>
-   <span class="n">List</span><span class="o">&lt;</span><span class="n">User</span><span class="o">&gt;</span> <span class="n">sourceUserList</span> <span class="o">=</span> <span class="k">new</span> <span class="n">ArrayList</span><span class="o">&lt;</span><span class="n">User</span><span class="o">&gt;</span> <span class="o">();</span>
-   <span class="n">sourceUserList</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="k">new</span> <span class="n">User</span><span class="o">(){</span>
-                                      <span class="o">{</span>
-                                          <span class="n">UserName</span> <span class="o">=</span> <span class="s">"Tomatoe"</span><span class="o">;</span>
-                                          <span class="n">Country</span> <span class="o">=</span> <span class="s">"USA"</span><span class="o">;</span>
-                                      <span class="o">}</span>
-                                  <span class="o">});</span>
-
-   <span class="c1">//create a target list of users to be compared                               </span>
-   <span class="n">List</span><span class="o">&lt;</span><span class="n">User</span><span class="o">&gt;</span> <span class="n">targetUserList</span> <span class="o">=</span> <span class="k">new</span> <span class="n">ArrayList</span><span class="o">&lt;</span><span class="n">User</span><span class="o">&gt;</span> <span class="o">();</span>
-   <span class="n">targetUserList</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="k">new</span> <span class="n">User</span><span class="o">(){</span>
-                                         <span class="o">{</span>
-                                             <span class="n">UserName</span> <span class="o">=</span> <span class="s">"Tomatoe"</span><span class="o">;</span>
-                                             <span class="n">Country</span> <span class="o">=</span> <span class="s">"USA"</span><span class="o">;</span>
-                                         <span class="o">}</span>
-                                     <span class="o">});</span>
-</code></pre>
 <p>In order to do compare between <em>sourceUserList and targetUserList</em>, you must implement an interface <strong>ComparableRow</strong> on User class.   When you implement <strong>ComparableRow</strong> interface, you will have to override <strong>getMetaData()</strong> and <strong>getValue()</strong> methods as shown below.   Basically you provide column information as opposed a object properties so this way one can easily deal with nest objects and calculated column values manipluated before returning them.  So you can also implemnent some custom auto inferring mechanism like spring beans via annotations is an idea for those who wants it but its is not the scope here and Mintleaf provides complete freedom to the user as how they would like to implement it.  </p>
 <pre class="highlight java tab-java"><code>
         <span class="kd">private</span> <span class="kd">class</span> <span class="nc">User</span> <span class="kd">implements</span> <span class="n">ComparableRow</span> <span class="o">{</span>
@@ -589,6 +569,26 @@ It&rsquo;s very easy to add changeset definition on your exising sql files if yo
         <span class="o">}</span>
 
 </code></pre>
+<p><strong>now create two different list of Users and populate with some data.</strong> </p>
+<pre class="highlight java tab-java"><code>
+    <span class="c1">//create a source list of users</span>
+   <span class="n">List</span><span class="o">&lt;</span><span class="n">User</span><span class="o">&gt;</span> <span class="n">sourceUserList</span> <span class="o">=</span> <span class="k">new</span> <span class="n">ArrayList</span><span class="o">&lt;</span><span class="n">User</span><span class="o">&gt;</span> <span class="o">();</span>
+   <span class="n">sourceUserList</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="k">new</span> <span class="n">User</span><span class="o">(){</span>
+                                      <span class="o">{</span>
+                                          <span class="n">UserName</span> <span class="o">=</span> <span class="s">"Tomatoe"</span><span class="o">;</span>
+                                          <span class="n">Country</span> <span class="o">=</span> <span class="s">"USA"</span><span class="o">;</span>
+                                      <span class="o">}</span>
+                                  <span class="o">});</span>
+
+   <span class="c1">//create a target list of users to be compared                               </span>
+   <span class="n">List</span><span class="o">&lt;</span><span class="n">User</span><span class="o">&gt;</span> <span class="n">targetUserList</span> <span class="o">=</span> <span class="k">new</span> <span class="n">ArrayList</span><span class="o">&lt;</span><span class="n">User</span><span class="o">&gt;</span> <span class="o">();</span>
+   <span class="n">targetUserList</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="k">new</span> <span class="n">User</span><span class="o">(){</span>
+                                         <span class="o">{</span>
+                                             <span class="n">UserName</span> <span class="o">=</span> <span class="s">"Tomatoe"</span><span class="o">;</span>
+                                             <span class="n">Country</span> <span class="o">=</span> <span class="s">"USA"</span><span class="o">;</span>
+                                         <span class="o">}</span>
+                                     <span class="o">});</span>
+</code></pre>
 <p>Lets see how compare works between sourceUserList and targetUserList,  </p>
 <pre class="highlight java tab-java"><code>
         <span class="c1">//logger</span>
@@ -607,7 +607,8 @@ It&rsquo;s very easy to add changeset definition on your exising sql files if yo
 
                         <span class="n">String</span> <span class="n">sourceColumnValue</span> <span class="o">=</span> <span class="n">sourceRow</span><span class="o">.</span><span class="na">Row</span><span class="o">.</span><span class="na">getValue</span><span class="o">(</span><span class="n">sourceRow</span><span class="o">.</span><span class="na">ColumnNumber</span><span class="o">).</span><span class="na">toString</span><span class="o">();</span> <span class="c1">// alternate code: sourceRow.asString();</span>
                         <span class="n">String</span> <span class="n">targetColumnValue</span> <span class="o">=</span> <span class="n">sourceRow</span><span class="o">.</span><span class="na">Row</span><span class="o">.</span><span class="na">getValue</span><span class="o">(</span><span class="n">sourceRow</span><span class="o">.</span><span class="na">ColumnNumber</span><span class="o">).</span><span class="na">toString</span><span class="o">();</span> <span class="c1">// alternate code: targetRow.asString();</span>
-                        <span class="k">if</span> <span class="o">(</span><span class="n">sourceColumnValue</span><span class="o">.</span><span class="na">equals</span><span class="o">(</span><span class="n">targetColumnValue</span><span class="o">))</span> <span class="o">{</span>
+
+                        <span class="k">if</span> <span class="o">(</span><span class="n">sourceColumnValue</span><span class="o">.</span><span class="na">equals</span><span class="o">(</span><span class="n">targetColumnValue</span><span class="o">))</span> <span class="o">{</span> <span class="c1">//alternate code: if (sourceRow.asString().equals(targetRow.asString())) {</span>
 
                             <span class="n">logger</span><span class="o">.</span><span class="na">info</span><span class="o">(</span><span class="s">"matches"</span><span class="o">);</span>
                         <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
