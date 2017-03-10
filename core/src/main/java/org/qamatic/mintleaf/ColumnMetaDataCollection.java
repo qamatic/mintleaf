@@ -37,19 +37,19 @@ package org.qamatic.mintleaf;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
-public class DbMetaDataCollection extends ArrayList<Column> implements MetaDataCollection {
+public class ColumnMetaDataCollection extends ArrayList<Column> implements MetaDataCollection {
 
     private String objectName;
 
-    public DbMetaDataCollection() {
+    public ColumnMetaDataCollection() {
 
     }
 
-    public DbMetaDataCollection(String objectName) {
+    public ColumnMetaDataCollection(String objectName) {
         this.objectName = objectName;
     }
 
-    public DbMetaDataCollection(Column... columns) {
+    public ColumnMetaDataCollection(Column... columns) {
         for (Column column : columns) {
 
             add(column);
@@ -74,6 +74,7 @@ public class DbMetaDataCollection extends ArrayList<Column> implements MetaDataC
     }
 
 
+    @Override
     public int getIndex(String columnName) {
         columnName = columnName.toUpperCase();
         for (int i = 0; i < this.size(); i++) {
@@ -84,6 +85,7 @@ public class DbMetaDataCollection extends ArrayList<Column> implements MetaDataC
         return -1;
     }
 
+    @Override
     public Column findColumn(String columnName) {
         int idx = getIndex(columnName);
         if (idx != -1) {

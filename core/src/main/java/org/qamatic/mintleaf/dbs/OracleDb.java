@@ -148,8 +148,8 @@ public class OracleDb extends Database {
 
     @Override
     @SuppressWarnings({"unchecked", "rawtypes"})
-    public DbMetaDataCollection getMetaData(String objectName) throws SQLException, MintLeafException {
-        final DbMetaDataCollection metaData = new DbMetaDataCollection(objectName);
+    public ColumnMetaDataCollection getMetaData(String objectName) throws SQLException, MintLeafException {
+        final ColumnMetaDataCollection metaData = new ColumnMetaDataCollection(objectName);
         if (objectName != null) {
             objectName = objectName.toUpperCase();
         }

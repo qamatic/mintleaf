@@ -108,7 +108,7 @@ public class DbComparerTests extends H2TestCase {
                 build();
 
 
-        dataComparer.compare();
+        dataComparer.execute();
 
         return actuals;
     }

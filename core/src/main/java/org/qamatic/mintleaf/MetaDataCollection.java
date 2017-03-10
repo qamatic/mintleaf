@@ -50,4 +50,8 @@ public interface MetaDataCollection extends ResultSetMetaData {
     default boolean isWrapperFor(Class<?> iface) throws SQLException {
         return false;
     }
+
+    int getIndex(String columnName);
+
+    Column findColumn(String columnName);
 }

@@ -35,7 +35,7 @@
 package org.qamatic.mintleaf.dbs;
 
 import org.qamatic.mintleaf.Column;
-import org.qamatic.mintleaf.DbMetaDataCollection;
+import org.qamatic.mintleaf.ColumnMetaDataCollection;
 import org.qamatic.mintleaf.DriverSource;
 import org.qamatic.mintleaf.MintLeafException;
 import org.qamatic.mintleaf.core.Database;
@@ -53,8 +53,8 @@ public class H2Db extends Database {
 
 
     @Override
-    public DbMetaDataCollection getMetaData(String objectName) throws SQLException, MintLeafException {
-        final DbMetaDataCollection metaData = new DbMetaDataCollection(objectName);
+    public ColumnMetaDataCollection getMetaData(String objectName) throws SQLException, MintLeafException {
+        final ColumnMetaDataCollection metaData = new ColumnMetaDataCollection(objectName);
         if (objectName != null) {
             objectName = objectName.toUpperCase();
         }

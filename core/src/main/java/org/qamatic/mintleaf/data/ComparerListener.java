@@ -38,15 +38,15 @@ package org.qamatic.mintleaf.data;
  * Created by qamatic on 3/4/16.
  */
 public interface ComparerListener {
-    default void onBeforeRowCompare(final RowState sourceRowState, final RowState targetRowState) {
+    default void onBeforeRowCompare(final RowState sourceRow, final RowState targetRow) {
 
     }
 
-    default void onAfterRowCompare(final RowState sourceRowState, final RowState targetRowState) {
+    default void onAfterRowCompare(final RowState sourceRow, final RowState targetRow) {
 
     }
 
-    void OnCompare(final RowState sourceRowState, final RowState targetRowState);
+    void OnCompare(final RowState sourceRow, final RowState targetRow);
 
 
 }

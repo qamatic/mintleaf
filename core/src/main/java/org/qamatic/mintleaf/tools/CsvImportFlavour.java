@@ -43,6 +43,7 @@ import org.qamatic.mintleaf.RowWrapper;
 
 import java.io.IOException;
 import java.io.Reader;
+import java.sql.ResultSetMetaData;
 
 /**
  * Created by qamatic on 2/18/6/16.
@@ -104,6 +105,11 @@ public class CsvImportFlavour implements ImportFlavour {
         @Override
         public int count() {
             return record.size();
+        }
+
+        @Override
+        public ResultSetMetaData getMetaData() throws MintLeafException {
+            return null;
         }
     }
 

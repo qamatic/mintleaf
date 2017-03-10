@@ -53,11 +53,7 @@ public interface RowWrapper {
         return -1;
     }
 
-    default int count() throws MintLeafException {
-        return -1;
-    }
+    int count() throws MintLeafException ;
 
-    default ResultSetMetaData getMetaData() throws MintLeafException {
-        return null;
-    }
+    ResultSetMetaData getMetaData() throws MintLeafException;
 }

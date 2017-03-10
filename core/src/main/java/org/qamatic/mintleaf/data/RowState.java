@@ -34,6 +34,7 @@
 
 package org.qamatic.mintleaf.data;
 
+import org.qamatic.mintleaf.MintLeafException;
 import org.qamatic.mintleaf.RowWrapper;
 
 /**
@@ -48,5 +49,13 @@ public class RowState {
     @Override
     public String toString() {
         return String.format("RowNo:%d, ColumnNo:%d, Surplus:%d, Row:%s", RowNumber, ColumnNumber, IsSurplusRow, Row == null ? "null" : Row.toString());
+    }
+
+    public Object getValue() throws MintLeafException {
+        return Row.getValue(ColumnNumber);
+    }
+
+    public String asString() throws MintLeafException {
+        return getValue().toString();
     }
 }

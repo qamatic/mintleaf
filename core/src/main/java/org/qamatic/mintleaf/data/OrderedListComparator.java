@@ -77,7 +77,7 @@ public class OrderedListComparator implements DataComparer {
     }
 
     @Override
-    public void compare() throws MintLeafException {
+    public void execute() throws MintLeafException {
         assertBefore();
         final RowState sourceRowState = new RowState();
         final RowState targetRowState = new RowState();

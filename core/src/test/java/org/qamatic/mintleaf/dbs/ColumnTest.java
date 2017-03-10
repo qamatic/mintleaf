@@ -37,7 +37,7 @@ package org.qamatic.mintleaf.dbs;
 import org.junit.Assert;
 import org.junit.Test;
 import org.qamatic.mintleaf.Column;
-import org.qamatic.mintleaf.DbMetaDataCollection;
+import org.qamatic.mintleaf.ColumnMetaDataCollection;
 import org.qamatic.mintleaf.MintLeafException;
 
 import java.sql.Date;
@@ -103,27 +103,27 @@ public class ColumnTest {
 
     @Test
     public void testMetaDataCollection() {
-        DbMetaDataCollection dbMetaDataCollection = new DbMetaDataCollection("HRDB.COUNTRIES");
-        assertEquals("HRDB.COUNTRIES", dbMetaDataCollection.getObjectName());
+        ColumnMetaDataCollection columnMetaDataCollection = new ColumnMetaDataCollection("HRDB.COUNTRIES");
+        assertEquals("HRDB.COUNTRIES", columnMetaDataCollection.getObjectName());
     }
 
     @Test(expected = MintLeafException.class)
     public void testMetaDataCollectionDupeColumn() {
-        DbMetaDataCollection dbMetaDataCollection = new DbMetaDataCollection("HRDB.COUNTRIES");
-        dbMetaDataCollection.add(new Column("X", Types.NCHAR));
-        dbMetaDataCollection.add(new Column("Y", Types.DATE));
-        dbMetaDataCollection.add(new Column("Y", Types.DOUBLE));
-        assertEquals("HRDB.COUNTRIES", dbMetaDataCollection.getObjectName());
+        ColumnMetaDataCollection columnMetaDataCollection = new ColumnMetaDataCollection("HRDB.COUNTRIES");
+        columnMetaDataCollection.add(new Column("X", Types.NCHAR));
+        columnMetaDataCollection.add(new Column("Y", Types.DATE));
+        columnMetaDataCollection.add(new Column("Y", Types.DOUBLE));
+        assertEquals("HRDB.COUNTRIES", columnMetaDataCollection.getObjectName());
     }
 
 
     @Test(expected = MintLeafException.class)
     public void testMetaDataCollectionDupeColumn2() {
-        DbMetaDataCollection dbMetaDataCollection = new DbMetaDataCollection("HRDB.COUNTRIES");
-        dbMetaDataCollection.add(new Column("X", Types.NCHAR));
-        dbMetaDataCollection.add(new Column("Y", Types.DATE));
-        dbMetaDataCollection.add(1, new Column("Y", Types.DOUBLE));
-        assertEquals("HRDB.COUNTRIES", dbMetaDataCollection.getObjectName());
+        ColumnMetaDataCollection columnMetaDataCollection = new ColumnMetaDataCollection("HRDB.COUNTRIES");
+        columnMetaDataCollection.add(new Column("X", Types.NCHAR));
+        columnMetaDataCollection.add(new Column("Y", Types.DATE));
+        columnMetaDataCollection.add(1, new Column("Y", Types.DOUBLE));
+        assertEquals("HRDB.COUNTRIES", columnMetaDataCollection.getObjectName());
     }
 
 }

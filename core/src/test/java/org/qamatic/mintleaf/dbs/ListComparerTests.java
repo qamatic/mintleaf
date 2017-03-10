@@ -83,8 +83,8 @@ public class ListComparerTests {
                 add("[Source:RowNo:2, ColumnNo:1, Surplus:1, Row:{COUNTRY=USA, USERNAME=XMEN}] [Target:RowNo:1, ColumnNo:-1, Surplus:-1, Row:null]");
             }
         };
-        List<UserRow> sourceList = getDefaultUsers();
-        sourceList.add(new UserRow("XMEN", "USA"));
+        List<ListRowWrapper> sourceList = getDefaultUsers();
+        sourceList.add(new ListRowWrapper("XMEN", "USA"));
         List<String> actuals = assertCompareTable(sourceList, getDefaultUsers());
 
         assertEquals(expected, actuals);
@@ -103,15 +103,15 @@ public class ListComparerTests {
                 add("[Source:RowNo:1, ColumnNo:-1, Surplus:-1, Row:null] [Target:RowNo:2, ColumnNo:1, Surplus:1, Row:{COUNTRY=USA, USERNAME=XMEN}]");
             }
         };
-        List<UserRow> targetList = getDefaultUsers();
-        targetList.add(new UserRow("XMEN", "USA"));
+        List<ListRowWrapper> targetList = getDefaultUsers();
+        targetList.add(new ListRowWrapper("XMEN", "USA"));
         List<String> actuals = assertCompareTable(getDefaultUsers(), targetList);
 
         assertEquals(expected, actuals);
     }
 
 
-    private List<String> assertCompareTable(List<UserRow> sourceList, List<UserRow> targetListList) throws MintLeafException {
+    private List<String> assertCompareTable(List<ListRowWrapper> sourceList, List<ListRowWrapper> targetListList) throws MintLeafException {
         final List<String> actuals = new ArrayList<>();
         final ConsoleLogger logger = new ConsoleLogger();
         DataComparer dataComparer = new Mintleaf.ComparerBuilder().
@@ -119,48 +119,48 @@ public class ListComparerTests {
                 withTargetTable(targetListList).
                 withMatchingResult(new ComparerListener() {
                     @Override
-                    public void OnCompare(RowState sourceRowState, RowState targetRowState) {
-                        actuals.add(String.format("[Source:%s] [Target:%s]", sourceRowState, targetRowState));
+                    public void OnCompare(RowState sourceRow, RowState targetRow) {
+                        actuals.add(String.format("[Source:%s] [Target:%s]", sourceRow, targetRow));
                         logger.info(actuals.get(actuals.size() - 1));
                     }
                 }).
                 build();
 
 
-        dataComparer.compare();
+        dataComparer.execute();
 
         return actuals;
     }
 
 
-    private ArrayList<UserRow> getDefaultUsers() {
-        return new ArrayList<UserRow>() {
+    private ArrayList<ListRowWrapper> getDefaultUsers() {
+        return new ArrayList<ListRowWrapper>() {
             {
-                add(new UserRow("Vallr", "USA"));
-                add(new UserRow("SM", "USA"));
+                add(new ListRowWrapper("Vallr", "USA"));
+                add(new ListRowWrapper("SM", "USA"));
             }
         };
     }
 
 
-    private class UserRow extends Properties implements RowWrapper {
+    private class ListRowWrapper extends Properties implements RowWrapper {
 
         private Properties properties = new Properties();
-        private DbMetaDataCollection dbMetaDataCollection = new DbMetaDataCollection("LIST.USERS") {
+        private ColumnMetaDataCollection columnMetaDataCollection = new ColumnMetaDataCollection("LIST.USERS") {
             {
                 add(new Column("USERNAME", Types.VARCHAR));
                 add(new Column("COUNTRY", Types.VARCHAR));
             }
         };
 
-        public UserRow(String userName, String country) {
+        public ListRowWrapper(String userName, String country) {
             setProperty("USERNAME", userName);
             setProperty("COUNTRY", country);
         }
 
         @Override
         public Object getValue(int columnIndex) throws MintLeafException {
-            return getValue(dbMetaDataCollection.get(columnIndex).getColumnName());
+            return getValue(columnMetaDataCollection.get(columnIndex).getColumnName());
         }
 
         @Override
@@ -174,14 +174,102 @@ public class ListComparerTests {
 
         @Override
         public int count() throws MintLeafException {
-            return dbMetaDataCollection.size();
+            return columnMetaDataCollection.size();
         }
 
         @Override
         public ResultSetMetaData getMetaData() throws MintLeafException {
-            return dbMetaDataCollection;
+            return columnMetaDataCollection;
         }
     }
 
+    public class UserList extends ArrayList<User> {
+
+    }
+
+    private class User implements RowWrapper {
+
+        private ColumnMetaDataCollection metaDataCollection;
+
+        public String UserName;
+        public String Country;
+
+        @Override
+        public Object getValue(int columnIndex) throws MintLeafException {
+            switch (columnIndex) {
+                case 0:
+                    return UserName;
+                case 1:
+                    return Country;
+            }
+            return null;
+        }
+
+        @Override
+        public Object getValue(String columnName) throws MintLeafException {
+            return getValue(getMetaData().getIndex(columnName));
+
+        }
+
+        @Override
+        public int count() throws MintLeafException {
+            return getMetaData().size();
+        }
+
+        @Override
+        public ColumnMetaDataCollection getMetaData() throws MintLeafException {
+            if (metaDataCollection == null) {
+                metaDataCollection = new ColumnMetaDataCollection("USERS");
+                metaDataCollection.add(new Column("UserName", Types.VARCHAR));
+                metaDataCollection.add(new Column("Country", Types.VARCHAR));
+            }
+            return metaDataCollection;
+        }
+    }
+
+
+    @Test
+    public void compareList() throws SQLException, IOException, MintLeafException {
+        List<User> sourceUserList = new UserList(){
+            {
+                add(new User(){
+                    {
+                        UserName = "SM";
+                        Country = "USA";
+                    }
+                });
+            }
+        };
+        List<User> targetUserList = new UserList(){
+            {
+                add(new User(){
+                    {
+                        UserName = "SM";
+                        Country = "USA";
+                    }
+                });
+            }
+        };
+        final ConsoleLogger logger = new ConsoleLogger();
+        DataComparer dataComparer = new Mintleaf.ComparerBuilder().
+                withSourceTable(sourceUserList).
+                withTargetTable(targetUserList).
+                withMatchingResult(new ComparerListener() {
+                    @Override
+                    public void OnCompare(RowState sourceRow, RowState targetRow) {
+//                        actuals.add(String.format("[Source:%s] [Target:%s]", sourceRowState, targetRowState));
+//                        logger.info(actuals.get(actuals.size() - 1));
+                        logger.info(String.format("[Source:%s] [Target:%s]", sourceRow, targetRow));
+                        try {
+                            assertEquals(sourceRow.asString(), targetRow.asString());
+                        } catch (MintLeafException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }).
+                build();
+
+        dataComparer.execute();
+    }
 
 }

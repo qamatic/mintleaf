@@ -79,7 +79,7 @@ public interface DbQueries {
         throw new NotImplementedException();
     }
 
-    default DbMetaDataCollection getMetaData(String objectName) throws SQLException, MintLeafException {
+    default ColumnMetaDataCollection getMetaData(String objectName) throws SQLException, MintLeafException {
         throw new NotImplementedException();
     }
 

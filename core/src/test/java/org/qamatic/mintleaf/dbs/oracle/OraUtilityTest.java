@@ -39,7 +39,7 @@ import org.junit.BeforeClass;
 import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.runners.MethodSorters;
-import org.qamatic.mintleaf.DbMetaDataCollection;
+import org.qamatic.mintleaf.ColumnMetaDataCollection;
 import org.qamatic.mintleaf.MintLeafException;
 import org.qamatic.mintleaf.core.ChangeSets;
 
@@ -80,7 +80,7 @@ public class OraUtilityTest extends OracleTestCase {
 
     @Test
     public void testCountryMetaData() throws SQLException, IOException, MintLeafException {
-        DbMetaDataCollection metaData = oracleHrDbCtx.getDbQueries().getMetaData("HRDB.COUNTRIES");
+        ColumnMetaDataCollection metaData = oracleHrDbCtx.getDbQueries().getMetaData("HRDB.COUNTRIES");
         assertEquals(3, metaData.size());
     }
 
@@ -104,7 +104,7 @@ public class OraUtilityTest extends OracleTestCase {
         if (!oracleHrDbCtx.getDbQueries().isSqlObjectExists("HRDB.employee_typ", "TYPE", true)) {
             ChangeSets.migrate(oracleHrDbCtx.getDriverSource(), "res:/oracle/hrdb-changesets/hrdb-ddl-typeobjects.sql", "create employee object type");
         }
-        DbMetaDataCollection metaData = oracleHrDbCtx.getDbQueries().getMetaData("HRDB.employee_typ");
+        ColumnMetaDataCollection metaData = oracleHrDbCtx.getDbQueries().getMetaData("HRDB.employee_typ");
         assertEquals(12, metaData.size());
     }
 

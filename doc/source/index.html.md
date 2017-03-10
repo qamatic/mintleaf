@@ -290,10 +290,13 @@ Suppose you have a data in a CSV file called abcd.csv and want to load it in to 
  
 #Data compare
 
-With Mintleaf, you can literally compare two data sets and they need not be a database table. For example you can compare CSV against a database table or list of object against CSV or a database table or vice versa.
+With Mintleaf, you can compare two data sets of any kind and it is not just limited to between two database tables. For example one can compare CSV file against a database table or list of objects against a CSV file or against a database table or vice versa. However out of the box implementations are available between for CSV and database tables.  See advanced section as how to implement your own custom comparer implementation.
 
 
-However out of the box there are modes are availabe
+
+## Comparing two lists of objects
+
+
 
 
 
