@@ -3,12 +3,11 @@ package org.qamatic.mintleaf.tools;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVParser;
 import org.apache.commons.csv.CSVRecord;
-import org.qamatic.mintleaf.ComparableRow;
-import org.qamatic.mintleaf.MintLeafException;
-import org.qamatic.mintleaf.RowListWrapper;
+import org.qamatic.mintleaf.*;
 
 import java.io.IOException;
 import java.io.Reader;
+import java.sql.ResultSetMetaData;
 import java.util.Iterator;
 
 /**
@@ -32,12 +31,20 @@ public class CsvRowListWrapper implements RowListWrapper {
     }
 
     @Override
-    public void resetAll() throws MintLeafException {
-        iterator=null;
+    public ColumnMetaDataCollection getMetaData() throws MintLeafException {
+        return csvRowWrapper.getMetaData();
     }
 
-    private Iterator<CSVRecord> getIterator() throws IOException {
-        if (iterator == null){
+    @Override
+    public void resetAll() throws MintLeafException {
+        iterator = null;
+    }
+
+    private Iterator<CSVRecord> getIterator() throws IOException, MintLeafException {
+        if (iterator == null) {
+            for (String columnName : getCSVParser().getHeaderMap().keySet()) {
+                csvRowWrapper.getMetaData().add(new Column(columnName));
+            }
             iterator = getCSVParser().iterator();
         }
         return iterator;

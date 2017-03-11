@@ -34,6 +34,8 @@
 
 package org.qamatic.mintleaf;
 
+import java.sql.ResultSetMetaData;
+
 /**
  * Created by qamatic on 3/4/16.
  */
@@ -44,4 +46,8 @@ public interface RowListWrapper {
     boolean moveNext() throws MintLeafException;
 
     ComparableRow row() throws MintLeafException;
+
+    default ResultSetMetaData getMetaData() throws MintLeafException {
+        return row().getMetaData();
+    }
 }
