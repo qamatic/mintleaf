@@ -32,7 +32,7 @@
  *
  */
 
-package junitsupport;
+package org.qamatic.mintleaf.dbexample.migrate;
 
 import org.junit.Before;
 import org.junit.Test;
