@@ -81,23 +81,20 @@ public class ListOfObjectsComparerTests {
         DataComparer dataComparer = new Mintleaf.ComparerBuilder().
                 withSourceTable(sourceUserList).
                 withTargetTable(targetUserList).
-                withMatchingResult(new ComparerListener() {
-                    @Override
-                    public void OnCompare(RowState sourceRow, RowState targetRow) throws MintLeafException {
+                withMatchingResult((sourceRow, targetRow) -> {
 
-                        logger.info(String.format("[Source:%s] [Target:%s]", sourceRow, targetRow));
-                        assertEquals(sourceRow.asString(), targetRow.asString());
+                    logger.info(String.format("[Source:%s] [Target:%s]", sourceRow, targetRow));
+                    assertEquals(sourceRow.asString(), targetRow.asString());
 
-                        String sourceColumnValue = sourceRow.Row.getValue(sourceRow.ColumnNumber).toString();
-                        String targetColumnValue = sourceRow.Row.getValue(sourceRow.ColumnNumber).toString();
-                        if (sourceColumnValue.equals(targetColumnValue)) {
+                    String sourceColumnValue = sourceRow.Row.getValue(sourceRow.ColumnNumber).toString();
+                    String targetColumnValue = sourceRow.Row.getValue(sourceRow.ColumnNumber).toString();
+                    if (sourceColumnValue.equals(targetColumnValue)) {
 
-                            logger.info("matches");
-                        } else {
-                            logger.info("no match");
-                        }
-
+                        logger.info("matches");
+                    } else {
+                        logger.info("no match");
                     }
+
                 }).
                 build();
 

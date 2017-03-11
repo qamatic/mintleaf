@@ -44,7 +44,6 @@ import org.qamatic.mintleaf.tools.CsvRowListWrapper;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.StringReader;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
@@ -63,53 +62,39 @@ public class CsvVsListComparerTests {
         InputStream csvStream = BaseSqlReader.getInputStreamFromFile("res:/users.csv");
         CsvRowListWrapper csvRowListWrapper = new CsvRowListWrapper(new InputStreamReader(csvStream));
 
-        List<User> sourceUserList = new ArrayList<User> (){
+
+        List<User> targetUserList = new ArrayList<User>() {
             {
-                add(new User(){
-                    {
-                        UserName = "SM";
-                        Country = "USA";
-                    }
-                });
+                add(new User("Aiden"));
+                add(new User("Ethan, Allen"));
+                add(new User("Liam"));
+                add(new User("Noah"));
+                add(new User("Jacob"));
+                add(new User("Benjamin"));
+                add(new User("qamatic"));
             }
         };
-        List<User> targetUserList = new ArrayList<User> (){
-            {
-                add(new User(){
-                    {
-                        UserName = "SM";
-                        Country = "USA";
-                    }
-                });
-            }
-        };
+
         final ConsoleLogger logger = new ConsoleLogger();
         DataComparer dataComparer = new Mintleaf.ComparerBuilder().
                 withSourceTable(csvRowListWrapper).
                 withTargetTable(targetUserList).
                 withMatchingResult(new ComparerListener() {
                     @Override
-                    public void OnCompare(RowState sourceRow, RowState targetRow) throws MintLeafException {
+                    public void OnColumnCompare(RowState sourceRow, RowState targetRow) throws MintLeafException {
 
+                    }
+
+                    @Override
+                    public void OnRowCompare(RowState sourceRow, RowState targetRow) throws MintLeafException {
                         logger.info(String.format("[Source:%s] [Target:%s]", sourceRow, targetRow));
-                      //  assertEquals(sourceRow.asString(), targetRow.asString());
-
-//                        String sourceColumnValue = sourceRow.Row.getValue(sourceRow.ColumnNumber).toString();
-//                        String targetColumnValue = sourceRow.Row.getValue(sourceRow.ColumnNumber).toString();
-//                        if (sourceColumnValue.equals(targetColumnValue)) {
-//
-//                            logger.info("matches");
-//                        } else {
-//                            logger.info("no match");
-//                        }
-
+                        assertEquals(sourceRow.Row.getValue(1), targetRow.Row.getValue(0));
                     }
                 }).
                 build();
 
         dataComparer.execute();
     }
-
 
 
     private class User implements ComparableRow {
@@ -119,13 +104,15 @@ public class CsvVsListComparerTests {
         public String UserName;
         public String Country;
 
+        public User(String userName) {
+            this.UserName = userName;
+        }
+
         @Override
         public Object getValue(int columnIndex) throws MintLeafException {
             switch (columnIndex) {
                 case 0:
                     return UserName;
-                case 1:
-                    return Country;
             }
             return null;
         }
@@ -135,7 +122,6 @@ public class CsvVsListComparerTests {
             if (metaDataCollection == null) {
                 metaDataCollection = new ColumnMetaDataCollection("USERS");
                 metaDataCollection.add(new Column("UserName"));
-                metaDataCollection.add(new Column("Country"));
             }
             return metaDataCollection;
         }

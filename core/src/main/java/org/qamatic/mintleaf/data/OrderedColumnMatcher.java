@@ -51,7 +51,7 @@ public class OrderedColumnMatcher implements RowMatcher {
 
 
                 if (listener != null) {
-                    listener.OnCompare(leftRowState, rightRowState);
+                    listener.OnColumnCompare(leftRowState, rightRowState);
                 }
 
 
@@ -59,7 +59,7 @@ public class OrderedColumnMatcher implements RowMatcher {
             while (rightRowState.ColumnNumber < rightRowState.Row.count() - 1) {
                 rightRowState.ColumnNumber++;
                 if (listener != null) {
-                    listener.OnCompare(leftRowState, rightRowState);
+                    listener.OnColumnCompare(leftRowState, rightRowState);
                 }
             }
 
@@ -68,7 +68,7 @@ public class OrderedColumnMatcher implements RowMatcher {
             while (leftRowState.ColumnNumber < leftRowState.Row.count() - 1) {
                 leftRowState.ColumnNumber++;
                 if (listener != null) {
-                    listener.OnCompare(leftRowState, rightRowState);
+                    listener.OnColumnCompare(leftRowState, rightRowState);
                 }
             }
 
@@ -77,7 +77,7 @@ public class OrderedColumnMatcher implements RowMatcher {
             while (rightRowState.ColumnNumber < rightRowState.Row.count() - 1) {
                 rightRowState.ColumnNumber++;
                 if (listener != null) {
-                    listener.OnCompare(leftRowState, rightRowState);
+                    listener.OnColumnCompare(leftRowState, rightRowState);
                 }
             }
         }

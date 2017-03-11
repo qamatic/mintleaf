@@ -99,7 +99,7 @@ public class OrderedListComparator implements DataComparer {
                 targetRowState.Row = this.targetTable.row();
                 targetRowState.IsSurplusRow = 0;
                 targetRowState.ColumnNumber = -1;
-
+                onRowCompare(sourceRowState, targetRowState);
                 rowMatcher.match(sourceRowState, targetRowState, this.comparerListener);
                 afterRowCompare(sourceRowState, targetRowState);
             } else {
@@ -111,7 +111,7 @@ public class OrderedListComparator implements DataComparer {
                 targetRowState.Row = null;
                 targetRowState.IsSurplusRow = -1;
                 targetRowState.ColumnNumber = -1;
-
+                onRowCompare(sourceRowState, targetRowState);
                 rowMatcher.match(sourceRowState, targetRowState, this.comparerListener);
                 afterRowCompare(sourceRowState, targetRowState);
             }
@@ -127,6 +127,7 @@ public class OrderedListComparator implements DataComparer {
             targetRowState.Row = this.targetTable.row();
             targetRowState.IsSurplusRow = 1;
             targetRowState.ColumnNumber = -1;
+            onRowCompare(sourceRowState, targetRowState);
             rowMatcher.match(sourceRowState, targetRowState, this.comparerListener);
             afterRowCompare(sourceRowState, targetRowState);
         }
@@ -139,6 +140,12 @@ public class OrderedListComparator implements DataComparer {
             throw new MintLeafException("SourceTable is missing");
         if (targetTable == null)
             throw new MintLeafException("TargetTable is missing");
+    }
+
+    private void onRowCompare(final RowState sourceRowState, final RowState targetRowState) throws MintLeafException {
+        if (this.comparerListener != null) {
+            this.comparerListener.OnRowCompare(sourceRowState, targetRowState);
+        }
     }
 
     private void beforeRowCompare(final RowState sourceRowState, final RowState targetRowState) {
