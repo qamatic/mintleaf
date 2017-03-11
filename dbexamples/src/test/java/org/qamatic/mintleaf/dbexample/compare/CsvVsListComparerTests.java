@@ -70,7 +70,7 @@ public class CsvVsListComparerTests {
                 add(new User("Liam"));
                 add(new User("Noah"));
                 add(new User("Jacob"));
-                add(new User("Benjamin"));
+                add(new User("SM"));
                 add(new User("qamatic"));
             }
         };

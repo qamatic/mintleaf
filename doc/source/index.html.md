@@ -11,20 +11,27 @@ includes:
 search: true
 ---
 
-# Introduction
+# Get started
 
 Welcome to the Mintleaf! Mintleaf is a light weight framework tool helps you to advance your database developement on continuous integration / continuous delivery model as easy as possible.
 
 ### Features
-- Database Migration (either from command line or programatic approach)
-- Ability to write automated tests and run them on migrated database schemas, objects, data integrity checks during CI/CD
-- Seamless Test life cycle management such as setup, teardown mock data, schema and any database objects using changesets
-- Transfer/Copy data between datbases
+- Simplified Database Migration (either from command line or programatic approach)
+- Compare Data between database tables/csv/spreadsheets/list of objects/any custom data sources
+- Data export/import: database table to CSV, CSV to database table and, between database tables  
+- Unit testing: write automated tests and run them on migrated database schemas, objects, data integrity checks during CI/CD.
+- Seamless Test life cycle management such as creation of test data,  test data setup, test data teardown, schema and any database objects using changesets
+- Extensibility framework offers you the power of customizations - custom data wrappers, custom import/export, custom comparer implementation, and report generation and so on..
+- Low memory overhead, high performance on large datasets for data exports, imports, and data compare scenarios
 - Nothing more but to use Plain old SQL that you know of
+  
 
-![Mintleaf](/images/mintleaf.png)  
+##Installation
 
 
+
+# Understanding Mintleaf
+ 
 ## Migration at a glance
 Database migraton refers to the management of incremental, reversible changes to relational database schemas. A schema migration is performed on a database whenever it is necessary to update or revert that database's schema to some newer or older version.  Look at the below diagram which shows you the schema changes over a period of time during a Agile Software Developement Life Cycle.   Every schema changes during a developement sprint will be applied to QA Databases and Prod Database at the end of sprint release.  
   
@@ -56,12 +63,12 @@ and so on....
 So again, welcome to the Mintleaf!  Mintleaf is a light weight framework tool helps you to advance your database developement on continuous integration / continuous delivery model as easy as possible.
 
  
-# Understanding Mintleaf
+
 
 Let's look at the core concepts behind Mintleaf design so that you will be able to understand and use it accordingly before you move onto technical section.  Here is the simple steps to get you started quick.
 
 
-## Changesets
+## Change-sets
  
 
  Changesets are basically contains one ore more changes that are to be applied during a database migration.  Mintleaf changesets are stored in plain old sql files but changeset information is described using sql comment lines as shown below 
@@ -144,6 +151,11 @@ Version profile is a configuration file which contains list of changesets to be 
 </mintleaf>
          
 ```
+
+
+## Components of Mintleaf and tool kits 
+
+![Mintleaf](/images/mintleaf.png)  
 
  
 # Creating test data
