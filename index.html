@@ -223,21 +223,26 @@
     <div class="page-wrapper">
       <div class="dark-box"></div>
       <div class="content">
-        <h1 id="introduction">Introduction</h1>
+        <h1 id="get-started">Get started</h1>
 
 <p>Welcome to the Mintleaf! Mintleaf is a light weight framework tool helps you to advance your database developement on continuous integration / continuous delivery model as easy as possible.</p>
 
 <h3 id="features">Features</h3>
 
 <ul>
-<li>Database Migration (either from command line or programatic approach)</li>
-<li>Ability to write automated tests and run them on migrated database schemas, objects, data integrity checks during CI/CD</li>
-<li>Seamless Test life cycle management such as setup, teardown mock data, schema and any database objects using changesets</li>
-<li>Transfer/Copy data between datbases</li>
+<li>Simplified Database Migration (either from command line or programatic approach)</li>
+<li>Compare Data between database tables/csv/spreadsheets/list of objects/any custom data sources</li>
+<li>Data export/import: database table to CSV, CSV to database table and, between database tables<br></li>
+<li>Unit testing: write automated tests and run them on migrated database schemas, objects, data integrity checks during CI/CD.</li>
+<li>Seamless Test life cycle management such as creation of test data,  test data setup, test data teardown, schema and any database objects using changesets</li>
+<li>Extensibility framework offers you the power of customizations - custom data wrappers, custom import/export, custom comparer implementation, and report generation and so on..</li>
+<li>Low memory overhead, high performance on large datasets for data exports, imports, and data compare scenarios</li>
 <li>Nothing more but to use Plain old SQL that you know of</li>
 </ul>
 
-<p><img src="images/mintleaf.png" alt="Mintleaf" />  </p>
+<h2 id="installation">Installation</h2>
+
+<h1 id="understanding-mintleaf">Understanding Mintleaf</h1>
 
 <h2 id="migration-at-a-glance">Migration at a glance</h2>
 
@@ -272,11 +277,9 @@ and so on&hellip;.</li>
 
 <p>So again, welcome to the Mintleaf!  Mintleaf is a light weight framework tool helps you to advance your database developement on continuous integration / continuous delivery model as easy as possible.</p>
 
-<h1 id="understanding-mintleaf">Understanding Mintleaf</h1>
-
 <p>Let&rsquo;s look at the core concepts behind Mintleaf design so that you will be able to understand and use it accordingly before you move onto technical section.  Here is the simple steps to get you started quick.</p>
 
-<h2 id="changesets">Changesets</h2>
+<h2 id="change-sets">Change-sets</h2>
 
 <p>Changesets are basically contains one ore more changes that are to be applied during a database migration.  Mintleaf changesets are stored in plain old sql files but changeset information is described using sql comment lines as shown below </p>
 <pre class="highlight sql tab-sql"><code> <span class="c1">-- &lt;ChangeSet id="{a-change-set-id}" delimiter=";" userdata="" /&gt;</span>
@@ -362,6 +365,10 @@ It&rsquo;s very easy to add changeset definition on your exising sql files if yo
 <span class="nt">&lt;/mintleaf&gt;</span>
 
 </code></pre>
+<h2 id="components-of-mintleaf-and-tool-kits">Components of Mintleaf and tool kits</h2>
+
+<p><img src="images/mintleaf.png" alt="Mintleaf" />  </p>
+
 <h1 id="creating-test-data">Creating test data</h1>
 
 <p>Before run your test you should load your test data to target test database so that your tests can be run for to prove to be working with developer code changes. So generally, your test scenearios may be involved with one or more database tables that needs to be populated with data in order to verify developer code changes either stored procedure side or application side. Mintleaf simplifies the test data creation process as easy as possible.  Here are the possible ways that one can think of creating test data with Mintleaf, </p>
