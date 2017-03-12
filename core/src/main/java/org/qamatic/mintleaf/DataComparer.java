@@ -48,4 +48,8 @@ public interface DataComparer extends DataAction  {
     void setSourceTable(RowListWrapper sourceTable);
 
     void setTargetTable(RowListWrapper targetTable);
+
+    RowListWrapper getSourceTable();
+
+    RowListWrapper getTargetTable();
 }

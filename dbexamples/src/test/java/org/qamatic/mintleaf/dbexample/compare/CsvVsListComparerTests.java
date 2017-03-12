@@ -78,7 +78,7 @@ public class CsvVsListComparerTests {
         final ConsoleLogger logger = new ConsoleLogger();
         DataComparer dataComparer = new Mintleaf.ComparerBuilder().
                 withSourceTable(csvRowListWrapper).
-                withTargetTable(targetUserList).
+                withTargetTable(targetUserList, getMetaData()).
                 withMatchingResult(new ComparerListener() {
 
                     @Override
@@ -98,5 +98,12 @@ public class CsvVsListComparerTests {
     }
 
 
+    private static ColumnMetaDataCollection getMetaData() throws MintLeafException {
 
+        ColumnMetaDataCollection metaDataCollection = new ColumnMetaDataCollection("USERS");
+        metaDataCollection.add(new Column("UserName"));
+        metaDataCollection.add(new Column("Country"));
+
+        return metaDataCollection;
+    }
 }

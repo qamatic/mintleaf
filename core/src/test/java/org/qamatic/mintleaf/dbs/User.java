@@ -34,9 +34,11 @@
  *
  */
 
-package org.qamatic.mintleaf.dbexample.compare;
+package org.qamatic.mintleaf.dbs;
 
-import org.qamatic.mintleaf.*;
+import org.qamatic.mintleaf.ComparableRow;
+import org.qamatic.mintleaf.MetaDataCollection;
+import org.qamatic.mintleaf.MintLeafException;
 
 /**
  * Created by QAmatic Team on 3/11/17.

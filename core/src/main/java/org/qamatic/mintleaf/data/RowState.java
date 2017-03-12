@@ -48,7 +48,7 @@ public class RowState {
 
     @Override
     public String toString() {
-        return String.format("RowNo:%d, ColumnNo:%d, Surplus:%d, Row:%s", RowNumber, ColumnNumber, IsSurplusRow, Row == null ? "null" : Row.toString());
+        return String.format("RowNo:%d, ColumnNo:%d, Surplus:%d", RowNumber, ColumnNumber, IsSurplusRow);
     }
 
     public Object getValue() throws MintLeafException {

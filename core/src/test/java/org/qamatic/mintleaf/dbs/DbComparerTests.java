@@ -74,15 +74,15 @@ public class DbComparerTests extends H2TestCase {
     public void compareListWithEqualSize() throws SQLException, IOException, MintLeafException {
         final List<String> expected = new ArrayList<String>() {
             {
-                add("[Source:RowNo:0, ColumnNo:0, Surplus:0, Row: Cols:4] [Target:RowNo:0, ColumnNo:0, Surplus:0, Row: Cols:4]");
-                add("[Source:RowNo:0, ColumnNo:1, Surplus:0, Row: Cols:4] [Target:RowNo:0, ColumnNo:1, Surplus:0, Row: Cols:4]");
-                add("[Source:RowNo:0, ColumnNo:2, Surplus:0, Row: Cols:4] [Target:RowNo:0, ColumnNo:2, Surplus:0, Row: Cols:4]");
-                add("[Source:RowNo:0, ColumnNo:3, Surplus:0, Row: Cols:4] [Target:RowNo:0, ColumnNo:3, Surplus:0, Row: Cols:4]");
+                add("[Source:RowNo:0, ColumnNo:0, Surplus:0] [Target:RowNo:0, ColumnNo:0, Surplus:0]");
+                add("[Source:RowNo:0, ColumnNo:1, Surplus:0] [Target:RowNo:0, ColumnNo:1, Surplus:0]");
+                add("[Source:RowNo:0, ColumnNo:2, Surplus:0] [Target:RowNo:0, ColumnNo:2, Surplus:0]");
+                add("[Source:RowNo:0, ColumnNo:3, Surplus:0] [Target:RowNo:0, ColumnNo:3, Surplus:0]");
 
-                add("[Source:RowNo:1, ColumnNo:0, Surplus:0, Row: Cols:4] [Target:RowNo:1, ColumnNo:0, Surplus:0, Row: Cols:4]");
-                add("[Source:RowNo:1, ColumnNo:1, Surplus:0, Row: Cols:4] [Target:RowNo:1, ColumnNo:1, Surplus:0, Row: Cols:4]");
-                add("[Source:RowNo:1, ColumnNo:2, Surplus:0, Row: Cols:4] [Target:RowNo:1, ColumnNo:2, Surplus:0, Row: Cols:4]");
-                add("[Source:RowNo:1, ColumnNo:3, Surplus:0, Row: Cols:4] [Target:RowNo:1, ColumnNo:3, Surplus:0, Row: Cols:4]");
+                add("[Source:RowNo:1, ColumnNo:0, Surplus:0] [Target:RowNo:1, ColumnNo:0, Surplus:0]");
+                add("[Source:RowNo:1, ColumnNo:1, Surplus:0] [Target:RowNo:1, ColumnNo:1, Surplus:0]");
+                add("[Source:RowNo:1, ColumnNo:2, Surplus:0] [Target:RowNo:1, ColumnNo:2, Surplus:0]");
+                add("[Source:RowNo:1, ColumnNo:3, Surplus:0] [Target:RowNo:1, ColumnNo:3, Surplus:0]");
             }
         };
 

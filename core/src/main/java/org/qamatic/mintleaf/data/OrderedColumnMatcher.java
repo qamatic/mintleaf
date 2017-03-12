@@ -37,26 +37,31 @@ package org.qamatic.mintleaf.data;
 import org.qamatic.mintleaf.MintLeafException;
 import org.qamatic.mintleaf.RowMatcher;
 
+import java.sql.SQLException;
+
 /**
  * Created by qamatic on 3/5/16.
  */
 public class OrderedColumnMatcher implements RowMatcher {
     @Override
     public void match(RowState leftRowState, RowState rightRowState, ComparerListener listener) throws MintLeafException {
+        try {
         if ((leftRowState.Row != null) && (rightRowState.Row != null)) {
 
-            while (leftRowState.ColumnNumber < leftRowState.Row.count() - 1) {
-                leftRowState.ColumnNumber++;
-                rightRowState.ColumnNumber++;
+
+                while (leftRowState.ColumnNumber < leftRowState.Row.getMetaData().getColumnCount() - 1) {
+                    leftRowState.ColumnNumber++;
+                    rightRowState.ColumnNumber++;
 
 
-                if (listener != null) {
-                    listener.OnColumnCompare(leftRowState, rightRowState);
+                    if (listener != null) {
+                        listener.OnColumnCompare(leftRowState, rightRowState);
+                    }
+
+
                 }
 
-
-            }
-            while (rightRowState.ColumnNumber < rightRowState.Row.count() - 1) {
+            while (rightRowState.ColumnNumber < rightRowState.Row.getMetaData().getColumnCount() - 1) {
                 rightRowState.ColumnNumber++;
                 if (listener != null) {
                     listener.OnColumnCompare(leftRowState, rightRowState);
@@ -65,7 +70,7 @@ public class OrderedColumnMatcher implements RowMatcher {
 
         } else if ((leftRowState.Row != null) && (rightRowState.Row == null)) {
 
-            while (leftRowState.ColumnNumber < leftRowState.Row.count() - 1) {
+            while (leftRowState.ColumnNumber < leftRowState.Row.getMetaData().getColumnCount() - 1) {
                 leftRowState.ColumnNumber++;
                 if (listener != null) {
                     listener.OnColumnCompare(leftRowState, rightRowState);
@@ -74,13 +79,15 @@ public class OrderedColumnMatcher implements RowMatcher {
 
         } else if ((leftRowState.Row == null) && (rightRowState.Row != null)) {
 
-            while (rightRowState.ColumnNumber < rightRowState.Row.count() - 1) {
+            while (rightRowState.ColumnNumber < rightRowState.Row.getMetaData().getColumnCount() - 1) {
                 rightRowState.ColumnNumber++;
                 if (listener != null) {
                     listener.OnColumnCompare(leftRowState, rightRowState);
                 }
             }
         }
-
+        } catch (SQLException e) {
+            throw new MintLeafException(e);
+        }
     }
 }

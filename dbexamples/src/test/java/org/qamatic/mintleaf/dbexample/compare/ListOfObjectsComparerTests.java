@@ -35,12 +35,8 @@
 package org.qamatic.mintleaf.dbexample.compare;
 
 import org.junit.Test;
-import org.qamatic.mintleaf.ConsoleLogger;
-import org.qamatic.mintleaf.DataComparer;
-import org.qamatic.mintleaf.MintLeafException;
-import org.qamatic.mintleaf.Mintleaf;
+import org.qamatic.mintleaf.*;
 import org.qamatic.mintleaf.data.ComparerListener;
-import org.qamatic.mintleaf.data.RowState;
 import org.qamatic.mintleaf.dbexample.reportgenerator.ComparisonResultReportGenerator;
 
 import java.io.FileWriter;
@@ -83,7 +79,7 @@ public class ListOfObjectsComparerTests {
     public void compareDataGenerateReport() throws SQLException, IOException, MintLeafException {
         List<User> sourceUserList = getUsers();
         List<User> targetUserList = getUsers();
-        ((User)targetUserList.get(0)).setUserName("SM1");
+        ((User) targetUserList.get(0)).setUserName("SM1");
         final ConsoleLogger logger = new ConsoleLogger();
         ComparerListener reportListener = new ComparisonResultReportGenerator(new FileWriter("report.html"));
         doCompare(sourceUserList, targetUserList, reportListener);
@@ -92,14 +88,22 @@ public class ListOfObjectsComparerTests {
     private void doCompare(List<User> sourceUserList, List<User> targetUserList, ComparerListener listener) throws MintLeafException {
 
         DataComparer dataComparer = new Mintleaf.ComparerBuilder().
-                withSourceTable(sourceUserList).
-                withTargetTable(targetUserList).
+                withSourceTable(sourceUserList, getMetaData()).
+                withTargetTable(targetUserList, getMetaData()).
                 withMatchingResult(listener).
                 build();
 
         dataComparer.execute();
     }
 
+    private static ColumnMetaDataCollection getMetaData() throws MintLeafException {
+
+        ColumnMetaDataCollection metaDataCollection = new ColumnMetaDataCollection("USERS");
+        metaDataCollection.add(new Column("UserName"));
+        metaDataCollection.add(new Column("Country"));
+
+        return metaDataCollection;
+    }
 
     private ArrayList<User> getUsers() {
         return new ArrayList<User>() {

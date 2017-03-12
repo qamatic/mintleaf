@@ -39,6 +39,7 @@ import org.qamatic.mintleaf.RowListWrapper;
 import org.qamatic.mintleaf.ComparableRow;
 
 import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 
 /**
@@ -46,7 +47,8 @@ import java.sql.SQLException;
  */
 public class ResultSetRowListWrapper implements RowListWrapper {
 
-    private ResultSet list;
+    private ResultSet resultSet;
+    private ResultSetMetaData resultSetMetaData;
 
     private int current = -1;
 
@@ -58,7 +60,7 @@ public class ResultSetRowListWrapper implements RowListWrapper {
     @Override
     public boolean moveNext() throws MintLeafException {
         try {
-            return list.next();
+            return resultSet.next();
         } catch (SQLException e) {
             throw new MintLeafException(e);
         }
@@ -66,10 +68,22 @@ public class ResultSetRowListWrapper implements RowListWrapper {
 
     @Override
     public ComparableRow row() throws MintLeafException {
-        return new ResultSetRowWrapper(list);
+        return new ResultSetRowWrapper(resultSet);
     }
 
     public void setResultSet(ResultSet list) {
-        this.list = list;
+        this.resultSet = list;
+    }
+
+    @Override
+    public ResultSetMetaData getMetaData() throws MintLeafException {
+        if (this.resultSetMetaData == null) {
+            try {
+                this.resultSetMetaData = this.resultSet.getMetaData();
+            } catch (SQLException e) {
+                throw new MintLeafException(e);
+            }
+        }
+        return this.resultSetMetaData;
     }
 }

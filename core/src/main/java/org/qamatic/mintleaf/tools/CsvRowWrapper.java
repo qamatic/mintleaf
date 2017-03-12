@@ -1,10 +1,7 @@
 package org.qamatic.mintleaf.tools;
 
 import org.apache.commons.csv.CSVRecord;
-import org.qamatic.mintleaf.Column;
-import org.qamatic.mintleaf.ColumnMetaDataCollection;
-import org.qamatic.mintleaf.ComparableRow;
-import org.qamatic.mintleaf.MintLeafException;
+import org.qamatic.mintleaf.*;
 
 import java.sql.ResultSetMetaData;
 
@@ -13,7 +10,7 @@ import java.sql.ResultSetMetaData;
  */
 public class CsvRowWrapper implements ComparableRow {
     private CSVRecord record;
-    private ColumnMetaDataCollection metaDataCollection;
+    private MetaDataCollection metaDataCollection;
 
     public CSVRecord getRecord() {
         return record;
@@ -35,15 +32,13 @@ public class CsvRowWrapper implements ComparableRow {
     }
 
     @Override
-    public int count() {
-        return record.size();
+    public void setMetaData(MetaDataCollection metaDataCollection) {
+        this.metaDataCollection = metaDataCollection;
+
     }
 
     @Override
-    public ColumnMetaDataCollection getMetaData() throws MintLeafException {
-        if (metaDataCollection == null) {
-            metaDataCollection = new ColumnMetaDataCollection("CSV");
-        }
-        return metaDataCollection;
+    public MetaDataCollection getMetaData() throws MintLeafException {
+        return this.metaDataCollection;
     }
 }

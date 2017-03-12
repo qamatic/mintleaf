@@ -34,9 +34,10 @@
 
 package org.qamatic.mintleaf.core;
 
+import org.qamatic.mintleaf.ComparableRow;
+import org.qamatic.mintleaf.MetaDataCollection;
 import org.qamatic.mintleaf.MintLeafException;
 import org.qamatic.mintleaf.MintLeafLogger;
-import org.qamatic.mintleaf.ComparableRow;
 
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
@@ -94,6 +95,11 @@ public class ResultSetRowWrapper implements ComparableRow {
         }
     }
 
+    @Override
+    public void setMetaData(MetaDataCollection metaDataCollection) {
+        this.resultSetMetaData = metaDataCollection;
+    }
+
     public void setResultSet(ResultSet resultSet) {
         this.resultSet = resultSet;
     }
@@ -110,22 +116,5 @@ public class ResultSetRowWrapper implements ComparableRow {
         return this.resultSetMetaData;
     }
 
-    @Override
-    public int count() throws MintLeafException {
-        try {
-            return getMetaData().getColumnCount();
-        } catch (SQLException e) {
-            throw new MintLeafException(e);
-        }
-    }
 
-    @Override
-    public String toString() {
-        try {
-            return String.format(" Cols:%d", count());
-        } catch (MintLeafException e) {
-            MintLeafException.throwException(e);
-        }
-        return super.toString();
-    }
 }

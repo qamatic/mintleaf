@@ -47,7 +47,5 @@ public interface RowListWrapper {
 
     ComparableRow row() throws MintLeafException;
 
-    default ResultSetMetaData getMetaData() throws MintLeafException {
-        return row().getMetaData();
-    }
+    ResultSetMetaData getMetaData() throws MintLeafException;
 }

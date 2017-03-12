@@ -71,13 +71,8 @@ public interface ComparableRow {
         return -1;
     }
 
-    default int count() throws MintLeafException {
-        try {
-            return getMetaData().getColumnCount();
-        } catch (SQLException e) {
-            throw new MintLeafException(e);
-        }
-    }
+
+    void setMetaData(MetaDataCollection metaDataCollection);
 
     ResultSetMetaData getMetaData() throws MintLeafException;
 }

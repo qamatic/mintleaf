@@ -16,6 +16,7 @@ import java.util.Iterator;
 public class CsvRowListWrapper implements RowListWrapper {
     private Reader afileReader;
     protected CSVParser parser;
+    private ColumnMetaDataCollection metaDataCollection = new ColumnMetaDataCollection("CSV");
     private CsvRowWrapper csvRowWrapper = new CsvRowWrapper();
     private Iterator<CSVRecord> iterator;
 
@@ -32,7 +33,7 @@ public class CsvRowListWrapper implements RowListWrapper {
 
     @Override
     public ColumnMetaDataCollection getMetaData() throws MintLeafException {
-        return csvRowWrapper.getMetaData();
+        return this.metaDataCollection;
     }
 
     @Override
@@ -43,7 +44,7 @@ public class CsvRowListWrapper implements RowListWrapper {
     private Iterator<CSVRecord> getIterator() throws IOException, MintLeafException {
         if (iterator == null) {
             for (String columnName : getCSVParser().getHeaderMap().keySet()) {
-                csvRowWrapper.getMetaData().add(new Column(columnName));
+                metaDataCollection.add(new Column(columnName));
             }
             iterator = getCSVParser().iterator();
         }
@@ -65,6 +66,9 @@ public class CsvRowListWrapper implements RowListWrapper {
 
     @Override
     public ComparableRow row() throws MintLeafException {
+        csvRowWrapper.setMetaData(this.metaDataCollection);
         return csvRowWrapper;
     }
+
+
 }

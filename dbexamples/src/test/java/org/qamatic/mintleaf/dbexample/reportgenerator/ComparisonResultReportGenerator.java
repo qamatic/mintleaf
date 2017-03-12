@@ -38,6 +38,7 @@ package org.qamatic.mintleaf.dbexample.reportgenerator;
 
 import org.qamatic.mintleaf.ConsoleLogger;
 import org.qamatic.mintleaf.MintLeafException;
+import org.qamatic.mintleaf.RowListWrapper;
 import org.qamatic.mintleaf.data.ComparerListener;
 import org.qamatic.mintleaf.data.RowState;
 
@@ -58,9 +59,17 @@ public class ComparisonResultReportGenerator implements ComparerListener {
     }
 
     @Override
-    public void OnBeginCompare() throws MintLeafException {
+    public void OnBeginCompare(RowListWrapper sourceTable, RowListWrapper targetTable) throws MintLeafException {
         try {
             this.fileWriter.write("<html><head><style> tr,td,table{border:1px silver solid} .pass{ background-color:green;color:white} .fail {background-color:red;color:white} </style></head><body><table>");
+            fileWriter.write("<tr>");
+            for (int i = 0; i < sourceTable.getMetaData().getColumnCount(); i++) {
+                fileWriter.write("<td>" + sourceTable.getMetaData().getColumnName(i) + "</td>");
+            }
+            fileWriter.write("</tr>");
+        } catch (SQLException e) {
+            throw new MintLeafException(e);
+
         } catch (IOException e) {
             throw new MintLeafException(e);
         }
@@ -79,18 +88,7 @@ public class ComparisonResultReportGenerator implements ComparerListener {
     @Override
     public void OnRowCompare(RowState sourceRow, RowState targetRow) throws MintLeafException {
         if (sourceRow.RowNumber == 0) {
-            try {
-                fileWriter.write("<tr>");
-                for (int i = 0; i < sourceRow.Row.getMetaData().getColumnCount(); i++) {
-                    fileWriter.write("<td>" + sourceRow.Row.getMetaData().getColumnName(i) + "</td>");
-                }
-                fileWriter.write("</tr>");
-            } catch (SQLException e) {
-                throw new MintLeafException(e);
 
-            } catch (IOException e) {
-                throw new MintLeafException(e);
-            }
         }
     }
 
@@ -100,8 +98,7 @@ public class ComparisonResultReportGenerator implements ComparerListener {
         try {
             if (sourceRow.asString().equals(targetRow.asString())) {
                 fileWriter.write(String.format("<td class='%s'>%s</td>", "pass", sourceRow.asString()));
-            }
-            else{
+            } else {
                 fileWriter.write(String.format("<td class='%s'>%s [expected %s]</td>", "fail", sourceRow.asString(), targetRow.asString()));
             }
 

@@ -54,4 +54,13 @@ public interface MetaDataCollection extends ResultSetMetaData {
     int getIndex(String columnName);
 
     Column findColumn(String columnName);
+
+
+    default String getColumnNameByIndex(int column) throws MintLeafException{
+        try {
+            return getColumnName(column);
+        } catch (SQLException e) {
+            throw new MintLeafException(e);
+        }
+    }
 }

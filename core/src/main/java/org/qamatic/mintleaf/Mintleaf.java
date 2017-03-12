@@ -43,6 +43,8 @@ import org.qamatic.mintleaf.tools.CsvExporter;
 import org.qamatic.mintleaf.tools.CsvImporter;
 import org.qamatic.mintleaf.tools.DbImporter;
 
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 
 /**
@@ -60,10 +62,8 @@ public class Mintleaf {
         private ComparerListener comparerListener;//= new ConsoleComparerListener();
         private RowMatcher rowMatcher = new OrderedColumnMatcher();
 
-        public ComparerBuilder withSourceTable(List<? extends ComparableRow> sourceTable) {
-            this.sourceTable = new ObjectRowListWrapper() {{
-                setList(sourceTable);
-            }};
+        public ComparerBuilder withSourceTable(List<? extends ComparableRow> sourceTable, MetaDataCollection metaDataCollection) {
+            this.sourceTable = new ObjectRowListWrapper(sourceTable, metaDataCollection);
             return this;
         }
 
@@ -72,10 +72,8 @@ public class Mintleaf {
             return this;
         }
 
-        public ComparerBuilder withTargetTable(List<? extends ComparableRow> targetTable) {
-            this.targetTable = new ObjectRowListWrapper() {{
-                setList(targetTable);
-            }};
+        public ComparerBuilder withTargetTable(List<? extends ComparableRow> targetTable, MetaDataCollection metaDataCollection) {
+            this.targetTable = new ObjectRowListWrapper(targetTable, metaDataCollection);
             return this;
         }
 
@@ -98,9 +96,9 @@ public class Mintleaf {
 
             DataComparer listComparator = null;
             try {
-                listComparator = dataComparerClazz.newInstance();
-                listComparator.setSourceTable(this.sourceTable);
-                listComparator.setTargetTable(this.targetTable);
+                Constructor constructor =
+                        dataComparerClazz.getConstructor(new Class[]{RowListWrapper.class, RowListWrapper.class});
+                listComparator = (DataComparer) constructor.newInstance(this.sourceTable, this.targetTable);
                 listComparator.setRowMatcher(this.rowMatcher);
                 listComparator.setComparerListener(this.comparerListener);
 
@@ -108,6 +106,14 @@ public class Mintleaf {
                 logger.error(e);
                 MintLeafException.throwException(e);
             } catch (IllegalAccessException e) {
+                logger.error(e);
+                MintLeafException.throwException(e);
+            }
+            catch (NoSuchMethodException e) {
+                logger.error(e);
+                MintLeafException.throwException(e);
+            }
+            catch (InvocationTargetException e) {
                 logger.error(e);
                 MintLeafException.throwException(e);
             }

@@ -51,31 +51,15 @@ public class OrderedListComparator implements DataComparer {
     private ComparerListener comparerListener;
     private RowMatcher rowMatcher;
 
-    public OrderedListComparator() {
 
+    public OrderedListComparator(RowListWrapper sourceTable, RowListWrapper targetTable) {
+        setSourceTable(sourceTable);
+        setTargetTable(targetTable);
+        setRowMatcher(new OrderedColumnMatcher());
     }
 
-    public static DataComparer create(RowListWrapper sourceTable, RowListWrapper targetTable) {
-        DataComparer dataComparer = new OrderedListComparator();
-        dataComparer.setSourceTable(sourceTable);
-        dataComparer.setTargetTable(targetTable);
-        dataComparer.setRowMatcher(new OrderedColumnMatcher());
-        return dataComparer;
-    }
 
-    public static DataComparer create(List sourceList, List targetList) {
-        DataComparer dataComparer = OrderedListComparator.create(
-                new ObjectRowListWrapper() {{
-                    setList(sourceList);
-                }},
-                new ObjectRowListWrapper() {{
-                    setList(targetList);
-                }});
-
-        return dataComparer;
-    }
-
-    protected RowState getRowStateInstance(){
+    protected RowState getRowStateInstance() {
         return new RowState();
     }
 
@@ -83,7 +67,7 @@ public class OrderedListComparator implements DataComparer {
     public void execute() throws MintLeafException {
         assertBefore();
         if (this.comparerListener != null) {
-            this.comparerListener.OnBeginCompare();
+            this.comparerListener.OnBeginCompare(this.sourceTable, this.targetTable);
         }
         final RowState sourceRowState = getRowStateInstance();
         final RowState targetRowState = getRowStateInstance();
@@ -184,6 +168,16 @@ public class OrderedListComparator implements DataComparer {
     @Override
     public void setTargetTable(RowListWrapper targetTable) {
         this.targetTable = targetTable;
+    }
+
+    @Override
+    public RowListWrapper getSourceTable() {
+        return this.sourceTable;
+    }
+
+    @Override
+    public RowListWrapper getTargetTable() {
+        return this.targetTable;
     }
 
 
