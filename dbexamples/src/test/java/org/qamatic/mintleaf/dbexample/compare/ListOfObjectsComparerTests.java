@@ -54,6 +54,7 @@ import static org.junit.Assert.assertEquals;
 
 /**
  * Created by qamatic on 3/5/16.
+ * these are examples only but not unit tests
  */
 public class ListOfObjectsComparerTests {
 
