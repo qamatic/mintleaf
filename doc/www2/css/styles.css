@@ -11,7 +11,7 @@
     font-family: "Helvetica Neue", Roboto, Arial, sans-serif;
     font-size: 62.5%;
     color: white;
-    background: linear-gradient(to bottom, #2473ab 0%,#1e528e 70%,#5b7983 100%);
+
   }
   body {
     font-size: 1.8rem;
@@ -173,3 +173,12 @@
     }
   }
 
+.hightlights>h2{
+  font-size:1.8em;
+  font-family: 'Ranga', sans-serif;
+}
+
+.hightlights>ul>li  {
+  font-size:0.8em;
+  font-family: 'Roboto', sans-serif;
+}

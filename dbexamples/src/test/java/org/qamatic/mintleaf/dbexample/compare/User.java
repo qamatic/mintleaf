@@ -59,6 +59,15 @@ public class User implements ComparableRow {
 
 
     private String userName;
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
+
     private String country;
 
     @Override

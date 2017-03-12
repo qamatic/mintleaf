@@ -82,6 +82,7 @@ public class ListOfObjectsComparerTests {
     public void compareDataGenerateReport() throws SQLException, IOException, MintLeafException {
         List<User> sourceUserList = getUsers();
         List<User> targetUserList = getUsers();
+        ((User)targetUserList.get(0)).setUserName("SM1");
         final ConsoleLogger logger = new ConsoleLogger();
         ComparerListener reportListener = new ComparisonResultReportGenerator(new FileWriter("report.html"));
         doCompare(sourceUserList, targetUserList, reportListener);
