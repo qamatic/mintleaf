@@ -82,6 +82,9 @@ public class OrderedListComparator implements DataComparer {
     @Override
     public void execute() throws MintLeafException {
         assertBefore();
+        if (this.comparerListener != null) {
+            this.comparerListener.OnBeginCompare();
+        }
         final RowState sourceRowState = getRowStateInstance();
         final RowState targetRowState = getRowStateInstance();
         this.sourceTable.resetAll();
@@ -131,6 +134,9 @@ public class OrderedListComparator implements DataComparer {
             rowMatcher.match(sourceRowState, targetRowState, this.comparerListener);
             afterRowCompare(sourceRowState, targetRowState);
         }
+        if (this.comparerListener != null) {
+            this.comparerListener.OnEndCompare(sourceRowState, targetRowState);
+        }
     }
 
     private void assertBefore() throws MintLeafException {
@@ -148,13 +154,13 @@ public class OrderedListComparator implements DataComparer {
         }
     }
 
-    private void beforeRowCompare(final RowState sourceRowState, final RowState targetRowState) {
+    private void beforeRowCompare(final RowState sourceRowState, final RowState targetRowState) throws MintLeafException {
         if (this.comparerListener != null) {
             this.comparerListener.onBeforeRowCompare(sourceRowState, targetRowState);
         }
     }
 
-    private void afterRowCompare(final RowState sourceRowState, final RowState targetRowState) {
+    private void afterRowCompare(final RowState sourceRowState, final RowState targetRowState) throws MintLeafException {
         if (this.comparerListener != null) {
             this.comparerListener.onAfterRowCompare(sourceRowState, targetRowState);
         }

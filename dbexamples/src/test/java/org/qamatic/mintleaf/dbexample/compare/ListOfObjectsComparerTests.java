@@ -35,17 +35,19 @@
 package org.qamatic.mintleaf.dbexample.compare;
 
 import org.junit.Test;
-import org.qamatic.mintleaf.*;
+import org.qamatic.mintleaf.ConsoleLogger;
+import org.qamatic.mintleaf.DataComparer;
+import org.qamatic.mintleaf.MintLeafException;
+import org.qamatic.mintleaf.Mintleaf;
 import org.qamatic.mintleaf.data.ComparerListener;
 import org.qamatic.mintleaf.data.RowState;
+import org.qamatic.mintleaf.dbexample.reportgenerator.ComparisonResultReportGenerator;
 
+import java.io.FileWriter;
 import java.io.IOException;
-import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
-import java.sql.Types;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Properties;
 
 import static org.junit.Assert.assertEquals;
 
@@ -57,79 +59,53 @@ public class ListOfObjectsComparerTests {
 
     @Test
     public void compareList() throws SQLException, IOException, MintLeafException {
-        List<User> sourceUserList = new ArrayList<User> (){
-            {
-                add(new User(){
-                    {
-                        UserName = "SM";
-                        Country = "USA";
-                    }
-                });
-            }
-        };
-        List<User> targetUserList = new ArrayList<User> (){
-            {
-                add(new User(){
-                    {
-                        UserName = "SM";
-                        Country = "USA";
-                    }
-                });
-            }
-        };
+        List<User> sourceUserList = getUsers();
+        List<User> targetUserList = getUsers();
         final ConsoleLogger logger = new ConsoleLogger();
+        doCompare(sourceUserList, targetUserList, (sourceRow, targetRow) -> {
+
+            assertEquals(sourceRow.asString(), targetRow.asString());
+
+            String sourceColumnValue = sourceRow.Row.getValue(sourceRow.ColumnNumber).toString();
+            String targetColumnValue = sourceRow.Row.getValue(sourceRow.ColumnNumber).toString();
+            if (sourceColumnValue.equals(targetColumnValue)) {
+
+                logger.info("matches");
+            } else {
+                logger.info("no match");
+            }
+
+        });
+    }
+
+    @Test
+    public void compareDataGenerateReport() throws SQLException, IOException, MintLeafException {
+        List<User> sourceUserList = getUsers();
+        List<User> targetUserList = getUsers();
+        final ConsoleLogger logger = new ConsoleLogger();
+        ComparerListener reportListener = new ComparisonResultReportGenerator(new FileWriter("report.html"));
+        doCompare(sourceUserList, targetUserList, reportListener);
+    }
+
+    private void doCompare(List<User> sourceUserList, List<User> targetUserList, ComparerListener listener) throws MintLeafException {
+
         DataComparer dataComparer = new Mintleaf.ComparerBuilder().
                 withSourceTable(sourceUserList).
                 withTargetTable(targetUserList).
-                withMatchingResult((sourceRow, targetRow) -> {
-
-                    logger.info(String.format("[Source:%s] [Target:%s]", sourceRow, targetRow));
-                    assertEquals(sourceRow.asString(), targetRow.asString());
-
-                    String sourceColumnValue = sourceRow.Row.getValue(sourceRow.ColumnNumber).toString();
-                    String targetColumnValue = sourceRow.Row.getValue(sourceRow.ColumnNumber).toString();
-                    if (sourceColumnValue.equals(targetColumnValue)) {
-
-                        logger.info("matches");
-                    } else {
-                        logger.info("no match");
-                    }
-
-                }).
+                withMatchingResult(listener).
                 build();
 
         dataComparer.execute();
     }
 
 
-
-    private class User implements ComparableRow {
-
-        private ColumnMetaDataCollection metaDataCollection;
-
-        public String UserName;
-        public String Country;
-
-        @Override
-        public Object getValue(int columnIndex) throws MintLeafException {
-            switch (columnIndex) {
-                case 0:
-                    return UserName;
-                case 1:
-                    return Country;
+    private ArrayList<User> getUsers() {
+        return new ArrayList<User>() {
+            {
+                add(new User("SM", "USA"));
             }
-            return null;
-        }
-
-        @Override
-        public ColumnMetaDataCollection getMetaData() throws MintLeafException {
-            if (metaDataCollection == null) {
-                metaDataCollection = new ColumnMetaDataCollection("USERS");
-                metaDataCollection.add(new Column("UserName"));
-                metaDataCollection.add(new Column("Country"));
-            }
-            return metaDataCollection;
-        }
+        };
     }
+
 
 }

@@ -80,15 +80,16 @@ public class CsvVsListComparerTests {
                 withSourceTable(csvRowListWrapper).
                 withTargetTable(targetUserList).
                 withMatchingResult(new ComparerListener() {
-                    @Override
-                    public void OnColumnCompare(RowState sourceRow, RowState targetRow) throws MintLeafException {
-
-                    }
 
                     @Override
                     public void OnRowCompare(RowState sourceRow, RowState targetRow) throws MintLeafException {
                         logger.info(String.format("[Source:%s] [Target:%s]", sourceRow, targetRow));
                         assertEquals(sourceRow.Row.getValue(1), targetRow.Row.getValue(0));
+                    }
+
+                    @Override
+                    public void OnColumnCompare(RowState sourceRow, RowState targetRow) throws MintLeafException {
+
                     }
                 }).
                 build();
@@ -97,34 +98,5 @@ public class CsvVsListComparerTests {
     }
 
 
-    private class User implements ComparableRow {
-
-        private ColumnMetaDataCollection metaDataCollection;
-
-        public String UserName;
-        public String Country;
-
-        public User(String userName) {
-            this.UserName = userName;
-        }
-
-        @Override
-        public Object getValue(int columnIndex) throws MintLeafException {
-            switch (columnIndex) {
-                case 0:
-                    return UserName;
-            }
-            return null;
-        }
-
-        @Override
-        public ColumnMetaDataCollection getMetaData() throws MintLeafException {
-            if (metaDataCollection == null) {
-                metaDataCollection = new ColumnMetaDataCollection("USERS");
-                metaDataCollection.add(new Column("UserName"));
-            }
-            return metaDataCollection;
-        }
-    }
 
 }

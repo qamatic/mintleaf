@@ -40,11 +40,20 @@ import org.qamatic.mintleaf.MintLeafException;
  * Created by qamatic on 3/4/16.
  */
 public interface ComparerListener {
-    default void onBeforeRowCompare(final RowState sourceRow, final RowState targetRow) {
+
+    default void OnBeginCompare() throws MintLeafException {
 
     }
 
-    default void onAfterRowCompare(final RowState sourceRow, final RowState targetRow) {
+    default void OnEndCompare(final RowState sourceRow, final RowState targetRow) throws MintLeafException {
+
+    }
+
+    default void onBeforeRowCompare(final RowState sourceRow, final RowState targetRow) throws MintLeafException {
+
+    }
+
+    default void onAfterRowCompare(final RowState sourceRow, final RowState targetRow) throws MintLeafException {
 
     }
 

@@ -49,7 +49,7 @@ import java.sql.SQLException;
 import static org.junit.Assert.*;
 
 /**
- * Created by senips on 3/10/17.
+ * Created by QAmatic Team on 3/10/17.
  */
 public class CsvWrapperTest {
 
