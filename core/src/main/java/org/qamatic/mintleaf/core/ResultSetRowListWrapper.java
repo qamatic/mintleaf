@@ -34,9 +34,9 @@
 
 package org.qamatic.mintleaf.core;
 
+import org.qamatic.mintleaf.ComparableRow;
 import org.qamatic.mintleaf.MintLeafException;
 import org.qamatic.mintleaf.RowListWrapper;
-import org.qamatic.mintleaf.ComparableRow;
 
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;

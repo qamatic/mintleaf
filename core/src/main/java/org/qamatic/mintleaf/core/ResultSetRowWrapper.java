@@ -95,11 +95,6 @@ public class ResultSetRowWrapper implements ComparableRow {
         }
     }
 
-    @Override
-    public void setMetaData(MetaDataCollection metaDataCollection) {
-        this.resultSetMetaData = metaDataCollection;
-    }
-
     public void setResultSet(ResultSet resultSet) {
         this.resultSet = resultSet;
     }
@@ -114,6 +109,11 @@ public class ResultSetRowWrapper implements ComparableRow {
             }
         }
         return this.resultSetMetaData;
+    }
+
+    @Override
+    public void setMetaData(MetaDataCollection metaDataCollection) {
+        this.resultSetMetaData = metaDataCollection;
     }
 
 

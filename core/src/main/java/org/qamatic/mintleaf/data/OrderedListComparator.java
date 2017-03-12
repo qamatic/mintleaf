@@ -37,9 +37,6 @@ import org.qamatic.mintleaf.DataComparer;
 import org.qamatic.mintleaf.MintLeafException;
 import org.qamatic.mintleaf.RowListWrapper;
 import org.qamatic.mintleaf.RowMatcher;
-import org.qamatic.mintleaf.core.ObjectRowListWrapper;
-
-import java.util.List;
 
 /**
  * Created by qamatic on 3/5/16.
@@ -80,12 +77,11 @@ public class OrderedListComparator implements DataComparer {
 
                 sourceRowState.Row = this.sourceTable.row();
                 sourceRowState.IsSurplusRow = 0;
-                sourceRowState.ColumnNumber = -1;
 
                 targetRowState.RowNumber++;
                 targetRowState.Row = this.targetTable.row();
                 targetRowState.IsSurplusRow = 0;
-                targetRowState.ColumnNumber = -1;
+
                 onRowCompare(sourceRowState, targetRowState);
                 rowMatcher.match(sourceRowState, targetRowState, this.comparerListener);
                 afterRowCompare(sourceRowState, targetRowState);
@@ -93,11 +89,9 @@ public class OrderedListComparator implements DataComparer {
                 beforeRowCompare(sourceRowState, targetRowState);
                 sourceRowState.Row = this.sourceTable.row();
                 sourceRowState.IsSurplusRow = 1;
-                sourceRowState.ColumnNumber = -1;
 
                 targetRowState.Row = null;
                 targetRowState.IsSurplusRow = -1;
-                targetRowState.ColumnNumber = -1;
                 onRowCompare(sourceRowState, targetRowState);
                 rowMatcher.match(sourceRowState, targetRowState, this.comparerListener);
                 afterRowCompare(sourceRowState, targetRowState);
@@ -108,12 +102,10 @@ public class OrderedListComparator implements DataComparer {
             beforeRowCompare(sourceRowState, targetRowState);
             sourceRowState.Row = null;
             sourceRowState.IsSurplusRow = -1;
-            sourceRowState.ColumnNumber = -1;
 
             targetRowState.RowNumber++;
             targetRowState.Row = this.targetTable.row();
             targetRowState.IsSurplusRow = 1;
-            targetRowState.ColumnNumber = -1;
             onRowCompare(sourceRowState, targetRowState);
             rowMatcher.match(sourceRowState, targetRowState, this.comparerListener);
             afterRowCompare(sourceRowState, targetRowState);
@@ -161,23 +153,23 @@ public class OrderedListComparator implements DataComparer {
     }
 
     @Override
-    public void setSourceTable(RowListWrapper sourceTable) {
-        this.sourceTable = sourceTable;
-    }
-
-    @Override
-    public void setTargetTable(RowListWrapper targetTable) {
-        this.targetTable = targetTable;
-    }
-
-    @Override
     public RowListWrapper getSourceTable() {
         return this.sourceTable;
     }
 
     @Override
+    public void setSourceTable(RowListWrapper sourceTable) {
+        this.sourceTable = sourceTable;
+    }
+
+    @Override
     public RowListWrapper getTargetTable() {
         return this.targetTable;
+    }
+
+    @Override
+    public void setTargetTable(RowListWrapper targetTable) {
+        this.targetTable = targetTable;
     }
 
 

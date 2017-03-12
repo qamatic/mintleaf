@@ -34,57 +34,15 @@
  *
  */
 
-package org.qamatic.mintleaf.dbs;
-
-import org.qamatic.mintleaf.ComparableRow;
-import org.qamatic.mintleaf.MetaDataCollection;
-import org.qamatic.mintleaf.MintLeafException;
+package org.qamatic.mintleaf.data;
 
 /**
- * Created by QAmatic Team on 3/11/17.
+ * Created by senips on 3/12/17.
  */
-public class User implements ComparableRow {
-
-    private MetaDataCollection metaDataCollection;
-    private String userName;
-    private String country;
-
-
-    public User(String userName) {
-        this.userName = userName;
-    }
-
-    public User(String userName, String country) {
-        this.userName = userName;
-        this.country = country;
-    }
-
-    public String getUserName() {
-        return userName;
-    }
-
-    public void setUserName(String userName) {
-        this.userName = userName;
-    }
-
+public class DbColumnState extends ColumnState {
     @Override
-    public Object getValue(int columnIndex) throws MintLeafException {
-        switch (columnIndex) {
-            case 0:
-                return userName;
-            case 1:
-                return country;
-        }
-        return null;
-    }
-
-    @Override
-    public MetaDataCollection getMetaData() throws MintLeafException {
-        return this.metaDataCollection;
-    }
-
-    @Override
-    public void setMetaData(MetaDataCollection metaDataCollection) {
-        this.metaDataCollection = metaDataCollection;
+    public void reset() {
+        super.reset();
+        setColumnNumber(0);
     }
 }

@@ -37,6 +37,7 @@ package org.qamatic.mintleaf.dbexample.compare;
 import org.junit.Test;
 import org.qamatic.mintleaf.*;
 import org.qamatic.mintleaf.core.BaseSqlReader;
+import org.qamatic.mintleaf.data.ColumnState;
 import org.qamatic.mintleaf.data.ComparerListener;
 import org.qamatic.mintleaf.data.RowState;
 import org.qamatic.mintleaf.tools.CsvRowListWrapper;
@@ -55,6 +56,15 @@ import static org.junit.Assert.assertEquals;
  * Created by qamatic on 3/5/16.
  */
 public class CsvVsListComparerTests {
+
+    private static ColumnMetaDataCollection getMetaData() throws MintLeafException {
+
+        ColumnMetaDataCollection metaDataCollection = new ColumnMetaDataCollection("USERS");
+        metaDataCollection.add(new Column("UserName"));
+        metaDataCollection.add(new Column("Country"));
+
+        return metaDataCollection;
+    }
 
     @Test
     public void compareList() throws SQLException, IOException, MintLeafException {
@@ -88,22 +98,14 @@ public class CsvVsListComparerTests {
                     }
 
                     @Override
-                    public void OnColumnCompare(RowState sourceRow, RowState targetRow) throws MintLeafException {
+                    public void OnColumnCompare(ColumnState sourceColumn, ColumnState targetColumn) throws MintLeafException {
 
                     }
+
+
                 }).
                 build();
 
         dataComparer.execute();
-    }
-
-
-    private static ColumnMetaDataCollection getMetaData() throws MintLeafException {
-
-        ColumnMetaDataCollection metaDataCollection = new ColumnMetaDataCollection("USERS");
-        metaDataCollection.add(new Column("UserName"));
-        metaDataCollection.add(new Column("Country"));
-
-        return metaDataCollection;
     }
 }

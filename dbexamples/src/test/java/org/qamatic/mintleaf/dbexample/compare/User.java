@@ -36,7 +36,9 @@
 
 package org.qamatic.mintleaf.dbexample.compare;
 
-import org.qamatic.mintleaf.*;
+import org.qamatic.mintleaf.ComparableRow;
+import org.qamatic.mintleaf.MetaDataCollection;
+import org.qamatic.mintleaf.MintLeafException;
 
 /**
  * Created by QAmatic Team on 3/11/17.
@@ -44,6 +46,9 @@ import org.qamatic.mintleaf.*;
 public class User implements ComparableRow {
 
     private MetaDataCollection metaDataCollection;
+    private String userName;
+    private String country;
+
 
     public User(String userName) {
         this.userName = userName;
@@ -54,9 +59,6 @@ public class User implements ComparableRow {
         this.country = country;
     }
 
-
-    private String userName;
-
     public String getUserName() {
         return userName;
     }
@@ -64,8 +66,6 @@ public class User implements ComparableRow {
     public void setUserName(String userName) {
         this.userName = userName;
     }
-
-    private String country;
 
     @Override
     public Object getValue(int columnIndex) throws MintLeafException {
@@ -79,12 +79,12 @@ public class User implements ComparableRow {
     }
 
     @Override
-    public void setMetaData(MetaDataCollection metaDataCollection) {
-        this.metaDataCollection = metaDataCollection;
+    public MetaDataCollection getMetaData() throws MintLeafException {
+        return this.metaDataCollection;
     }
 
     @Override
-    public MetaDataCollection getMetaData() throws MintLeafException {
-        return this.metaDataCollection;
+    public void setMetaData(MetaDataCollection metaDataCollection) {
+        this.metaDataCollection = metaDataCollection;
     }
 }

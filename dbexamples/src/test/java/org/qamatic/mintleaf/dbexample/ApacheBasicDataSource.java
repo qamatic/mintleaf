@@ -33,6 +33,7 @@
  */
 
 package org.qamatic.mintleaf.dbexample;
+
 import org.apache.commons.dbcp.BasicDataSource;
 import org.qamatic.mintleaf.DriverSource;
 

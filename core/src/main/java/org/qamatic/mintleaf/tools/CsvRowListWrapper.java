@@ -7,15 +7,14 @@ import org.qamatic.mintleaf.*;
 
 import java.io.IOException;
 import java.io.Reader;
-import java.sql.ResultSetMetaData;
 import java.util.Iterator;
 
 /**
  * Created by Senthil on 3/10/2017.
  */
 public class CsvRowListWrapper implements RowListWrapper {
-    private Reader afileReader;
     protected CSVParser parser;
+    private Reader afileReader;
     private ColumnMetaDataCollection metaDataCollection = new ColumnMetaDataCollection("CSV");
     private CsvRowWrapper csvRowWrapper = new CsvRowWrapper();
     private Iterator<CSVRecord> iterator;

@@ -39,6 +39,7 @@ package org.qamatic.mintleaf.dbexample.reportgenerator;
 import org.qamatic.mintleaf.ConsoleLogger;
 import org.qamatic.mintleaf.MintLeafException;
 import org.qamatic.mintleaf.RowListWrapper;
+import org.qamatic.mintleaf.data.ColumnState;
 import org.qamatic.mintleaf.data.ComparerListener;
 import org.qamatic.mintleaf.data.RowState;
 
@@ -93,13 +94,12 @@ public class ComparisonResultReportGenerator implements ComparerListener {
     }
 
     @Override
-    public void OnColumnCompare(RowState sourceRow, RowState targetRow) throws MintLeafException {
-        logger.info(String.format("[Source:%s] [Target:%s]", sourceRow, targetRow));
+    public void OnColumnCompare(final ColumnState sourceColumn, final ColumnState targetColumn) throws MintLeafException {
         try {
-            if (sourceRow.asString().equals(targetRow.asString())) {
-                fileWriter.write(String.format("<td class='%s'>%s</td>", "pass", sourceRow.asString()));
+            if (sourceColumn.equals(targetColumn)) {
+                fileWriter.write(String.format("<td class='%s'>%s</td>", "pass", sourceColumn));
             } else {
-                fileWriter.write(String.format("<td class='%s'>%s [expected %s]</td>", "fail", sourceRow.asString(), targetRow.asString()));
+                fileWriter.write(String.format("<td class='%s'>%s [expected %s]</td>", "fail", sourceColumn, targetColumn));
             }
 
         } catch (IOException e) {

@@ -34,8 +34,8 @@
 
 package org.qamatic.mintleaf.data;
 
-import org.qamatic.mintleaf.MintLeafException;
 import org.qamatic.mintleaf.ComparableRow;
+import org.qamatic.mintleaf.MintLeafException;
 
 /**
  * Created by qamatic on 3/5/16.

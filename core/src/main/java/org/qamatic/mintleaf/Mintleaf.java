@@ -36,9 +36,8 @@ package org.qamatic.mintleaf;
 
 import org.qamatic.mintleaf.builders.DbContextBuilder;
 import org.qamatic.mintleaf.core.ObjectRowListWrapper;
-import org.qamatic.mintleaf.data.ComparerListener;
-import org.qamatic.mintleaf.data.OrderedColumnMatcher;
-import org.qamatic.mintleaf.data.OrderedListComparator;
+import org.qamatic.mintleaf.core.ResultSetRowListWrapper;
+import org.qamatic.mintleaf.data.*;
 import org.qamatic.mintleaf.tools.CsvExporter;
 import org.qamatic.mintleaf.tools.CsvImporter;
 import org.qamatic.mintleaf.tools.DbImporter;
@@ -60,7 +59,7 @@ public class Mintleaf {
         private RowListWrapper sourceTable;
         private RowListWrapper targetTable;
         private ComparerListener comparerListener;//= new ConsoleComparerListener();
-        private RowMatcher rowMatcher = new OrderedColumnMatcher();
+        private RowMatcher rowMatcher;
 
         public ComparerBuilder withSourceTable(List<? extends ComparableRow> sourceTable, MetaDataCollection metaDataCollection) {
             this.sourceTable = new ObjectRowListWrapper(sourceTable, metaDataCollection);
@@ -99,7 +98,28 @@ public class Mintleaf {
                 Constructor constructor =
                         dataComparerClazz.getConstructor(new Class[]{RowListWrapper.class, RowListWrapper.class});
                 listComparator = (DataComparer) constructor.newInstance(this.sourceTable, this.targetTable);
-                listComparator.setRowMatcher(this.rowMatcher);
+                if (this.rowMatcher != null) {
+                    listComparator.setRowMatcher(this.rowMatcher);
+                } else {
+                    final boolean dbSourceColumnState = (sourceTable instanceof ResultSetRowListWrapper);
+                    final boolean dbTargetColumnState = (targetTable instanceof ResultSetRowListWrapper);
+                    listComparator.setRowMatcher(new OrderedColumnMatcher() {
+                        @Override
+                        protected ColumnState createSourceColumnStateInstance() {
+                            if (dbSourceColumnState)
+                                return new DbColumnState();
+                            return super.createSourceColumnStateInstance();
+                        }
+
+                        @Override
+                        protected ColumnState createTargetColumnStateInstance() {
+                            if (dbTargetColumnState)
+                                return new DbColumnState();
+                            return super.createTargetColumnStateInstance();
+                        }
+                    });
+
+                }
                 listComparator.setComparerListener(this.comparerListener);
 
             } catch (InstantiationException e) {
@@ -108,12 +128,10 @@ public class Mintleaf {
             } catch (IllegalAccessException e) {
                 logger.error(e);
                 MintLeafException.throwException(e);
-            }
-            catch (NoSuchMethodException e) {
+            } catch (NoSuchMethodException e) {
                 logger.error(e);
                 MintLeafException.throwException(e);
-            }
-            catch (InvocationTargetException e) {
+            } catch (InvocationTargetException e) {
                 logger.error(e);
                 MintLeafException.throwException(e);
             }

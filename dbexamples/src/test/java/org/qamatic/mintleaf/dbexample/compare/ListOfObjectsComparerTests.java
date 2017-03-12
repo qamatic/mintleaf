@@ -54,23 +54,24 @@ import static org.junit.Assert.assertEquals;
  */
 public class ListOfObjectsComparerTests {
 
+    private static ColumnMetaDataCollection getMetaData() throws MintLeafException {
+
+        ColumnMetaDataCollection metaDataCollection = new ColumnMetaDataCollection("USERS");
+        metaDataCollection.add(new Column("UserName"));
+        metaDataCollection.add(new Column("Country"));
+
+        return metaDataCollection;
+    }
+
     @Test
     public void compareList() throws SQLException, IOException, MintLeafException {
         List<User> sourceUserList = getUsers();
         List<User> targetUserList = getUsers();
         final ConsoleLogger logger = new ConsoleLogger();
-        doCompare(sourceUserList, targetUserList, (sourceRow, targetRow) -> {
+        doCompare(sourceUserList, targetUserList, (sourceColumn, targetColumn) -> {
 
-            assertEquals(sourceRow.asString(), targetRow.asString());
+            assertEquals(sourceColumn.asString(), targetColumn.asString());
 
-            String sourceColumnValue = sourceRow.Row.getValue(sourceRow.ColumnNumber).toString();
-            String targetColumnValue = sourceRow.Row.getValue(sourceRow.ColumnNumber).toString();
-            if (sourceColumnValue.equals(targetColumnValue)) {
-
-                logger.info("matches");
-            } else {
-                logger.info("no match");
-            }
 
         });
     }
@@ -94,15 +95,6 @@ public class ListOfObjectsComparerTests {
                 build();
 
         dataComparer.execute();
-    }
-
-    private static ColumnMetaDataCollection getMetaData() throws MintLeafException {
-
-        ColumnMetaDataCollection metaDataCollection = new ColumnMetaDataCollection("USERS");
-        metaDataCollection.add(new Column("UserName"));
-        metaDataCollection.add(new Column("Country"));
-
-        return metaDataCollection;
     }
 
     private ArrayList<User> getUsers() {

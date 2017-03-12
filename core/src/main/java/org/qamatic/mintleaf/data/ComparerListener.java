@@ -58,12 +58,12 @@ public interface ComparerListener {
 
     }
 
-    default void OnRowCompare(final RowState sourceRow, final RowState targetRow) throws MintLeafException{
+    default void OnRowCompare(final RowState sourceRow, final RowState targetRow) throws MintLeafException {
 
     }
 
 
-    void OnColumnCompare(final RowState sourceRow, final RowState targetRow) throws MintLeafException;
+    void OnColumnCompare(final ColumnState sourceColumn, final ColumnState targetColumn) throws MintLeafException;
 
 
 }

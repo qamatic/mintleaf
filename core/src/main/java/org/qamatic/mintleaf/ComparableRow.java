@@ -44,7 +44,7 @@ public interface ComparableRow {
 
     Object getValue(int columnIndex) throws MintLeafException;
 
-    default Object getValue(String columnName) throws MintLeafException{
+    default Object getValue(String columnName) throws MintLeafException {
         return getValue(getIndex(columnName));
     }
 
@@ -71,8 +71,7 @@ public interface ComparableRow {
         return -1;
     }
 
+    ResultSetMetaData getMetaData() throws MintLeafException;
 
     void setMetaData(MetaDataCollection metaDataCollection);
-
-    ResultSetMetaData getMetaData() throws MintLeafException;
 }

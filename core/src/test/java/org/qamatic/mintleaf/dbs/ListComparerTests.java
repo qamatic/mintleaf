@@ -58,69 +58,14 @@ public class ListComparerTests {
         }
     };
 
-
-    @Test
-    public void compareListWithEqualSize() throws SQLException, IOException, MintLeafException {
-        final List<String> expected = new ArrayList<String>() {
-            {
-                add("[Source:RowNo:0, ColumnNo:0, Surplus:0] [Target:RowNo:0, ColumnNo:0, Surplus:0]");
-                add("[Source:RowNo:0, ColumnNo:1, Surplus:0] [Target:RowNo:0, ColumnNo:1, Surplus:0]");
-                add("[Source:RowNo:1, ColumnNo:0, Surplus:0] [Target:RowNo:1, ColumnNo:0, Surplus:0]");
-                add("[Source:RowNo:1, ColumnNo:1, Surplus:0] [Target:RowNo:1, ColumnNo:1, Surplus:0]");
-            }
-        };
-        List<String> actuals = assertCompareTable(getSampleData1(), getSampleData1());
-        assertEquals(expected, actuals);
-    }
-
-    @Test
-    public void compareListSourceSurplus() throws SQLException, IOException, MintLeafException {
-        final List<String> expected = new ArrayList<String>() {
-            {
-                add("[Source:RowNo:0, ColumnNo:0, Surplus:0] [Target:RowNo:0, ColumnNo:0, Surplus:0]");
-                add("[Source:RowNo:0, ColumnNo:1, Surplus:0] [Target:RowNo:0, ColumnNo:1, Surplus:0]");
-                add("[Source:RowNo:1, ColumnNo:0, Surplus:0] [Target:RowNo:1, ColumnNo:0, Surplus:0]");
-                add("[Source:RowNo:1, ColumnNo:1, Surplus:0] [Target:RowNo:1, ColumnNo:1, Surplus:0]");
-                add("[Source:RowNo:2, ColumnNo:0, Surplus:1] [Target:RowNo:1, ColumnNo:-1, Surplus:-1]");
-                add("[Source:RowNo:2, ColumnNo:1, Surplus:1] [Target:RowNo:1, ColumnNo:-1, Surplus:-1]");
-            }
-        };
-        List<User> sourceList = getSampleData1();
-        sourceList.add(new User("XMEN", "USA"));
-        List<String> actuals = assertCompareTable(sourceList, getSampleData1());
-
-        assertEquals(expected, actuals);
-    }
-
-
-    @Test
-    public void compareListSourceDeficit() throws SQLException, IOException, MintLeafException {
-        final List<String> expected = new ArrayList<String>() {
-            {
-                add("[Source:RowNo:0, ColumnNo:0, Surplus:0] [Target:RowNo:0, ColumnNo:0, Surplus:0]");
-                add("[Source:RowNo:0, ColumnNo:1, Surplus:0] [Target:RowNo:0, ColumnNo:1, Surplus:0]");
-                add("[Source:RowNo:1, ColumnNo:0, Surplus:0] [Target:RowNo:1, ColumnNo:0, Surplus:0]");
-                add("[Source:RowNo:1, ColumnNo:1, Surplus:0] [Target:RowNo:1, ColumnNo:1, Surplus:0]");
-                add("[Source:RowNo:1, ColumnNo:-1, Surplus:-1] [Target:RowNo:2, ColumnNo:0, Surplus:1]");
-                add("[Source:RowNo:1, ColumnNo:-1, Surplus:-1] [Target:RowNo:2, ColumnNo:1, Surplus:1]");
-            }
-        };
-        List<User> targetList = getSampleData1();
-        targetList.add(new User("XMEN", "USA"));
-        List<String> actuals = assertCompareTable(getSampleData1(), targetList);
-
-        assertEquals(expected, actuals);
-    }
-
-
     private static List<String> assertCompareTable(List<User> sourceList, List<User> targetListList) throws MintLeafException {
         final List<String> actuals = new ArrayList<>();
         final ConsoleLogger logger = new ConsoleLogger();
         DataComparer dataComparer = new Mintleaf.ComparerBuilder().
                 withSourceTable(sourceList, columnDefs).
                 withTargetTable(targetListList, columnDefs).
-                withMatchingResult((sourceRow, targetRow) -> {
-                    actuals.add(String.format("[Source:%s] [Target:%s]", sourceRow, targetRow));
+                withMatchingResult((sourceCol, targetCol) -> {
+                    actuals.add(String.format("[Source:%s] [Target:%s]", sourceCol.toLog(), targetCol.toLog()));
                     logger.info(actuals.get(actuals.size() - 1));
                 }).
                 build();
@@ -131,7 +76,57 @@ public class ListComparerTests {
         return actuals;
     }
 
+    @Test
+    public void compareListWithEqualSize() throws SQLException, IOException, MintLeafException {
+        final List<String> expected = new ArrayList<String>() {
+            {
+                add("[Source:RowNo:0, ColumnNo:0, Surplus:0, Value:Vallr] [Target:RowNo:0, ColumnNo:0, Surplus:0, Value:Vallr]");
+                add("[Source:RowNo:0, ColumnNo:1, Surplus:0, Value:USA] [Target:RowNo:0, ColumnNo:1, Surplus:0, Value:USA]");
+                add("[Source:RowNo:1, ColumnNo:0, Surplus:0, Value:SM] [Target:RowNo:1, ColumnNo:0, Surplus:0, Value:SM]");
+                add("[Source:RowNo:1, ColumnNo:1, Surplus:0, Value:USA] [Target:RowNo:1, ColumnNo:1, Surplus:0, Value:USA]");
+            }
+        };
+        List<String> actuals = assertCompareTable(getSampleData1(), getSampleData1());
+        assertEquals(expected, actuals);
+    }
 
+    @Test
+    public void compareListSourceSurplus() throws SQLException, IOException, MintLeafException {
+        final List<String> expected = new ArrayList<String>() {
+            {
+                add("[Source:RowNo:0, ColumnNo:0, Surplus:0, Value:Vallr] [Target:RowNo:0, ColumnNo:0, Surplus:0, Value:Vallr]");
+                add("[Source:RowNo:0, ColumnNo:1, Surplus:0, Value:USA] [Target:RowNo:0, ColumnNo:1, Surplus:0, Value:USA]");
+                add("[Source:RowNo:1, ColumnNo:0, Surplus:0, Value:SM] [Target:RowNo:1, ColumnNo:0, Surplus:0, Value:SM]");
+                add("[Source:RowNo:1, ColumnNo:1, Surplus:0, Value:USA] [Target:RowNo:1, ColumnNo:1, Surplus:0, Value:USA]");
+                add("[Source:RowNo:2, ColumnNo:0, Surplus:1, Value:XMEN] [Target:RowNo:-1, ColumnNo:-1, Surplus:-1, Value:null]");
+                add("[Source:RowNo:2, ColumnNo:1, Surplus:1, Value:USA] [Target:RowNo:-1, ColumnNo:-1, Surplus:-1, Value:null]");
+            }
+        };
+        List<User> sourceList = getSampleData1();
+        sourceList.add(new User("XMEN", "USA"));
+        List<String> actuals = assertCompareTable(sourceList, getSampleData1());
+
+        assertEquals(expected, actuals);
+    }
+
+    @Test
+    public void compareListSourceDeficit() throws SQLException, IOException, MintLeafException {
+        final List<String> expected = new ArrayList<String>() {
+            {
+                add("[Source:RowNo:0, ColumnNo:0, Surplus:0, Value:Vallr] [Target:RowNo:0, ColumnNo:0, Surplus:0, Value:Vallr]");
+                add("[Source:RowNo:0, ColumnNo:1, Surplus:0, Value:USA] [Target:RowNo:0, ColumnNo:1, Surplus:0, Value:USA]");
+                add("[Source:RowNo:1, ColumnNo:0, Surplus:0, Value:SM] [Target:RowNo:1, ColumnNo:0, Surplus:0, Value:SM]");
+                add("[Source:RowNo:1, ColumnNo:1, Surplus:0, Value:USA] [Target:RowNo:1, ColumnNo:1, Surplus:0, Value:USA]");
+                add("[Source:RowNo:-1, ColumnNo:-1, Surplus:-1, Value:null] [Target:RowNo:2, ColumnNo:0, Surplus:1, Value:XMEN]");
+                add("[Source:RowNo:-1, ColumnNo:-1, Surplus:-1, Value:null] [Target:RowNo:2, ColumnNo:1, Surplus:1, Value:USA]");
+            }
+        };
+        List<User> targetList = getSampleData1();
+        targetList.add(new User("XMEN", "USA"));
+        List<String> actuals = assertCompareTable(getSampleData1(), targetList);
+
+        assertEquals(expected, actuals);
+    }
 
     @Test
     public void compareList() throws SQLException, IOException, MintLeafException {
@@ -141,10 +136,10 @@ public class ListComparerTests {
         DataComparer dataComparer = new Mintleaf.ComparerBuilder().
                 withSourceTable(sourceUserList, columnDefs).
                 withTargetTable(targetUserList, columnDefs).
-                withMatchingResult((sourceRow, targetRow) -> {
+                withMatchingResult((sourceColumn, targetColumn) -> {
 
-                    logger.info(String.format("[Source:%s] [Target:%s]", sourceRow, targetRow));
-                    assertEquals(sourceRow.asString(), targetRow.asString());
+                    logger.info(String.format("[Source:%s] [Target:%s]", sourceColumn.toLog(), targetColumn.toLog()));
+                    assertEquals(sourceColumn.asString(), targetColumn.asString());
 
 
                 }).

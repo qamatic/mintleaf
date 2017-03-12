@@ -43,51 +43,83 @@ import java.sql.SQLException;
  * Created by qamatic on 3/5/16.
  */
 public class OrderedColumnMatcher implements RowMatcher {
+
+
     @Override
     public void match(RowState leftRowState, RowState rightRowState, ComparerListener listener) throws MintLeafException {
+        final ColumnState sourceColumnState = createSourceColumnStateInstance();
+        final ColumnState targetColumnState = createTargetColumnStateInstance();
+
+        int sourceColumnNumber = sourceColumnState.getColumnNumber();
+        int targetColumnNumber = targetColumnState.getColumnNumber();
+
+
         try {
-        if ((leftRowState.Row != null) && (rightRowState.Row != null)) {
+            if ((leftRowState.Row != null) && (rightRowState.Row != null)) {
 
-
-                while (leftRowState.ColumnNumber < leftRowState.Row.getMetaData().getColumnCount() - 1) {
-                    leftRowState.ColumnNumber++;
-                    rightRowState.ColumnNumber++;
+                while (sourceColumnNumber < leftRowState.Row.getMetaData().getColumnCount() - 1) {
+                    sourceColumnNumber++;
+                    targetColumnNumber++;
 
 
                     if (listener != null) {
-                        listener.OnColumnCompare(leftRowState, rightRowState);
+                        sourceColumnState.reset(leftRowState.RowNumber, sourceColumnNumber, 0,
+                                leftRowState.Row.getValue(sourceColumnNumber));
+                        targetColumnState.reset(rightRowState.RowNumber, targetColumnNumber, 0,
+                                rightRowState.Row.getValue(targetColumnNumber));
+
+                        listener.OnColumnCompare(sourceColumnState, targetColumnState);
                     }
 
 
                 }
 
-            while (rightRowState.ColumnNumber < rightRowState.Row.getMetaData().getColumnCount() - 1) {
-                rightRowState.ColumnNumber++;
-                if (listener != null) {
-                    listener.OnColumnCompare(leftRowState, rightRowState);
+                while (targetColumnNumber < rightRowState.Row.getMetaData().getColumnCount() - 1) {
+                    targetColumnNumber++;
+                    if (listener != null) {
+                        sourceColumnState.reset(-1, -1, -1, null);
+                        targetColumnState.reset(rightRowState.RowNumber, targetColumnNumber, 0,
+                                rightRowState.Row.getValue(targetColumnNumber));
+
+                        listener.OnColumnCompare(sourceColumnState, targetColumnState);
+                    }
+                }
+
+            } else if ((leftRowState.Row != null) && (rightRowState.Row == null)) {
+
+                while (sourceColumnNumber < leftRowState.Row.getMetaData().getColumnCount() - 1) {
+                    sourceColumnNumber++;
+                    if (listener != null) {
+                        sourceColumnState.reset(leftRowState.RowNumber, sourceColumnNumber, 1,
+                                leftRowState.Row.getValue(sourceColumnNumber));
+                        targetColumnState.reset(-1, -1, -1, null);
+
+                        listener.OnColumnCompare(sourceColumnState, targetColumnState);
+                    }
+                }
+
+            } else if ((leftRowState.Row == null) && (rightRowState.Row != null)) {
+
+                while (targetColumnNumber < rightRowState.Row.getMetaData().getColumnCount() - 1) {
+                    targetColumnNumber++;
+                    if (listener != null) {
+                        sourceColumnState.reset(-1, -1, -1, null);
+                        targetColumnState.reset(rightRowState.RowNumber, targetColumnNumber, 1,
+                                rightRowState.Row.getValue(targetColumnNumber));
+                        listener.OnColumnCompare(sourceColumnState, targetColumnState);
+                    }
                 }
             }
-
-        } else if ((leftRowState.Row != null) && (rightRowState.Row == null)) {
-
-            while (leftRowState.ColumnNumber < leftRowState.Row.getMetaData().getColumnCount() - 1) {
-                leftRowState.ColumnNumber++;
-                if (listener != null) {
-                    listener.OnColumnCompare(leftRowState, rightRowState);
-                }
-            }
-
-        } else if ((leftRowState.Row == null) && (rightRowState.Row != null)) {
-
-            while (rightRowState.ColumnNumber < rightRowState.Row.getMetaData().getColumnCount() - 1) {
-                rightRowState.ColumnNumber++;
-                if (listener != null) {
-                    listener.OnColumnCompare(leftRowState, rightRowState);
-                }
-            }
-        }
         } catch (SQLException e) {
             throw new MintLeafException(e);
         }
+    }
+
+    protected ColumnState createSourceColumnStateInstance() {
+        return new ColumnState();
+    }
+
+    protected ColumnState createTargetColumnStateInstance() {
+        return new ColumnState();
     }
 }

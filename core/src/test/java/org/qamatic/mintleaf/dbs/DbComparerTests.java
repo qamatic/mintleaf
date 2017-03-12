@@ -74,15 +74,12 @@ public class DbComparerTests extends H2TestCase {
     public void compareListWithEqualSize() throws SQLException, IOException, MintLeafException {
         final List<String> expected = new ArrayList<String>() {
             {
-                add("[Source:RowNo:0, ColumnNo:0, Surplus:0] [Target:RowNo:0, ColumnNo:0, Surplus:0]");
-                add("[Source:RowNo:0, ColumnNo:1, Surplus:0] [Target:RowNo:0, ColumnNo:1, Surplus:0]");
-                add("[Source:RowNo:0, ColumnNo:2, Surplus:0] [Target:RowNo:0, ColumnNo:2, Surplus:0]");
-                add("[Source:RowNo:0, ColumnNo:3, Surplus:0] [Target:RowNo:0, ColumnNo:3, Surplus:0]");
-
-                add("[Source:RowNo:1, ColumnNo:0, Surplus:0] [Target:RowNo:1, ColumnNo:0, Surplus:0]");
-                add("[Source:RowNo:1, ColumnNo:1, Surplus:0] [Target:RowNo:1, ColumnNo:1, Surplus:0]");
-                add("[Source:RowNo:1, ColumnNo:2, Surplus:0] [Target:RowNo:1, ColumnNo:2, Surplus:0]");
-                add("[Source:RowNo:1, ColumnNo:3, Surplus:0] [Target:RowNo:1, ColumnNo:3, Surplus:0]");
+                add("[Source:RowNo:0, ColumnNo:1, Surplus:0, Value:1] [Target:RowNo:0, ColumnNo:1, Surplus:0, Value:1]");
+                add("[Source:RowNo:0, ColumnNo:2, Surplus:0, Value:Aiden] [Target:RowNo:0, ColumnNo:2, Surplus:0, Value:Aiden]");
+                add("[Source:RowNo:0, ColumnNo:3, Surplus:0, Value:NULL] [Target:RowNo:0, ColumnNo:3, Surplus:0, Value:NULL]");
+                add("[Source:RowNo:1, ColumnNo:1, Surplus:0, Value:2] [Target:RowNo:1, ColumnNo:1, Surplus:0, Value:2]");
+                add("[Source:RowNo:1, ColumnNo:2, Surplus:0, Value:qamatic] [Target:RowNo:1, ColumnNo:2, Surplus:0, Value:qamatic]");
+                add("[Source:RowNo:1, ColumnNo:3, Surplus:0, Value:NULL] [Target:RowNo:1, ColumnNo:3, Surplus:0, Value:NULL]");
             }
         };
 
@@ -101,18 +98,9 @@ public class DbComparerTests extends H2TestCase {
         DataComparer dataComparer = new Mintleaf.ComparerBuilder().
                 withSourceTable(sourceList).
                 withTargetTable(targetListList).
-                withMatchingResult((sourceRow, targetRow) -> {
-                    actuals.add(String.format("[Source:%s] [Target:%s]", sourceRow, targetRow));
+                withMatchingResult((sourceColumn, targetColumn) -> {
+                    actuals.add(String.format("[Source:%s] [Target:%s]", sourceColumn.toLog(), targetColumn.toLog()));
                     logger.info(actuals.get(actuals.size() - 1));
-
-                    String sourceColumnValue = (String) sourceRow.Row.getValue(sourceRow.ColumnNumber+1);
-                    String targetColumnValue = (String) sourceRow.Row.getValue(sourceRow.ColumnNumber+1);
-
-                    if (sourceColumnValue.equals(targetColumnValue)){
-                        logger.info("matches");
-                    }else {
-                        logger.info("no match");
-                    }
 
                 }).
                 build();
