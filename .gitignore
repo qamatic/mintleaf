@@ -27,3 +27,5 @@ doc/build/*
 target
 
 dependency-redu*
+
+*report.html
