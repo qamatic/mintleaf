@@ -1,0 +1,20 @@
+language: java
+sudo: false # optional
+
+addons:
+  apt:
+    packages:
+      - oracle-java8-installer
+
+jdk: oraclejdk8
+
+
+install:
+  - mvn initialize -P install-drivers
+
+script:
+  - mvn install
+  - mvn cobertura:cobertura
+
+after_success:
+  - bash <(curl -s https://codecov.io/bash)
