@@ -461,3 +461,22 @@ Lets see how compare works between sourceUserList and targetUserList,
         //compare now
         dataComparer.execute();
 ```
+
+
+For selected column comparison, use **withSelectedColumnMaps()**   
+```java
+
+        //logger
+        final ConsoleLogger logger = new ConsoleLogger();
+        
+        //create comparer
+        DataComparer dataComparer = new Mintleaf.ComparerBuilder().
+                withSourceTable(sourceUserList).
+                withTargetTable(targetUserList).
+                withSelectedColumnMaps("USERNAME=USERNAME,ID=ID").
+                ......
+                 ............   
+                .   ..................
+                .build()
+                   
+```
