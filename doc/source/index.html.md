@@ -327,25 +327,13 @@ With Mintleaf, you can compare two data sets of any kind and it is not just limi
         DataComparer dataComparer = new Mintleaf.ComparerBuilder().
                 withSourceTable(sourceList).
                 withTargetTable(targetListList).
-                withMatchingResult((sourceRow, targetRow) -> {
+                withMatchingResult((sourceColumn, targetColumn) -> {
                     
-                    //here is where you add your compare criteria and along with you can generate reports as well if you want.
-                    //you would get here source row, column number, row number and similarly for targetrow so its upto you define the compare criteria
-                    
-                    String sourceColumnValue = (String) sourceRow.Row.getValue(sourceRow.ColumnNumber);
-                    String targetColumnValue = (String) sourceRow.Row.getValue(sourceRow.ColumnNumber);
-                    
-                    if (sourceColumnValue.equals(targetColumnValue)){
+                    //here is where you add your compare criteria 
+                
+                    if (sourceColumn.equals(targetColumn)){
                         logger.info("matches");
                     }else {
-                        logger.info("no match");
-                    }
-                    
-                    //here another way to compare column values in short
-                    if (sourceRow.asString().equals(targetRow.asString()) ){
-                        logger.info("match");
-                    }
-                    else   {
                         logger.info("no match");
                     }
                     
@@ -386,11 +374,13 @@ In order to do compare between _sourceUserList and targetUserList_, you must imp
 
         private class User implements ComparableRow {
     
-            private ColumnMetaDataCollection metaDataCollection;
+             public String UserName;
+             public String Country;
+                
+            //add this line 
+            private MetaDataCollection metaDataCollection; 
     
-            public String UserName;
-            public String Country;
-    
+            //add this override to map your bean members to column***********
             @Override
             public Object getValue(int columnIndex) throws MintLeafException {
                 switch (columnIndex) {
@@ -402,14 +392,16 @@ In order to do compare between _sourceUserList and targetUserList_, you must imp
                 return null;
             }
     
+            //add this override to return column meta data information********************
             @Override
-            public ColumnMetaDataCollection getMetaData() throws MintLeafException {
-                if (metaDataCollection == null) {
-                    metaDataCollection = new ColumnMetaDataCollection("USERS");
-                    metaDataCollection.add(new Column("UserName"));
-                    metaDataCollection.add(new Column("Country"));
-                }
-                return metaDataCollection;
+            public MetaDataCollection getMetaData() throws MintLeafException {
+                return this.metaDataCollection;
+            }
+        
+             //add this override to set column meta data information- framework injects the value********************
+            @Override
+            public void setMetaData(MetaDataCollection metaDataCollection) {
+                this.metaDataCollection = metaDataCollection;
             }
         }
 
@@ -452,24 +444,17 @@ Lets see how compare works between sourceUserList and targetUserList,
         DataComparer dataComparer = new Mintleaf.ComparerBuilder().
                 withSourceTable(sourceUserList).
                 withTargetTable(targetUserList).
-                withMatchingResult(new ComparerListener() {
-                    @Override
-                    public void OnCompare(RowState sourceRow, RowState targetRow) throws MintLeafException {
-                        
-                       // logger.info(String.format("[Source:%s] [Target:%s]", sourceRow, targetRow));
-                   
-                        
-                        String sourceColumnValue = sourceRow.Row.getValue(sourceRow.ColumnNumber).toString(); // alternate code: sourceRow.asString();
-                        String targetColumnValue = sourceRow.Row.getValue(sourceRow.ColumnNumber).toString(); // alternate code: targetRow.asString();
-                        
-                        if (sourceColumnValue.equals(targetColumnValue)) { //alternate code: if (sourceRow.asString().equals(targetRow.asString())) {
-                        
-                            logger.info("matches");
-                        } else {
-                            logger.info("no match");
-                        }
-
+                withMatchingResult((sourceColumn, targetColumn) -> {
+                    
+                    //here is where you add your compare criteria 
+                
+                    if (sourceColumn.equals(targetColumn)){
+                        logger.info("matches");
+                    }else {
+                        logger.info("no match");
                     }
+                    
+                    //logger.info(String.format("[Source:%s] [Target:%s]", sourceRowState, targetRowState));
                 }).
                 build();
 
