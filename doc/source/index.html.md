@@ -437,13 +437,18 @@ Lets see how compare works between sourceUserList and targetUserList,
 
 ```java
 
+        // create column metadata
+        ColumnMetaDataCollection metaDataCollection = new ColumnMetaDataCollection("USERS");
+        metaDataCollection.add(new Column("UserName"));
+        metaDataCollection.add(new Column("Country"));
+        
         //logger
         final ConsoleLogger logger = new ConsoleLogger();
         
         //create comparer
         DataComparer dataComparer = new Mintleaf.ComparerBuilder().
-                withSourceTable(sourceUserList).
-                withTargetTable(targetUserList).
+                withSourceTable(sourceUserList, metaDataCollection).
+                withTargetTable(targetUserList, metaDataCollection).
                 withMatchingResult((sourceColumn, targetColumn) -> {
                     
                     //here is where you add your compare criteria 
