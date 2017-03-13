@@ -503,25 +503,13 @@ It&rsquo;s very easy to add changeset definition on your exising sql files if yo
         <span class="n">DataComparer</span> <span class="n">dataComparer</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Mintleaf</span><span class="o">.</span><span class="na">ComparerBuilder</span><span class="o">().</span>
                 <span class="n">withSourceTable</span><span class="o">(</span><span class="n">sourceList</span><span class="o">).</span>
                 <span class="n">withTargetTable</span><span class="o">(</span><span class="n">targetListList</span><span class="o">).</span>
-                <span class="n">withMatchingResult</span><span class="o">((</span><span class="n">sourceRow</span><span class="o">,</span> <span class="n">targetRow</span><span class="o">)</span> <span class="o">-&gt;</span> <span class="o">{</span>
+                <span class="n">withMatchingResult</span><span class="o">((</span><span class="n">sourceColumn</span><span class="o">,</span> <span class="n">targetColumn</span><span class="o">)</span> <span class="o">-&gt;</span> <span class="o">{</span>
 
-                    <span class="c1">//here is where you add your compare criteria and along with you can generate reports as well if you want.</span>
-                    <span class="c1">//you would get here source row, column number, row number and similarly for targetrow so its upto you define the compare criteria</span>
+                    <span class="c1">//here is where you add your compare criteria </span>
 
-                    <span class="n">String</span> <span class="n">sourceColumnValue</span> <span class="o">=</span> <span class="o">(</span><span class="n">String</span><span class="o">)</span> <span class="n">sourceRow</span><span class="o">.</span><span class="na">Row</span><span class="o">.</span><span class="na">getValue</span><span class="o">(</span><span class="n">sourceRow</span><span class="o">.</span><span class="na">ColumnNumber</span><span class="o">);</span>
-                    <span class="n">String</span> <span class="n">targetColumnValue</span> <span class="o">=</span> <span class="o">(</span><span class="n">String</span><span class="o">)</span> <span class="n">sourceRow</span><span class="o">.</span><span class="na">Row</span><span class="o">.</span><span class="na">getValue</span><span class="o">(</span><span class="n">sourceRow</span><span class="o">.</span><span class="na">ColumnNumber</span><span class="o">);</span>
-
-                    <span class="k">if</span> <span class="o">(</span><span class="n">sourceColumnValue</span><span class="o">.</span><span class="na">equals</span><span class="o">(</span><span class="n">targetColumnValue</span><span class="o">)){</span>
+                    <span class="k">if</span> <span class="o">(</span><span class="n">sourceColumn</span><span class="o">.</span><span class="na">equals</span><span class="o">(</span><span class="n">targetColumn</span><span class="o">)){</span>
                         <span class="n">logger</span><span class="o">.</span><span class="na">info</span><span class="o">(</span><span class="s">"matches"</span><span class="o">);</span>
                     <span class="o">}</span><span class="k">else</span> <span class="o">{</span>
-                        <span class="n">logger</span><span class="o">.</span><span class="na">info</span><span class="o">(</span><span class="s">"no match"</span><span class="o">);</span>
-                    <span class="o">}</span>
-
-                    <span class="c1">//here another way to compare column values in short</span>
-                    <span class="k">if</span> <span class="o">(</span><span class="n">sourceRow</span><span class="o">.</span><span class="na">asString</span><span class="o">().</span><span class="na">equals</span><span class="o">(</span><span class="n">targetRow</span><span class="o">.</span><span class="na">asString</span><span class="o">())</span> <span class="o">){</span>
-                        <span class="n">logger</span><span class="o">.</span><span class="na">info</span><span class="o">(</span><span class="s">"match"</span><span class="o">);</span>
-                    <span class="o">}</span>
-                    <span class="k">else</span>   <span class="o">{</span>
                         <span class="n">logger</span><span class="o">.</span><span class="na">info</span><span class="o">(</span><span class="s">"no match"</span><span class="o">);</span>
                     <span class="o">}</span>
 
@@ -548,11 +536,13 @@ It&rsquo;s very easy to add changeset definition on your exising sql files if yo
 <pre class="highlight java tab-java"><code>
         <span class="kd">private</span> <span class="kd">class</span> <span class="nc">User</span> <span class="kd">implements</span> <span class="n">ComparableRow</span> <span class="o">{</span>
 
-            <span class="kd">private</span> <span class="n">ColumnMetaDataCollection</span> <span class="n">metaDataCollection</span><span class="o">;</span>
+             <span class="kd">public</span> <span class="n">String</span> <span class="n">UserName</span><span class="o">;</span>
+             <span class="kd">public</span> <span class="n">String</span> <span class="n">Country</span><span class="o">;</span>
 
-            <span class="kd">public</span> <span class="n">String</span> <span class="n">UserName</span><span class="o">;</span>
-            <span class="kd">public</span> <span class="n">String</span> <span class="n">Country</span><span class="o">;</span>
+            <span class="c1">//add this line </span>
+            <span class="kd">private</span> <span class="n">MetaDataCollection</span> <span class="n">metaDataCollection</span><span class="o">;</span> 
 
+            <span class="c1">//add this override to map your bean members to column***********</span>
             <span class="nd">@Override</span>
             <span class="kd">public</span> <span class="n">Object</span> <span class="nf">getValue</span><span class="o">(</span><span class="kt">int</span> <span class="n">columnIndex</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">MintLeafException</span> <span class="o">{</span>
                 <span class="k">switch</span> <span class="o">(</span><span class="n">columnIndex</span><span class="o">)</span> <span class="o">{</span>
@@ -564,14 +554,16 @@ It&rsquo;s very easy to add changeset definition on your exising sql files if yo
                 <span class="k">return</span> <span class="kc">null</span><span class="o">;</span>
             <span class="o">}</span>
 
+            <span class="c1">//add this override to return column meta data information********************</span>
             <span class="nd">@Override</span>
-            <span class="kd">public</span> <span class="n">ColumnMetaDataCollection</span> <span class="nf">getMetaData</span><span class="o">()</span> <span class="kd">throws</span> <span class="n">MintLeafException</span> <span class="o">{</span>
-                <span class="k">if</span> <span class="o">(</span><span class="n">metaDataCollection</span> <span class="o">==</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
-                    <span class="n">metaDataCollection</span> <span class="o">=</span> <span class="k">new</span> <span class="n">ColumnMetaDataCollection</span><span class="o">(</span><span class="s">"USERS"</span><span class="o">);</span>
-                    <span class="n">metaDataCollection</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="k">new</span> <span class="n">Column</span><span class="o">(</span><span class="s">"UserName"</span><span class="o">));</span>
-                    <span class="n">metaDataCollection</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="k">new</span> <span class="n">Column</span><span class="o">(</span><span class="s">"Country"</span><span class="o">));</span>
-                <span class="o">}</span>
-                <span class="k">return</span> <span class="n">metaDataCollection</span><span class="o">;</span>
+            <span class="kd">public</span> <span class="n">MetaDataCollection</span> <span class="nf">getMetaData</span><span class="o">()</span> <span class="kd">throws</span> <span class="n">MintLeafException</span> <span class="o">{</span>
+                <span class="k">return</span> <span class="k">this</span><span class="o">.</span><span class="na">metaDataCollection</span><span class="o">;</span>
+            <span class="o">}</span>
+
+             <span class="c1">//add this override to set column meta data information- framework injects the value********************</span>
+            <span class="nd">@Override</span>
+            <span class="kd">public</span> <span class="kt">void</span> <span class="nf">setMetaData</span><span class="o">(</span><span class="n">MetaDataCollection</span> <span class="n">metaDataCollection</span><span class="o">)</span> <span class="o">{</span>
+                <span class="k">this</span><span class="o">.</span><span class="na">metaDataCollection</span> <span class="o">=</span> <span class="n">metaDataCollection</span><span class="o">;</span>
             <span class="o">}</span>
         <span class="o">}</span>
 
@@ -605,24 +597,17 @@ It&rsquo;s very easy to add changeset definition on your exising sql files if yo
         <span class="n">DataComparer</span> <span class="n">dataComparer</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Mintleaf</span><span class="o">.</span><span class="na">ComparerBuilder</span><span class="o">().</span>
                 <span class="n">withSourceTable</span><span class="o">(</span><span class="n">sourceUserList</span><span class="o">).</span>
                 <span class="n">withTargetTable</span><span class="o">(</span><span class="n">targetUserList</span><span class="o">).</span>
-                <span class="n">withMatchingResult</span><span class="o">(</span><span class="k">new</span> <span class="n">ComparerListener</span><span class="o">()</span> <span class="o">{</span>
-                    <span class="nd">@Override</span>
-                    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">OnCompare</span><span class="o">(</span><span class="n">RowState</span> <span class="n">sourceRow</span><span class="o">,</span> <span class="n">RowState</span> <span class="n">targetRow</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">MintLeafException</span> <span class="o">{</span>
+                <span class="n">withMatchingResult</span><span class="o">((</span><span class="n">sourceColumn</span><span class="o">,</span> <span class="n">targetColumn</span><span class="o">)</span> <span class="o">-&gt;</span> <span class="o">{</span>
 
-                       <span class="c1">// logger.info(String.format("[Source:%s] [Target:%s]", sourceRow, targetRow));</span>
+                    <span class="c1">//here is where you add your compare criteria </span>
 
-
-                        <span class="n">String</span> <span class="n">sourceColumnValue</span> <span class="o">=</span> <span class="n">sourceRow</span><span class="o">.</span><span class="na">Row</span><span class="o">.</span><span class="na">getValue</span><span class="o">(</span><span class="n">sourceRow</span><span class="o">.</span><span class="na">ColumnNumber</span><span class="o">).</span><span class="na">toString</span><span class="o">();</span> <span class="c1">// alternate code: sourceRow.asString();</span>
-                        <span class="n">String</span> <span class="n">targetColumnValue</span> <span class="o">=</span> <span class="n">sourceRow</span><span class="o">.</span><span class="na">Row</span><span class="o">.</span><span class="na">getValue</span><span class="o">(</span><span class="n">sourceRow</span><span class="o">.</span><span class="na">ColumnNumber</span><span class="o">).</span><span class="na">toString</span><span class="o">();</span> <span class="c1">// alternate code: targetRow.asString();</span>
-
-                        <span class="k">if</span> <span class="o">(</span><span class="n">sourceColumnValue</span><span class="o">.</span><span class="na">equals</span><span class="o">(</span><span class="n">targetColumnValue</span><span class="o">))</span> <span class="o">{</span> <span class="c1">//alternate code: if (sourceRow.asString().equals(targetRow.asString())) {</span>
-
-                            <span class="n">logger</span><span class="o">.</span><span class="na">info</span><span class="o">(</span><span class="s">"matches"</span><span class="o">);</span>
-                        <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
-                            <span class="n">logger</span><span class="o">.</span><span class="na">info</span><span class="o">(</span><span class="s">"no match"</span><span class="o">);</span>
-                        <span class="o">}</span>
-
+                    <span class="k">if</span> <span class="o">(</span><span class="n">sourceColumn</span><span class="o">.</span><span class="na">equals</span><span class="o">(</span><span class="n">targetColumn</span><span class="o">)){</span>
+                        <span class="n">logger</span><span class="o">.</span><span class="na">info</span><span class="o">(</span><span class="s">"matches"</span><span class="o">);</span>
+                    <span class="o">}</span><span class="k">else</span> <span class="o">{</span>
+                        <span class="n">logger</span><span class="o">.</span><span class="na">info</span><span class="o">(</span><span class="s">"no match"</span><span class="o">);</span>
                     <span class="o">}</span>
+
+                    <span class="c1">//logger.info(String.format("[Source:%s] [Target:%s]", sourceRowState, targetRowState));</span>
                 <span class="o">}).</span>
                 <span class="n">build</span><span class="o">();</span>
 
