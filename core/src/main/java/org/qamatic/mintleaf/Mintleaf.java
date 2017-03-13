@@ -59,7 +59,8 @@ public class Mintleaf {
         private RowListWrapper sourceTable;
         private RowListWrapper targetTable;
         private ComparerListener comparerListener;//= new ConsoleComparerListener();
-        private RowMatcher rowMatcher;
+        private ColumnMatcher columnMatcher;
+        private String selectedColumnMaps;
 
         public ComparerBuilder withSourceTable(List<? extends ComparableRow> sourceTable, MetaDataCollection metaDataCollection) {
             this.sourceTable = new ObjectRowListWrapper(sourceTable, metaDataCollection);
@@ -81,15 +82,23 @@ public class Mintleaf {
             return this;
         }
 
-        public ComparerBuilder withMatchingLogic(RowMatcher rowMatcher) {
-            this.rowMatcher = rowMatcher;
+        public ComparerBuilder withColumnMatchingLogic(ColumnMatcher columnMatcher) {
+            this.columnMatcher = columnMatcher;
             return this;
         }
+
+
+        public ComparerBuilder withSelectedColumnMaps(String selectedColumnMaps) {
+            this.selectedColumnMaps = selectedColumnMaps;
+            return this;
+        }
+
 
         public ComparerBuilder withMatchingResult(ComparerListener comparerListener) {
             this.comparerListener = comparerListener;
             return this;
         }
+
 
         public DataComparer buildWith(Class<? extends DataComparer> dataComparerClazz) {
 
@@ -98,26 +107,17 @@ public class Mintleaf {
                 Constructor constructor =
                         dataComparerClazz.getConstructor(new Class[]{RowListWrapper.class, RowListWrapper.class});
                 listComparator = (DataComparer) constructor.newInstance(this.sourceTable, this.targetTable);
-                if (this.rowMatcher != null) {
-                    listComparator.setRowMatcher(this.rowMatcher);
+                if (this.columnMatcher != null) {
+                    listComparator.setColumnMatcher(this.columnMatcher);
                 } else {
-                    final boolean dbSourceColumnState = (sourceTable instanceof ResultSetRowListWrapper);
-                    final boolean dbTargetColumnState = (targetTable instanceof ResultSetRowListWrapper);
-                    listComparator.setRowMatcher(new OrderedColumnMatcher() {
-                        @Override
-                        protected ColumnState createSourceColumnStateInstance() {
-                            if (dbSourceColumnState)
-                                return new DbColumnState();
-                            return super.createSourceColumnStateInstance();
-                        }
 
-                        @Override
-                        protected ColumnState createTargetColumnStateInstance() {
-                            if (dbTargetColumnState)
-                                return new DbColumnState();
-                            return super.createTargetColumnStateInstance();
-                        }
-                    });
+                    if (this.selectedColumnMaps == null) {
+                        listComparator.setColumnMatcher(getOrderedColumnMatcher(sourceTable instanceof ResultSetRowListWrapper,
+                                targetTable instanceof ResultSetRowListWrapper));
+                    } else {
+                        listComparator.setColumnMatcher(new SelectedColumnMatcher(this.selectedColumnMaps));
+                    }
+
 
                 }
                 listComparator.setComparerListener(this.comparerListener);
@@ -138,6 +138,24 @@ public class Mintleaf {
 
 
             return listComparator;
+        }
+
+        private OrderedColumnMatcher getOrderedColumnMatcher(final boolean dbSourceColumnState, final boolean dbTargetColumnState) {
+            return new OrderedColumnMatcher() {
+                @Override
+                protected ColumnState createSourceColumnStateInstance() {
+                    if (dbSourceColumnState)
+                        return new DbColumnState();
+                    return super.createSourceColumnStateInstance();
+                }
+
+                @Override
+                protected ColumnState createTargetColumnStateInstance() {
+                    if (dbTargetColumnState)
+                        return new DbColumnState();
+                    return super.createTargetColumnStateInstance();
+                }
+            };
         }
 
         public DataComparer build() {

@@ -64,6 +64,8 @@ public class CsvVsListComparerTests {
         ColumnMetaDataCollection metaDataCollection = new ColumnMetaDataCollection("USERS");
         metaDataCollection.add(new Column("UserName"));
         metaDataCollection.add(new Column("Country"));
+        metaDataCollection.add(new Column("UserLastName"));
+        metaDataCollection.add(new Column("Id"));
 
         return metaDataCollection;
     }

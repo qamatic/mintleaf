@@ -366,7 +366,7 @@ For example you have a pojo class looks like the following.  For simplicity purp
 ```
 
 
-In order to do compare between _sourceUserList and targetUserList_, you must implement an interface **ComparableRow** on User class.   When you implement **ComparableRow** interface, you will have to override **getMetaData()** and **getValue()** methods as shown below.   Basically you provide column information as opposed a object properties so this way one can easily deal with nest objects and calculated column values manipluated before returning them.  So you can also implemnent some custom auto inferring mechanism like spring beans via annotations is an idea for those who wants it but its is not the scope here and Mintleaf provides complete freedom to the user as how they would like to implement it.  
+In order to do compare between _sourceUserList and targetUserList_, you must implement an interface **ComparableRow** on User class.   When you implement **ComparableRow** interface, you will have to override **getMetaData()**,  **setMetaData()** and **getValue()** methods as shown below.   Basically you provide column information as opposed a object properties so this way one can easily deal with nest objects and calculated column values manipluated before returning them.  So you can also implemnent some custom auto inferring mechanism like spring beans via annotations is an idea for those who wants it but its is not the scope here and Mintleaf provides complete freedom to the user as how they would like to implement it.  
 
 
 

@@ -46,34 +46,47 @@ import org.qamatic.mintleaf.MintLeafException;
 public class User implements ComparableRow {
 
     private MetaDataCollection metaDataCollection;
-    private String userName;
+    private int id;
+    private String firstName;
+    private String lastName;
     private String country;
 
 
-    public User(String userName) {
-        this.userName = userName;
+    public User(String firstName) {
+        this.firstName = firstName;
     }
 
-    public User(String userName, String country) {
-        this.userName = userName;
+    public User(int id, String firstName, String lastName) {
+        this.firstName = firstName;
+        this.id = id;
+        this.lastName = lastName;
+    }
+
+
+    public User(String firstName, String country) {
+        this.firstName = firstName;
         this.country = country;
     }
 
-    public String getUserName() {
-        return userName;
+    public String getFirstName() {
+        return firstName;
     }
 
-    public void setUserName(String userName) {
-        this.userName = userName;
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
     }
 
     @Override
     public Object getValue(int columnIndex) throws MintLeafException {
         switch (columnIndex) {
             case 0:
-                return userName;
+                return firstName;
             case 1:
                 return country;
+            case 2:
+                return lastName;
+            case 3:
+                return id;
         }
         return null;
     }
@@ -86,5 +99,13 @@ public class User implements ComparableRow {
     @Override
     public void setMetaData(MetaDataCollection metaDataCollection) {
         this.metaDataCollection = metaDataCollection;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 }

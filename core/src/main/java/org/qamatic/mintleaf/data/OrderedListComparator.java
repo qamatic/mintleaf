@@ -36,7 +36,7 @@ package org.qamatic.mintleaf.data;
 import org.qamatic.mintleaf.DataComparer;
 import org.qamatic.mintleaf.MintLeafException;
 import org.qamatic.mintleaf.RowListWrapper;
-import org.qamatic.mintleaf.RowMatcher;
+import org.qamatic.mintleaf.ColumnMatcher;
 
 /**
  * Created by qamatic on 3/5/16.
@@ -46,13 +46,13 @@ public class OrderedListComparator implements DataComparer {
     private RowListWrapper sourceTable;
     private RowListWrapper targetTable;
     private ComparerListener comparerListener;
-    private RowMatcher rowMatcher;
+    private ColumnMatcher columnMatcher;
 
 
     public OrderedListComparator(RowListWrapper sourceTable, RowListWrapper targetTable) {
         setSourceTable(sourceTable);
         setTargetTable(targetTable);
-        setRowMatcher(new OrderedColumnMatcher());
+        setColumnMatcher(new OrderedColumnMatcher());
     }
 
 
@@ -67,7 +67,11 @@ public class OrderedListComparator implements DataComparer {
             this.comparerListener.OnBeginCompare(this.sourceTable, this.targetTable);
         }
         final RowState sourceRowState = getRowStateInstance();
+        sourceRowState.setMetaData(this.sourceTable.getMetaData());
+
         final RowState targetRowState = getRowStateInstance();
+        targetRowState.setMetaData(this.targetTable.getMetaData());
+
         this.sourceTable.resetAll();
         this.targetTable.resetAll();
         while (this.sourceTable.moveNext()) {
@@ -83,7 +87,7 @@ public class OrderedListComparator implements DataComparer {
                 targetRowState.IsSurplusRow = 0;
 
                 onRowCompare(sourceRowState, targetRowState);
-                rowMatcher.match(sourceRowState, targetRowState, this.comparerListener);
+                columnMatcher.match(sourceRowState, targetRowState, this.comparerListener);
                 afterRowCompare(sourceRowState, targetRowState);
             } else {
                 beforeRowCompare(sourceRowState, targetRowState);
@@ -93,7 +97,7 @@ public class OrderedListComparator implements DataComparer {
                 targetRowState.Row = null;
                 targetRowState.IsSurplusRow = -1;
                 onRowCompare(sourceRowState, targetRowState);
-                rowMatcher.match(sourceRowState, targetRowState, this.comparerListener);
+                columnMatcher.match(sourceRowState, targetRowState, this.comparerListener);
                 afterRowCompare(sourceRowState, targetRowState);
             }
         }
@@ -107,7 +111,7 @@ public class OrderedListComparator implements DataComparer {
             targetRowState.Row = this.targetTable.row();
             targetRowState.IsSurplusRow = 1;
             onRowCompare(sourceRowState, targetRowState);
-            rowMatcher.match(sourceRowState, targetRowState, this.comparerListener);
+            columnMatcher.match(sourceRowState, targetRowState, this.comparerListener);
             afterRowCompare(sourceRowState, targetRowState);
         }
         if (this.comparerListener != null) {
@@ -116,7 +120,7 @@ public class OrderedListComparator implements DataComparer {
     }
 
     private void assertBefore() throws MintLeafException {
-        if (rowMatcher == null)
+        if (columnMatcher == null)
             throw new MintLeafException("RowMatcher must be set");
         if (sourceTable == null)
             throw new MintLeafException("SourceTable is missing");
@@ -147,9 +151,8 @@ public class OrderedListComparator implements DataComparer {
         this.comparerListener = comparerListener;
     }
 
-    @Override
-    public void setRowMatcher(RowMatcher rowMatcher) {
-        this.rowMatcher = rowMatcher;
+    public void setColumnMatcher(ColumnMatcher columnMatcher) {
+        this.columnMatcher = columnMatcher;
     }
 
     @Override

@@ -43,7 +43,7 @@ public interface DataComparer extends DataAction {
 
     void setComparerListener(ComparerListener comparerListener);
 
-    void setRowMatcher(RowMatcher rowMatcher);
+    void setColumnMatcher(ColumnMatcher columnMatcher);
 
     RowListWrapper getSourceTable();
 

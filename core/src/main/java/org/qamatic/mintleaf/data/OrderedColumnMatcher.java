@@ -34,19 +34,24 @@
 
 package org.qamatic.mintleaf.data;
 
+import org.qamatic.mintleaf.ColumnMatcher;
 import org.qamatic.mintleaf.MintLeafException;
-import org.qamatic.mintleaf.RowMatcher;
 
 import java.sql.SQLException;
 
 /**
  * Created by qamatic on 3/5/16.
  */
-public class OrderedColumnMatcher implements RowMatcher {
+public class OrderedColumnMatcher implements ColumnMatcher {
 
 
     @Override
     public void match(RowState leftRowState, RowState rightRowState, ComparerListener listener) throws MintLeafException {
+        if (listener == null) {
+            return;
+        }
+
+
         final ColumnState sourceColumnState = createSourceColumnStateInstance();
         final ColumnState targetColumnState = createTargetColumnStateInstance();
 
@@ -61,53 +66,49 @@ public class OrderedColumnMatcher implements RowMatcher {
                     sourceColumnNumber++;
                     targetColumnNumber++;
 
+                    sourceColumnState.reset(leftRowState.RowNumber, sourceColumnNumber, 0,
+                            leftRowState.Row.getValue(sourceColumnNumber));
+                    targetColumnState.reset(rightRowState.RowNumber, targetColumnNumber, 0,
+                            rightRowState.Row.getValue(targetColumnNumber));
 
-                    if (listener != null) {
-                        sourceColumnState.reset(leftRowState.RowNumber, sourceColumnNumber, 0,
-                                leftRowState.Row.getValue(sourceColumnNumber));
-                        targetColumnState.reset(rightRowState.RowNumber, targetColumnNumber, 0,
-                                rightRowState.Row.getValue(targetColumnNumber));
-
-                        listener.OnColumnCompare(sourceColumnState, targetColumnState);
-                    }
-
+                    listener.OnColumnCompare(sourceColumnState, targetColumnState);
 
                 }
 
                 while (targetColumnNumber < rightRowState.Row.getMetaData().getColumnCount() - 1) {
                     targetColumnNumber++;
-                    if (listener != null) {
-                        sourceColumnState.reset(-1, -1, -1, null);
-                        targetColumnState.reset(rightRowState.RowNumber, targetColumnNumber, 0,
-                                rightRowState.Row.getValue(targetColumnNumber));
 
-                        listener.OnColumnCompare(sourceColumnState, targetColumnState);
-                    }
+                    sourceColumnState.reset(-1, -1, -1, null);
+                    targetColumnState.reset(rightRowState.RowNumber, targetColumnNumber, 0,
+                            rightRowState.Row.getValue(targetColumnNumber));
+
+                    listener.OnColumnCompare(sourceColumnState, targetColumnState);
+
                 }
 
             } else if ((leftRowState.Row != null) && (rightRowState.Row == null)) {
 
                 while (sourceColumnNumber < leftRowState.Row.getMetaData().getColumnCount() - 1) {
                     sourceColumnNumber++;
-                    if (listener != null) {
-                        sourceColumnState.reset(leftRowState.RowNumber, sourceColumnNumber, 1,
-                                leftRowState.Row.getValue(sourceColumnNumber));
-                        targetColumnState.reset(-1, -1, -1, null);
 
-                        listener.OnColumnCompare(sourceColumnState, targetColumnState);
-                    }
+                    sourceColumnState.reset(leftRowState.RowNumber, sourceColumnNumber, 1,
+                            leftRowState.Row.getValue(sourceColumnNumber));
+                    targetColumnState.reset(-1, -1, -1, null);
+
+                    listener.OnColumnCompare(sourceColumnState, targetColumnState);
+
                 }
 
             } else if ((leftRowState.Row == null) && (rightRowState.Row != null)) {
 
                 while (targetColumnNumber < rightRowState.Row.getMetaData().getColumnCount() - 1) {
                     targetColumnNumber++;
-                    if (listener != null) {
-                        sourceColumnState.reset(-1, -1, -1, null);
-                        targetColumnState.reset(rightRowState.RowNumber, targetColumnNumber, 1,
-                                rightRowState.Row.getValue(targetColumnNumber));
-                        listener.OnColumnCompare(sourceColumnState, targetColumnState);
-                    }
+
+                    sourceColumnState.reset(-1, -1, -1, null);
+                    targetColumnState.reset(rightRowState.RowNumber, targetColumnNumber, 1,
+                            rightRowState.Row.getValue(targetColumnNumber));
+                    listener.OnColumnCompare(sourceColumnState, targetColumnState);
+
                 }
             }
         } catch (SQLException e) {

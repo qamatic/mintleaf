@@ -83,7 +83,7 @@ public class ObjectRowListWrapper implements RowListWrapper {
     }
 
     @Override
-    public ResultSetMetaData getMetaData() throws MintLeafException {
+    public MetaDataCollection getMetaData() throws MintLeafException {
         return this.metaDataCollection;
     }
 
