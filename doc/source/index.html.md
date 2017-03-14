@@ -3,7 +3,7 @@ title: Mintleaf Documentation
  
 toc_footers:  
   - <a href='http://getmintleaf.org'>getmintleaf.org</a>
-  - <a href='https://github.com/qamatic/mintleaf'>Source @ github</a>
+  - <a href='https://github.com/qamatic/mintleaf'>Source @ github</a>  
  
 
 includes:
@@ -27,6 +27,17 @@ Welcome to the Mintleaf! Mintleaf is a light weight framework tool helps you to 
   
 
 ##Installation
+
+[![Maven Central](https://maven-badges.herokuapp.com/maven-central/org.qamatic/mintleaf-core/badge.svg?style=plastic)](https://maven-badges.herokuapp.com/maven-central/org.qamatic/mintleaf-core)
+
+
+```xml
+    <dependency>
+        <groupId>org.qamatic</groupId>
+        <artifactId>mintleaf-core</artifactId>
+        <version>1.8.19</version>
+    </dependency>
+```
 
 
 
@@ -468,7 +479,8 @@ Lets see how compare works between sourceUserList and targetUserList,
 ```
 
 
-For selected column comparison, use **withSelectedColumnMaps()**   
+For selected column comparison, use **withSelectedColumnMaps()** 
+  
 ```java
 
         //logger

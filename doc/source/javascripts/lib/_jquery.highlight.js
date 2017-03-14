@@ -1,34 +1,45 @@
 /*
+ * jQuery Highlight plugin
  *
- *  *
- *  *  * <!--
- *  *  *   ~
- *  *  *   ~ The MIT License (MIT)
- *  *  *   ~
- *  *  *   ~ Copyright (c) 2010-2017 QAMatic
- *  *  *   ~
- *  *  *   ~ Permission is hereby granted, free of charge, to any person obtaining a copy
- *  *  *   ~ of this software and associated documentation files (the "Software"), to deal
- *  *  *   ~ in the Software without restriction, including without limitation the rights
- *  *  *   ~ to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- *  *  *   ~ copies of the Software, and to permit persons to whom the Software is
- *  *  *   ~ furnished to do so, subject to the following conditions:
- *  *  *   ~
- *  *  *   ~ The above copyright notice and this permission notice shall be included in all
- *  *  *   ~ copies or substantial portions of the Software.
- *  *  *   ~
- *  *  *   ~ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- *  *  *   ~ IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- *  *  *   ~ FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- *  *  *   ~ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- *  *  *   ~ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- *  *  *   ~ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
- *  *  *   ~ SOFTWARE.
- *  *  *   ~
- *  *  *   ~
- *  *  *   -->
- *  *
- *  *
+ * Based on highlight v3 by Johann Burkard
+ * http://johannburkard.de/blog/programming/javascript/highlight-javascript-text-higlighting-jquery-plugin.html
+ *
+ * Code a little bit refactored and cleaned (in my humble opinion).
+ * Most important changes:
+ *  - has an option to highlight only entire words (wordsOnly - false by default),
+ *  - has an option to be case sensitive (caseSensitive - false by default)
+ *  - highlight element tag and class names can be specified in options
+ *
+ * Usage:
+ *   // wrap every occurrance of text 'lorem' in content
+ *   // with <span class='highlight'> (default options)
+ *   $('#content').highlight('lorem');
+ *
+ *   // search for and highlight more terms at once
+ *   // so you can save some time on traversing DOM
+ *   $('#content').highlight(['lorem', 'ipsum']);
+ *   $('#content').highlight('lorem ipsum');
+ *
+ *   // search only for entire word 'lorem'
+ *   $('#content').highlight('lorem', { wordsOnly: true });
+ *
+ *   // don't ignore case during search of term 'lorem'
+ *   $('#content').highlight('lorem', { caseSensitive: true });
+ *
+ *   // wrap every occurrance of term 'ipsum' in content
+ *   // with <em class='important'>
+ *   $('#content').highlight('ipsum', { element: 'em', className: 'important' });
+ *
+ *   // remove default highlight
+ *   $('#content').unhighlight();
+ *
+ *   // remove custom highlight
+ *   $('#content').unhighlight({ element: 'em', className: 'important' });
+ *
+ *
+ * Copyright (c) 2009 Bartek Szopka
+ *
+ * Licensed under MIT license.
  *
  */
 
