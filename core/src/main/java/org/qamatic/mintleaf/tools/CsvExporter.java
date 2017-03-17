@@ -41,7 +41,6 @@ import org.qamatic.mintleaf.MintLeafException;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.sql.SQLException;
 
 /**
  * Created by qamatic on 3/6/16.
@@ -67,8 +66,6 @@ public class CsvExporter extends ImpExpBase implements DataAction {
             File f = new File(this.targetCsvFile);
             exportDataTo(new CsvExportFlavour(new FileWriter(f)), this.sourceSql, this.sqlaramValueBindings);
 
-        } catch (SQLException e) {
-            throw new MintLeafException(e);
         } catch (IOException e) {
             throw new MintLeafException(e);
         }

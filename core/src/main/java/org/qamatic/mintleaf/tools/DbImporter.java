@@ -40,9 +40,6 @@ import org.qamatic.mintleaf.MintLeafException;
 import org.qamatic.mintleaf.MintLeafLogger;
 import org.qamatic.mintleaf.core.FluentJdbc;
 
-import java.io.IOException;
-import java.sql.SQLException;
-
 /**
  * Created by qamatic on 3/6/16.
  */
@@ -66,19 +63,11 @@ public class DbImporter extends ImpExpBase implements DataAction {
 
     @Override
     public void execute() throws MintLeafException {
+        FluentJdbc sourceDbQuery = this.sourceDbDriverSource.queryBuilder().
+                withSql(sourceSql).
+                withParamValues(this.sourceSqlParamValueBindings);
 
-        try {
-            FluentJdbc sourceDbQuery = this.sourceDbDriverSource.queryBuilder().
-                    withSql(sourceSql).
-                    withParamValues(this.sourceSqlParamValueBindings);
-
-            importDataFrom(new DbImportFlavour(sourceDbQuery), this.targetSqlTemplate);
-
-        } catch (SQLException e) {
-            throw new MintLeafException(e);
-        } catch (IOException e) {
-            throw new MintLeafException(e);
-        }
+        importDataFrom(new DbImportFlavour(sourceDbQuery), this.targetSqlTemplate);
     }
 
     @Override

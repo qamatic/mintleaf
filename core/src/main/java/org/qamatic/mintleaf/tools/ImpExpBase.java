@@ -54,14 +54,14 @@ public abstract class ImpExpBase {
 
 
     //this is meant for testing purpose of loading data but for production side you should consider using param binds..
-    protected void importDataFrom(final ImportFlavour dataImport, final String sqlTemplate) throws IOException, SQLException, MintLeafException {
+    protected void importDataFrom(final ImportFlavour dataImport, final String sqlTemplate) throws  MintLeafException {
         final Pattern columnPattern = Pattern.compile("\\$(\\w+)\\$", Pattern.DOTALL | Pattern.MULTILINE | Pattern.CASE_INSENSITIVE);
         final Matcher columns = columnPattern.matcher(sqlTemplate);
         logger.info("importing using template:" + sqlTemplate);
         final FluentJdbc fluentJdbc = this.getDriverSource().queryBuilder();
         dataImport.doImport((rowNum, row) -> {
 
-            try {
+
                 StringBuffer buffer = new StringBuffer(sqlTemplate);
                 columns.reset();
                 while (columns.find()) {
@@ -71,10 +71,6 @@ public abstract class ImpExpBase {
                 fluentJdbc.addBatch(buffer.toString());
 
 
-            } catch (SQLException e) {
-                logger.error("importUsingSqlTemplate", e);
-                throw new MintLeafException("importUsingSqlTemplate", e);
-            }
             return null;
         });
         dataImport.close();
@@ -82,7 +78,7 @@ public abstract class ImpExpBase {
         fluentJdbc.close();
     }
 
-    protected void exportDataTo(final ExportFlavour dataExport, String sql, Object[] optionalParamValueBindings) throws SQLException, IOException, MintLeafException {
+    protected void exportDataTo(final ExportFlavour dataExport, String sql, Object[] optionalParamValueBindings) throws MintLeafException {
         FluentJdbc fluentJdbc = this.getDriverSource().queryBuilder().withSql(sql).withParamValues(optionalParamValueBindings);
         try {
             dataExport.export(fluentJdbc.getResultSet());

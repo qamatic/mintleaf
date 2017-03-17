@@ -47,7 +47,9 @@ public interface DbQueries {
         throw new NotImplementedException();
     }
 
-    int getCount(String tableName) throws MintLeafException;
+    default int getCount(String tableName) throws MintLeafException {
+        return getCount(tableName, null, null);
+    }
 
     default boolean isTableExists(String tableName) throws MintLeafException {
         throw new NotImplementedException();
@@ -60,8 +62,13 @@ public interface DbQueries {
     <T> List<T> query(String sql, Object[] paramValues, final DataRowListener<T> listener) throws MintLeafException;
 
     default <T> List<T> query(String sql, final DataRowListener<T> listener) throws MintLeafException {
-        return query(sql, listener);
+        return query(sql, null, listener);
     }
+
+    default List<String> queryString(String sql, Object[] paramValues, String columnName) throws MintLeafException {
+        return query(sql, paramValues, (row, resultSet) -> resultSet.asString(columnName));
+    }
+
 
     int queryInt(String sql, Object[] paramValues) throws MintLeafException;
 
@@ -102,4 +109,9 @@ public interface DbQueries {
         return objectNames;
     }
 
+    void executeSql(String sql, Object[] paramValues) throws MintLeafException;
+
+    default void executeSql(String sql) throws MintLeafException {
+        executeSql(sql, null);
+    }
 }

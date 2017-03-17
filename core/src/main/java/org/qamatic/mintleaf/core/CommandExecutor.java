@@ -102,16 +102,7 @@ public class CommandExecutor implements SqlReaderListener {
 
     protected void execute(StringBuilder sql) throws MintLeafException {
 
-        FluentJdbc fluentJdbc = null;
-        try {
-            fluentJdbc = driverSource.queryBuilder().withSql(sql.toString());
-            fluentJdbc.execute();
-        } catch (SQLException e) {
-            logger.error("error in executing query", e);
-            throw new MintLeafException(e);
-        } finally {
-            fluentJdbc.close();
-        }
+        FluentJdbc.executeSql(driverSource, sql.toString(), null);
 
 
     }

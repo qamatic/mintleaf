@@ -74,9 +74,7 @@ public class CsvImporter extends ImpExpBase implements DataAction {
 
             importDataFrom(new CsvImportFlavour(new FileReader(f)), this.targetSqlTemplate);
 
-        } catch (SQLException e) {
-            throw new MintLeafException(e);
-        } catch (IOException e) {
+        }  catch (IOException e) {
             throw new MintLeafException(e);
         }
     }

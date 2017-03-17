@@ -34,10 +34,7 @@
 
 package org.qamatic.mintleaf.core;
 
-import org.qamatic.mintleaf.DataRowListener;
-import org.qamatic.mintleaf.MintLeafException;
-import org.qamatic.mintleaf.MintLeafLogger;
-import org.qamatic.mintleaf.RowListWrapper;
+import org.qamatic.mintleaf.*;
 
 import javax.sql.DataSource;
 import java.sql.*;
@@ -46,7 +43,7 @@ import java.util.Calendar;
 /**
  * Created by qamatic on 2/20/16.
  */
-public class FluentJdbc {
+public class FluentJdbc implements SqlResultSet {
 
     private static final MintLeafLogger logger = MintLeafLogger.getLogger(FluentJdbc.class);
     private DataSource dataSource;
@@ -61,28 +58,46 @@ public class FluentJdbc {
         this.dataSource = dataSource;
     }
 
-    public FluentJdbc withSql(final String sql) throws SQLException {
+    public FluentJdbc withSql(final String sql) throws MintLeafException {
         if (statement != null) {
             close();
         }
-        connection = dataSource.getConnection();
-        statement = connection.prepareStatement(sql);
+        try {
+            connection = dataSource.getConnection();
+            statement = connection.prepareStatement(sql);
+        } catch (SQLException e) {
+
+            logger.error(e);
+            throw new MintLeafException(e);
+        }
         this.sql = sql;
         return this;
     }
 
 
-    public ResultSet getResultSet() throws SQLException {
-        if (this.resultSet == null) {
-            executeQuery();
+    public ResultSet getResultSet() throws MintLeafException {
+        try {
+            if (this.resultSet == null) {
+
+                executeQuery();
+
+            }
+            return this.resultSet;
+        } catch (MintLeafException e) {
+            logger.error("error fetching data", e);
+            throw new MintLeafException(e);
         }
-        return this.resultSet;
     }
 
-    public int[] executeBatch() throws SQLException {
+    public int[] executeBatch() throws MintLeafException {
 
 
-        return this.statement.executeBatch();
+        try {
+            return this.statement.executeBatch();
+        } catch (SQLException e) {
+            logger.error("error executing batch:", e);
+            throw new MintLeafException(e);
+        }
     }
 
 
@@ -102,8 +117,9 @@ public class FluentJdbc {
             this.resultSet = null;
             this.connection = null;
             this.statement = null;
-        } catch (SQLException se) {
-            logger.error("FluentJdbc close()", se);
+        } catch (SQLException e) {
+            logger.error("FluentJdbc close()", e);
+            throw new MintLeafException(e);
         } finally {
             return this;
         }
@@ -113,85 +129,161 @@ public class FluentJdbc {
         return (PreparedStatement) statement;
     }
 
-    public FluentJdbc executeQuery() throws SQLException {
-        this.resultSet = getPrepStmt().executeQuery();
-        return this;
-    }
-
-
-    public FluentJdbc setNull(int parameterIndex, int sqlType) throws SQLException {
-        getPrepStmt().setNull(parameterIndex, sqlType);
-        return this;
-    }
-
-
-    public FluentJdbc setInt(int parameterIndex, int x) throws SQLException {
-        getPrepStmt().setInt(parameterIndex, x);
-        return this;
-    }
-
-
-    public FluentJdbc setString(int parameterIndex, String x) throws SQLException {
-        getPrepStmt().setString(parameterIndex, x);
-        return this;
-    }
-
-
-    public FluentJdbc clearParameters() throws SQLException {
-        getPrepStmt().clearParameters();
-        return this;
-    }
-
-
-    public FluentJdbc setObject(int parameterIndex, Object x, int targetSqlType) throws SQLException {
-        getPrepStmt().setObject(parameterIndex, x, targetSqlType);
-        return this;
-    }
-
-
-    public FluentJdbc setObject(int parameterIndex, Object x) throws SQLException {
-        getPrepStmt().setObject(parameterIndex, x);
-        return this;
-    }
-
-
-    public boolean execute() throws SQLException {
-        logger.info(sql);
-        return getPrepStmt().execute();
-    }
-
-
-    public void addBatch() throws SQLException {
-        getPrepStmt().addBatch();
-    }
-
-    public FluentJdbc addBatch(String sql) throws SQLException {
-        if (statement == null) {
-            connection = dataSource.getConnection();
-            statement = connection.createStatement();
+    public FluentJdbc executeQuery() throws MintLeafException {
+        try {
+            this.resultSet = getPrepStmt().executeQuery();
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
-        statement.addBatch(sql);
-        return this;
-    }
-
-    public FluentJdbc setDate(int parameterIndex, Date x, Calendar cal) throws SQLException {
-        getPrepStmt().setDate(parameterIndex, x, cal);
         return this;
     }
 
 
-    public FluentJdbc setTime(int parameterIndex, Time x, Calendar cal) throws SQLException {
-        getPrepStmt().setTime(parameterIndex, x, cal);
-        return this;
+    public FluentJdbc setNull(int parameterIndex, int sqlType) throws MintLeafException {
+        try {
+            getPrepStmt().setNull(parameterIndex, sqlType);
+            return this;
+        } catch (SQLException e) {
+
+            logger.error(e);
+            throw new MintLeafException(e);
+        }
     }
 
 
-    public FluentJdbc setTimestamp(int parameterIndex, Timestamp x, Calendar cal) throws SQLException {
-        getPrepStmt().setTimestamp(parameterIndex, x, cal);
-        return this;
+    public FluentJdbc setInt(int parameterIndex, int x) throws MintLeafException {
+        try {
+            getPrepStmt().setInt(parameterIndex, x);
+            return this;
+        } catch (SQLException e) {
+
+            logger.error(e);
+            throw new MintLeafException(e);
+        }
     }
 
-    public FluentJdbc withParamValues(Object[] bindingParams) throws SQLException {
+
+    public FluentJdbc setString(int parameterIndex, String x) throws MintLeafException {
+        try {
+            getPrepStmt().setString(parameterIndex, x);
+            return this;
+        } catch (SQLException e) {
+
+            logger.error(e);
+            throw new MintLeafException(e);
+        }
+    }
+
+
+    public FluentJdbc clearParameters() throws MintLeafException {
+        try {
+            getPrepStmt().clearParameters();
+            return this;
+        } catch (SQLException e) {
+
+            logger.error(e);
+            throw new MintLeafException(e);
+        }
+    }
+
+
+    public FluentJdbc setObject(int parameterIndex, Object x, int targetSqlType) throws MintLeafException {
+        try {
+            getPrepStmt().setObject(parameterIndex, x, targetSqlType);
+            return this;
+        } catch (SQLException e) {
+
+            logger.error(e);
+            throw new MintLeafException(e);
+        }
+    }
+
+
+    public FluentJdbc setObject(int parameterIndex, Object x) throws MintLeafException {
+        try {
+            getPrepStmt().setObject(parameterIndex, x);
+            return this;
+        } catch (SQLException e) {
+
+            logger.error(e);
+            throw new MintLeafException(e);
+        }
+    }
+
+
+    public boolean execute() throws MintLeafException {
+        try {
+            logger.info(sql);
+            return getPrepStmt().execute();
+        } catch (SQLException e) {
+
+            logger.error(e);
+            throw new MintLeafException(e);
+        }
+    }
+
+
+    public void addBatch() throws MintLeafException {
+        try {
+            getPrepStmt().addBatch();
+        } catch (SQLException e) {
+
+            logger.error(e);
+            throw new MintLeafException(e);
+        }
+    }
+
+    public FluentJdbc addBatch(String sql) throws MintLeafException {
+        try {
+            if (statement == null) {
+                connection = dataSource.getConnection();
+                statement = connection.createStatement();
+            }
+            statement.addBatch(sql);
+            return this;
+        } catch (SQLException e) {
+
+            logger.error(e);
+            throw new MintLeafException(e);
+        }
+    }
+
+    public FluentJdbc setDate(int parameterIndex, Date x, Calendar cal) throws MintLeafException {
+        try {
+            getPrepStmt().setDate(parameterIndex, x, cal);
+            return this;
+        } catch (SQLException e) {
+
+            logger.error(e);
+            throw new MintLeafException(e);
+        }
+    }
+
+
+    public FluentJdbc setTime(int parameterIndex, Time x, Calendar cal) throws MintLeafException {
+        try {
+            getPrepStmt().setTime(parameterIndex, x, cal);
+            return this;
+        } catch (SQLException e) {
+
+            logger.error(e);
+            throw new MintLeafException(e);
+        }
+    }
+
+
+    public FluentJdbc setTimestamp(int parameterIndex, Timestamp x, Calendar cal) throws MintLeafException {
+        try {
+            getPrepStmt().setTimestamp(parameterIndex, x, cal);
+            return this;
+        } catch (SQLException e) {
+
+            logger.error(e);
+            throw new MintLeafException(e);
+        }
+    }
+
+    public FluentJdbc withParamValues(Object[] bindingParams) throws MintLeafException {
 
         if (bindingParams == null)
             return this;
@@ -207,27 +299,49 @@ public class FluentJdbc {
     }
 
 
-    public FluentJdbc first() throws SQLException {
-        getResultSet().next();
-        return this;
+    public FluentJdbc first() throws MintLeafException {
+        try {
+            getResultSet().next();
+            return this;
+        } catch (SQLException e) {
+
+            logger.error(e);
+            throw new MintLeafException(e);
+        }
     }
 
-    public <T> FluentJdbc query(final DataRowListener<T> listener) throws SQLException, MintLeafException {
+    public <T> FluentJdbc query(final DataRowListener<T> listener) throws MintLeafException, MintLeafException {
 
         try {
             int i = 0;
             while (getResultSet().next()) {
                 listener.eachRow(i++, new ResultSetRowWrapper(getResultSet()));
             }
-        } finally {
+        } catch (SQLException e) {
 
+            logger.error(e);
+            throw new MintLeafException(e);
         }
         return this;
     }
 
-    public RowListWrapper asRowListWrapper() throws SQLException {
+    public RowListWrapper asRowListWrapper() throws MintLeafException {
         ResultSetRowListWrapper rowListWrapper = new ResultSetRowListWrapper();
         rowListWrapper.setResultSet(this.getResultSet());
         return rowListWrapper;
     }
+
+    public static void executeSql(DriverSource driverSource, String sql, Object[] paramValues) throws MintLeafException {
+        FluentJdbc fluentJdbc = null;
+        try {
+            fluentJdbc = driverSource.queryBuilder().withSql(sql.toString()).withParamValues(paramValues);
+            fluentJdbc.execute();
+        } catch (MintLeafException e) {
+            logger.error("error in executing query", e);
+            throw new MintLeafException(e);
+        } finally {
+            fluentJdbc.close();
+        }
+    }
+
 }

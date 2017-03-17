@@ -88,9 +88,7 @@ public class OracleDb extends Database {
         try {
             fluentJdbc = this.driverSource.queryBuilder().withSql(sql);
             fluentJdbc.execute();
-        } catch (SQLException e) {
-            throw new MintLeafException(e);
-        } finally {
+        }  finally {
             fluentJdbc.close();
         }
     }
@@ -103,7 +101,7 @@ public class OracleDb extends Database {
     @Override
     public List<String> getSqlObjects(String objectType) throws MintLeafException {
 
-        return query(String.format("select object_name from user_objects where object_type='%s'", objectType), null, (row, resultSet) -> resultSet.asString("object_name"));
+        return queryString(String.format("select object_name from user_objects where object_type='%s'", objectType), null, "object_name");
     }
 
     @Override
@@ -116,7 +114,7 @@ public class OracleDb extends Database {
         String sql = String
                 .format("select ucc.column_name as keyname from all_constraints uc, all_cons_columns ucc where uc.table_name = upper('%s') and uc.constraint_type = 'P' and (uc.constraint_name=ucc.constraint_name) and  uc.owner=ucc.owner %s",
                         tableName, owner);
-        return query(sql, null, (row, resultSet) -> resultSet.asString("keyname"));
+        return queryString(sql, null, "keyname");
     }
 
     @Override

@@ -71,16 +71,10 @@ public class Database implements DbQueries {
                     return null;
                 }
             });
-        } catch (SQLException e) {
-            throw new MintLeafException(e);
-        } finally {
+        }  finally {
             fluentJdbc.close();
         }
         return rows;
-    }
-
-    public List<String> queryString(String sql, Object[] paramValues, String columnName) throws MintLeafException {
-        return query(sql, paramValues, (row, resultSet) -> resultSet.asString(columnName));
     }
 
     @Override
@@ -112,10 +106,7 @@ public class Database implements DbQueries {
 
 
     @Override
-    public int getCount(String tableName) throws MintLeafException {
-        return getCount(tableName, null, null);
-
+    public void executeSql(String sql, Object[] paramValues) throws MintLeafException {
+        FluentJdbc.executeSql(driverSource, sql, paramValues);
     }
-
-
 }
