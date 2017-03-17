@@ -34,15 +34,14 @@
 
 package org.qamatic.mintleaf.core;
 
+import org.qamatic.mintleaf.MintLeafException;
 import org.qamatic.mintleaf.MintLeafLogger;
 import org.qamatic.mintleaf.SqlReader;
 import org.qamatic.mintleaf.SqlReaderListener;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.io.InputStream;
-import java.sql.SQLException;
 
 public abstract class BaseSqlReader implements SqlReader {
 
@@ -82,7 +81,7 @@ public abstract class BaseSqlReader implements SqlReader {
     }
 
     @Override
-    public abstract void read() throws IOException, SQLException;
+    public abstract void read() throws MintLeafException;
 
     @Override
     public SqlReaderListener getReaderListener() {

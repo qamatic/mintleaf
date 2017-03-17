@@ -70,7 +70,7 @@ public class H2ChangeSetsExampleTest {
     }
 
     @Test
-    public void testCount() {
+    public void testCount() throws MintLeafException {
         assertEquals(7, hrDatabaseContext.getDbQueries().getCount("HRDB.USERS"));
     }
 

@@ -36,54 +36,56 @@ package org.qamatic.mintleaf;
 
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
-import java.sql.SQLException;
 import java.util.List;
 import java.util.regex.Pattern;
 
 public interface DbQueries {
 
-    int getCount(String tableName, String whereClause, Object[] whereClauseValues);
+    int getCount(String tableName, String whereClause, Object[] paramValues) throws MintLeafException;
 
     default boolean isSqlObjectExists(String objectName, String objectType, boolean ignoreValidity) throws MintLeafException {
         throw new NotImplementedException();
     }
 
-    int getCount(String tableName);
+    int getCount(String tableName) throws MintLeafException;
 
-    default boolean isTableExists(String tableName) throws SQLException, MintLeafException {
+    default boolean isTableExists(String tableName) throws MintLeafException {
         throw new NotImplementedException();
     }
 
-    default boolean isdbFeatureExists(String featureName) {
+    default boolean isDbOptionExists(String optionName) throws MintLeafException {
         throw new NotImplementedException();
     }
 
+    <T> List<T> query(String sql, Object[] paramValues, final DataRowListener<T> listener) throws MintLeafException;
 
-    <T> List<T> query(String sql, final DataRowListener<T> listener) throws SQLException, MintLeafException;
+    default <T> List<T> query(String sql, final DataRowListener<T> listener) throws MintLeafException {
+        return query(sql, listener);
+    }
 
-    int queryInt(String sql, Object[] whereClauseValues);
+    int queryInt(String sql, Object[] paramValues) throws MintLeafException;
 
-    default void truncateTable(String tableName) throws SQLException, MintLeafException {
+    default void truncateTable(String tableName) throws MintLeafException {
         throw new NotImplementedException();
     }
 
-    default boolean isUserExists(String userName) {
+    default boolean isUserExists(String userName) throws MintLeafException {
         throw new NotImplementedException();
     }
 
-    default List<String> getSqlObjects(String objectType) throws SQLException, MintLeafException {
+    default List<String> getSqlObjects(String objectType) throws MintLeafException {
         throw new NotImplementedException();
     }
 
-    default List<String> getPrimaryKeys(String ownerName, String tableName) throws SQLException, MintLeafException {
+    default List<String> getPrimaryKeys(String ownerName, String tableName) throws MintLeafException {
         throw new NotImplementedException();
     }
 
-    default ColumnMetaDataCollection getMetaData(String objectName) throws SQLException, MintLeafException {
+    default ColumnMetaDataCollection getMetaData(String objectName) throws MintLeafException {
         throw new NotImplementedException();
     }
 
-    default boolean isPrivilegeExists(String granteeName, String privilegeName, String objectName) {
+    default boolean isPrivilegeExists(String granteeName, String privilegeName, String objectName) throws MintLeafException {
         throw new NotImplementedException();
     }
 

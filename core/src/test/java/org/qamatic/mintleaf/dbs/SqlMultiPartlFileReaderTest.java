@@ -37,6 +37,7 @@ package org.qamatic.mintleaf.dbs;
 import org.junit.Test;
 import org.qamatic.mintleaf.ChangeSet;
 import org.qamatic.mintleaf.ChangeSetReader;
+import org.qamatic.mintleaf.MintLeafException;
 import org.qamatic.mintleaf.SqlReaderListener;
 import org.qamatic.mintleaf.core.SqlChangeSetFileReader;
 
@@ -54,7 +55,7 @@ public class SqlMultiPartlFileReaderTest {
     private String actual_part3;
 
     @Test
-    public void testSqlChangeSetReaderCount() throws IOException, SQLException {
+    public void testSqlChangeSetReaderCount() throws IOException, SQLException, MintLeafException {
         InputStream iStream = this.getClass().getResourceAsStream("/multipart2.sql");
         ChangeSetReader reader = new SqlChangeSetFileReader(iStream);
         reader.read();
@@ -62,7 +63,7 @@ public class SqlMultiPartlFileReaderTest {
     }
 
     @Test
-    public void testSqlChangeSetReaderSections() throws IOException, SQLException {
+    public void testSqlChangeSetReaderSections() throws IOException, SQLException, MintLeafException {
         ChangeSetReader reader = new SqlChangeSetFileReader("res:/multipart2.sql");
         reader.read();
 
@@ -136,7 +137,7 @@ public class SqlMultiPartlFileReaderTest {
     }
 
     @Test
-    public void testSqlChangeSetReaderListnerTest() throws IOException, SQLException {
+    public void testSqlChangeSetReaderListnerTest() throws IOException, SQLException, MintLeafException {
 
         SqlReaderListener listner = new ChangeSetFileReadListner();
         InputStream iStream = this.getClass().getResourceAsStream("/multipart.sql");
@@ -159,7 +160,7 @@ public class SqlMultiPartlFileReaderTest {
     private class ChangeSetFileReadListner implements SqlReaderListener {
 
         @Override
-        public void onReadChild(StringBuilder sql, Object context) throws SQLException, IOException {
+        public void onReadChild(StringBuilder sql, Object context) throws MintLeafException {
             if (actual_part1 == null) {
                 actual_part1 = sql.toString();
             } else if (actual_part2 == null) {

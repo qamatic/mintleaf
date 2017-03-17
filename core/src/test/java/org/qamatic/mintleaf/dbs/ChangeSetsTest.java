@@ -46,7 +46,7 @@ import java.sql.SQLException;
 public class ChangeSetsTest extends H2TestCase {
 
     @Before
-    public void cleanDb() throws IOException, SQLException {
+    public void cleanDb() throws MintLeafException {
         ChangeSets.migrate(h2DatabaseContext.getDriverSource(), "res:/Testddl.sql", "clean db, create schema");
     }
 

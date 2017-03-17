@@ -35,11 +35,10 @@
 package org.qamatic.mintleaf.dbs;
 
 import org.junit.Test;
+import org.qamatic.mintleaf.MintLeafException;
 import org.qamatic.mintleaf.SqlReaderListener;
 import org.qamatic.mintleaf.core.SqlStringReader;
 
-import java.io.IOException;
-import java.sql.SQLException;
 import java.util.Map;
 
 import static org.junit.Assert.assertEquals;
@@ -72,7 +71,7 @@ public class SqlStringReaderTest {
 
 
     @Test
-    public void testSqlReaderListnerTest2() throws IOException, SQLException {
+    public void testSqlReaderListnerTest2() throws MintLeafException {
 
         SqlStringReader reader = new SqlStringReader(getSamplePackageData());
         SqlReaderListener listner = new EmptyPackageReadListner();
@@ -106,7 +105,7 @@ public class SqlStringReaderTest {
     private class EmptyPackageReadListner implements SqlReaderListener {
 
         @Override
-        public void onReadChild(StringBuilder sql, Object context) throws SQLException, IOException {
+        public void onReadChild(StringBuilder sql, Object context) throws MintLeafException {
             if (actual_emptypackage_block1 == null) {
                 actual_emptypackage_block1 = sql.toString();
             } else if (actual_emptypackage_block2 == null) {

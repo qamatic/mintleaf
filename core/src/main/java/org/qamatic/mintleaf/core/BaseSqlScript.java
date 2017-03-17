@@ -37,9 +37,6 @@ package org.qamatic.mintleaf.core;
 
 import org.qamatic.mintleaf.*;
 
-import java.io.IOException;
-import java.sql.SQLException;
-
 public abstract class BaseSqlScript implements SqlScript {
 
     private final static MintLeafLogger logger = MintLeafLogger.getLogger(BaseSqlScript.class);
@@ -53,7 +50,7 @@ public abstract class BaseSqlScript implements SqlScript {
 
 
     @Override
-    public void apply() throws SQLException, IOException {
+    public void apply() throws MintLeafException {
         SqlReader reader = getSourceReader();
         execute(reader);
     }
@@ -70,7 +67,7 @@ public abstract class BaseSqlScript implements SqlScript {
 
     protected abstract SqlReader getSourceReader();
 
-    protected void execute(SqlReader reader) throws IOException, SQLException {
+    protected void execute(SqlReader reader) throws MintLeafException {
         reader.setReaderListener(getReadListener());
         reader.read();
     }

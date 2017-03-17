@@ -155,10 +155,9 @@ public class FluentJdbc {
     }
 
 
-    public FluentJdbc execute() throws SQLException {
+    public boolean execute() throws SQLException {
         logger.info(sql);
-        getPrepStmt().execute();
-        return this;
+        return getPrepStmt().execute();
     }
 
 

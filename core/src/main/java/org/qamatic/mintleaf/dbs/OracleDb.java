@@ -37,6 +37,7 @@ package org.qamatic.mintleaf.dbs;
 
 import org.qamatic.mintleaf.*;
 import org.qamatic.mintleaf.core.Database;
+import org.qamatic.mintleaf.core.FluentJdbc;
 
 import java.sql.SQLException;
 import java.util.List;
@@ -73,32 +74,40 @@ public class OracleDb extends Database {
     }
 
     @Override
-    public boolean isdbFeatureExists(String featureName) {
+    public boolean isDbOptionExists(String optionName) throws MintLeafException {
 
-        int cnt = getCount("dba_server_registry", "comp_id=? and status=?", new Object[]{featureName.toUpperCase(), "VALID"});
+        int cnt = getCount("dba_server_registry", "comp_id=? and status=?", new Object[]{optionName.toUpperCase(), "VALID"});
         return cnt != 0;
     }
 
     @Override
-    public void truncateTable(String tableName) throws SQLException, MintLeafException {
+    public void truncateTable(String tableName) throws MintLeafException {
         final String[] objectNames = getObjectNames(tableName.toUpperCase());
         String sql = String.format("truncate  table %s.%s", objectNames[0], objectNames[1]);
-        this.driverSource.queryBuilder().withSql(sql).execute().close();
+        FluentJdbc fluentJdbc = null;
+        try {
+            fluentJdbc = this.driverSource.queryBuilder().withSql(sql);
+            fluentJdbc.execute();
+        } catch (SQLException e) {
+            throw new MintLeafException(e);
+        } finally {
+            fluentJdbc.close();
+        }
     }
 
     @Override
-    public boolean isUserExists(String userName) {
+    public boolean isUserExists(String userName) throws MintLeafException {
         return getCount("all_users", "username = upper(?)", new Object[]{userName}) != 0;
     }
 
     @Override
-    public List<String> getSqlObjects(String objectType) throws SQLException, MintLeafException {
+    public List<String> getSqlObjects(String objectType) throws MintLeafException {
 
-        return query(String.format("select object_name from user_objects where object_type='%s'", objectType), (row, resultSet) -> resultSet.asString("object_name"));
+        return query(String.format("select object_name from user_objects where object_type='%s'", objectType), null, (row, resultSet) -> resultSet.asString("object_name"));
     }
 
     @Override
-    public List<String> getPrimaryKeys(String ownerName, String tableName) throws SQLException, MintLeafException {
+    public List<String> getPrimaryKeys(String ownerName, String tableName) throws MintLeafException {
 
         String owner = "";
         if (ownerName != null) {
@@ -107,11 +116,11 @@ public class OracleDb extends Database {
         String sql = String
                 .format("select ucc.column_name as keyname from all_constraints uc, all_cons_columns ucc where uc.table_name = upper('%s') and uc.constraint_type = 'P' and (uc.constraint_name=ucc.constraint_name) and  uc.owner=ucc.owner %s",
                         tableName, owner);
-        return query(sql, (row, resultSet) -> resultSet.asString("keyname"));
+        return query(sql, null, (row, resultSet) -> resultSet.asString("keyname"));
     }
 
     @Override
-    public boolean isPrivilegeExists(String granteeName, String privilegeName, String objectName) {
+    public boolean isPrivilegeExists(String granteeName, String privilegeName, String objectName) throws MintLeafException {
         int cnt = getCount("all_tab_privs", "grantee = ? AND table_name = ? AND privilege=?", new Object[]{granteeName.toUpperCase(), objectName.toUpperCase(),
                 privilegeName.toUpperCase()});
         return cnt != 0;
@@ -130,7 +139,7 @@ public class OracleDb extends Database {
 
         final String typeCheckSql = String.format("SELECT DECODE(OBJECT_TYPE, 'TYPE', 1, 0) ISTYPEOBJECT FROM ALL_OBJECTS WHERE OWNER = UPPER('%s') AND OBJECT_NAME = UPPER(\n" +
                 "'%s')", objectNames[0], objectNames[1]);
-        query(typeCheckSql,
+        query(typeCheckSql, null,
                 (DataRowListener) (row, resultSet) -> {
                     if (resultSet.asInt("ISTYPEOBJECT") == 1) {
                         sql.setLength(0);
@@ -148,17 +157,19 @@ public class OracleDb extends Database {
 
     @Override
     @SuppressWarnings({"unchecked", "rawtypes"})
-    public ColumnMetaDataCollection getMetaData(String objectName) throws SQLException, MintLeafException {
+    public ColumnMetaDataCollection getMetaData(String objectName) throws MintLeafException {
         final ColumnMetaDataCollection metaData = new ColumnMetaDataCollection(objectName);
         if (objectName != null) {
             objectName = objectName.toUpperCase();
         }
 
+        String sql = null;
+        try {
+            sql = getSqlObjectMetaSql(objectName);
 
-        String sql = getSqlObjectMetaSql(objectName);
-        query(sql, (row, rs) -> {
+            query(sql, null, (row, rs) -> {
 
-            try {
+
                 metaData.add(new Column() {
                     {
                         setColumnName(rs.asString("COLUMN_NAME"));
@@ -179,11 +190,14 @@ public class OracleDb extends Database {
                     }
                 });
 
-            } catch (MintLeafException e) {
-                logger.error("error getting metadata", e);
-            }
-            return metaData.get(metaData.size() - 1);
-        });
+
+                return metaData.get(metaData.size() - 1);
+            });
+
+        } catch (SQLException e) {
+            logger.error("error getting meta data", e);
+            throw new MintLeafException(e);
+        }
         return metaData;
 
     }

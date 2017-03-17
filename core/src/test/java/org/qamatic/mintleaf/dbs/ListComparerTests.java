@@ -58,6 +58,23 @@ public class ListComparerTests {
         }
     };
 
+    private static List<String> assertCompareTable(List<User> sourceList, List<User> targetListList) throws MintLeafException {
+        final List<String> actuals = new ArrayList<>();
+        final ConsoleLogger logger = new ConsoleLogger();
+        DataComparer dataComparer = new Mintleaf.ComparerBuilder().
+                withSourceTable(sourceList, columnDefs).
+                withTargetTable(targetListList, columnDefs).
+                withMatchingResult((sourceCol, targetCol) -> {
+                    actuals.add(String.format("[Source:%s] [Target:%s]", sourceCol.toLog(), targetCol.toLog()));
+                    logger.info(actuals.get(actuals.size() - 1));
+                }).
+                build();
+
+
+        dataComparer.execute();
+
+        return actuals;
+    }
 
     @Test
     public void compareListWithEqualSize() throws SQLException, IOException, MintLeafException {
@@ -146,24 +163,6 @@ public class ListComparerTests {
                 add(new User("SM", "USA"));
             }
         };
-    }
-
-    private static List<String> assertCompareTable(List<User> sourceList, List<User> targetListList) throws MintLeafException {
-        final List<String> actuals = new ArrayList<>();
-        final ConsoleLogger logger = new ConsoleLogger();
-        DataComparer dataComparer = new Mintleaf.ComparerBuilder().
-                withSourceTable(sourceList, columnDefs).
-                withTargetTable(targetListList, columnDefs).
-                withMatchingResult((sourceCol, targetCol) -> {
-                    actuals.add(String.format("[Source:%s] [Target:%s]", sourceCol.toLog(), targetCol.toLog()));
-                    logger.info(actuals.get(actuals.size() - 1));
-                }).
-                build();
-
-
-        dataComparer.execute();
-
-        return actuals;
     }
 
 }

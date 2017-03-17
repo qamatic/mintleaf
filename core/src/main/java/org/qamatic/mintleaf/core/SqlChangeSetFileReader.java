@@ -43,7 +43,6 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.sql.SQLException;
 import java.util.HashMap;
 
 public class SqlChangeSetFileReader extends BaseSqlReader implements ChangeSetReader {
@@ -90,57 +89,61 @@ public class SqlChangeSetFileReader extends BaseSqlReader implements ChangeSetRe
     }
 
     @Override
-    public void read() throws IOException, SQLException {
+    public void read() throws MintLeafException {
 
         if (bRead) {
             return;
         }
         bRead = true;
         StringBuilder childContents = new StringBuilder();
-
-        BufferedReader input = new BufferedReader(new InputStreamReader(getInputStream(), "UTF-8"));
-        ChangeSet currentChangeSet = null;
+        BufferedReader input = null;
         try {
-            String line = null; // not declared within while loop
+            input = new BufferedReader(new InputStreamReader(getInputStream(), "UTF-8"));
+            ChangeSet currentChangeSet = null;
+            try {
+                String line = null; // not declared within while loop
 
-            while ((line = input.readLine()) != null) {
-                line = line.trim();
-                if (line.length() == 0) {
-                    continue;
-                }
-
-                if ((line.trim().contains("<ChangeSet")) && ChangeSet.xmlToChangeSet(line) != null) {
-                    if (currentChangeSet == null) {
-                        currentChangeSet = ChangeSet.xmlToChangeSet(line);
+                while ((line = input.readLine()) != null) {
+                    line = line.trim();
+                    if (line.length() == 0) {
+                        continue;
                     }
-                    String sql = childContents.toString().trim();
-                    if (sql.length() != 0) {
-                        if (readerListener != null) {
-                            readerListener.onReadChild(new StringBuilder(sql), currentChangeSet);
+
+                    if ((line.trim().contains("<ChangeSet")) && ChangeSet.xmlToChangeSet(line) != null) {
+                        if (currentChangeSet == null) {
+                            currentChangeSet = ChangeSet.xmlToChangeSet(line);
                         }
-                        currentChangeSet.setChangeSetSource(sql);
-                        getChangeSets().put(currentChangeSet.getId(), currentChangeSet);
-                        currentChangeSet = ChangeSet.xmlToChangeSet(line);
+                        String sql = childContents.toString().trim();
+                        if (sql.length() != 0) {
+                            if (readerListener != null) {
+                                readerListener.onReadChild(new StringBuilder(sql), currentChangeSet);
+                            }
+                            currentChangeSet.setChangeSetSource(sql);
+                            getChangeSets().put(currentChangeSet.getId(), currentChangeSet);
+                            currentChangeSet = ChangeSet.xmlToChangeSet(line);
+                        }
+                        childContents.setLength(0);
+                        continue;
                     }
-                    childContents.setLength(0);
-                    continue;
+                    childContents.append(line);
+                    childContents.append("\n");
                 }
-                childContents.append(line);
-                childContents.append("\n");
+            } finally {
+                input.close();
             }
-        } finally {
-            input.close();
-        }
 
-        String sql = childContents.toString().trim();
-        if ((currentChangeSet != null) && (currentChangeSet.getId() != null) && (currentChangeSet.getId().length() != 0) && (sql.length() != 0)) {
-            if (readerListener != null) {
-                readerListener.onReadChild(new StringBuilder(sql), null);
+            String sql = childContents.toString().trim();
+            if ((currentChangeSet != null) && (currentChangeSet.getId() != null) && (currentChangeSet.getId().length() != 0) && (sql.length() != 0)) {
+                if (readerListener != null) {
+                    readerListener.onReadChild(new StringBuilder(sql), null);
+                }
+                currentChangeSet.setChangeSetSource(sql);
+                getChangeSets().put(currentChangeSet.getId(), currentChangeSet);
             }
-            currentChangeSet.setChangeSetSource(sql);
-            getChangeSets().put(currentChangeSet.getId(), currentChangeSet);
+        } catch (IOException e) {
+            logger.error("error reading changeset ", e);
+            throw new MintLeafException(e);
         }
-
     }
 
     @Override

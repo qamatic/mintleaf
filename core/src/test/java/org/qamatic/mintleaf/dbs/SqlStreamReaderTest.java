@@ -35,12 +35,11 @@
 package org.qamatic.mintleaf.dbs;
 
 import org.junit.Test;
+import org.qamatic.mintleaf.MintLeafException;
 import org.qamatic.mintleaf.SqlReaderListener;
 import org.qamatic.mintleaf.core.SqlStreamReader;
 
-import java.io.IOException;
 import java.io.InputStream;
-import java.sql.SQLException;
 import java.util.Map;
 
 import static org.junit.Assert.*;
@@ -77,7 +76,7 @@ public class SqlStreamReaderTest {
     }
 
     @Test
-    public void testSqlReaderReadTest() throws IOException, SQLException {
+    public void testSqlReaderReadTest() throws MintLeafException {
 
         InputStream iStream = this.getClass().getResourceAsStream("/EmptyPackage.sql");
         SqlStreamReader reader = new SqlStreamReader(iStream);
@@ -86,7 +85,7 @@ public class SqlStreamReaderTest {
         final StringBuilder actual = new StringBuilder();
         SqlReaderListener listner = new EmptyPackageReadListner() {
             @Override
-            public void onReadChild(StringBuilder sql, Object context) throws SQLException, IOException {
+            public void onReadChild(StringBuilder sql, Object context) throws MintLeafException {
                 actual.append(sql.toString());
             }
         };
@@ -109,7 +108,7 @@ public class SqlStreamReaderTest {
     }
 
     @Test
-    public void testSqlReaderListnerTest2() throws IOException, SQLException {
+    public void testSqlReaderListnerTest2() throws MintLeafException {
 
         SqlReaderListener listner = new EmptyPackageReadListner();
         InputStream iStream = this.getClass().getResourceAsStream("/EmptyPackage.sql");
@@ -144,7 +143,7 @@ public class SqlStreamReaderTest {
     private class EmptyPackageReadListner implements SqlReaderListener {
 
         @Override
-        public void onReadChild(StringBuilder sql, Object context) throws SQLException, IOException {
+        public void onReadChild(StringBuilder sql, Object context) throws MintLeafException {
             if (actual_emptypackage_block1 == null) {
                 actual_emptypackage_block1 = sql.toString();
             } else if (actual_emptypackage_block2 == null) {

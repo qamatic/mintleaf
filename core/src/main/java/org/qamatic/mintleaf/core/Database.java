@@ -55,44 +55,50 @@ public class Database implements DbQueries {
     }
 
 
-    public <T> List<T> query(String sql, final DataRowListener<T> listener) throws SQLException, MintLeafException {
+    public <T> List<T> query(String sql, Object[] paramValues, final DataRowListener<T> listener) throws MintLeafException {
 
         final List<T> rows = new ArrayList<T>();
+        FluentJdbc fluentJdbc = null;
+        try {
+            fluentJdbc = driverSource.queryBuilder().withSql(sql).withParamValues(paramValues).query(new DataRowListener<Object>() {
 
-        FluentJdbc fluentJdbc = driverSource.queryBuilder().withSql(sql).query(new DataRowListener<Object>() {
-
-            public T eachRow(int row, ComparableRow dr) {
-                try {
-                    rows.add(listener.eachRow(row, dr));
-                } catch (MintLeafException e) {
-                    logger.error("error iterating resultset", e);
+                public T eachRow(int row, ComparableRow dr) {
+                    try {
+                        rows.add(listener.eachRow(row, dr));
+                    } catch (MintLeafException e) {
+                        logger.error("error iterating resultset", e);
+                    }
+                    return null;
                 }
-                return null;
-            }
-        }).close();
+            });
+        } catch (SQLException e) {
+            throw new MintLeafException(e);
+        } finally {
+            fluentJdbc.close();
+        }
         return rows;
     }
 
-    @Override
-    public int queryInt(String sql, Object[] whereClauseValues) {
-        FluentJdbc fluentJdbc = null;
-        try {
-            fluentJdbc = driverSource.queryBuilder().withSql(sql).withParamValues(whereClauseValues).first();
-            return fluentJdbc.getResultSet().getInt(1);
-
-        } catch (SQLException e) {
-            logger.error("getCount()", e);
-
-        } finally {
-            if (fluentJdbc != null) {
-                fluentJdbc.close();
-            }
-        }
-        return -1;
+    public List<String> queryString(String sql, Object[] paramValues, String columnName) throws MintLeafException {
+        return query(sql, paramValues, (row, resultSet) -> resultSet.asString(columnName));
     }
 
     @Override
-    public int getCount(String tableName, String whereClause, Object[] whereClauseValues) {
+    public int queryInt(String sql, Object[] paramValues) throws MintLeafException {
+        FluentJdbc fluentJdbc = null;
+
+        try {
+            fluentJdbc = driverSource.queryBuilder().withSql(sql).withParamValues(paramValues).first();
+            return fluentJdbc.getResultSet().getInt(1);
+        } catch (SQLException e) {
+            throw new MintLeafException(e);
+        } finally {
+            fluentJdbc.close();
+        }
+    }
+
+    @Override
+    public int getCount(String tableName, String whereClause, Object[] paramValues) throws MintLeafException {
 
         String sql = "";
         if (whereClause != null) {
@@ -101,12 +107,12 @@ public class Database implements DbQueries {
             sql = String.format("select count(*) from %s", tableName);
         }
 
-        return queryInt(sql, whereClauseValues);
+        return queryInt(sql, paramValues);
     }
 
 
     @Override
-    public int getCount(String tableName) {
+    public int getCount(String tableName) throws MintLeafException {
         return getCount(tableName, null, null);
 
     }

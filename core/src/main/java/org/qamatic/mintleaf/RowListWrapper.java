@@ -34,8 +34,6 @@
 
 package org.qamatic.mintleaf;
 
-import java.sql.ResultSetMetaData;
-
 /**
  * Created by qamatic on 3/4/16.
  */

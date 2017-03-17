@@ -34,14 +34,17 @@
 
 package org.qamatic.mintleaf.core;
 
+import org.qamatic.mintleaf.MintLeafException;
+import org.qamatic.mintleaf.MintLeafLogger;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.sql.SQLException;
 
 public class SqlStreamReader extends BaseSqlReader {
 
+    private final static MintLeafLogger logger = MintLeafLogger.getLogger(SqlStreamReader.class);
     protected InputStream mvstream;
 
     public SqlStreamReader(InputStream stream) {
@@ -54,43 +57,52 @@ public class SqlStreamReader extends BaseSqlReader {
     }
 
     @Override
-    public void read() throws IOException, SQLException {
+    public void read() throws MintLeafException {
 
         StringBuilder childContents = new StringBuilder();
         StringBuilder contents = new StringBuilder();
-        BufferedReader input = new BufferedReader(new InputStreamReader(mvstream, "UTF-8"));
+        BufferedReader input = null;
         try {
-            String line = null; // not declared within while loop
-            while ((line = input.readLine()) != null) {
+            try {
+                input = new BufferedReader(new InputStreamReader(mvstream, "UTF-8"));
 
-                line = line.trim();
+                String line = null; // not declared within while loop
+                while ((line = input.readLine()) != null) {
 
-                if (line.startsWith("show err") || line.startsWith("--") && !line.contains("--@")) {
-                    continue;
+                    line = line.trim();
+
+                    if (line.startsWith("show err") || line.startsWith("--") && !line.contains("--@")) {
+                        continue;
+                    }
+
+                    contents.append(line);
+                    contents.append("\n");
+
+                    if (isDelimiterFound(line)) {
+
+                        String[] splits = line.split(getDelimiter());
+                        if (splits.length >= 1) {
+                            childContents.append(splits[0]);
+                        }
+                        String sql = childContents.toString().trim();
+                        if (readerListener != null && sql.length() != 0) {
+                            readerListener.onReadChild(new StringBuilder(sql), null);
+                        }
+                        childContents.setLength(0);
+
+                    } else {
+                        childContents.append(line);
+                        childContents.append("\n");
+                    }
                 }
-
-                contents.append(line);
-                contents.append("\n");
-
-                if (isDelimiterFound(line)) {
-
-                    String[] splits = line.split(getDelimiter());
-                    if (splits.length >= 1) {
-                        childContents.append(splits[0]);
-                    }
-                    String sql = childContents.toString().trim();
-                    if (readerListener != null && sql.length() != 0) {
-                        readerListener.onReadChild(new StringBuilder(sql), null);
-                    }
-                    childContents.setLength(0);
-
-                } else {
-                    childContents.append(line);
-                    childContents.append("\n");
+            } finally {
+                if (input != null) {
+                    input.close();
                 }
             }
-        } finally {
-            input.close();
+        } catch (IOException e) {
+            logger.error(e);
+            throw new MintLeafException(e);
         }
         //return contents.toString();
     }

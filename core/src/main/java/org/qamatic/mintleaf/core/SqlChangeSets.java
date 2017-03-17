@@ -36,9 +36,6 @@ package org.qamatic.mintleaf.core;
 
 import org.qamatic.mintleaf.*;
 
-import java.io.IOException;
-import java.sql.SQLException;
-
 /**
  * Created by qamatic on 7/18/16.
  */
@@ -57,7 +54,7 @@ public class SqlChangeSets extends BaseSqlScript {
 
 
     @Override
-    public void apply() throws SQLException, IOException {
+    public void apply() throws MintLeafException {
         for (String changeSetName : changeSetsToApply) {
             if (changeSetReader.getChangeSets().containsKey(changeSetName.trim())) {
                 final ChangeSet section = changeSetReader.getChangeSet(changeSetName.trim());

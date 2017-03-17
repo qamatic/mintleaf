@@ -57,7 +57,7 @@ public class ImportExportTests extends H2TestCase {
 
 
     @Before
-    public void applyChangeSet() throws IOException, SQLException {
+    public void applyChangeSet() throws IOException, SQLException, MintLeafException {
         ChangeSets.migrate(h2DatabaseContext.getDriverSource(), "res:/example-changesets.sql", "create schema,load seed data");
     }
 
@@ -93,7 +93,7 @@ public class ImportExportTests extends H2TestCase {
                 build();
 
         action.execute();
-        h2DbQueries.query("SELECT USERNAME FROM HRDB.USERS", (row, resultSet) -> {
+        h2DbQueries.query("SELECT USERNAME FROM HRDB.USERS", null, (row, resultSet) -> {
             assertTrue(resultSet.asString("USERNAME").contains("-changed"));
             return null;
         });

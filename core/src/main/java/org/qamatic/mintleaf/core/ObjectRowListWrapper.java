@@ -39,7 +39,6 @@ import org.qamatic.mintleaf.MetaDataCollection;
 import org.qamatic.mintleaf.MintLeafException;
 import org.qamatic.mintleaf.RowListWrapper;
 
-import java.sql.ResultSetMetaData;
 import java.util.List;
 
 /**

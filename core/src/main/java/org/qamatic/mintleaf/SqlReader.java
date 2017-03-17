@@ -34,9 +34,6 @@
 
 package org.qamatic.mintleaf;
 
-import java.io.IOException;
-import java.sql.SQLException;
-
 public interface SqlReader {
     String getDelimiter();
 
@@ -46,5 +43,5 @@ public interface SqlReader {
 
     void setReaderListener(SqlReaderListener mvreaderListener);
 
-    void read() throws IOException, SQLException;
+    void read() throws MintLeafException;
 }

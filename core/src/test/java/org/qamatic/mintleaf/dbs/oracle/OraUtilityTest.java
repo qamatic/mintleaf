@@ -43,9 +43,6 @@ import org.qamatic.mintleaf.ColumnMetaDataCollection;
 import org.qamatic.mintleaf.MintLeafException;
 import org.qamatic.mintleaf.core.ChangeSets;
 
-import java.io.IOException;
-import java.sql.SQLException;
-
 import static junit.framework.TestCase.assertTrue;
 import static org.junit.Assert.assertEquals;
 
@@ -57,7 +54,7 @@ public class OraUtilityTest extends OracleTestCase {
 
 
     @BeforeClass
-    public static void migrate() throws IOException, SQLException {
+    public static void migrate() throws MintLeafException {
         //clean db, create hrdb-schema
         ChangeSets.migrate(oracleSysDbaCtx.getDriverSource(), "res:/oracle/hrdb-changesets/hrdb-schema-setup.sql", "create schema");
         //do some DDL
@@ -65,42 +62,42 @@ public class OraUtilityTest extends OracleTestCase {
     }
 
     @Test
-    public void testCountriesCount() throws SQLException, IOException, MintLeafException {
+    public void testCountriesCount() throws MintLeafException {
         ChangeSets.migrate(oracleHrDbCtx.getDriverSource(), "res:/oracle/hrdb-changesets/hrdb-sampledata.sql", "seed data for countries");
         assertEquals(12, oracleHrDbCtx.getDbQueries().getCount("HRDB.COUNTRIES"));
 
     }
 
     @Test
-    public void testPackageExists() throws SQLException, IOException, MintLeafException {
+    public void testPackageExists() throws MintLeafException {
         ChangeSets.migrate(oracleHrDbCtx.getDriverSource(), "res:/oracle/hrdb-changesets/hrdb-proc-packages.sql", "create some test packages");
         assertTrue("Package by name SOMEPACKAGE does not exists", oracleHrDbCtx.getDbQueries().isSqlObjectExists("HRDB.SOMEPACKAGE", "PACKAGE", false));
         assertTrue("Package by name SOMEPACKAGE body does not exists", oracleHrDbCtx.getDbQueries().isSqlObjectExists("HRDB.SOMEPACKAGE", "PACKAGE BODY", false));
     }
 
     @Test
-    public void testCountryMetaData() throws SQLException, IOException, MintLeafException {
+    public void testCountryMetaData() throws MintLeafException {
         ColumnMetaDataCollection metaData = oracleHrDbCtx.getDbQueries().getMetaData("HRDB.COUNTRIES");
         assertEquals(3, metaData.size());
     }
 
     @Test
-    public void testIsColumnExists() throws SQLException, IOException, MintLeafException {
+    public void testIsColumnExists() throws MintLeafException {
         Assert.assertTrue(oracleHrDbCtx.getDbQueries().isColumnExists("HRDB.COUNTRIES", "COUNTRY_NAME"));
     }
 
     @Test
-    public void testgetSqlObjectsFound() throws SQLException, IOException, MintLeafException {
+    public void testgetSqlObjectsFound() throws MintLeafException {
         Assert.assertTrue(oracleHrDbCtx.getDbQueries().getSqlObjects("TABLE").contains("COUNTRIES"));
     }
 
     @Test(expected = MintLeafException.class)
-    public void testInvalidObjectName() throws SQLException, IOException, MintLeafException {
+    public void testInvalidObjectName() throws MintLeafException {
         oracleHrDbCtx.getDbQueries().getObjectNames("employee_typ");
     }
 
     @Test
-    public void testEmployeeObjectMetaData() throws SQLException, IOException, MintLeafException {
+    public void testEmployeeObjectMetaData() throws MintLeafException {
         if (!oracleHrDbCtx.getDbQueries().isSqlObjectExists("HRDB.employee_typ", "TYPE", true)) {
             ChangeSets.migrate(oracleHrDbCtx.getDriverSource(), "res:/oracle/hrdb-changesets/hrdb-ddl-typeobjects.sql", "create employee object type");
         }

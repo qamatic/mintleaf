@@ -37,7 +37,6 @@ package org.qamatic.mintleaf.core;
 import org.qamatic.mintleaf.*;
 
 import java.sql.ResultSet;
-import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 
 /**

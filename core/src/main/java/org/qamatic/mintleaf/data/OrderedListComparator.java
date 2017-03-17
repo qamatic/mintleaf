@@ -33,10 +33,10 @@
  */
 package org.qamatic.mintleaf.data;
 
+import org.qamatic.mintleaf.ColumnMatcher;
 import org.qamatic.mintleaf.DataComparer;
 import org.qamatic.mintleaf.MintLeafException;
 import org.qamatic.mintleaf.RowListWrapper;
-import org.qamatic.mintleaf.ColumnMatcher;
 
 /**
  * Created by qamatic on 3/5/16.

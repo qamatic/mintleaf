@@ -40,7 +40,6 @@ import org.qamatic.mintleaf.DriverSource;
 import org.qamatic.mintleaf.MintLeafException;
 import org.qamatic.mintleaf.core.Database;
 
-import java.sql.SQLException;
 import java.util.regex.Pattern;
 
 /**
@@ -53,7 +52,7 @@ public class H2Db extends Database {
 
 
     @Override
-    public ColumnMetaDataCollection getMetaData(String objectName) throws SQLException, MintLeafException {
+    public ColumnMetaDataCollection getMetaData(String objectName) throws MintLeafException {
         final ColumnMetaDataCollection metaData = new ColumnMetaDataCollection(objectName);
         if (objectName != null) {
             objectName = objectName.toUpperCase();
@@ -63,7 +62,7 @@ public class H2Db extends Database {
 
 
         String sql = String.format("select * from information_schema.columns where TABLE_SCHEMA ='%s' and TABLE_NAME='%s'", splits[0], splits[1]);
-        query(sql, (rowNum, rs) -> {
+        query(sql, null, (rowNum, rs) -> {
             metaData.add(new Column() {
                 {
                     setColumnName(rs.asString("COLUMN_NAME"));
@@ -86,7 +85,7 @@ public class H2Db extends Database {
     }
 
     @Override
-    public boolean isTableExists(String tableName) throws SQLException, MintLeafException {
+    public boolean isTableExists(String tableName) throws MintLeafException {
         return getMetaData(tableName).size() != 0;
     }
 }

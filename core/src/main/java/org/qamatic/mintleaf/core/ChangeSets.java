@@ -36,16 +36,14 @@ package org.qamatic.mintleaf.core;
 
 
 import org.qamatic.mintleaf.DriverSource;
+import org.qamatic.mintleaf.MintLeafException;
 import org.qamatic.mintleaf.SqlReader;
 import org.qamatic.mintleaf.SqlScript;
-
-import java.io.IOException;
-import java.sql.SQLException;
 
 public final class ChangeSets {
 
 
-    public static void applySource(final DriverSource driverSource, final String script, final String delimiter) throws SQLException, IOException {
+    public static void applySource(final DriverSource driverSource, final String script, final String delimiter) throws MintLeafException {
         SqlScript sqlScript = new BaseSqlScript(driverSource) {
             @Override
             protected SqlReader getSourceReader() {
@@ -58,12 +56,12 @@ public final class ChangeSets {
     }
 
 
-    public static void migrate(final DriverSource driverSource, String fileName, String changeSetsToLoadSeparatedByComma) throws SQLException, IOException {
+    public static void migrate(final DriverSource driverSource, String fileName, String changeSetsToLoadSeparatedByComma) throws MintLeafException {
         migrate(driverSource, fileName, changeSetsToLoadSeparatedByComma.split(","));
     }
 
 
-    public static void migrate(final DriverSource driverSource, String fileName, String[] changeSetsToLoad) throws SQLException, IOException {
+    public static void migrate(final DriverSource driverSource, String fileName, String[] changeSetsToLoad) throws MintLeafException {
         SqlChangeSets changeSets = new SqlChangeSets(driverSource, new SqlChangeSetFileReader(fileName), changeSetsToLoad);
         changeSets.apply();
     }

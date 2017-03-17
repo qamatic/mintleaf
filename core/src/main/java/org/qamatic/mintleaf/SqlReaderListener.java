@@ -34,12 +34,10 @@
 
 package org.qamatic.mintleaf;
 
-import java.io.IOException;
-import java.sql.SQLException;
 import java.util.Map;
 
 public interface SqlReaderListener {
-    void onReadChild(StringBuilder sql, Object context) throws SQLException, IOException;
+    void onReadChild(StringBuilder sql, Object context) throws MintLeafException;
 
     SqlReaderListener getChildReaderListener();
 

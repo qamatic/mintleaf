@@ -35,10 +35,10 @@
 package org.qamatic.mintleaf.core;
 
 import org.qamatic.mintleaf.DriverSource;
+import org.qamatic.mintleaf.MintLeafException;
 import org.qamatic.mintleaf.MintLeafLogger;
 import org.qamatic.mintleaf.SqlReaderListener;
 
-import java.io.IOException;
 import java.sql.SQLException;
 import java.util.Hashtable;
 import java.util.Map;
@@ -91,8 +91,7 @@ public class CommandExecutor implements SqlReaderListener {
     }
 
     @Override
-    public void onReadChild(StringBuilder sql, Object context) throws SQLException, IOException {
-
+    public void onReadChild(StringBuilder sql, Object context) throws MintLeafException {
         preProcess(sql);
         if (getChildReaderListener() != null) {
             getChildReaderListener().onReadChild(sql, context);
@@ -101,9 +100,19 @@ public class CommandExecutor implements SqlReaderListener {
         execute(sql);
     }
 
-    protected void execute(StringBuilder sql) throws SQLException {
+    protected void execute(StringBuilder sql) throws MintLeafException {
 
-        driverSource.queryBuilder().withSql(sql.toString()).execute().close();
+        FluentJdbc fluentJdbc = null;
+        try {
+            fluentJdbc = driverSource.queryBuilder().withSql(sql.toString());
+            fluentJdbc.execute();
+        } catch (SQLException e) {
+            logger.error("error in executing query", e);
+            throw new MintLeafException(e);
+        } finally {
+            fluentJdbc.close();
+        }
+
 
     }
 

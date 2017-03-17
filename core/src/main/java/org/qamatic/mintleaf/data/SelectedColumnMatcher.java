@@ -36,11 +36,10 @@
 
 package org.qamatic.mintleaf.data;
 
+import org.qamatic.mintleaf.ColumnMatcher;
 import org.qamatic.mintleaf.MetaDataCollection;
 import org.qamatic.mintleaf.MintLeafException;
-import org.qamatic.mintleaf.ColumnMatcher;
 
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;
@@ -61,19 +60,19 @@ public class SelectedColumnMatcher implements ColumnMatcher {
         this.selectedColumnMaps = selectedColumnMaps;
     }
 
-    public List<String> getSourceColumns(){
+    public List<String> getSourceColumns() {
         prepareColumns();
         return sourceColumns;
     }
 
-    public List<String> getTargetColumns(){
+    public List<String> getTargetColumns() {
         prepareColumns();
         return targetColumns;
     }
 
-    private int[] getColumnIndexes(List<String> columns, MetaDataCollection metaDataCollection){
+    private int[] getColumnIndexes(List<String> columns, MetaDataCollection metaDataCollection) {
         int[] indices = new int[columns.size()];
-        for (int i=0;i<columns.size();i++){
+        for (int i = 0; i < columns.size(); i++) {
             indices[i] = metaDataCollection.getIndex(columns.get(i));
         }
         return indices;
@@ -95,7 +94,7 @@ public class SelectedColumnMatcher implements ColumnMatcher {
 
         if ((leftRowState.Row != null) && (rightRowState.Row != null)) {
 
-            for(int i=0;i<sourceColumns.size();i++){
+            for (int i = 0; i < sourceColumns.size(); i++) {
 
                 sourceColumnState.reset(leftRowState.RowNumber, sourceColumnsIndexes[i], 0,
                         leftRowState.Row.getValue(sourceColumnsIndexes[i]));
@@ -107,10 +106,9 @@ public class SelectedColumnMatcher implements ColumnMatcher {
             }
 
 
-
         } else if ((leftRowState.Row != null) && (rightRowState.Row == null)) {
 
-            for(int i=0;i<sourceColumns.size();i++){
+            for (int i = 0; i < sourceColumns.size(); i++) {
 
                 sourceColumnState.reset(leftRowState.RowNumber, sourceColumnsIndexes[i], 1,
                         leftRowState.Row.getValue(sourceColumnsIndexes[i]));
@@ -125,7 +123,7 @@ public class SelectedColumnMatcher implements ColumnMatcher {
         } else if ((leftRowState.Row == null) && (rightRowState.Row != null)) {
 
 
-            for(int i=0;i<targetColumns.size();i++){
+            for (int i = 0; i < targetColumns.size(); i++) {
 
                 sourceColumnState.reset(-1, -1, -1, null);
                 targetColumnState.reset(rightRowState.RowNumber, targetColumnsIndexes[i], 1,
@@ -146,20 +144,20 @@ public class SelectedColumnMatcher implements ColumnMatcher {
         return new ColumnState();
     }
 
-    private void prepareColumns(){
-        if (sourceColumns != null){
+    private void prepareColumns() {
+        if (sourceColumns != null) {
             return;
         }
         sourceColumns = new ArrayList<>();
         targetColumns = new ArrayList<>();
 
         String[] commaSplits = selectedColumnMaps.split(Pattern.quote(","));
-        if (commaSplits.length<=0){
+        if (commaSplits.length <= 0) {
             MintLeafException.throwException("selected column maps is empty, unable to proceed");
         }
-        for(String sp : commaSplits){
+        for (String sp : commaSplits) {
             String[] maps = sp.split(Pattern.quote("="));
-            if (maps.length!=2){
+            if (maps.length != 2) {
                 MintLeafException.throwException("selected column maps is not defined right. format sourcecolumn=targetcolumn");
             }
             sourceColumns.add(maps[0].trim());

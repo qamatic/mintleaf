@@ -40,8 +40,6 @@ import org.junit.Test;
 import org.qamatic.mintleaf.*;
 import org.qamatic.mintleaf.data.SelectedColumnMatcher;
 
-import java.io.IOException;
-import java.sql.SQLException;
 import java.sql.Types;
 import java.util.ArrayList;
 import java.util.List;
@@ -52,56 +50,6 @@ import static org.junit.Assert.assertEquals;
  * Created by senips on 3/12/17.
  */
 public class SelectedMatchTests {
-
-    @Test
-    public void testColumnSelection(){
-        SelectedColumnMatcher matcher = new SelectedColumnMatcher("susername=tusername");
-
-        assertEquals("susername", matcher.getSourceColumns().get(0));
-        assertEquals("tusername", matcher.getTargetColumns().get(0));
-
-    }
-
-    @Test(expected= MintLeafException.class)
-    public void testIncorrectMaps(){
-        SelectedColumnMatcher matcher = new SelectedColumnMatcher("susernametusername");
-        assertEquals("susername", matcher.getSourceColumns().get(0));
-    }
-
-    @Test(expected= MintLeafException.class)
-    public void testIncorrectMaps2(){
-        SelectedColumnMatcher matcher = new SelectedColumnMatcher("");
-        assertEquals("susername", matcher.getSourceColumns().get(0));
-    }
-
-
-    @Test
-    public void testCompareSelected() throws MintLeafException {
-
-        final List<String> expected = new ArrayList<String>() {
-            {
-                add("[Source:RowNo:0, ColumnNo:0, Surplus:0, Value:Tom] [Target:RowNo:0, ColumnNo:0, Surplus:0, Value:Tom]");
-                add("[Source:RowNo:0, ColumnNo:2, Surplus:0, Value:Hanks] [Target:RowNo:0, ColumnNo:2, Surplus:0, Value:Hanks]");
-                add("[Source:RowNo:1, ColumnNo:0, Surplus:0, Value:Bruce] [Target:RowNo:1, ColumnNo:0, Surplus:0, Value:Bruce]");
-                add("[Source:RowNo:1, ColumnNo:2, Surplus:0, Value:Lee] [Target:RowNo:1, ColumnNo:2, Surplus:0, Value:Lee]");
-            }
-        };
-        List<User> sourceData =  new ArrayList<User>() {
-            {
-                add(new User(0, "Tom", "Hanks"));
-                add(new User(1, "Bruce", "Lee"));
-            }
-        };
-        List<User> targetData =  new ArrayList<User>() {
-            {
-                add(new User(0, "Tom", "Hanks"));
-                add(new User(1, "Bruce", "Lee"));
-            }
-        };
-        List<String> actuals = assertCompareTable(sourceData, targetData, "FIRSTNAME=FNAME,LASTNAME=LNAME");
-        assertEquals(expected, actuals);
-    }
-
 
     private static List<String> assertCompareTable(List<User> sourceList, List<User> targetListList, String selectedColumnMaps) throws MintLeafException {
         final ColumnMetaDataCollection sourceColumnDefs = new ColumnMetaDataCollection("LIST.USERS") {
@@ -139,6 +87,54 @@ public class SelectedMatchTests {
         dataComparer.execute();
 
         return actuals;
+    }
+
+    @Test
+    public void testColumnSelection() {
+        SelectedColumnMatcher matcher = new SelectedColumnMatcher("susername=tusername");
+
+        assertEquals("susername", matcher.getSourceColumns().get(0));
+        assertEquals("tusername", matcher.getTargetColumns().get(0));
+
+    }
+
+    @Test(expected = MintLeafException.class)
+    public void testIncorrectMaps() {
+        SelectedColumnMatcher matcher = new SelectedColumnMatcher("susernametusername");
+        assertEquals("susername", matcher.getSourceColumns().get(0));
+    }
+
+    @Test(expected = MintLeafException.class)
+    public void testIncorrectMaps2() {
+        SelectedColumnMatcher matcher = new SelectedColumnMatcher("");
+        assertEquals("susername", matcher.getSourceColumns().get(0));
+    }
+
+    @Test
+    public void testCompareSelected() throws MintLeafException {
+
+        final List<String> expected = new ArrayList<String>() {
+            {
+                add("[Source:RowNo:0, ColumnNo:0, Surplus:0, Value:Tom] [Target:RowNo:0, ColumnNo:0, Surplus:0, Value:Tom]");
+                add("[Source:RowNo:0, ColumnNo:2, Surplus:0, Value:Hanks] [Target:RowNo:0, ColumnNo:2, Surplus:0, Value:Hanks]");
+                add("[Source:RowNo:1, ColumnNo:0, Surplus:0, Value:Bruce] [Target:RowNo:1, ColumnNo:0, Surplus:0, Value:Bruce]");
+                add("[Source:RowNo:1, ColumnNo:2, Surplus:0, Value:Lee] [Target:RowNo:1, ColumnNo:2, Surplus:0, Value:Lee]");
+            }
+        };
+        List<User> sourceData = new ArrayList<User>() {
+            {
+                add(new User(0, "Tom", "Hanks"));
+                add(new User(1, "Bruce", "Lee"));
+            }
+        };
+        List<User> targetData = new ArrayList<User>() {
+            {
+                add(new User(0, "Tom", "Hanks"));
+                add(new User(1, "Bruce", "Lee"));
+            }
+        };
+        List<String> actuals = assertCompareTable(sourceData, targetData, "FIRSTNAME=FNAME,LASTNAME=LNAME");
+        assertEquals(expected, actuals);
     }
 
 }
