@@ -36,17 +36,34 @@
 package org.qamatic.mintleaf.dbs;
 
 import org.junit.Test;
-import org.qamatic.mintleaf.DriverSource;
-import org.qamatic.mintleaf.core.CommandExecutor;
+import org.qamatic.mintleaf.DbType;
+import org.qamatic.mintleaf.core.BasicDatabaseContext;
+import org.qamatic.mintleaf.core.Database;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
-public class CommandExecutorTest {
+public class UtilTests {
+
+    BasicDatabaseContext builder = new BasicDatabaseContext(null, null, null, null);
 
     @Test
-    public void testCheckTemplateValuesNotNull() {
-        CommandExecutor executor = new CommandExecutor(null);
-//        assertNotNull(executor.getTemplateValues());
+    public void testDbType() {
+        assertEquals(DbType.H2, DbType.getDbType("jdbc:H2:/"));
+        assertEquals(DbType.MYSQL, DbType.getDbType("jdbc:MySql:/"));
+        assertEquals(DbType.MSSQL, DbType.getDbType("/jdbc:SqlServer:/"));
+        assertEquals(DbType.ORACLE, DbType.getDbType("jdbc:Oracle:/"));
+
+    }
+
+    @Test
+    public void testQueryImpl() {
+
+        assertEquals(H2Db.class, Database.getQueryImplementation("jdbc:H2:/"));
+        assertEquals(MySqlDb.class, Database.getQueryImplementation("jdbc:MySql:/"));
+        assertEquals(MSSqlDb.class, Database.getQueryImplementation("jdbc:SqlServer:/"));
+        assertEquals(OracleDb.class, Database.getQueryImplementation("jdbc:Oracle:/"));
+
+
     }
 
 }

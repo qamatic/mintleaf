@@ -35,7 +35,8 @@
 
 package org.qamatic.mintleaf;
 
-import org.qamatic.mintleaf.builders.DbContextBuilder;
+import org.qamatic.mintleaf.core.BasicDatabaseContext;
+import org.qamatic.mintleaf.core.JdbcDriverSource;
 import org.qamatic.mintleaf.core.ObjectRowListWrapper;
 import org.qamatic.mintleaf.core.ResultSetRowListWrapper;
 import org.qamatic.mintleaf.data.*;
@@ -164,24 +165,37 @@ public class Mintleaf {
         }
     }
 
-    public static final class DatabaseBuilder extends DbContextBuilder implements DatabaseContext {
+    public static final class DatabaseBuilder {
 
-        public DatabaseBuilder() {
+        private Class<? extends DriverSource> driverSourceClazz = JdbcDriverSource.class;
+        private String url;
+        private String username;
+        private String password;
+
+        public DatabaseBuilder withDriverSource(Class<? extends DriverSource> driverSourceClazz) {
+            this.driverSourceClazz = driverSourceClazz;
+            return this;
         }
 
-        public DatabaseBuilder(DbType dbType) {
-            super(dbType);
+        public DatabaseBuilder withUrl(String url) {
+            this.url = url;
+            return this;
         }
 
-        public DatabaseBuilder(DbType dbType, DriverSource driverSource) {
-            super(dbType, driverSource);
+        public DatabaseBuilder withUsername(String username) {
+            this.username = username;
+            return this;
+        }
+
+        public DatabaseBuilder withPassword(String password) {
+            this.password = password;
+            return this;
         }
 
         public DatabaseContext build() {
-            DatabaseBuilder db = new DatabaseBuilder(this.dbType, buildDriverSource());
-            return db;
+            BasicDatabaseContext databaseContext = new BasicDatabaseContext(this.driverSourceClazz, this.url, this.username, this.password);
+            return databaseContext;
         }
-
 
     }
 
@@ -300,4 +314,5 @@ public class Mintleaf {
             return dbImporter;
         }
     }
+
 }

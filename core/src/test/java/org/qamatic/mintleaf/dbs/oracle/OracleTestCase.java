@@ -59,7 +59,7 @@ public class OracleTestCase {
 
 
     public static DatabaseContext createOracleDbContext(String userName, String password) {
-        DatabaseContext db = new Mintleaf.DatabaseBuilder(DbType.ORACLE).
+        DatabaseContext db = new Mintleaf.DatabaseBuilder().
                 withDriverSource(ApacheBasicDataSource.class).
                 withUrl(System.getenv("TEST_DB_URL")).
                 withUsername(userName).

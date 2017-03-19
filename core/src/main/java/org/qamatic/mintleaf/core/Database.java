@@ -39,12 +39,15 @@ import org.qamatic.mintleaf.*;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class Database implements DbQueries {
 
     private static final MintLeafLogger logger = MintLeafLogger.getLogger(Database.class);
     protected final DriverSource driverSource;
+    private static final Map<String, Class<? extends Database>> registeredQueries = new HashMap<>();
 
 
     public Database(DriverSource datasource) {
@@ -104,5 +107,17 @@ public class Database implements DbQueries {
     @Override
     public void executeSql(String sql, ParameterBinding parameterBinding) throws MintLeafException {
         FluentJdbc.executeSql(driverSource, sql, parameterBinding);
+    }
+
+    public static void registerQueryImplementation(String jdbcUrlPrefix, Class<? extends Database> dbQueryClaz) {
+        if (!registeredQueries.containsKey(jdbcUrlPrefix)) {
+            registeredQueries.put(jdbcUrlPrefix, dbQueryClaz);
+        }
+    }
+
+    public static Class<? extends Database> getQueryImplementation(String url) {
+        if (DbType.getDbType(url) == null)
+            return Database.class;
+        return registeredQueries.get(DbType.getDbType(url).getJdbcUrlPrefix());
     }
 }

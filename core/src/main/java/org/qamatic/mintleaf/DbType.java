@@ -39,20 +39,35 @@ package org.qamatic.mintleaf;
  * Created by qamatic on 1/5/16.
  */
 public enum DbType {
-    H2("H2 Database"),
-    MYSQL("MySQL database"),
-    ORACLE("Oracle database"),
-    MSSQL("Microsoft SQL Server database");
+    H2("H2 Database", "jdbc:h2:"),
+    MYSQL("MySQL database", "jdbc:mysql:"),
+    ORACLE("Oracle database", "jdbc:oracle:"),
+    MSSQL("Microsoft SQL Server database", "jdbc:sqlserver:");
 
     private final String name;
+    private String jdbcUrlPrefix;
 
-    private DbType(String name) {
+    private DbType(String name, String jdbcUrlPrefix) {
         this.name = name;
+        this.jdbcUrlPrefix = jdbcUrlPrefix;
     }
 
     public String getName() {
         return name;
     }
 
+    public String getJdbcUrlPrefix(){
+        return this.jdbcUrlPrefix;
+    }
+
+    public static DbType getDbType(String url) {
+        url = url.toLowerCase();
+        for (DbType dt : DbType.values()) {
+            if (url.contains(dt.jdbcUrlPrefix)) {
+                return dt;
+            }
+        }
+        return null;
+    }
 
 }

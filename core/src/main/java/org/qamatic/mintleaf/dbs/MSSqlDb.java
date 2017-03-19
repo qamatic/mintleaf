@@ -35,6 +35,7 @@
 
 package org.qamatic.mintleaf.dbs;
 
+import org.qamatic.mintleaf.DbType;
 import org.qamatic.mintleaf.DriverSource;
 import org.qamatic.mintleaf.core.Database;
 

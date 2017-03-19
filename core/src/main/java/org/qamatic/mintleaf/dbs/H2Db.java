@@ -35,10 +35,7 @@
 
 package org.qamatic.mintleaf.dbs;
 
-import org.qamatic.mintleaf.Column;
-import org.qamatic.mintleaf.ColumnMetaDataCollection;
-import org.qamatic.mintleaf.DriverSource;
-import org.qamatic.mintleaf.MintLeafException;
+import org.qamatic.mintleaf.*;
 import org.qamatic.mintleaf.core.Database;
 
 import java.util.regex.Pattern;
@@ -47,6 +44,7 @@ import java.util.regex.Pattern;
  * Created by qamatic on 3/6/16.
  */
 public class H2Db extends Database {
+
     public H2Db(DriverSource dataSource) {
         super(dataSource);
     }
@@ -89,4 +87,5 @@ public class H2Db extends Database {
     public boolean isTableExists(String tableName) throws MintLeafException {
         return getMetaData(tableName).size() != 0;
     }
+
 }
