@@ -1,33 +1,35 @@
 /*
  *
  *  *
- *  *  * <!--
- *  *  *   ~
- *  *  *   ~ The MIT License (MIT)
- *  *  *   ~
- *  *  *   ~ Copyright (c) 2010-2017 QAMatic
- *  *  *   ~
- *  *  *   ~ Permission is hereby granted, free of charge, to any person obtaining a copy
- *  *  *   ~ of this software and associated documentation files (the "Software"), to deal
- *  *  *   ~ in the Software without restriction, including without limitation the rights
- *  *  *   ~ to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- *  *  *   ~ copies of the Software, and to permit persons to whom the Software is
- *  *  *   ~ furnished to do so, subject to the following conditions:
- *  *  *   ~
- *  *  *   ~ The above copyright notice and this permission notice shall be included in all
- *  *  *   ~ copies or substantial portions of the Software.
- *  *  *   ~
- *  *  *   ~ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- *  *  *   ~ IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- *  *  *   ~ FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- *  *  *   ~ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- *  *  *   ~ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- *  *  *   ~ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
- *  *  *   ~ SOFTWARE.
- *  *  *   ~
- *  *  *   ~
- *  *  *   -->
- *  *
+ *  *  *
+ *  *  *  * <!--
+ *  *  *  *   ~
+ *  *  *  *   ~ The MIT License (MIT)
+ *  *  *  *   ~
+ *  *  *  *   ~ Copyright (c) 2010-2017 QAMatic Team
+ *  *  *  *   ~
+ *  *  *  *   ~ Permission is hereby granted, free of charge, to any person obtaining a copy
+ *  *  *  *   ~ of this software and associated documentation files (the "Software"), to deal
+ *  *  *  *   ~ in the Software without restriction, including without limitation the rights
+ *  *  *  *   ~ to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ *  *  *  *   ~ copies of the Software, and to permit persons to whom the Software is
+ *  *  *  *   ~ furnished to do so, subject to the following conditions:
+ *  *  *  *   ~
+ *  *  *  *   ~ The above copyright notice and this permission notice shall be included in all
+ *  *  *  *   ~ copies or substantial portions of the Software.
+ *  *  *  *   ~
+ *  *  *  *   ~ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ *  *  *  *   ~ IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ *  *  *  *   ~ FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ *  *  *  *   ~ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ *  *  *  *   ~ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ *  *  *  *   ~ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ *  *  *  *   ~ SOFTWARE.
+ *  *  *  *   ~
+ *  *  *  *   ~
+ *  *  *  *   -->
+ *  *  *
+ *  *  *
  *  *
  *
  */
@@ -63,6 +65,19 @@ public class FluentJdbc implements SqlResultSet {
         dataSource = builder.dataSource;
     }
 
+    public static void executeSql(DriverSource driverSource, String sql, ParameterBinding parameterBinding) throws MintLeafException {
+        FluentJdbc fluentJdbc = null;
+        try {
+            fluentJdbc = driverSource.queryBuilder().withSql(sql.toString()).withParamValues(parameterBinding);
+            fluentJdbc.execute();
+        } catch (MintLeafException e) {
+            logger.error("error in executing query", e);
+            throw new MintLeafException(e);
+        } finally {
+            fluentJdbc.close();
+        }
+    }
+
     public FluentJdbc withSql(final String sql) throws MintLeafException {
         if (statement != null) {
             close();
@@ -78,7 +93,6 @@ public class FluentJdbc implements SqlResultSet {
         this.sql = sql;
         return this;
     }
-
 
     public ResultSet getResultSet() throws MintLeafException {
         try {
@@ -106,7 +120,6 @@ public class FluentJdbc implements SqlResultSet {
             throw new MintLeafException(e);
         }
     }
-
 
     public FluentJdbc close() {
         try {
@@ -145,43 +158,6 @@ public class FluentJdbc implements SqlResultSet {
         return this;
     }
 
-
-    public FluentJdbc setNull(int parameterIndex, int sqlType) throws MintLeafException {
-        try {
-            getPrepStmt().setNull(parameterIndex, sqlType);
-            return this;
-        } catch (SQLException e) {
-
-            logger.error(e);
-            throw new MintLeafException(e);
-        }
-    }
-
-
-    public FluentJdbc setInt(int parameterIndex, int x) throws MintLeafException {
-        try {
-            getPrepStmt().setInt(parameterIndex, x);
-            return this;
-        } catch (SQLException e) {
-
-            logger.error(e);
-            throw new MintLeafException(e);
-        }
-    }
-
-
-    public FluentJdbc setString(int parameterIndex, String x) throws MintLeafException {
-        try {
-            getPrepStmt().setString(parameterIndex, x);
-            return this;
-        } catch (SQLException e) {
-
-            logger.error(e);
-            throw new MintLeafException(e);
-        }
-    }
-
-
     public FluentJdbc clearParameters() throws MintLeafException {
         try {
             getPrepStmt().clearParameters();
@@ -193,7 +169,6 @@ public class FluentJdbc implements SqlResultSet {
         }
     }
 
-
     public boolean execute() throws MintLeafException {
         try {
             logger.info(sql);
@@ -204,7 +179,6 @@ public class FluentJdbc implements SqlResultSet {
             throw new MintLeafException(e);
         }
     }
-
 
     public void addBatch() throws MintLeafException {
         try {
@@ -231,12 +205,10 @@ public class FluentJdbc implements SqlResultSet {
         }
     }
 
-
     public FluentJdbc withParamValues(ParameterBinding parameterBinding) throws MintLeafException {
         this.parameterBinding = parameterBinding;
         return this;
     }
-
 
     public FluentJdbc first() throws MintLeafException {
         try {
@@ -268,19 +240,6 @@ public class FluentJdbc implements SqlResultSet {
         ResultSetRowListWrapper rowListWrapper = new ResultSetRowListWrapper();
         rowListWrapper.setResultSet(this.getResultSet());
         return rowListWrapper;
-    }
-
-    public static void executeSql(DriverSource driverSource, String sql, ParameterBinding parameterBinding) throws MintLeafException {
-        FluentJdbc fluentJdbc = null;
-        try {
-            fluentJdbc = driverSource.queryBuilder().withSql(sql.toString()).withParamValues(parameterBinding);
-            fluentJdbc.execute();
-        } catch (MintLeafException e) {
-            logger.error("error in executing query", e);
-            throw new MintLeafException(e);
-        } finally {
-            fluentJdbc.close();
-        }
     }
 
     public static final class Builder {
