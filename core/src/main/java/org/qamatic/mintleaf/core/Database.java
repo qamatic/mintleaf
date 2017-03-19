@@ -41,7 +41,6 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-
 public class Database implements DbQueries {
 
     private static final MintLeafLogger logger = MintLeafLogger.getLogger(Database.class);
@@ -49,12 +48,8 @@ public class Database implements DbQueries {
 
 
     public Database(DriverSource datasource) {
-
         this.driverSource = datasource;
-        this.driverSource.setDbQueries(this);
-
     }
-
 
     public <T> List<T> query(String sql, ParameterBinding parameterBinding, final DataRowListener<T> listener) throws MintLeafException {
 

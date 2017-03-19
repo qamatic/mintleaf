@@ -48,13 +48,6 @@ import java.util.logging.Logger;
  */
 public interface DriverSource extends DataSource, DbSettings {
 
-    default DbQueries getDbQueries() {
-        return null;
-    }
-
-    default void setDbQueries(DbQueries dbQueries) {
-
-    }
 
     @Override
     default PrintWriter getLogWriter() throws SQLException {

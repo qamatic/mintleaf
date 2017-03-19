@@ -65,7 +65,6 @@ public abstract class DbContextBuilder extends DriverSourceBuilder {
     public DbContextBuilder(DbType dbType, DriverSource driverSource) {
         this.driverSource = driverSource;
         dbQueries = createNewInstance(dbType, driverSource);
-        this.driverSource.setDbQueries(dbQueries);
     }
 
     protected static DbQueries createNewInstance(DbType dbType, DriverSource driverSource) {

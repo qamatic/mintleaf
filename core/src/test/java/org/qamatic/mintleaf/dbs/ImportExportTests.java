@@ -94,7 +94,7 @@ public class ImportExportTests extends H2TestCase {
                 build();
 
         action.execute();
-        h2DbQueries.query("SELECT USERNAME FROM HRDB.USERS", null, (row, resultSet) -> {
+        h2DbQueries.query("SELECT USERNAME FROM HRDB.USERS", (row, resultSet) -> {
             assertTrue(resultSet.asString("USERNAME").contains("-changed"));
             return null;
         });

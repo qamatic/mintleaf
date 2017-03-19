@@ -154,7 +154,7 @@ public class OracleDb extends Database {
 
         final String typeCheckSql = String.format("SELECT DECODE(OBJECT_TYPE, 'TYPE', 1, 0) ISTYPEOBJECT FROM ALL_OBJECTS WHERE OWNER = UPPER('%s') AND OBJECT_NAME = UPPER(\n" +
                 "'%s')", objectNames[0], objectNames[1]);
-        query(typeCheckSql, null,
+        query(typeCheckSql,
                 (DataRowListener) (row, resultSet) -> {
                     if (resultSet.asInt("ISTYPEOBJECT") == 1) {
                         sql.setLength(0);
@@ -182,7 +182,7 @@ public class OracleDb extends Database {
         try {
             sql = getSqlObjectMetaSql(objectName);
 
-            query(sql, null, (row, rs) -> {
+            query(sql, (row, rs) -> {
 
 
                 metaData.add(new Column() {

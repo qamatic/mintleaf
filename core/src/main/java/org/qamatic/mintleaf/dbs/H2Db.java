@@ -63,7 +63,7 @@ public class H2Db extends Database {
 
 
         String sql = String.format("select * from information_schema.columns where TABLE_SCHEMA ='%s' and TABLE_NAME='%s'", splits[0], splits[1]);
-        query(sql, null, (rowNum, rs) -> {
+        query(sql, (rowNum, rs) -> {
             metaData.add(new Column() {
                 {
                     setColumnName(rs.asString("COLUMN_NAME"));

@@ -43,7 +43,7 @@ import org.qamatic.mintleaf.DriverSource;
  * Created by qamatic on 3/5/16.
  */
 public class ApacheBasicDataSource extends BasicDataSource implements DriverSource {
-    private DbQueries dbQueries;
+
 
     @Override
     public boolean isDebugEnabled() {
@@ -63,15 +63,5 @@ public class ApacheBasicDataSource extends BasicDataSource implements DriverSour
     @Override
     public String getProperty(String propName) {
         return null;
-    }
-
-    @Override
-    public DbQueries getDbQueries() {
-        return dbQueries;
-    }
-
-    @Override
-    public void setDbQueries(DbQueries dbQueries) {
-        this.dbQueries = dbQueries;
     }
 }

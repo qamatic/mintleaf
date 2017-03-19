@@ -54,7 +54,6 @@ public class JdbcDriverSource implements DriverSource {
     protected Properties mvProperties;
     private ClassLoader driverClassLoader;
     private Driver driver;
-    private DbQueries dbQueries;
 
     @Override
     public Connection getConnection() throws SQLException {
@@ -185,13 +184,4 @@ public class JdbcDriverSource implements DriverSource {
     }
 
 
-    @Override
-    public DbQueries getDbQueries() {
-        return dbQueries;
-    }
-
-    @Override
-    public void setDbQueries(DbQueries dbQueries) {
-        this.dbQueries = dbQueries;
-    }
 }
