@@ -57,7 +57,7 @@ public class SqlScriptFile extends BaseSqlScript {
     }
 
     @Override
-    protected SqlReader getSourceReader() {
+    protected SqlReader getReader() {
         InputStream stream = BaseSqlReader.getInputStreamFromFile(this.filename);
 
         SqlReader reader = new SqlStreamReader(stream);

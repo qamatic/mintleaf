@@ -47,14 +47,7 @@ public class CommandExecutor implements ChangeSetListener {
 
     @Override
     public void onChangeSetRead(StringBuilder sql, ChangeSet changeSetInfo) throws MintLeafException {
-        execute(sql);
-    }
-
-    protected void execute(StringBuilder sql) throws MintLeafException {
-
         FluentJdbc.executeSql(driverSource, sql.toString(), null);
-
-
     }
 
 }

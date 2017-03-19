@@ -47,7 +47,7 @@ public final class ChangeSets {
     public static void applySource(final DriverSource driverSource, final String script, final String delimiter) throws MintLeafException {
         SqlScript sqlScript = new BaseSqlScript(driverSource) {
             @Override
-            protected SqlReader getSourceReader() {
+            protected SqlReader getReader() {
                 SqlReader reader = new SqlStringReader(script);
                 reader.setDelimiter(delimiter);
                 return reader;

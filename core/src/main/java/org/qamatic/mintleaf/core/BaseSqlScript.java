@@ -44,15 +44,13 @@ public abstract class BaseSqlScript implements SqlScript {
     protected DriverSource driverSource;
     protected ChangeSetListener changeSetListener;
 
-
     public BaseSqlScript(DriverSource context) {
         driverSource = context;
     }
 
-
     @Override
     public void apply() throws MintLeafException {
-        SqlReader reader = getSourceReader();
+        SqlReader reader = getReader();
         execute(reader);
     }
 
@@ -65,8 +63,7 @@ public abstract class BaseSqlScript implements SqlScript {
         return changeSetListener;
     }
 
-
-    protected abstract SqlReader getSourceReader();
+    protected abstract SqlReader getReader();
 
     protected void execute(SqlReader reader) throws MintLeafException {
         reader.setChangeSetListener(getReadListener());

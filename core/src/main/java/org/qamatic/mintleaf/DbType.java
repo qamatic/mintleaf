@@ -39,5 +39,18 @@ package org.qamatic.mintleaf;
  * Created by qamatic on 1/5/16.
  */
 public enum DbType {
-    H2, MYSQL, ORACLE, MSSQL
+    H2("H2 Database"), MYSQL("MySQL database"), ORACLE("Oracle database"), MSSQL("Microsoft SQL Server database");
+
+
+    private final String name;
+
+    private DbType(String name) {
+        this.name = name;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+
 }
