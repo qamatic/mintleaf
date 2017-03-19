@@ -35,68 +35,18 @@
 
 package org.qamatic.mintleaf.core;
 
-import org.qamatic.mintleaf.DriverSource;
-import org.qamatic.mintleaf.MintLeafException;
-import org.qamatic.mintleaf.MintLeafLogger;
-import org.qamatic.mintleaf.SqlReaderListener;
+import org.qamatic.mintleaf.*;
 
-import java.util.Hashtable;
-import java.util.Map;
-
-public class CommandExecutor implements SqlReaderListener {
-
+public class CommandExecutor implements ChangeSetListener {
     private static final MintLeafLogger logger = MintLeafLogger.getLogger(CommandExecutor.class);
     protected final DriverSource driverSource;
-    private final Map<String, String> templateValues = new Hashtable<String, String>();
-    private SqlReaderListener childListner;
 
     public CommandExecutor(DriverSource driverSource) {
         this.driverSource = driverSource;
     }
 
-    public static void replaceStr(StringBuilder sqlBuilder, String findStr, String replaceStr) {
-        int indexOfTarget = -1;
-        while ((indexOfTarget = sqlBuilder.indexOf(findStr)) > 0) {
-            sqlBuilder.replace(indexOfTarget, indexOfTarget + findStr.length(), replaceStr);
-        }
-    }
-
     @Override
-    public SqlReaderListener getChildReaderListener() {
-        return childListner;
-    }
-
-    @Override
-    public void setChildReaderListener(SqlReaderListener childListner) {
-        this.childListner = childListner;
-    }
-
-    @Override
-    public Map<String, String> getTemplateValues() {
-        return templateValues;
-    }
-
-    private void findAndReplace(StringBuilder sqlText) {
-        for (String key : getTemplateValues().keySet()) {
-            onReplaceTemplateValue(sqlText, key, getTemplateValues().get(key).toString());
-        }
-    }
-
-    protected void onReplaceTemplateValue(StringBuilder sqlBuilder, String findStr, String replaceStr) {
-        replaceStr(sqlBuilder, findStr, replaceStr);
-    }
-
-    protected void preProcess(StringBuilder sqlText) {
-        findAndReplace(sqlText);
-    }
-
-    @Override
-    public void onReadChild(StringBuilder sql, Object context) throws MintLeafException {
-        preProcess(sql);
-        if (getChildReaderListener() != null) {
-            getChildReaderListener().onReadChild(sql, context);
-            return;
-        }
+    public void onChangeSetRead(StringBuilder sql, ChangeSet changeSetInfo) throws MintLeafException {
         execute(sql);
     }
 

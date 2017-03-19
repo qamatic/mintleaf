@@ -39,7 +39,7 @@ import org.junit.Test;
 import org.qamatic.mintleaf.ChangeSet;
 import org.qamatic.mintleaf.ChangeSetReader;
 import org.qamatic.mintleaf.MintLeafException;
-import org.qamatic.mintleaf.SqlReaderListener;
+import org.qamatic.mintleaf.ChangeSetListener;
 import org.qamatic.mintleaf.core.SqlChangeSetFileReader;
 
 import java.io.IOException;
@@ -140,10 +140,10 @@ public class SqlMultiPartlFileReaderTest {
     @Test
     public void testSqlChangeSetReaderListnerTest() throws IOException, SQLException, MintLeafException {
 
-        SqlReaderListener listner = new ChangeSetFileReadListner();
+        ChangeSetListener listner = new ChangeSetFileReadListner();
         InputStream iStream = this.getClass().getResourceAsStream("/multipart.sql");
         SqlChangeSetFileReader reader = new SqlChangeSetFileReader(iStream);
-        reader.setReaderListener(listner);
+        reader.setChangeSetListener(listner);
         actual_part1 = null;
         actual_part2 = null;
         actual_part3 = null;
@@ -158,10 +158,10 @@ public class SqlMultiPartlFileReaderTest {
     }
 
 
-    private class ChangeSetFileReadListner implements SqlReaderListener {
+    private class ChangeSetFileReadListner implements ChangeSetListener {
 
         @Override
-        public void onReadChild(StringBuilder sql, Object context) throws MintLeafException {
+        public void onChangeSetRead(StringBuilder sql, ChangeSet changeSet) throws MintLeafException {
             if (actual_part1 == null) {
                 actual_part1 = sql.toString();
             } else if (actual_part2 == null) {
@@ -171,20 +171,5 @@ public class SqlMultiPartlFileReaderTest {
             }
         }
 
-        @Override
-        public SqlReaderListener getChildReaderListener() {
-            return null;
-        }
-
-        @Override
-        public void setChildReaderListener(SqlReaderListener childListener) {
-
-        }
-
-        @Override
-        public Map<String, String> getTemplateValues() {
-
-            throw new UnsupportedOperationException();
-        }
     }
 }

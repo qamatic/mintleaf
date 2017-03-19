@@ -36,8 +36,9 @@
 package org.qamatic.mintleaf.dbs;
 
 import org.junit.Test;
+import org.qamatic.mintleaf.ChangeSet;
 import org.qamatic.mintleaf.MintLeafException;
-import org.qamatic.mintleaf.SqlReaderListener;
+import org.qamatic.mintleaf.ChangeSetListener;
 import org.qamatic.mintleaf.core.SqlStringReader;
 
 import java.util.Map;
@@ -75,8 +76,8 @@ public class SqlStringReaderTest {
     public void testSqlReaderListnerTest2() throws MintLeafException {
 
         SqlStringReader reader = new SqlStringReader(getSamplePackageData());
-        SqlReaderListener listner = new EmptyPackageReadListner();
-        reader.setReaderListener(listner);
+        ChangeSetListener listner = new EmptyPackageReadListner();
+        reader.setChangeSetListener(listner);
         actual_emptypackage_block1 = null;
         actual_emptypackage_block2 = null;
 
@@ -103,10 +104,10 @@ public class SqlStringReaderTest {
     }
 
 
-    private class EmptyPackageReadListner implements SqlReaderListener {
+    private class EmptyPackageReadListner implements ChangeSetListener {
 
         @Override
-        public void onReadChild(StringBuilder sql, Object context) throws MintLeafException {
+        public void onChangeSetRead(StringBuilder sql, ChangeSet changeSet) throws MintLeafException {
             if (actual_emptypackage_block1 == null) {
                 actual_emptypackage_block1 = sql.toString();
             } else if (actual_emptypackage_block2 == null) {
@@ -114,20 +115,5 @@ public class SqlStringReaderTest {
             }
         }
 
-        @Override
-        public SqlReaderListener getChildReaderListener() {
-            return null;
-        }
-
-        @Override
-        public void setChildReaderListener(SqlReaderListener childListener) {
-
-        }
-
-        @Override
-        public Map<String, String> getTemplateValues() {
-
-            throw new UnsupportedOperationException();
-        }
     }
 }

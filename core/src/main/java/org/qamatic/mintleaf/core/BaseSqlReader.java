@@ -38,7 +38,7 @@ package org.qamatic.mintleaf.core;
 import org.qamatic.mintleaf.MintLeafException;
 import org.qamatic.mintleaf.MintLeafLogger;
 import org.qamatic.mintleaf.SqlReader;
-import org.qamatic.mintleaf.SqlReaderListener;
+import org.qamatic.mintleaf.ChangeSetListener;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -47,7 +47,7 @@ import java.io.InputStream;
 public abstract class BaseSqlReader implements SqlReader {
 
     private final static MintLeafLogger logger = MintLeafLogger.getLogger(BaseSqlReader.class);
-    protected SqlReaderListener readerListener;
+    protected ChangeSetListener changeSetListener;
     private String delimiter = "/";
 
     public static InputStream getInputStreamFromFile(String resourceOrFileName) {
@@ -84,13 +84,11 @@ public abstract class BaseSqlReader implements SqlReader {
     @Override
     public abstract void read() throws MintLeafException;
 
-    @Override
-    public SqlReaderListener getReaderListener() {
-        return readerListener;
+    public ChangeSetListener getChangeSetListener() {
+        return changeSetListener;
     }
 
-    @Override
-    public void setReaderListener(SqlReaderListener readerListener) {
-        this.readerListener = readerListener;
+    public void setChangeSetListener(ChangeSetListener changeSetListener) {
+        this.changeSetListener = changeSetListener;
     }
 }

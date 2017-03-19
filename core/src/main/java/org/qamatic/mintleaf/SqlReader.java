@@ -40,9 +40,9 @@ public interface SqlReader {
 
     void setDelimiter(String delimStr);
 
-    SqlReaderListener getReaderListener();
+    ChangeSetListener getChangeSetListener();
 
-    void setReaderListener(SqlReaderListener mvreaderListener);
+    void setChangeSetListener(ChangeSetListener mvreaderListener);
 
     void read() throws MintLeafException;
 }

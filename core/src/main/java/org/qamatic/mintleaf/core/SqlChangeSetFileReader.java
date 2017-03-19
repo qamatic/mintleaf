@@ -116,8 +116,8 @@ public class SqlChangeSetFileReader extends BaseSqlReader implements ChangeSetRe
                         }
                         String sql = childContents.toString().trim();
                         if (sql.length() != 0) {
-                            if (readerListener != null) {
-                                readerListener.onReadChild(new StringBuilder(sql), currentChangeSet);
+                            if (changeSetListener != null) {
+                                changeSetListener.onChangeSetRead(new StringBuilder(sql), currentChangeSet);
                             }
                             currentChangeSet.setChangeSetSource(sql);
                             getChangeSets().put(currentChangeSet.getId(), currentChangeSet);
@@ -135,8 +135,8 @@ public class SqlChangeSetFileReader extends BaseSqlReader implements ChangeSetRe
 
             String sql = childContents.toString().trim();
             if ((currentChangeSet != null) && (currentChangeSet.getId() != null) && (currentChangeSet.getId().length() != 0) && (sql.length() != 0)) {
-                if (readerListener != null) {
-                    readerListener.onReadChild(new StringBuilder(sql), null);
+                if (changeSetListener != null) {
+                    changeSetListener.onChangeSetRead(new StringBuilder(sql), null);
                 }
                 currentChangeSet.setChangeSetSource(sql);
                 getChangeSets().put(currentChangeSet.getId(), currentChangeSet);

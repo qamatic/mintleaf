@@ -37,12 +37,6 @@ package org.qamatic.mintleaf;
 
 import java.util.Map;
 
-public interface SqlReaderListener {
-    void onReadChild(StringBuilder sql, Object context) throws MintLeafException;
-
-    SqlReaderListener getChildReaderListener();
-
-    void setChildReaderListener(SqlReaderListener childListener);
-
-    Map<String, String> getTemplateValues();
+public interface ChangeSetListener {
+    void onChangeSetRead(StringBuilder sql, ChangeSet changeSetInfo) throws MintLeafException;
 }

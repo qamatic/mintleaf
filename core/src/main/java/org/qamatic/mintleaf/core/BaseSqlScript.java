@@ -42,7 +42,7 @@ public abstract class BaseSqlScript implements SqlScript {
 
     private final static MintLeafLogger logger = MintLeafLogger.getLogger(BaseSqlScript.class);
     protected DriverSource driverSource;
-    protected SqlReaderListener sqlReaderListener;
+    protected ChangeSetListener changeSetListener;
 
 
     public BaseSqlScript(DriverSource context) {
@@ -57,19 +57,19 @@ public abstract class BaseSqlScript implements SqlScript {
     }
 
 
-    public SqlReaderListener getReadListener() {
-        if (sqlReaderListener == null) {
-            sqlReaderListener = new CommandExecutor(driverSource);
+    public ChangeSetListener getReadListener() {
+        if (changeSetListener == null) {
+            changeSetListener = new CommandExecutor(driverSource);
         }
 
-        return sqlReaderListener;
+        return changeSetListener;
     }
 
 
     protected abstract SqlReader getSourceReader();
 
     protected void execute(SqlReader reader) throws MintLeafException {
-        reader.setReaderListener(getReadListener());
+        reader.setChangeSetListener(getReadListener());
         reader.read();
     }
 
