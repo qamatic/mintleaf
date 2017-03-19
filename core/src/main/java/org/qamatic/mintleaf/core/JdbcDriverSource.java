@@ -35,7 +35,6 @@
 
 package org.qamatic.mintleaf.core;
 
-import org.qamatic.mintleaf.DbQueries;
 import org.qamatic.mintleaf.DriverSource;
 import org.qamatic.mintleaf.MintLeafLogger;
 
@@ -54,6 +53,10 @@ public class JdbcDriverSource implements DriverSource {
     protected Properties mvProperties;
     private ClassLoader driverClassLoader;
     private Driver driver;
+
+    static {
+        DriverManager.getDrivers();
+    }
 
     @Override
     public Connection getConnection() throws SQLException {
@@ -82,46 +85,61 @@ public class JdbcDriverSource implements DriverSource {
 
     private synchronized Driver getDriver() throws SQLException {
         if (driver == null) {
-            Class<?> driverClaz = null;
-            try {
-                try {
-                    if (driverClassLoader == null) {
-                        driverClaz = Class.forName(getDriverClassName());
-                    } else {
-                        driverClaz = Class.forName(
-                                getDriverClassName(), true, driverClassLoader);
-                    }
-                } catch (final ClassNotFoundException cnfe) {
-                    driverClaz = Thread.currentThread(
-                    ).getContextClassLoader().loadClass(
-                            getDriverClassName());
-                }
-            } catch (final Exception t) {
-                final String message = "Unable to load JDBC driver:" +
-                        getDriverClassName();
-                logger.error(message);
-
-                throw new SQLException(message, t);
-            }
-
-            try {
-                if (driverClaz == null) {
-                    this.driver = DriverManager.getDriver(getUrl());
-                } else {
-                    this.driver = (Driver) driverClaz.newInstance();
-                    if (!this.driver.acceptsURL(getUrl())) {
-                        throw new SQLException("No driver is found!");
-                    }
-                }
-            } catch (final Exception t) {
-                final String message = "Unable to create JDBC driver '" +
-                        (getDriverClassName() != null ? getDriverClassName() : "") +
-                        "' for connect URL '" + getUrl() + "'";
-                logger.error(message);
-                throw new SQLException(message, t);
-            }
+           this.driver = createDriverInstance(getDriverClassLoader(), getDriverClassName(), getUrl());
         }
         return driver;
+    }
+
+    private static Driver createDriverInstance(ClassLoader driverClassLoader, String driverClassName, String url) throws SQLException {
+        Driver driver = null;
+        final String message = "Unable to create JDBC driver '" +
+                (driverClassName != null ? driverClassName : "auto-find") +
+                "' for connect URL '" + url + "'";
+        try {
+            if (driverClassName == null) {
+                driver = DriverManager.getDriver(url);
+            } else {
+                Class<?> driverClaz  = findDriverClass(driverClassLoader, driverClassName);
+                driver = (Driver) driverClaz.newInstance();
+                if (!driver.acceptsURL(url)) {
+                    throw new SQLException("No driver is found!");
+                }
+            }
+        } catch (final Exception t) {
+            logger.error(message);
+            throw new SQLException(message, t);
+        }
+
+        if (driver == null){
+            logger.error(message);
+            throw new SQLException(message);
+        }
+        return driver;
+    }
+
+    private static Class<?> findDriverClass(ClassLoader driverClassLoader, String driverClassName) throws SQLException {
+        Class<?> driverClaz;
+        try {
+            try {
+                if (driverClassLoader == null) {
+                    driverClaz = Class.forName(driverClassName);
+                } else {
+                    driverClaz = Class.forName(
+                            driverClassName, true, driverClassLoader);
+                }
+            } catch (final ClassNotFoundException cnfe) {
+                driverClaz = Thread.currentThread(
+                ).getContextClassLoader().loadClass(
+                        driverClassName);
+            }
+        } catch (final Exception t) {
+            final String message = "Unable to load JDBC driver:" +
+                    driverClassName;
+            logger.error(message);
+
+            throw new SQLException(message, t);
+        }
+        return driverClaz;
     }
 
 

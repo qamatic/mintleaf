@@ -39,6 +39,7 @@ import org.junit.BeforeClass;
 import org.qamatic.mintleaf.DatabaseContext;
 import org.qamatic.mintleaf.DbQueries;
 import org.qamatic.mintleaf.Mintleaf;
+import org.qamatic.mintleaf.core.JdbcDriverSource;
 
 /**
  * Created by qamatic on 3/3/16.
@@ -54,7 +55,7 @@ public class H2TestCase {
             return;
 
         h2DatabaseContext = new Mintleaf.DatabaseBuilder().
-                withDriverSource(ApacheBasicDataSource.class).
+                withDriverSource(JdbcDriverSource.class).
                 withUrl("jdbc:h2:file:./target/H2DbScriptTests;mv_store=false;").
                 build();
         h2DbQueries = h2DatabaseContext.getDbQueries();

@@ -54,7 +54,6 @@ public abstract class DbContextBuilder extends DriverSourceBuilder {
 
     public DbContextBuilder() {
         this.dbType = DbType.H2;
-        this.driverClassName = "org.h2.Driver";
     }
 
 

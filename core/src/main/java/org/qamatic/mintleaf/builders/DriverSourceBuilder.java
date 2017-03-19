@@ -49,14 +49,7 @@ public abstract class DriverSourceBuilder {
     protected String url;
     protected String username;
     protected String password;
-    protected String driverClassName;
-
-    protected DbQueries dbQueries;
     protected DriverSource driverSource;
-
-    public DriverSourceBuilder() {
-        this.driverClassName = "org.h2.Driver";
-    }
 
     private static DriverSource getDriverSource(Class<? extends DriverSource> driverSourceClazz) {
         DriverSource driverSource = null;
@@ -92,11 +85,6 @@ public abstract class DriverSourceBuilder {
         return this;
     }
 
-    public DriverSourceBuilder withDriverClassName(String driverClassName) {
-        this.driverClassName = driverClassName;
-        return this;
-    }
-
     public DriverSource buildDriverSource() {
         DriverSource driverSource = getDriverSource(this.driverSourceClazz);
         driverSource.setUrl(this.url);
@@ -104,7 +92,6 @@ public abstract class DriverSourceBuilder {
             driverSource.setUsername(this.username);
             driverSource.setPassword(this.password);
         }
-        driverSource.setDriverClassName(this.driverClassName);
         return driverSource;
     }
 
