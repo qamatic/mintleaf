@@ -57,14 +57,22 @@ public class OracleDb extends Database {
     public boolean isSqlObjectExists(String objectName, String objectType, boolean ignoreValidity) throws MintLeafException {
         final String[] objectNames = getObjectNames(objectName.toUpperCase());
         String validSql = ignoreValidity ? "" : "status='VALID' AND ";
-        int cnt = getCount("all_objects", validSql + "OWNER = ? AND object_name = ? AND Object_Type = ?", new Object[]{objectNames[0], objectNames[1], objectType});
+        int cnt = getCount("all_objects", validSql + "OWNER = ? AND object_name = ? AND Object_Type = ?", parameterSets -> {
+            parameterSets.setString(1, objectNames[0]);
+            parameterSets.setString(2, objectNames[1]);
+            parameterSets.setString(3, objectType);
+        });
         return cnt != 0;
     }
 
 
     public boolean isColumnExists(String tableName, String columnName) throws MintLeafException {
         final String[] objectNames = getObjectNames(tableName.toUpperCase());
-        int cnt = getCount("all_tab_columns", "OWNER = ? AND table_name = ? AND column_name = ?", new Object[]{objectNames[0], objectNames[1], columnName.toUpperCase()});
+        int cnt = getCount("all_tab_columns", "OWNER = ? AND table_name = ? AND column_name = ?", parameterSets -> {
+            parameterSets.setString(1, objectNames[0]);
+            parameterSets.setString(2, objectNames[1]);
+            parameterSets.setString(3, columnName.toUpperCase());
+        });
         return cnt != 0;
     }
 
@@ -76,7 +84,10 @@ public class OracleDb extends Database {
     @Override
     public boolean isDbOptionExists(String optionName) throws MintLeafException {
 
-        int cnt = getCount("dba_server_registry", "comp_id=? and status=?", new Object[]{optionName.toUpperCase(), "VALID"});
+        int cnt = getCount("dba_server_registry", "comp_id=? and status=?", parameterSets -> {
+            parameterSets.setString(1, optionName.toUpperCase());
+            parameterSets.setString(2, "VALID");
+        });
         return cnt != 0;
     }
 
@@ -88,14 +99,16 @@ public class OracleDb extends Database {
         try {
             fluentJdbc = this.driverSource.queryBuilder().withSql(sql);
             fluentJdbc.execute();
-        }  finally {
+        } finally {
             fluentJdbc.close();
         }
     }
 
     @Override
     public boolean isUserExists(String userName) throws MintLeafException {
-        return getCount("all_users", "username = upper(?)", new Object[]{userName}) != 0;
+        return getCount("all_users", "username = upper(?)", parameterSets -> {
+            parameterSets.setString(1, userName);
+        }) != 0;
     }
 
     @Override
@@ -119,8 +132,11 @@ public class OracleDb extends Database {
 
     @Override
     public boolean isPrivilegeExists(String granteeName, String privilegeName, String objectName) throws MintLeafException {
-        int cnt = getCount("all_tab_privs", "grantee = ? AND table_name = ? AND privilege=?", new Object[]{granteeName.toUpperCase(), objectName.toUpperCase(),
-                privilegeName.toUpperCase()});
+        int cnt = getCount("all_tab_privs", "grantee = ? AND table_name = ? AND privilege=?", parameterSets -> {
+            parameterSets.setString(1, granteeName.toUpperCase());
+            parameterSets.setString(2, objectName.toUpperCase());
+            parameterSets.setString(3, privilegeName.toUpperCase());
+        });
         return cnt != 0;
     }
 

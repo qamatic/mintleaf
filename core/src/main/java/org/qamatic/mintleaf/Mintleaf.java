@@ -187,12 +187,12 @@ public class Mintleaf {
 
     public static final class DbToCsvBuilder {
         private String sourceSql;
-        private Object[] sqlaramValueBindings;
+        private ParameterBinding sqlaramValueBindings;
         private DatabaseContext sourceDb;
 
         private String targetCsvFile;
 
-        public DbToCsvBuilder withSqlaramValueBindings(Object[] sqlaramValueBindings) {
+        public DbToCsvBuilder withSqlaramValueBindings(ParameterBinding sqlaramValueBindings) {
             this.sqlaramValueBindings = sqlaramValueBindings;
             return this;
         }
@@ -257,13 +257,13 @@ public class Mintleaf {
 
     public static final class DbToDbBuilder {
         private String sourceSql;
-        private Object[] sqlaramValueBindings;
+        private ParameterBinding sqlaramValueBindings;
         private DatabaseContext sourceDb;
 
         private DatabaseContext targetDb;
         private String targetSqlTemplate;
 
-        public DbToDbBuilder withSqlaramValueBindings(Object[] sqlaramValueBindings) {
+        public DbToDbBuilder withSqlaramValueBindings(ParameterBinding sqlaramValueBindings) {
             this.sqlaramValueBindings = sqlaramValueBindings;
             return this;
         }

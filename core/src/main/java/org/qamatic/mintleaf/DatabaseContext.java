@@ -48,7 +48,7 @@ public interface DatabaseContext {
     DriverSource getDriverSource();
 
     default FluentJdbc queryBuilder() {
-        return new FluentJdbc(getDriverSource());
+        return new FluentJdbc.Builder().withDataSource(getDriverSource()).build();
     }
 
     default Connection getConnection() throws SQLException {

@@ -41,7 +41,7 @@ import java.util.regex.Pattern;
 
 public interface DbQueries {
 
-    int getCount(String tableName, String whereClause, Object[] paramValues) throws MintLeafException;
+    int getCount(String tableName, String whereClause, ParameterBinding parameterBinding) throws MintLeafException;
 
     default boolean isSqlObjectExists(String objectName, String objectType, boolean ignoreValidity) throws MintLeafException {
         throw new NotImplementedException();
@@ -59,18 +59,18 @@ public interface DbQueries {
         throw new NotImplementedException();
     }
 
-    <T> List<T> query(String sql, Object[] paramValues, final DataRowListener<T> listener) throws MintLeafException;
+    <T> List<T> query(String sql, ParameterBinding parameterBinding, final DataRowListener<T> listener) throws MintLeafException;
 
     default <T> List<T> query(String sql, final DataRowListener<T> listener) throws MintLeafException {
         return query(sql, null, listener);
     }
 
-    default List<String> queryString(String sql, Object[] paramValues, String columnName) throws MintLeafException {
-        return query(sql, paramValues, (row, resultSet) -> resultSet.asString(columnName));
+    default List<String> queryString(String sql, ParameterBinding parameterBinding, String columnName) throws MintLeafException {
+        return query(sql, parameterBinding, (row, resultSet) -> resultSet.asString(columnName));
     }
 
 
-    int queryInt(String sql, Object[] paramValues) throws MintLeafException;
+    int queryInt(String sql, ParameterBinding parameterBinding) throws MintLeafException;
 
     default void truncateTable(String tableName) throws MintLeafException {
         throw new NotImplementedException();
@@ -109,7 +109,7 @@ public interface DbQueries {
         return objectNames;
     }
 
-    void executeSql(String sql, Object[] paramValues) throws MintLeafException;
+    void executeSql(String sql, ParameterBinding parameterBinding) throws MintLeafException;
 
     default void executeSql(String sql) throws MintLeafException {
         executeSql(sql, null);

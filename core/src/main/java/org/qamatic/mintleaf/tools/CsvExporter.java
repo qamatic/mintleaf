@@ -37,6 +37,7 @@ package org.qamatic.mintleaf.tools;
 import org.qamatic.mintleaf.DataAction;
 import org.qamatic.mintleaf.DriverSource;
 import org.qamatic.mintleaf.MintLeafException;
+import org.qamatic.mintleaf.ParameterBinding;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -47,7 +48,7 @@ import java.io.IOException;
  */
 public class CsvExporter extends ImpExpBase implements DataAction {
 
-    private Object[] sqlaramValueBindings;
+    private ParameterBinding sqlaramValueBindings;
     private DriverSource sourceDbDriverSource;
     private String sourceSql;
     private String targetCsvFile;
@@ -71,7 +72,7 @@ public class CsvExporter extends ImpExpBase implements DataAction {
         }
     }
 
-    public void setSqlaramValueBindings(Object[] sqlaramValueBindings) {
+    public void setSqlaramValueBindings(ParameterBinding sqlaramValueBindings) {
         this.sqlaramValueBindings = sqlaramValueBindings;
     }
 

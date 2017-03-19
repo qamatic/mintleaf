@@ -34,10 +34,7 @@
 
 package org.qamatic.mintleaf.tools;
 
-import org.qamatic.mintleaf.DataAction;
-import org.qamatic.mintleaf.DriverSource;
-import org.qamatic.mintleaf.MintLeafException;
-import org.qamatic.mintleaf.MintLeafLogger;
+import org.qamatic.mintleaf.*;
 import org.qamatic.mintleaf.core.FluentJdbc;
 
 /**
@@ -50,7 +47,7 @@ public class DbImporter extends ImpExpBase implements DataAction {
     private String targetSqlTemplate;
     private DriverSource sourceDbDriverSource;
     private String sourceSql;
-    private Object[] sourceSqlParamValueBindings;
+    private ParameterBinding sourceSqlParamValueBindings;
 
     public DbImporter(DriverSource sourceDbDriverSource, String sourceSql,
                       DriverSource targetDbDriverSource,
@@ -75,7 +72,7 @@ public class DbImporter extends ImpExpBase implements DataAction {
         return this.sourceDbDriverSource;
     }
 
-    public void setSourceSqlParamValueBindings(Object[] sourceSqlParamValueBindings) {
+    public void setSourceSqlParamValueBindings(ParameterBinding sourceSqlParamValueBindings) {
         this.sourceSqlParamValueBindings = sourceSqlParamValueBindings;
     }
 }

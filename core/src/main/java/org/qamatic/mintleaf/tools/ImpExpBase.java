@@ -37,6 +37,7 @@ package org.qamatic.mintleaf.tools;
 import org.qamatic.mintleaf.DriverSource;
 import org.qamatic.mintleaf.MintLeafException;
 import org.qamatic.mintleaf.MintLeafLogger;
+import org.qamatic.mintleaf.ParameterBinding;
 import org.qamatic.mintleaf.core.FluentJdbc;
 
 import java.io.IOException;
@@ -78,8 +79,8 @@ public abstract class ImpExpBase {
         fluentJdbc.close();
     }
 
-    protected void exportDataTo(final ExportFlavour dataExport, String sql, Object[] optionalParamValueBindings) throws MintLeafException {
-        FluentJdbc fluentJdbc = this.getDriverSource().queryBuilder().withSql(sql).withParamValues(optionalParamValueBindings);
+    protected void exportDataTo(final ExportFlavour dataExport, String sql, ParameterBinding parameterBinding) throws MintLeafException {
+        FluentJdbc fluentJdbc = this.getDriverSource().queryBuilder().withSql(sql).withParamValues(parameterBinding);
         try {
             dataExport.export(fluentJdbc.getResultSet());
         } finally {

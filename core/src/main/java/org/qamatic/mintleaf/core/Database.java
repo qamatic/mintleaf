@@ -55,12 +55,12 @@ public class Database implements DbQueries {
     }
 
 
-    public <T> List<T> query(String sql, Object[] paramValues, final DataRowListener<T> listener) throws MintLeafException {
+    public <T> List<T> query(String sql, ParameterBinding parameterBinding, final DataRowListener<T> listener) throws MintLeafException {
 
         final List<T> rows = new ArrayList<T>();
         FluentJdbc fluentJdbc = null;
         try {
-            fluentJdbc = driverSource.queryBuilder().withSql(sql).withParamValues(paramValues).query(new DataRowListener<Object>() {
+            fluentJdbc = driverSource.queryBuilder().withSql(sql).withParamValues(parameterBinding).query(new DataRowListener<Object>() {
 
                 public T eachRow(int row, ComparableRow dr) {
                     try {
@@ -78,11 +78,11 @@ public class Database implements DbQueries {
     }
 
     @Override
-    public int queryInt(String sql, Object[] paramValues) throws MintLeafException {
+    public int queryInt(String sql, ParameterBinding parameterBinding) throws MintLeafException {
         FluentJdbc fluentJdbc = null;
 
         try {
-            fluentJdbc = driverSource.queryBuilder().withSql(sql).withParamValues(paramValues).first();
+            fluentJdbc = driverSource.queryBuilder().withSql(sql).withParamValues(parameterBinding).first();
             return fluentJdbc.getResultSet().getInt(1);
         } catch (SQLException e) {
             throw new MintLeafException(e);
@@ -92,7 +92,7 @@ public class Database implements DbQueries {
     }
 
     @Override
-    public int getCount(String tableName, String whereClause, Object[] paramValues) throws MintLeafException {
+    public int getCount(String tableName, String whereClause, ParameterBinding parameterBinding) throws MintLeafException {
 
         String sql = "";
         if (whereClause != null) {
@@ -101,12 +101,12 @@ public class Database implements DbQueries {
             sql = String.format("select count(*) from %s", tableName);
         }
 
-        return queryInt(sql, paramValues);
+        return queryInt(sql, parameterBinding);
     }
 
 
     @Override
-    public void executeSql(String sql, Object[] paramValues) throws MintLeafException {
-        FluentJdbc.executeSql(driverSource, sql, paramValues);
+    public void executeSql(String sql, ParameterBinding parameterBinding) throws MintLeafException {
+        FluentJdbc.executeSql(driverSource, sql, parameterBinding);
     }
 }

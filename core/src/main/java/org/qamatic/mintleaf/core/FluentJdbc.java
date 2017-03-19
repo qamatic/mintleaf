@@ -38,7 +38,6 @@ import org.qamatic.mintleaf.*;
 
 import javax.sql.DataSource;
 import java.sql.*;
-import java.util.Calendar;
 
 /**
  * Created by qamatic on 2/20/16.
@@ -52,10 +51,16 @@ public class FluentJdbc implements SqlResultSet {
     private Statement statement;
     private ResultSet resultSet;
     private String sql;
+    private ParameterBinding parameterBinding;
 
-    public FluentJdbc(DataSource dataSource) {
+    private FluentJdbc(DataSource dataSource) {
 
         this.dataSource = dataSource;
+    }
+
+    private FluentJdbc(Builder builder) {
+        sql = builder.sql;
+        dataSource = builder.dataSource;
     }
 
     public FluentJdbc withSql(final String sql) throws MintLeafException {
@@ -78,7 +83,9 @@ public class FluentJdbc implements SqlResultSet {
     public ResultSet getResultSet() throws MintLeafException {
         try {
             if (this.resultSet == null) {
-
+                if (parameterBinding != null) {
+                    parameterBinding.bindParameters(new ParameterSets(getPrepStmt()));
+                }
                 executeQuery();
 
             }
@@ -187,30 +194,6 @@ public class FluentJdbc implements SqlResultSet {
     }
 
 
-    public FluentJdbc setObject(int parameterIndex, Object x, int targetSqlType) throws MintLeafException {
-        try {
-            getPrepStmt().setObject(parameterIndex, x, targetSqlType);
-            return this;
-        } catch (SQLException e) {
-
-            logger.error(e);
-            throw new MintLeafException(e);
-        }
-    }
-
-
-    public FluentJdbc setObject(int parameterIndex, Object x) throws MintLeafException {
-        try {
-            getPrepStmt().setObject(parameterIndex, x);
-            return this;
-        } catch (SQLException e) {
-
-            logger.error(e);
-            throw new MintLeafException(e);
-        }
-    }
-
-
     public boolean execute() throws MintLeafException {
         try {
             logger.info(sql);
@@ -248,53 +231,9 @@ public class FluentJdbc implements SqlResultSet {
         }
     }
 
-    public FluentJdbc setDate(int parameterIndex, Date x, Calendar cal) throws MintLeafException {
-        try {
-            getPrepStmt().setDate(parameterIndex, x, cal);
-            return this;
-        } catch (SQLException e) {
 
-            logger.error(e);
-            throw new MintLeafException(e);
-        }
-    }
-
-
-    public FluentJdbc setTime(int parameterIndex, Time x, Calendar cal) throws MintLeafException {
-        try {
-            getPrepStmt().setTime(parameterIndex, x, cal);
-            return this;
-        } catch (SQLException e) {
-
-            logger.error(e);
-            throw new MintLeafException(e);
-        }
-    }
-
-
-    public FluentJdbc setTimestamp(int parameterIndex, Timestamp x, Calendar cal) throws MintLeafException {
-        try {
-            getPrepStmt().setTimestamp(parameterIndex, x, cal);
-            return this;
-        } catch (SQLException e) {
-
-            logger.error(e);
-            throw new MintLeafException(e);
-        }
-    }
-
-    public FluentJdbc withParamValues(Object[] bindingParams) throws MintLeafException {
-
-        if (bindingParams == null)
-            return this;
-        for (int i = 0; i < bindingParams.length; i++) {
-            if (bindingParams[i] instanceof Integer) {
-                setInt(i + 1, (Integer) bindingParams[i]);
-            } else {
-                setString(i + 1, (String) bindingParams[i]);
-            }
-        }
-
+    public FluentJdbc withParamValues(ParameterBinding parameterBinding) throws MintLeafException {
+        this.parameterBinding = parameterBinding;
         return this;
     }
 
@@ -331,10 +270,10 @@ public class FluentJdbc implements SqlResultSet {
         return rowListWrapper;
     }
 
-    public static void executeSql(DriverSource driverSource, String sql, Object[] paramValues) throws MintLeafException {
+    public static void executeSql(DriverSource driverSource, String sql, ParameterBinding parameterBinding) throws MintLeafException {
         FluentJdbc fluentJdbc = null;
         try {
-            fluentJdbc = driverSource.queryBuilder().withSql(sql.toString()).withParamValues(paramValues);
+            fluentJdbc = driverSource.queryBuilder().withSql(sql.toString()).withParamValues(parameterBinding);
             fluentJdbc.execute();
         } catch (MintLeafException e) {
             logger.error("error in executing query", e);
@@ -344,4 +283,25 @@ public class FluentJdbc implements SqlResultSet {
         }
     }
 
+    public static final class Builder {
+        private String sql;
+        private DataSource dataSource;
+
+        public Builder() {
+        }
+
+        public Builder withSql(String sql) {
+            this.sql = sql;
+            return this;
+        }
+
+        public Builder withDataSource(DataSource dataSource) {
+            this.dataSource = dataSource;
+            return this;
+        }
+
+        public FluentJdbc build() {
+            return new FluentJdbc(this);
+        }
+    }
 }
