@@ -35,6 +35,7 @@
 
 package org.qamatic.mintleaf;
 
+import org.qamatic.mintleaf.core.DbConnectionWrapper;
 import org.qamatic.mintleaf.core.FluentJdbc;
 
 import javax.sql.DataSource;
@@ -86,5 +87,13 @@ public interface DriverSource extends DataSource, DbSettings {
 
     default FluentJdbc queryBuilder() {
         return new FluentJdbc.Builder().withDataSource(this).build();
+    }
+
+    default ConnectionContext getCloseableConnection() throws MintLeafException {
+        return getCloseableConnection(true);
+    }
+
+    default ConnectionContext getCloseableConnection(boolean autoClosable) throws MintLeafException {
+        return new DbConnectionWrapper(this, autoClosable);
     }
 }

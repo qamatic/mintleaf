@@ -43,7 +43,7 @@ import java.sql.*;
 /**
  * Created by qamatic on 2/20/16.
  */
-public class FluentJdbc implements SqlResultSet {
+public class FluentJdbc {
 
     private static final MintLeafLogger logger = MintLeafLogger.getLogger(FluentJdbc.class);
     private DataSource dataSource;

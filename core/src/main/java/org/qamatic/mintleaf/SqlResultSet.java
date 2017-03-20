@@ -38,8 +38,16 @@ package org.qamatic.mintleaf;
 import java.sql.ResultSet;
 
 /**
- * Created by senips on 3/16/17.
+ * Created by QAmatic Team on 3/16/17.
  */
 public interface SqlResultSet {
     ResultSet getResultSet() throws MintLeafException;
+
+    void close() throws MintLeafException;
+
+    ResultSet first() throws MintLeafException;
+
+    <T> void iterate(DataRowListener<T> listener) throws MintLeafException, MintLeafException;
+
+    RowListWrapper asRowListWrapper() throws MintLeafException;
 }

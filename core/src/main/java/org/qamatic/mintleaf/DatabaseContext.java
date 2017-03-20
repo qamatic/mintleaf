@@ -48,12 +48,20 @@ public interface DatabaseContext {
 
     DriverSource getDriverSource();
 
-    default FluentJdbc queryBuilder() {
-        return new FluentJdbc.Builder().withDataSource(getDriverSource()).build();
+    default ConnectionContext getCloseableConnection() throws MintLeafException{
+        return getDriverSource().getCloseableConnection();
     }
 
-    default Connection getConnection() throws SQLException {
-        return getDriverSource().getConnection();
+    default ConnectionContext getCloseableConnection(boolean autoClosable) throws MintLeafException {
+        return getDriverSource().getCloseableConnection(autoClosable);
+    }
+
+    default FluentJdbc queryBuilder() {
+        return getDriverSource().queryBuilder();
+    }
+
+    default DbType getSupportedDbType(){
+        return DbType.getDbType(getDriverSource().getUrl());
     }
 
 }

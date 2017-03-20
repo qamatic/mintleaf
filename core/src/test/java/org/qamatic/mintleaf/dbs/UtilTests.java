@@ -52,18 +52,14 @@ public class UtilTests {
         assertEquals(DbType.MYSQL, DbType.getDbType("jdbc:MySql:/"));
         assertEquals(DbType.MSSQL, DbType.getDbType("/jdbc:SqlServer:/"));
         assertEquals(DbType.ORACLE, DbType.getDbType("jdbc:Oracle:/"));
-
     }
 
     @Test
     public void testQueryImpl() {
-
         assertEquals(H2Db.class, Database.getQueryImplementation("jdbc:H2:/"));
         assertEquals(MySqlDb.class, Database.getQueryImplementation("jdbc:MySql:/"));
         assertEquals(MSSqlDb.class, Database.getQueryImplementation("jdbc:SqlServer:/"));
         assertEquals(OracleDb.class, Database.getQueryImplementation("jdbc:Oracle:/"));
-
-
     }
 
 }

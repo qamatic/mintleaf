@@ -35,6 +35,7 @@
 
 package org.qamatic.mintleaf.core;
 
+import org.qamatic.mintleaf.ConnectionContext;
 import org.qamatic.mintleaf.DriverSource;
 import org.qamatic.mintleaf.MintLeafLogger;
 import org.qamatic.mintleaf.SqlReader;
@@ -50,8 +51,8 @@ public class SqlScriptFile extends BaseSqlScript {
     private final String filename;
     private final String delimiter;
 
-    public SqlScriptFile(DriverSource driverSource, String filename, String delimiter) {
-        super(driverSource);
+    public SqlScriptFile(ConnectionContext connectionContext, String filename, String delimiter) {
+        super(connectionContext);
         this.filename = filename;
         this.delimiter = delimiter;
     }

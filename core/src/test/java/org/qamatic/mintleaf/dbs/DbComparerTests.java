@@ -59,7 +59,7 @@ public class DbComparerTests extends H2TestCase {
     @Before
     public void applyChangeSet() throws IOException, SQLException, MintLeafException {
 
-        ChangeSets.migrate(h2DatabaseContext.getDriverSource(), "res:/example-changesets.sql", "create schema, DataForDbCompareTest, DROP_CREATE_USERS_IMPORT_TABLE");
+        ChangeSets.migrate(h2DatabaseContext.getCloseableConnection(), "res:/example-changesets.sql", "create schema, DataForDbCompareTest, DROP_CREATE_USERS_IMPORT_TABLE");
         DataAction action = new DbImporter(h2DatabaseContext.getDriverSource(),
                 "SELECT * FROM HRDB.USERS",
                 h2DatabaseContext.getDriverSource(),

@@ -52,7 +52,7 @@ public class SingleLoadScriptTests extends H2TestCase {
 
     @Test
     public void simpleScriptLoad() throws SQLException, IOException, MintLeafException {
-        SqlScript script = new SqlScriptFile(h2DatabaseContext.getDriverSource(), "res:/h2singlescript.sql", ";");
+        SqlScript script = new SqlScriptFile(h2DatabaseContext.getCloseableConnection(), "res:/h2singlescript.sql", ";");
         script.apply();
 
         Assert.assertTrue(h2DbQueries.isTableExists("HRDB.USERS"));

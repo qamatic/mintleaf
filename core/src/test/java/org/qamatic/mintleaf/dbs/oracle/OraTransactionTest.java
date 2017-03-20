@@ -33,14 +33,39 @@
  * /
  */
 
-package org.qamatic.mintleaf;
+package org.qamatic.mintleaf.dbs.oracle;
 
-import org.qamatic.mintleaf.core.ParameterSets;
+import org.junit.BeforeClass;
+import org.junit.FixMethodOrder;
+import org.junit.Test;
+import org.junit.runners.MethodSorters;
+import org.qamatic.mintleaf.MintLeafException;
+import org.qamatic.mintleaf.core.ChangeSets;
+
+import static junit.framework.TestCase.assertTrue;
+import static org.junit.Assert.assertEquals;
 
 /**
- * Created by QAmatic Team on 3/18/17.
+ * Created by qamatic on 3/4/16.
  */
-public interface ParameterBinding {
+@FixMethodOrder(MethodSorters.NAME_ASCENDING)
+public class OraTransactionTest extends OracleTestCase {
 
-    void bindParameters(ParameterSets parameterSets) throws MintLeafException;
+
+    @BeforeClass
+    public static void migrate() throws MintLeafException {
+        //clean db, create hrdb-schema
+        ChangeSets.migrate(oracleSysDbaCtx.getCloseableConnection(), "res:/oracle/hrdb-changesets/hrdb-schema-setup.sql", "create schema");
+        //do some DDL
+        ChangeSets.migrate(oracleHrDbCtx.getCloseableConnection(), "res:/oracle/hrdb-changesets/hrdb-ddl.sql", "create countries");
+    }
+
+    @Test
+    public void testCountriesCount() throws MintLeafException {
+        ChangeSets.migrate(oracleHrDbCtx.getCloseableConnection(), "res:/oracle/hrdb-changesets/hrdb-sampledata.sql", "seed data for countries");
+        assertEquals(12, oracleHrDbCtx.getDbQueries().getCount("HRDB.COUNTRIES"));
+
+    }
+
+
 }

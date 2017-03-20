@@ -47,31 +47,42 @@ public class SqlChangeSets extends BaseSqlScript {
     private String[] changeSetsToApply;
 
 
-    public SqlChangeSets(DriverSource driverSource, ChangeSetReader changeSetReader, String[] changeSetsToApply) {
-        super(driverSource);
+    public SqlChangeSets(ConnectionContext connectionContext, ChangeSetReader changeSetReader, String[] changeSetsToApply) {
+        super(connectionContext);
         this.changeSetReader = changeSetReader;
         this.changeSetsToApply = changeSetsToApply;
     }
-
 
     @Override
     public void apply() throws MintLeafException {
         for (String changeSetName : changeSetsToApply) {
             if (changeSetReader.getChangeSets().containsKey(changeSetName.trim())) {
                 final ChangeSet section = changeSetReader.getChangeSet(changeSetName.trim());
-                SqlScript script = new BaseSqlScript(driverSource) {
+                SqlScript script = new BaseSqlScript(connectionContext) {
                     @Override
                     protected SqlReader getReader() {
                         SqlReader reader = new SqlStringReader(section.getChangeSetSource());
                         reader.setDelimiter(section.getDelimiter());
                         return reader;
                     }
+
+                    @Override
+                    protected void close() throws MintLeafException {
+
+                    }
+
                 };
                 script.apply();
             } else {
                 logger.error("apply a changeset does not exist: " + changeSetName);
             }
         }
+        this.close();
+    }
+
+    @Override
+    protected void close() throws MintLeafException {
+        connectionContext.close();
     }
 
     @Override

@@ -36,7 +36,7 @@
 package org.qamatic.mintleaf.data;
 
 /**
- * Created by senips on 3/12/17.
+ * Created by QAmatic Team on 3/12/17.
  */
 public class DbColumnState extends ColumnState {
     @Override

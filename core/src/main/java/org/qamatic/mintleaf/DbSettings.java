@@ -36,7 +36,7 @@
 package org.qamatic.mintleaf;
 
 public interface DbSettings {
-    static String PROP_USERNAME = "username";
+    static String PROP_USERNAME = "user";
     static String PROP_PASSWORD = "password";
     static String PROP_URL = "url";
     static String PROP_DRIVER_CLASSNAME = "driverClassName";

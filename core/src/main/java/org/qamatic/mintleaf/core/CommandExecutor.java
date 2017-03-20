@@ -39,15 +39,22 @@ import org.qamatic.mintleaf.*;
 
 public class CommandExecutor implements ChangeSetListener {
     private static final MintLeafLogger logger = MintLeafLogger.getLogger(CommandExecutor.class);
-    protected final DriverSource driverSource;
+    protected final ConnectionContext connectionContext;
 
-    public CommandExecutor(DriverSource driverSource) {
-        this.driverSource = driverSource;
+    public CommandExecutor(ConnectionContext connectionContext) {
+        this.connectionContext = connectionContext;
     }
 
     @Override
     public void onChangeSetRead(StringBuilder sql, ChangeSet changeSetInfo) throws MintLeafException {
-        FluentJdbc.executeSql(driverSource, sql.toString(), null);
+        ExecuteQuery query = new ExecuteQuery(connectionContext.getConnection(), sql.toString(), null);
+        try {
+            logger.info("execute: "+sql.toString());
+            query.execute();
+        } catch (Exception e) {
+            logger.error("error executing query: ",e);
+            throw new MintLeafException("error executing query: ",e);
+        }
     }
 
 }

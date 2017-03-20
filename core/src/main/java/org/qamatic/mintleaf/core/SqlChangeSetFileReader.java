@@ -83,7 +83,7 @@ public class SqlChangeSetFileReader extends BaseSqlReader implements ChangeSetRe
 
     private InputStream getInputStream() throws IOException {
         if (this.inputStream == null) {
-            logger.info(String.format("reading resource : %s", this.resource));
+            //logger.info(String.format("reading resource : %s", this.resource));
             this.inputStream = BaseSqlReader.getInputStreamFromFile(this.resource);
         }
         return this.inputStream;

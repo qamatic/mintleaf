@@ -35,12 +35,17 @@
 
 package org.qamatic.mintleaf;
 
-import org.qamatic.mintleaf.core.ParameterSets;
+import java.sql.Connection;
 
 /**
- * Created by QAmatic Team on 3/18/17.
+ * Created by senips on 3/19/17.
  */
-public interface ParameterBinding {
+public interface ConnectionContext {
 
-    void bindParameters(ParameterSets parameterSets) throws MintLeafException;
+    Connection getConnection() throws MintLeafException;
+
+    boolean isCloseable();
+
+    void close() throws MintLeafException;
+
 }

@@ -59,16 +59,13 @@ public class Database implements DbQueries {
         final List<T> rows = new ArrayList<T>();
         FluentJdbc fluentJdbc = null;
         try {
-            fluentJdbc = driverSource.queryBuilder().withSql(sql).withParamValues(parameterBinding).query(new DataRowListener<Object>() {
-
-                public T eachRow(int row, ComparableRow dr) {
-                    try {
-                        rows.add(listener.eachRow(row, dr));
-                    } catch (MintLeafException e) {
-                        logger.error("error iterating resultset", e);
-                    }
-                    return null;
+            fluentJdbc = driverSource.queryBuilder().withSql(sql).withParamValues(parameterBinding).query((row, dr) -> {
+                try {
+                    rows.add(listener.eachRow(row, dr));
+                } catch (MintLeafException e) {
+                    logger.error("error iterating resultset", e);
                 }
+                return null;
             });
         } finally {
             fluentJdbc.close();

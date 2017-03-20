@@ -36,16 +36,18 @@
 package org.qamatic.mintleaf.core;
 
 
-import org.qamatic.mintleaf.DriverSource;
+import org.qamatic.mintleaf.ConnectionContext;
 import org.qamatic.mintleaf.MintLeafException;
 import org.qamatic.mintleaf.SqlReader;
 import org.qamatic.mintleaf.SqlScript;
 
+import java.sql.SQLException;
+
 public final class ChangeSets {
 
 
-    public static void applySource(final DriverSource driverSource, final String script, final String delimiter) throws MintLeafException {
-        SqlScript sqlScript = new BaseSqlScript(driverSource) {
+    public static void applySource(final ConnectionContext connectionContext, final String script, final String delimiter) throws MintLeafException {
+        SqlScript sqlScript = new BaseSqlScript(connectionContext) {
             @Override
             protected SqlReader getReader() {
                 SqlReader reader = new SqlStringReader(script);
@@ -53,17 +55,18 @@ public final class ChangeSets {
                 return reader;
             }
         };
+
         sqlScript.apply();
     }
 
 
-    public static void migrate(final DriverSource driverSource, String fileName, String changeSetsToLoadSeparatedByComma) throws MintLeafException {
-        migrate(driverSource, fileName, changeSetsToLoadSeparatedByComma.split(","));
+    public static void migrate(final ConnectionContext connectionContext, String fileName, String changeSetsToLoadSeparatedByComma) throws MintLeafException {
+        migrate(connectionContext, fileName, changeSetsToLoadSeparatedByComma.split(","));
     }
 
 
-    public static void migrate(final DriverSource driverSource, String fileName, String[] changeSetsToLoad) throws MintLeafException {
-        SqlChangeSets changeSets = new SqlChangeSets(driverSource, new SqlChangeSetFileReader(fileName), changeSetsToLoad);
+    public static void migrate(final ConnectionContext connectionContext, String fileName, String[] changeSetsToLoad) throws MintLeafException {
+        SqlChangeSets changeSets = new SqlChangeSets(connectionContext, new SqlChangeSetFileReader(fileName), changeSetsToLoad);
         changeSets.apply();
     }
 

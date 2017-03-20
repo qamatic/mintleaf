@@ -35,12 +35,21 @@
 
 package org.qamatic.mintleaf;
 
-import org.qamatic.mintleaf.core.ParameterSets;
+import java.sql.Connection;
+import java.sql.SQLException;
+import java.util.concurrent.Callable;
 
 /**
- * Created by QAmatic Team on 3/18/17.
+ * Created by QAmatic Team on 7/19/16.
  */
-public interface ParameterBinding {
+public interface DbCallable<V>  {
 
-    void bindParameters(ParameterSets parameterSets) throws MintLeafException;
+
+    Connection getConnection() throws SQLException;
+    default void close() throws MintLeafException{
+
+    }
+
+    V execute() throws Exception;
+
 }

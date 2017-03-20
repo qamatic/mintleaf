@@ -46,7 +46,7 @@ import java.util.List;
 import static org.junit.Assert.assertEquals;
 
 /**
- * Created by senips on 3/12/17.
+ * Created by QAmatic Team on 3/12/17.
  */
 public class SelectedMatchTests {
 

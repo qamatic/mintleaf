@@ -33,14 +33,55 @@
  * /
  */
 
-package org.qamatic.mintleaf;
+package org.qamatic.mintleaf.core;
 
-import org.qamatic.mintleaf.core.ParameterSets;
+import org.qamatic.mintleaf.ConnectionContext;
+import org.qamatic.mintleaf.DriverSource;
+import org.qamatic.mintleaf.MintLeafException;
+
+import java.sql.Connection;
+import java.sql.SQLException;
 
 /**
- * Created by QAmatic Team on 3/18/17.
+ * Created by senips on 3/19/17.
  */
-public interface ParameterBinding {
+public class DbConnectionWrapper implements ConnectionContext {
 
-    void bindParameters(ParameterSets parameterSets) throws MintLeafException;
+    private Connection connection;
+    private DriverSource driverSource;
+    private boolean autoCloseable = true;
+
+
+    public DbConnectionWrapper(DriverSource driverSource, boolean autoCloseable) {
+        this.driverSource = driverSource;
+        this.autoCloseable = autoCloseable;
+    }
+
+    @Override
+    public Connection getConnection() throws MintLeafException {
+        if (this.connection == null) {
+            try {
+                this.connection = driverSource.getConnection();
+            } catch (SQLException e) {
+                throw new MintLeafException(e);
+            }
+        }
+        return this.connection;
+    }
+
+    @Override
+    public boolean isCloseable() {
+        return this.autoCloseable;
+    }
+
+    public void close() throws MintLeafException {
+        if (isCloseable() && (this.connection != null)) {
+            try {
+                this.connection.close();
+                this.connection = null;
+            } catch (SQLException e) {
+                throw new MintLeafException(e);
+            }
+        }
+    }
 }
