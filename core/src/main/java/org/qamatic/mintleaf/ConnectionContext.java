@@ -35,10 +35,12 @@
 
 package org.qamatic.mintleaf;
 
+import org.qamatic.mintleaf.core.FluentJdbc;
+
 import java.sql.Connection;
 
 /**
- * Created by senips on 3/19/17.
+ * Created by QAmatic Team on 3/19/17.
  */
 public interface ConnectionContext {
 
@@ -48,4 +50,11 @@ public interface ConnectionContext {
 
     void close() throws MintLeafException;
 
+    void beginTransaction()  throws MintLeafException;
+
+    void commitTransaction()  throws MintLeafException;
+
+    void rollbackTransaction()  throws MintLeafException;
+
+    FluentJdbc queryBuilder() ;
 }

@@ -37,6 +37,7 @@ package org.qamatic.mintleaf.dbexample.reportgenerator;
 
 import org.qamatic.mintleaf.ConsoleLogger;
 import org.qamatic.mintleaf.MintLeafException;
+import org.qamatic.mintleaf.MintLeafLogger;
 import org.qamatic.mintleaf.RowListWrapper;
 import org.qamatic.mintleaf.data.ColumnState;
 import org.qamatic.mintleaf.data.ComparerListener;
@@ -51,7 +52,8 @@ import java.sql.SQLException;
  */
 public class ComparisonResultReportGenerator implements ComparerListener {
 
-    private ConsoleLogger logger = new ConsoleLogger();
+    private static final MintLeafLogger logger = MintLeafLogger.getLogger(ComparisonResultReportGenerator.class);
+
     private FileWriter fileWriter;
 
     public ComparisonResultReportGenerator(FileWriter fileWriter) {

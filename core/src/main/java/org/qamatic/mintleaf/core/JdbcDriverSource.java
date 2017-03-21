@@ -201,5 +201,8 @@ public class JdbcDriverSource implements DriverSource {
         setProperty(PROP_DRIVER_CLASSNAME, driverClassName);
     }
 
-
+    @Override
+    public String toString() {
+        return String.format("Connection Properties:\n %s \n", getProperties().toString());
+    }
 }

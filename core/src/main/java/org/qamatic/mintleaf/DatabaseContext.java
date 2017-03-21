@@ -35,10 +35,8 @@
 
 package org.qamatic.mintleaf;
 
+import org.qamatic.mintleaf.core.DbConnectionContext;
 import org.qamatic.mintleaf.core.FluentJdbc;
-
-import java.sql.Connection;
-import java.sql.SQLException;
 
 /**
  * Created by qamatic on 12/6/15.
@@ -48,12 +46,12 @@ public interface DatabaseContext {
 
     DriverSource getDriverSource();
 
-    default ConnectionContext getCloseableConnection() throws MintLeafException{
-        return getDriverSource().getCloseableConnection();
+    default ConnectionContext getNewConnection(){
+        return getNewConnection(false);
     }
 
-    default ConnectionContext getCloseableConnection(boolean autoClosable) throws MintLeafException {
-        return getDriverSource().getCloseableConnection(autoClosable);
+    default ConnectionContext getNewConnection(boolean autoCloseable) {
+        return new DbConnectionContext(getDriverSource(), autoCloseable);
     }
 
     default FluentJdbc queryBuilder() {

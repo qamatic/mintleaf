@@ -44,24 +44,24 @@ import org.qamatic.mintleaf.core.FluentJdbc;
 public class DbImporter extends ImpExpBase implements DataAction {
     private static final MintLeafLogger logger = MintLeafLogger.getLogger(DbImporter.class);
 
-    private DriverSource targetDbDriverSource;
+    private ConnectionContext targetDb;
     private String targetSqlTemplate;
-    private DriverSource sourceDbDriverSource;
+    private ConnectionContext sourceDb;
     private String sourceSql;
     private ParameterBinding sourceSqlParamValueBindings;
 
-    public DbImporter(DriverSource sourceDbDriverSource, String sourceSql,
-                      DriverSource targetDbDriverSource,
+    public DbImporter(ConnectionContext sourceDb, String sourceSql,
+                      ConnectionContext targetDb,
                       String targetSqlTemplate) {
-        this.sourceDbDriverSource = sourceDbDriverSource;
+        this.sourceDb = sourceDb;
         this.sourceSql = sourceSql;
-        this.targetDbDriverSource = targetDbDriverSource;
+        this.targetDb = targetDb;
         this.targetSqlTemplate = targetSqlTemplate;
     }
 
     @Override
     public void execute() throws MintLeafException {
-        FluentJdbc sourceDbQuery = this.sourceDbDriverSource.queryBuilder().
+        FluentJdbc sourceDbQuery = this.sourceDb.queryBuilder().
                 withSql(sourceSql).
                 withParamValues(this.sourceSqlParamValueBindings);
 
@@ -69,8 +69,8 @@ public class DbImporter extends ImpExpBase implements DataAction {
     }
 
     @Override
-    protected DriverSource getDriverSource() {
-        return this.sourceDbDriverSource;
+    protected ConnectionContext getConnectionContext() {
+        return this.sourceDb;
     }
 
     public void setSourceSqlParamValueBindings(ParameterBinding sourceSqlParamValueBindings) {

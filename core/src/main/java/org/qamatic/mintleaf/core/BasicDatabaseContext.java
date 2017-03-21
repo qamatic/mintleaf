@@ -55,7 +55,6 @@ public class BasicDatabaseContext implements DatabaseContext {
     private String url;
     private String username;
     private String password;
-    private DbQueries dbQueries;
     private DriverSource driverSource;
 
     public BasicDatabaseContext(Class<? extends DriverSource> driverSourceClazz, String url, String username, String password) {
@@ -65,6 +64,7 @@ public class BasicDatabaseContext implements DatabaseContext {
         this.password = password;
     }
 
+    //spring beans can configure props easily
     public BasicDatabaseContext(DriverSource driverSource) {
         this.driverSource = driverSource;
         this.url = driverSource.getUrl();
@@ -73,10 +73,9 @@ public class BasicDatabaseContext implements DatabaseContext {
     }
 
     public DbQueries getDbQueries() {
-        if (dbQueries == null) {
-            this.dbQueries = createDbQueryInstance(this.url, getDriverSource());
-        }
-        return dbQueries;
+
+        return createDbQueryInstance(this.url, this.getNewConnection());
+
     }
 
     public DriverSource getDriverSource() {
@@ -110,13 +109,13 @@ public class BasicDatabaseContext implements DatabaseContext {
         return driverSource;
     }
 
-    private static DbQueries createDbQueryInstance(String url, DriverSource driverSource) {
+    private static DbQueries createDbQueryInstance(String url, ConnectionContext connectionContext) {
         Class<? extends Database> queryImplClaz = Database.getQueryImplementation(url);
         DbQueries dbQueries = null;
         try {
             Constructor constructor =
-                    queryImplClaz.getConstructor(new Class[]{DriverSource.class});
-            dbQueries = (DbQueries) constructor.newInstance(driverSource);
+                    queryImplClaz.getConstructor(new Class[]{ConnectionContext.class});
+            dbQueries = (DbQueries) constructor.newInstance(connectionContext);
         } catch (InstantiationException e) {
             logger.error(e);
             MintLeafException.throwException(e);

@@ -64,10 +64,10 @@ public class FluentJdbc {
         dataSource = builder.dataSource;
     }
 
-    public static void executeSql(DriverSource driverSource, String sql, ParameterBinding parameterBinding) throws MintLeafException {
+    public static void executeSql(ConnectionContext connectionContext, String sql, ParameterBinding parameterBinding) throws MintLeafException {
         FluentJdbc fluentJdbc = null;
         try {
-            fluentJdbc = driverSource.queryBuilder().withSql(sql.toString()).withParamValues(parameterBinding);
+            fluentJdbc = connectionContext.queryBuilder().withSql(sql.toString()).withParamValues(parameterBinding);
             fluentJdbc.execute();
         } catch (MintLeafException e) {
             logger.error("error in executing query", e);
@@ -157,17 +157,6 @@ public class FluentJdbc {
         return this;
     }
 
-    public FluentJdbc clearParameters() throws MintLeafException {
-        try {
-            getPrepStmt().clearParameters();
-            return this;
-        } catch (SQLException e) {
-
-            logger.error(e);
-            throw new MintLeafException(e);
-        }
-    }
-
     public boolean execute() throws MintLeafException {
         try {
             logger.info(sql);
@@ -179,15 +168,6 @@ public class FluentJdbc {
         }
     }
 
-    public void addBatch() throws MintLeafException {
-        try {
-            getPrepStmt().addBatch();
-        } catch (SQLException e) {
-
-            logger.error(e);
-            throw new MintLeafException(e);
-        }
-    }
 
     public FluentJdbc addBatch(String sql) throws MintLeafException {
         try {

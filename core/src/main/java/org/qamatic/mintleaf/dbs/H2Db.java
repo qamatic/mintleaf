@@ -45,8 +45,8 @@ import java.util.regex.Pattern;
  */
 public class H2Db extends Database {
 
-    public H2Db(DriverSource dataSource) {
-        super(dataSource);
+    public H2Db(ConnectionContext connectionContext) {
+        super(connectionContext);
     }
 
 

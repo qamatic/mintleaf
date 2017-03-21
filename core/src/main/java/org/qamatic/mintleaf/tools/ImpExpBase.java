@@ -35,10 +35,7 @@
 
 package org.qamatic.mintleaf.tools;
 
-import org.qamatic.mintleaf.DriverSource;
-import org.qamatic.mintleaf.MintLeafException;
-import org.qamatic.mintleaf.MintLeafLogger;
-import org.qamatic.mintleaf.ParameterBinding;
+import org.qamatic.mintleaf.*;
 import org.qamatic.mintleaf.core.FluentJdbc;
 
 import java.util.regex.Matcher;
@@ -50,7 +47,7 @@ import java.util.regex.Pattern;
 public abstract class ImpExpBase {
     private static final MintLeafLogger logger = MintLeafLogger.getLogger(ImpExpBase.class);
 
-    protected abstract DriverSource getDriverSource();
+    protected abstract ConnectionContext getConnectionContext();
 
 
     //this is meant for testing purpose of loading data but for production side you should consider using param binds..
@@ -58,7 +55,7 @@ public abstract class ImpExpBase {
         final Pattern columnPattern = Pattern.compile("\\$(\\w+)\\$", Pattern.DOTALL | Pattern.MULTILINE | Pattern.CASE_INSENSITIVE);
         final Matcher columns = columnPattern.matcher(sqlTemplate);
         logger.info("importing using template:" + sqlTemplate);
-        final FluentJdbc fluentJdbc = this.getDriverSource().queryBuilder();
+        final FluentJdbc fluentJdbc =  this.getConnectionContext().queryBuilder();
         dataImport.doImport((rowNum, row) -> {
 
 
@@ -79,7 +76,7 @@ public abstract class ImpExpBase {
     }
 
     protected void exportDataTo(final ExportFlavour dataExport, String sql, ParameterBinding parameterBinding) throws MintLeafException {
-        FluentJdbc fluentJdbc = this.getDriverSource().queryBuilder().withSql(sql).withParamValues(parameterBinding);
+        FluentJdbc fluentJdbc = this.getConnectionContext().queryBuilder().withSql(sql).withParamValues(parameterBinding);
         try {
             dataExport.export(fluentJdbc.getResultSet());
         } finally {

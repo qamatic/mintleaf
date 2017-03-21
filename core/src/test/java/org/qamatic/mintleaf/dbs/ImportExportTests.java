@@ -59,7 +59,7 @@ public class ImportExportTests extends H2TestCase {
 
     @Before
     public void applyChangeSet() throws IOException, SQLException, MintLeafException {
-        ChangeSets.migrate(h2DatabaseContext.getCloseableConnection(), "res:/example-changesets.sql", "create schema,load seed data");
+        ChangeSets.migrate(h2DatabaseContext.getNewConnection(), "res:/example-changesets.sql", "create schema,load seed data");
     }
 
 
@@ -112,7 +112,7 @@ public class ImportExportTests extends H2TestCase {
 
     @Test
     public void DbToDbImport() throws SQLException, IOException, MintLeafException {
-        ChangeSets.migrate(h2DatabaseContext.getCloseableConnection(), "res:/example-changesets.sql", "DROP_CREATE_USERS_IMPORT_TABLE");
+        ChangeSets.migrate(h2DatabaseContext.getNewConnection(), "res:/example-changesets.sql", "DROP_CREATE_USERS_IMPORT_TABLE");
 
         DataAction action = new Mintleaf.DbToDbBuilder().
                 withSourceDb(h2DatabaseContext).
@@ -129,11 +129,11 @@ public class ImportExportTests extends H2TestCase {
 
     @Test
     public void DbToDbImportNullIssue() throws SQLException, IOException, MintLeafException {
-        ChangeSets.migrate(h2DatabaseContext.getCloseableConnection(), "res:/example-changesets.sql", "DROP_CREATE_USERS_IMPORT_TABLE");
+        ChangeSets.migrate(h2DatabaseContext.getNewConnection(), "res:/example-changesets.sql", "DROP_CREATE_USERS_IMPORT_TABLE");
 
-        DataAction action = new DbImporter(h2DatabaseContext.getDriverSource(),
+        DataAction action = new DbImporter(h2DatabaseContext.getNewConnection(),
                 "SELECT * FROM HRDB.USERS",
-                h2DatabaseContext.getDriverSource(),
+                h2DatabaseContext.getNewConnection(),
                 "INSERT INTO HRDB.USERS_IMPORT_TABLE (USERID, USERNAME, RATE) VALUES ($USERID$, '$USERNAME$', $RATE$)"
         );
         action.execute();

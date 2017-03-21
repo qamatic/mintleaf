@@ -35,6 +35,7 @@
 
 package org.qamatic.mintleaf.dbs;
 
+import org.qamatic.mintleaf.ConnectionContext;
 import org.qamatic.mintleaf.DriverSource;
 import org.qamatic.mintleaf.core.Database;
 
@@ -42,8 +43,8 @@ import org.qamatic.mintleaf.core.Database;
  * Created by qamatic on 3/6/16.
  */
 public class MySqlDb extends Database {
-    public MySqlDb(DriverSource dataSource) {
-        super(dataSource);
+    public MySqlDb(ConnectionContext connectionContext) {
+        super(connectionContext);
     }
 
 

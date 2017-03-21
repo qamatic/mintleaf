@@ -35,6 +35,7 @@
 
 package org.qamatic.mintleaf.dbs;
 
+import org.qamatic.mintleaf.ConnectionContext;
 import org.qamatic.mintleaf.DbType;
 import org.qamatic.mintleaf.DriverSource;
 import org.qamatic.mintleaf.core.Database;
@@ -43,8 +44,8 @@ import org.qamatic.mintleaf.core.Database;
  * Created by qamatic on 3/6/16.
  */
 public class MSSqlDb extends Database {
-    public MSSqlDb(DriverSource dataSource) {
-        super(dataSource);
+    public MSSqlDb(ConnectionContext connectionContext) {
+        super(connectionContext);
     }
 
 

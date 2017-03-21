@@ -43,7 +43,7 @@ import java.sql.SQLException;
 import java.util.concurrent.Callable;
 
 /**
- * Created by senips on 3/19/17.
+ * Created by QAmatic Team on 3/19/17.
  */
 public class TransactionCallable<T> implements Callable<T> {
 

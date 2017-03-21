@@ -50,8 +50,8 @@ public class OracleDb extends Database {
 
     private static final MintLeafLogger logger = MintLeafLogger.getLogger(OracleDb.class);
 
-    public OracleDb(DriverSource dataSource) {
-        super(dataSource);
+    public OracleDb(ConnectionContext connectionContext) {
+        super(connectionContext);
     }
 
     @Override
@@ -98,7 +98,7 @@ public class OracleDb extends Database {
         String sql = String.format("truncate  table %s.%s", objectNames[0], objectNames[1]);
         FluentJdbc fluentJdbc = null;
         try {
-            fluentJdbc = this.driverSource.queryBuilder().withSql(sql);
+            fluentJdbc = this.connectionContext.queryBuilder().withSql(sql);
             fluentJdbc.execute();
         } finally {
             fluentJdbc.close();

@@ -35,10 +35,7 @@
 
 package org.qamatic.mintleaf.tools;
 
-import org.qamatic.mintleaf.DataAction;
-import org.qamatic.mintleaf.DriverSource;
-import org.qamatic.mintleaf.MintLeafException;
-import org.qamatic.mintleaf.MintLeafLogger;
+import org.qamatic.mintleaf.*;
 
 import java.io.File;
 import java.io.FileReader;
@@ -51,14 +48,14 @@ public class CsvImporter extends ImpExpBase implements DataAction {
 
     private static final MintLeafLogger logger = MintLeafLogger.getLogger(CsvImporter.class);
     private String sourceCsvFile;
-    private DriverSource targetDbDriverSource;
+    private ConnectionContext targetDb;
     private String targetSqlTemplate;
 
 
-    public CsvImporter(String sourceCsvFile, DriverSource targetDbDriverSource,
+    public CsvImporter(String sourceCsvFile, ConnectionContext targetDb,
                        String targetSqlTemplate) {
         this.sourceCsvFile = sourceCsvFile;
-        this.targetDbDriverSource = targetDbDriverSource;
+        this.targetDb = targetDb;
         this.targetSqlTemplate = targetSqlTemplate;
     }
 
@@ -81,7 +78,7 @@ public class CsvImporter extends ImpExpBase implements DataAction {
 
 
     @Override
-    protected DriverSource getDriverSource() {
-        return targetDbDriverSource;
+    protected ConnectionContext getConnectionContext() {
+        return targetDb;
     }
 }

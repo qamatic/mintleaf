@@ -49,11 +49,16 @@ public class CommandExecutor implements ChangeSetListener {
     public void onChangeSetRead(StringBuilder sql, ChangeSet changeSetInfo) throws MintLeafException {
         ExecuteQuery query = new ExecuteQuery(connectionContext.getConnection(), sql.toString(), null);
         try {
-            logger.info("execute: "+sql.toString());
+            logger.info(String.format("Executing Query: %s \n--\n", sql.toString()));
             query.execute();
         } catch (Exception e) {
-            logger.error("error executing query: ",e);
+
+            final String message = "error executing query: \n"+this.connectionContext.toString();
+            logger.error(message, e);
             throw new MintLeafException("error executing query: ",e);
+        }
+        finally {
+            query.close();
         }
     }
 

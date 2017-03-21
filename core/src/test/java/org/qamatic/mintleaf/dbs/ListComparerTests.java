@@ -52,6 +52,7 @@ import static org.junit.Assert.assertEquals;
  */
 public class ListComparerTests {
 
+    private static final MintLeafLogger logger = MintLeafLogger.getLogger(ListComparerTests.class);
     private static ColumnMetaDataCollection columnDefs = new ColumnMetaDataCollection("LIST.USERS") {
         {
             add(new Column("USERNAME", Types.VARCHAR));
@@ -61,7 +62,7 @@ public class ListComparerTests {
 
     private static List<String> assertCompareTable(List<User> sourceList, List<User> targetListList) throws MintLeafException {
         final List<String> actuals = new ArrayList<>();
-        final ConsoleLogger logger = new ConsoleLogger();
+        final ConsoleLogger logger = new ConsoleLogger(ListComparerTests.class);
         DataComparer dataComparer = new Mintleaf.ComparerBuilder().
                 withSourceTable(sourceList, columnDefs).
                 withTargetTable(targetListList, columnDefs).
@@ -133,7 +134,7 @@ public class ListComparerTests {
     public void compareList() throws SQLException, IOException, MintLeafException {
         List<User> sourceUserList = getSampleData2();
         List<User> targetUserList = getSampleData2();
-        final ConsoleLogger logger = new ConsoleLogger();
+
         DataComparer dataComparer = new Mintleaf.ComparerBuilder().
                 withSourceTable(sourceUserList, columnDefs).
                 withTargetTable(targetUserList, columnDefs).

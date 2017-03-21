@@ -55,6 +55,7 @@ import static org.junit.Assert.assertEquals;
  */
 public class ListOfObjectsComparerTests {
 
+    private static final MintLeafLogger logger = MintLeafLogger.getLogger(ListOfObjectsComparerTests.class);
     private static ColumnMetaDataCollection getMetaData() throws MintLeafException {
 
         ColumnMetaDataCollection metaDataCollection = new ColumnMetaDataCollection("USERS");
@@ -68,7 +69,6 @@ public class ListOfObjectsComparerTests {
     public void compareList() throws SQLException, IOException, MintLeafException {
         List<User> sourceUserList = getUsers();
         List<User> targetUserList = getUsers();
-        final ConsoleLogger logger = new ConsoleLogger();
         doCompare(sourceUserList, targetUserList, (sourceColumn, targetColumn) -> {
 
             assertEquals(sourceColumn.asString(), targetColumn.asString());
@@ -82,7 +82,6 @@ public class ListOfObjectsComparerTests {
         List<User> sourceUserList = getUsers();
         List<User> targetUserList = getUsers();
         ((User) targetUserList.get(0)).setUserName("SM1");
-        final ConsoleLogger logger = new ConsoleLogger();
         ComparerListener reportListener = new ComparisonResultReportGenerator(new FileWriter("report.html"));
         doCompare(sourceUserList, targetUserList, reportListener);
     }

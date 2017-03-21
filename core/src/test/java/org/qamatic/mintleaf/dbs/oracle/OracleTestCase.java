@@ -36,11 +36,10 @@
 package org.qamatic.mintleaf.dbs.oracle;
 
 import org.qamatic.mintleaf.DatabaseContext;
-import org.qamatic.mintleaf.DbQueries;
-import org.qamatic.mintleaf.DbType;
+import org.qamatic.mintleaf.MintLeafException;
 import org.qamatic.mintleaf.Mintleaf;
+import org.qamatic.mintleaf.core.ChangeSets;
 import org.qamatic.mintleaf.core.JdbcDriverSource;
-import org.qamatic.mintleaf.dbs.ApacheBasicDataSource;
 
 /**
  * Created by qamatic on 3/4/16.
@@ -48,16 +47,17 @@ import org.qamatic.mintleaf.dbs.ApacheBasicDataSource;
 public class OracleTestCase {
 
 
-    protected static DatabaseContext oracleSysDbaCtx = createOracleDbContext(System.getenv("TEST_DB_MASTER_USERNAME"),
-            System.getenv("TEST_DB_MASTER_PASSWORD"));
+    private static DatabaseContext oracleSysDbaCtx;
 
-    protected static DatabaseContext oracleHrDbCtx = createOracleDbContext("HRDB", "HRDB");
-    ;
-
-
-    protected static DbQueries oracleHrDbQueries = oracleHrDbCtx.getDbQueries();
-    protected static DbQueries oracleSysDbaContext = oracleSysDbaCtx.getDbQueries();
-
+    static {
+        oracleSysDbaCtx = createOracleDbContext(System.getenv("TEST_DB_MASTER_USERNAME"),
+                System.getenv("TEST_DB_MASTER_PASSWORD"));
+        try {
+            ChangeSets.migrate(oracleSysDbaCtx.getNewConnection(), "res:/oracle/hrdb-changesets/hrdb-schema-setup.sql", "create schema");
+        } catch (MintLeafException e) {
+            MintLeafException.throwException(e.getMessage());
+        }
+    }
 
     public static DatabaseContext createOracleDbContext(String userName, String password) {
         DatabaseContext db = new Mintleaf.DatabaseBuilder().

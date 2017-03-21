@@ -46,12 +46,12 @@ import java.util.Map;
 public class Database implements DbQueries {
 
     private static final MintLeafLogger logger = MintLeafLogger.getLogger(Database.class);
-    protected final DriverSource driverSource;
+    protected final ConnectionContext connectionContext;
     private static final Map<String, Class<? extends Database>> registeredQueries = new HashMap<>();
 
 
-    public Database(DriverSource datasource) {
-        this.driverSource = datasource;
+    public Database(ConnectionContext connectionContext) {
+        this.connectionContext = connectionContext;
     }
 
     public <T> List<T> query(String sql, ParameterBinding parameterBinding, final DataRowListener<T> listener) throws MintLeafException {
@@ -59,7 +59,7 @@ public class Database implements DbQueries {
         final List<T> rows = new ArrayList<T>();
         FluentJdbc fluentJdbc = null;
         try {
-            fluentJdbc = driverSource.queryBuilder().withSql(sql).withParamValues(parameterBinding).query((row, dr) -> {
+            fluentJdbc = connectionContext.queryBuilder().withSql(sql).withParamValues(parameterBinding).query((row, dr) -> {
                 try {
                     rows.add(listener.eachRow(row, dr));
                 } catch (MintLeafException e) {
@@ -78,12 +78,13 @@ public class Database implements DbQueries {
         FluentJdbc fluentJdbc = null;
 
         try {
-            fluentJdbc = driverSource.queryBuilder().withSql(sql).withParamValues(parameterBinding).first();
+            fluentJdbc = connectionContext.queryBuilder().withSql(sql).withParamValues(parameterBinding).first();
             return fluentJdbc.getResultSet().getInt(1);
         } catch (SQLException e) {
             throw new MintLeafException(e);
         } finally {
-            fluentJdbc.close();
+            if (fluentJdbc != null)
+                fluentJdbc.close();
         }
     }
 
@@ -103,7 +104,7 @@ public class Database implements DbQueries {
 
     @Override
     public void executeSql(String sql, ParameterBinding parameterBinding) throws MintLeafException {
-        FluentJdbc.executeSql(driverSource, sql, parameterBinding);
+        FluentJdbc.executeSql(connectionContext, sql, parameterBinding);
     }
 
     public static void registerQueryImplementation(String jdbcUrlPrefix, Class<? extends Database> dbQueryClaz) {

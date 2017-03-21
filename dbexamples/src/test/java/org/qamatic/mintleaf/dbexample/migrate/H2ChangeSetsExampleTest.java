@@ -66,7 +66,7 @@ public class H2ChangeSetsExampleTest {
         if (hrDatabaseContext.getDbQueries().isTableExists("HRDB.USERS"))
             return;
 
-        ChangeSets.migrate(hrDatabaseContext.getCloseableConnection(), "res:/h2-changesets/v1/schema-v1.sql", "create schema, load seed data");
+        ChangeSets.migrate(hrDatabaseContext.getNewConnection(), "res:/h2-changesets/v1/schema-v1.sql", "create schema, load seed data");
 
     }
 

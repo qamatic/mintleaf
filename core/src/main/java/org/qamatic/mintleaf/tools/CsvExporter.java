@@ -35,10 +35,7 @@
 
 package org.qamatic.mintleaf.tools;
 
-import org.qamatic.mintleaf.DataAction;
-import org.qamatic.mintleaf.DriverSource;
-import org.qamatic.mintleaf.MintLeafException;
-import org.qamatic.mintleaf.ParameterBinding;
+import org.qamatic.mintleaf.*;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -50,13 +47,13 @@ import java.io.IOException;
 public class CsvExporter extends ImpExpBase implements DataAction {
 
     private ParameterBinding sqlaramValueBindings;
-    private DriverSource sourceDbDriverSource;
+    private ConnectionContext sourceDb;
     private String sourceSql;
     private String targetCsvFile;
 
-    public CsvExporter(DriverSource sourceDbDriverSource, String sourceSql,
+    public CsvExporter(ConnectionContext sourceDb, String sourceSql,
                        String targetCsvFile) {
-        this.sourceDbDriverSource = sourceDbDriverSource;
+        this.sourceDb = sourceDb;
         this.sourceSql = sourceSql;
         this.targetCsvFile = targetCsvFile;
     }
@@ -78,7 +75,7 @@ public class CsvExporter extends ImpExpBase implements DataAction {
     }
 
     @Override
-    protected DriverSource getDriverSource() {
-        return this.sourceDbDriverSource;
+    protected ConnectionContext getConnectionContext() {
+        return this.sourceDb;
     }
 }

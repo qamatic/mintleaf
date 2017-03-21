@@ -229,7 +229,7 @@ public class Mintleaf {
 
         public DataAction build() {
             CsvExporter csvExporter = new CsvExporter(
-                    sourceDb.getDriverSource(),
+                    sourceDb.getNewConnection(),
                     sourceSql,
                     targetCsvFile
             );
@@ -262,7 +262,7 @@ public class Mintleaf {
         public DataAction build() {
             CsvImporter csvImporter = new CsvImporter(
                     sourceCsvFile,
-                    targetDb.getDriverSource(),
+                    targetDb.getNewConnection(),
                     targetSqlTemplate);
 
 
@@ -305,9 +305,9 @@ public class Mintleaf {
 
         public DataAction build() {
             DbImporter dbImporter = new DbImporter(
-                    sourceDb.getDriverSource(),
+                    sourceDb.getNewConnection(),
                     sourceSql,
-                    targetDb.getDriverSource(),
+                    targetDb.getNewConnection(),
                     targetSqlTemplate);
 
             dbImporter.setSourceSqlParamValueBindings(sqlaramValueBindings);

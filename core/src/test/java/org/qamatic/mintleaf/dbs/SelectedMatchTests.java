@@ -49,7 +49,7 @@ import static org.junit.Assert.assertEquals;
  * Created by QAmatic Team on 3/12/17.
  */
 public class SelectedMatchTests {
-
+    private static final MintLeafLogger logger = MintLeafLogger.getLogger(SelectedMatchTests.class);
     private static List<String> assertCompareTable(List<User> sourceList, List<User> targetListList, String selectedColumnMaps) throws MintLeafException {
         final ColumnMetaDataCollection sourceColumnDefs = new ColumnMetaDataCollection("LIST.USERS") {
             {
@@ -71,7 +71,7 @@ public class SelectedMatchTests {
         };
 
         final List<String> actuals = new ArrayList<>();
-        final ConsoleLogger logger = new ConsoleLogger();
+
         DataComparer dataComparer = new Mintleaf.ComparerBuilder().
                 withSourceTable(sourceList, sourceColumnDefs).
                 withTargetTable(targetListList, targetColumnDefs).

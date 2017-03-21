@@ -45,7 +45,7 @@ public abstract class MintLeafLogger {
     public synchronized static MintLeafLogger getLogger(Class<?> clazz) {
 
         if (mintLeafLogger == null) {
-            mintLeafLogger = new ConsoleLogger();
+            mintLeafLogger = new ConsoleLogger(clazz);
         }
         return mintLeafLogger;
 

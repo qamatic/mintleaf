@@ -55,14 +55,14 @@ import static org.junit.Assert.assertEquals;
  */
 public class DbComparerTests extends H2TestCase {
 
-
+    private static final MintLeafLogger logger = MintLeafLogger.getLogger(DbComparerTests.class);
     @Before
     public void applyChangeSet() throws IOException, SQLException, MintLeafException {
 
-        ChangeSets.migrate(h2DatabaseContext.getCloseableConnection(), "res:/example-changesets.sql", "create schema, DataForDbCompareTest, DROP_CREATE_USERS_IMPORT_TABLE");
-        DataAction action = new DbImporter(h2DatabaseContext.getDriverSource(),
+        ChangeSets.migrate(h2DatabaseContext.getNewConnection(), "res:/example-changesets.sql", "create schema, DataForDbCompareTest, DROP_CREATE_USERS_IMPORT_TABLE");
+        DataAction action = new DbImporter(h2DatabaseContext.getNewConnection(),
                 "SELECT * FROM HRDB.USERS",
-                h2DatabaseContext.getDriverSource(),
+                h2DatabaseContext.getNewConnection(),
                 "INSERT INTO HRDB.USERS_IMPORT_TABLE (USERID, USERNAME) VALUES ($USERID$, '$USERNAME$')"
         );
         action.execute();
@@ -95,7 +95,7 @@ public class DbComparerTests extends H2TestCase {
 
     private List<String> assertCompareTable(RowListWrapper sourceList, RowListWrapper targetListList) throws MintLeafException {
         final List<String> actuals = new ArrayList<>();
-        final ConsoleLogger logger = new ConsoleLogger();
+
         DataComparer dataComparer = new Mintleaf.ComparerBuilder().
                 withSourceTable(sourceList).
                 withTargetTable(targetListList).

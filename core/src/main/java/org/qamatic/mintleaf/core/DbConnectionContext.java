@@ -38,21 +38,24 @@ package org.qamatic.mintleaf.core;
 import org.qamatic.mintleaf.ConnectionContext;
 import org.qamatic.mintleaf.DriverSource;
 import org.qamatic.mintleaf.MintLeafException;
+import org.qamatic.mintleaf.MintLeafLogger;
 
 import java.sql.Connection;
 import java.sql.SQLException;
 
 /**
- * Created by senips on 3/19/17.
+ * Created by QAmatic Team on 3/19/17.
  */
-public class DbConnectionWrapper implements ConnectionContext {
+public class DbConnectionContext implements ConnectionContext {
 
+    private static final MintLeafLogger logger = MintLeafLogger.getLogger(DbConnectionContext.class);
     private Connection connection;
     private DriverSource driverSource;
     private boolean autoCloseable = true;
+    private boolean inTransaction = false;
 
 
-    public DbConnectionWrapper(DriverSource driverSource, boolean autoCloseable) {
+    public DbConnectionContext(DriverSource driverSource, boolean autoCloseable) {
         this.driverSource = driverSource;
         this.autoCloseable = autoCloseable;
     }
@@ -77,11 +80,59 @@ public class DbConnectionWrapper implements ConnectionContext {
     public void close() throws MintLeafException {
         if (isCloseable() && (this.connection != null)) {
             try {
+                commitTransaction();
                 this.connection.close();
                 this.connection = null;
             } catch (SQLException e) {
                 throw new MintLeafException(e);
             }
         }
+    }
+
+    @Override
+    public void beginTransaction() throws MintLeafException {
+        try {
+            inTransaction = true;
+            getConnection().setAutoCommit(false);
+        } catch (SQLException e) {
+            throw new MintLeafException(e);
+        }
+    }
+
+    @Override
+    public void commitTransaction() throws MintLeafException {
+        if (!inTransaction){
+            return;
+        }
+
+        try {
+            getConnection().commit();
+            inTransaction = false;
+        } catch (SQLException e) {
+            throw new MintLeafException(e);
+        }
+    }
+
+    @Override
+    public void rollbackTransaction() throws MintLeafException {
+        if (!inTransaction){
+            return;
+        }
+        try {
+            getConnection().rollback();
+            inTransaction = false;
+        } catch (SQLException e) {
+            throw new MintLeafException(e);
+        }
+    }
+
+    @Override
+    public FluentJdbc queryBuilder() {
+        return new FluentJdbc.Builder().withDataSource(this.driverSource).build();
+    }
+
+    @Override
+    public String toString() {
+        return String.format("Driver: %s, InTransaction:%s, AutoCloseConnection:%s ", this.driverSource, this.inTransaction, isCloseable());
     }
 }
