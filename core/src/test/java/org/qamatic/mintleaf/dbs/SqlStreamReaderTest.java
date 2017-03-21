@@ -37,12 +37,11 @@ package org.qamatic.mintleaf.dbs;
 
 import org.junit.Test;
 import org.qamatic.mintleaf.ChangeSet;
-import org.qamatic.mintleaf.MintLeafException;
 import org.qamatic.mintleaf.ChangeSetListener;
+import org.qamatic.mintleaf.MintLeafException;
 import org.qamatic.mintleaf.core.SqlStreamReader;
 
 import java.io.InputStream;
-import java.util.Map;
 
 import static org.junit.Assert.*;
 

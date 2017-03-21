@@ -50,45 +50,14 @@ import java.util.Properties;
 public class JdbcDriverSource implements DriverSource {
 
     private static final MintLeafLogger logger = MintLeafLogger.getLogger(JdbcDriverSource.class);
-    protected Properties mvProperties;
-    private ClassLoader driverClassLoader;
-    private Driver driver;
 
     static {
         DriverManager.getDrivers();
     }
 
-    @Override
-    public Connection getConnection() throws SQLException {
-        return getConnection(getUsername(), getPassword());
-    }
-
-    @Override
-    public Connection getConnection(String username, String password) throws SQLException {
-        return getDriver().connect(getUrl(), getProperties());
-    }
-
-    public synchronized ClassLoader getDriverClassLoader() {
-        return this.driverClassLoader;
-    }
-
-    public synchronized void setDriverClassLoader(final ClassLoader driverClassLoader) {
-        this.driverClassLoader = driverClassLoader;
-    }
-
-    protected Properties getProperties() {
-        if (mvProperties == null) {
-            mvProperties = new Properties();
-        }
-        return mvProperties;
-    }
-
-    private synchronized Driver getDriver() throws SQLException {
-        if (driver == null) {
-           this.driver = createDriverInstance(getDriverClassLoader(), getDriverClassName(), getUrl());
-        }
-        return driver;
-    }
+    protected Properties mvProperties;
+    private ClassLoader driverClassLoader;
+    private Driver driver;
 
     private static Driver createDriverInstance(ClassLoader driverClassLoader, String driverClassName, String url) throws SQLException {
         Driver driver = null;
@@ -99,7 +68,7 @@ public class JdbcDriverSource implements DriverSource {
             if (driverClassName == null) {
                 driver = DriverManager.getDriver(url);
             } else {
-                Class<?> driverClaz  = findDriverClass(driverClassLoader, driverClassName);
+                Class<?> driverClaz = findDriverClass(driverClassLoader, driverClassName);
                 driver = (Driver) driverClaz.newInstance();
                 if (!driver.acceptsURL(url)) {
                     throw new SQLException("No driver is found!");
@@ -110,7 +79,7 @@ public class JdbcDriverSource implements DriverSource {
             throw new SQLException(message, t);
         }
 
-        if (driver == null){
+        if (driver == null) {
             logger.error(message);
             throw new SQLException(message);
         }
@@ -142,6 +111,37 @@ public class JdbcDriverSource implements DriverSource {
         return driverClaz;
     }
 
+    @Override
+    public Connection getConnection() throws SQLException {
+        return getConnection(getUsername(), getPassword());
+    }
+
+    @Override
+    public Connection getConnection(String username, String password) throws SQLException {
+        return getDriver().connect(getUrl(), getProperties());
+    }
+
+    public synchronized ClassLoader getDriverClassLoader() {
+        return this.driverClassLoader;
+    }
+
+    public synchronized void setDriverClassLoader(final ClassLoader driverClassLoader) {
+        this.driverClassLoader = driverClassLoader;
+    }
+
+    protected Properties getProperties() {
+        if (mvProperties == null) {
+            mvProperties = new Properties();
+        }
+        return mvProperties;
+    }
+
+    private synchronized Driver getDriver() throws SQLException {
+        if (driver == null) {
+            this.driver = createDriverInstance(getDriverClassLoader(), getDriverClassName(), getUrl());
+        }
+        return driver;
+    }
 
     public String getProperty(String propName) {
         return getProperties().getProperty(propName);

@@ -35,14 +35,12 @@
 
 package org.qamatic.mintleaf;
 
-import com.sun.xml.internal.bind.v2.runtime.RuntimeUtil;
 import org.qamatic.mintleaf.core.FluentJdbc;
 
 import javax.sql.DataSource;
 import java.io.PrintWriter;
 import java.sql.SQLException;
 import java.sql.SQLFeatureNotSupportedException;
-import java.util.TooManyListenersException;
 import java.util.logging.Logger;
 
 /**
@@ -90,7 +88,7 @@ public interface DriverSource extends DataSource, DbSettings {
         return new FluentJdbc.Builder().withDataSource(this).build();
     }
 
-    default String getInfo(){
+    default String getInfo() {
         return toString();
     }
 }

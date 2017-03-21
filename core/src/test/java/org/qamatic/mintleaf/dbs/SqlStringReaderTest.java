@@ -36,9 +36,7 @@
 package org.qamatic.mintleaf.dbs;
 
 import org.junit.Test;
-import org.qamatic.mintleaf.ChangeSet;
 import org.qamatic.mintleaf.MintLeafException;
-import org.qamatic.mintleaf.ChangeSetListener;
 import org.qamatic.mintleaf.core.SqlStringReader;
 
 import static org.junit.Assert.assertEquals;
@@ -106,7 +104,6 @@ public class SqlStringReaderTest {
         assertEquals(expected.toString(), actual_emptypackage_block2);
 
     }
-
 
 
 }

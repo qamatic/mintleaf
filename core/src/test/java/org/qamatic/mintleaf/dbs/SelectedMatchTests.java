@@ -50,6 +50,7 @@ import static org.junit.Assert.assertEquals;
  */
 public class SelectedMatchTests {
     private static final MintLeafLogger logger = MintLeafLogger.getLogger(SelectedMatchTests.class);
+
     private static List<String> assertCompareTable(List<User> sourceList, List<User> targetListList, String selectedColumnMaps) throws MintLeafException {
         final ColumnMetaDataCollection sourceColumnDefs = new ColumnMetaDataCollection("LIST.USERS") {
             {

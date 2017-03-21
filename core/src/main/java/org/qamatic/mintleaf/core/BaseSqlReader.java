@@ -35,10 +35,10 @@
 
 package org.qamatic.mintleaf.core;
 
+import org.qamatic.mintleaf.ChangeSetListener;
 import org.qamatic.mintleaf.MintLeafException;
 import org.qamatic.mintleaf.MintLeafLogger;
 import org.qamatic.mintleaf.SqlReader;
-import org.qamatic.mintleaf.ChangeSetListener;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;

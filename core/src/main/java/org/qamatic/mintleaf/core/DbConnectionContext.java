@@ -101,7 +101,7 @@ public class DbConnectionContext implements ConnectionContext {
 
     @Override
     public void commitTransaction() throws MintLeafException {
-        if (!inTransaction){
+        if (!inTransaction) {
             return;
         }
 
@@ -115,7 +115,7 @@ public class DbConnectionContext implements ConnectionContext {
 
     @Override
     public void rollbackTransaction() throws MintLeafException {
-        if (!inTransaction){
+        if (!inTransaction) {
             return;
         }
         try {

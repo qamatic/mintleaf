@@ -50,11 +50,11 @@ public interface ConnectionContext {
 
     void close() throws MintLeafException;
 
-    void beginTransaction()  throws MintLeafException;
+    void beginTransaction() throws MintLeafException;
 
-    void commitTransaction()  throws MintLeafException;
+    void commitTransaction() throws MintLeafException;
 
-    void rollbackTransaction()  throws MintLeafException;
+    void rollbackTransaction() throws MintLeafException;
 
-    FluentJdbc queryBuilder() ;
+    FluentJdbc queryBuilder();
 }

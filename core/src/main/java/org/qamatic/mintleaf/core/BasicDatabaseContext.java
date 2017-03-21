@@ -51,6 +51,13 @@ public class BasicDatabaseContext implements DatabaseContext {
 
     private static final MintLeafLogger logger = MintLeafLogger.getLogger(BasicDatabaseContext.class);
 
+    static {
+        Database.registerQueryImplementation(DbType.H2.getJdbcUrlPrefix(), H2Db.class);
+        Database.registerQueryImplementation(DbType.MSSQL.getJdbcUrlPrefix(), MSSqlDb.class);
+        Database.registerQueryImplementation(DbType.MYSQL.getJdbcUrlPrefix(), MySqlDb.class);
+        Database.registerQueryImplementation(DbType.ORACLE.getJdbcUrlPrefix(), OracleDb.class);
+    }
+
     private Class<? extends DriverSource> driverSourceClazz;
     private String url;
     private String username;
@@ -70,29 +77,6 @@ public class BasicDatabaseContext implements DatabaseContext {
         this.url = driverSource.getUrl();
         this.username = driverSource.getUsername();
         this.password = driverSource.getPassword();
-    }
-
-    public DbQueries getDbQueries() {
-
-        return createDbQueryInstance(this.url, this.getNewConnection());
-
-    }
-
-    public DriverSource getDriverSource() {
-        if (this.driverSource == null) {
-            this.driverSource = buildDriverSource();
-        }
-        return this.driverSource;
-    }
-
-    private DriverSource buildDriverSource() {
-        DriverSource driverSource = getDriverSource(this.driverSourceClazz);
-        driverSource.setUrl(this.url);
-        if (this.username != null) {
-            driverSource.setUsername(this.username);
-            driverSource.setPassword(this.password);
-        }
-        return driverSource;
     }
 
     private static DriverSource getDriverSource(Class<? extends DriverSource> driverSourceClazz) {
@@ -133,11 +117,27 @@ public class BasicDatabaseContext implements DatabaseContext {
         return dbQueries;
     }
 
-    static {
-        Database.registerQueryImplementation(DbType.H2.getJdbcUrlPrefix(), H2Db.class);
-        Database.registerQueryImplementation(DbType.MSSQL.getJdbcUrlPrefix(), MSSqlDb.class);
-        Database.registerQueryImplementation(DbType.MYSQL.getJdbcUrlPrefix(), MySqlDb.class);
-        Database.registerQueryImplementation(DbType.ORACLE.getJdbcUrlPrefix(), OracleDb.class);
+    public DbQueries getDbQueries() {
+
+        return createDbQueryInstance(this.url, this.getNewConnection());
+
+    }
+
+    public DriverSource getDriverSource() {
+        if (this.driverSource == null) {
+            this.driverSource = buildDriverSource();
+        }
+        return this.driverSource;
+    }
+
+    private DriverSource buildDriverSource() {
+        DriverSource driverSource = getDriverSource(this.driverSourceClazz);
+        driverSource.setUrl(this.url);
+        if (this.username != null) {
+            driverSource.setUsername(this.username);
+            driverSource.setPassword(this.password);
+        }
+        return driverSource;
     }
 
 }

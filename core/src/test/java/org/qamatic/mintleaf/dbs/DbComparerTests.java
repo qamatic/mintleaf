@@ -56,6 +56,7 @@ import static org.junit.Assert.assertEquals;
 public class DbComparerTests extends H2TestCase {
 
     private static final MintLeafLogger logger = MintLeafLogger.getLogger(DbComparerTests.class);
+
     @Before
     public void applyChangeSet() throws IOException, SQLException, MintLeafException {
 

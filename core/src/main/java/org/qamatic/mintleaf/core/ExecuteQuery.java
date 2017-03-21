@@ -78,8 +78,7 @@ public class ExecuteQuery implements DbCallable<Boolean> {
         } catch (SQLException e) {
             logger.error(e);
             throw new MintLeafException(e);
-        }
-        finally {
+        } finally {
             close();
         }
     }

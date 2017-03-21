@@ -36,7 +36,6 @@
 package org.qamatic.mintleaf.core;
 
 import org.qamatic.mintleaf.ConnectionContext;
-import org.qamatic.mintleaf.DriverSource;
 import org.qamatic.mintleaf.MintLeafLogger;
 import org.qamatic.mintleaf.SqlReader;
 

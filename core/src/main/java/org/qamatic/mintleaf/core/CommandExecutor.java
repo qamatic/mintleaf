@@ -53,11 +53,10 @@ public class CommandExecutor implements ChangeSetListener {
             query.execute();
         } catch (Exception e) {
 
-            final String message = "error executing query: \n"+this.connectionContext.toString();
+            final String message = "error executing query: \n" + this.connectionContext.toString();
             logger.error(message, e);
-            throw new MintLeafException("error executing query: ",e);
-        }
-        finally {
+            throw new MintLeafException("error executing query: ", e);
+        } finally {
             query.close();
         }
     }

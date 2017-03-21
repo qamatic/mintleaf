@@ -71,7 +71,7 @@ public class SelectQuery implements DbCallable<ResultSet> {
                     if (parameterBinding != null) {
                         parameterBinding.bindParameters(new ParameterSets(this.preparedStatement));
                     }
-                    logger.info("executing select query: "+this.sql);
+                    logger.info("executing select query: " + this.sql);
                     this.resultSet = this.preparedStatement.executeQuery();
                 }
             } catch (MintLeafException e) {

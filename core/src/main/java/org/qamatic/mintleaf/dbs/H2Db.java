@@ -35,7 +35,10 @@
 
 package org.qamatic.mintleaf.dbs;
 
-import org.qamatic.mintleaf.*;
+import org.qamatic.mintleaf.Column;
+import org.qamatic.mintleaf.ColumnMetaDataCollection;
+import org.qamatic.mintleaf.ConnectionContext;
+import org.qamatic.mintleaf.MintLeafException;
 import org.qamatic.mintleaf.core.Database;
 
 import java.util.regex.Pattern;

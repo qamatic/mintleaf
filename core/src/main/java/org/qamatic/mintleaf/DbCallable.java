@@ -37,16 +37,16 @@ package org.qamatic.mintleaf;
 
 import java.sql.Connection;
 import java.sql.SQLException;
-import java.util.concurrent.Callable;
 
 /**
  * Created by QAmatic Team on 7/19/16.
  */
-public interface DbCallable<V>  {
+public interface DbCallable<V> {
 
 
     Connection getConnection() throws SQLException;
-    default void close() throws MintLeafException{
+
+    default void close() throws MintLeafException {
 
     }
 

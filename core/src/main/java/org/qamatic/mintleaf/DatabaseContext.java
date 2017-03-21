@@ -46,7 +46,7 @@ public interface DatabaseContext {
 
     DriverSource getDriverSource();
 
-    default ConnectionContext getNewConnection(){
+    default ConnectionContext getNewConnection() {
         return getNewConnection(false);
     }
 
@@ -58,7 +58,7 @@ public interface DatabaseContext {
         return getDriverSource().queryBuilder();
     }
 
-    default DbType getSupportedDbType(){
+    default DbType getSupportedDbType() {
         return DbType.getDbType(getDriverSource().getUrl());
     }
 

@@ -52,14 +52,6 @@ public enum DbType {
         this.jdbcUrlPrefix = jdbcUrlPrefix;
     }
 
-    public String getName() {
-        return name;
-    }
-
-    public String getJdbcUrlPrefix(){
-        return this.jdbcUrlPrefix;
-    }
-
     public static DbType getDbType(String url) {
         url = url.toLowerCase();
         for (DbType dt : DbType.values()) {
@@ -68,6 +60,14 @@ public enum DbType {
             }
         }
         return null;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getJdbcUrlPrefix() {
+        return this.jdbcUrlPrefix;
     }
 
 }

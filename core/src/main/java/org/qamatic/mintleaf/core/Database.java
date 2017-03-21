@@ -46,12 +46,24 @@ import java.util.Map;
 public class Database implements DbQueries {
 
     private static final MintLeafLogger logger = MintLeafLogger.getLogger(Database.class);
-    protected final ConnectionContext connectionContext;
     private static final Map<String, Class<? extends Database>> registeredQueries = new HashMap<>();
+    protected final ConnectionContext connectionContext;
 
 
     public Database(ConnectionContext connectionContext) {
         this.connectionContext = connectionContext;
+    }
+
+    public static void registerQueryImplementation(String jdbcUrlPrefix, Class<? extends Database> dbQueryClaz) {
+        if (!registeredQueries.containsKey(jdbcUrlPrefix)) {
+            registeredQueries.put(jdbcUrlPrefix, dbQueryClaz);
+        }
+    }
+
+    public static Class<? extends Database> getQueryImplementation(String url) {
+        if (DbType.getDbType(url) == null)
+            return Database.class;
+        return registeredQueries.get(DbType.getDbType(url).getJdbcUrlPrefix());
     }
 
     public <T> List<T> query(String sql, ParameterBinding parameterBinding, final DataRowListener<T> listener) throws MintLeafException {
@@ -101,21 +113,8 @@ public class Database implements DbQueries {
         return queryInt(sql, parameterBinding);
     }
 
-
     @Override
     public void executeSql(String sql, ParameterBinding parameterBinding) throws MintLeafException {
         FluentJdbc.executeSql(connectionContext, sql, parameterBinding);
-    }
-
-    public static void registerQueryImplementation(String jdbcUrlPrefix, Class<? extends Database> dbQueryClaz) {
-        if (!registeredQueries.containsKey(jdbcUrlPrefix)) {
-            registeredQueries.put(jdbcUrlPrefix, dbQueryClaz);
-        }
-    }
-
-    public static Class<? extends Database> getQueryImplementation(String url) {
-        if (DbType.getDbType(url) == null)
-            return Database.class;
-        return registeredQueries.get(DbType.getDbType(url).getJdbcUrlPrefix());
     }
 }

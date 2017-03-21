@@ -35,7 +35,10 @@
 
 package org.qamatic.mintleaf.tools;
 
-import org.qamatic.mintleaf.*;
+import org.qamatic.mintleaf.ConnectionContext;
+import org.qamatic.mintleaf.DataAction;
+import org.qamatic.mintleaf.MintLeafException;
+import org.qamatic.mintleaf.ParameterBinding;
 
 import java.io.File;
 import java.io.FileWriter;

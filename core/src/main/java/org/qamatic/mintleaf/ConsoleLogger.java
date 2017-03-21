@@ -42,7 +42,7 @@ public class ConsoleLogger extends MintLeafLogger {
 
     private Class<?> clazz;
 
-    public ConsoleLogger(Class<?> clazz){
+    public ConsoleLogger(Class<?> clazz) {
 
         this.clazz = clazz;
     }
@@ -54,7 +54,7 @@ public class ConsoleLogger extends MintLeafLogger {
 
     @Override
     public void error(String message, Throwable e) {
-        System.out.println(String.format("[%s] : %s",this.clazz.getName(), message));
+        System.out.println(String.format("[%s] : %s", this.clazz.getName(), message));
         System.out.println(e.getMessage());
     }
 
@@ -65,12 +65,12 @@ public class ConsoleLogger extends MintLeafLogger {
 
     @Override
     public void info(String message) {
-        System.out.println(String.format("[%s] : %s",this.clazz.getName(), message));
+        System.out.println(String.format("[%s] : %s", this.clazz.getName(), message));
     }
 
     @Override
     public void error(String message) {
-        System.out.println(String.format("[%s] : %s",this.clazz.getName(), message));
+        System.out.println(String.format("[%s] : %s", this.clazz.getName(), message));
     }
 
     @Override

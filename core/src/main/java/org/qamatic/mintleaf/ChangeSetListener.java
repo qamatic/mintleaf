@@ -35,8 +35,6 @@
 
 package org.qamatic.mintleaf;
 
-import java.util.Map;
-
 public interface ChangeSetListener {
     void onChangeSetRead(StringBuilder sql, ChangeSet changeSetInfo) throws MintLeafException;
 }

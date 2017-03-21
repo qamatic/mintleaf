@@ -41,8 +41,6 @@ import org.qamatic.mintleaf.MintLeafException;
 import org.qamatic.mintleaf.SqlReader;
 import org.qamatic.mintleaf.SqlScript;
 
-import java.sql.SQLException;
-
 public final class ChangeSets {
 
 
