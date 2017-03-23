@@ -33,58 +33,33 @@
  * /
  */
 
-package org.qamatic.mintleaf.dbs;
+package org.qamatic.mintleaf;
 
-import org.junit.Test;
-import org.qamatic.mintleaf.DbSettings;
-import org.qamatic.mintleaf.core.JdbcDriverSource;
+import org.qamatic.mintleaf.core.DbConnectionContext;
+import org.qamatic.mintleaf.core.FluentJdbc;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-
-
-public class ConnectionParameterTest {
+/**
+ * Created by qamatic on 12/6/15.
+ */
+public interface Database {
 
 
-    @Test
-    public void testDefaultDevMode() {
-        DbSettings settings = new JdbcDriverSource();
-        assertFalse(settings.isDebugEnabled());
+    DriverSource getDriverSource();
+
+    default ConnectionContext getNewConnection() {
+        return getNewConnection(true);
     }
 
-    @Test
-    public void testJdbcUrl() {
-        DbSettings settings = new JdbcDriverSource();
-        settings.setUrl("jdbc:");
-        assertEquals("jdbc:", settings.getUrl());
+    default ConnectionContext getNewConnection(boolean autoCloseable) {
+        return new DbConnectionContext(getDriverSource(), autoCloseable);
     }
 
-    @Test
-    public void testUsername() {
-        DbSettings settings = new JdbcDriverSource();
-        settings.setUsername("sys");
-        assertEquals("sys", settings.getUsername());
+    default FluentJdbc queryBuilder() {
+        return getDriverSource().queryBuilder();
     }
 
-    @Test
-    public void testPassword() {
-        DbSettings settings = new JdbcDriverSource();
-        settings.setPassword("1234");
-        assertEquals("1234", settings.getPassword());
-    }
-
-    @Test
-    public void testDebug() {
-        DbSettings settings = new JdbcDriverSource();
-        settings.setPassword("debug");
-        assertEquals("debug", settings.getPassword());
-    }
-
-    @Test
-    public void testDriverClassName() {
-        DbSettings settings = new JdbcDriverSource();
-        settings.setDriverClassName("org.h2.Driver");
-        assertEquals("org.h2.Driver", settings.getDriverClassName());
+    default DbType getSupportedDbType() {
+        return DbType.getDbType(getDriverSource().getUrl());
     }
 
 }

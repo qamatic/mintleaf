@@ -33,30 +33,38 @@
  * /
  */
 
-package org.qamatic.mintleaf;
+package org.qamatic.mintleaf.dbqueries;
 
-import org.qamatic.mintleaf.core.FluentJdbc;
-
-import java.sql.Connection;
+import org.junit.BeforeClass;
+import org.qamatic.mintleaf.Database;
+import org.qamatic.mintleaf.DbQueries;
+import org.qamatic.mintleaf.Mintleaf;
+import org.qamatic.mintleaf.core.JdbcDriverSource;
 
 /**
- * Created by QAmatic Team on 3/19/17.
+ * Created by qamatic on 3/3/16.
  */
-public interface ConnectionContext extends AutoCloseable {
+public class H2TestCase {
+    protected static Database h2Database;
+    protected static DbQueries h2DbQueries;
 
-    Connection getConnection() throws MintLeafException;
+    @BeforeClass
+    public static void setupDb() {
 
-    boolean isCloseable();
+        if (h2Database != null)
+            return;
 
-    void close() throws MintLeafException;
+        h2Database = new Mintleaf.DatabaseBuilder().
+                withDriverSource(JdbcDriverSource.class).
+                withUrl("jdbc:h2:file:./target/H2DbScriptTests;mv_store=false;").
+                build();
+        h2DbQueries = h2Database.getNewConnection().getDbQueries();
 
-    void beginTransaction() throws MintLeafException;
+        /*
+            Database db = Database.builder().withUrl("").with
 
-    void commitTransaction() throws MintLeafException;
+         */
 
-    void rollbackTransaction() throws MintLeafException;
+    }
 
-    FluentJdbc queryBuilder();
-
-    DbQueries getDbQueries();
 }

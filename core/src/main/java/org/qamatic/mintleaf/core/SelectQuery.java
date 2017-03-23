@@ -35,10 +35,7 @@
 
 package org.qamatic.mintleaf.core;
 
-import org.qamatic.mintleaf.DbCallable;
-import org.qamatic.mintleaf.MintLeafException;
-import org.qamatic.mintleaf.MintLeafLogger;
-import org.qamatic.mintleaf.ParameterBinding;
+import org.qamatic.mintleaf.*;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -48,7 +45,7 @@ import java.sql.SQLException;
 /**
  * Created by qamatic on 2/20/16.
  */
-public class SelectQuery implements DbCallable<ResultSet> {
+public class SelectQuery implements DbCallable<SqlResultSet> {
 
     private static final MintLeafLogger logger = MintLeafLogger.getLogger(SelectQuery.class);
     private Connection connection;
@@ -87,7 +84,6 @@ public class SelectQuery implements DbCallable<ResultSet> {
     }
 
 
-    @Override
     public Connection getConnection() throws SQLException {
         return this.connection;
     }
@@ -117,7 +113,58 @@ public class SelectQuery implements DbCallable<ResultSet> {
      * @throws Exception if unable to compute a result
      */
     @Override
-    public ResultSet execute() throws Exception {
-        return getResultSet();
+    public SqlResultSet execute() throws Exception {
+        return new SelectQueryWrapper(this);
+    }
+
+    private class SelectQueryWrapper implements SqlResultSet {
+        private SelectQuery selectQuery;
+
+        private SelectQueryWrapper(SelectQuery selectQuery) {
+            this.selectQuery = selectQuery;
+        }
+
+        @Override
+        public ResultSet getResultSet() throws MintLeafException {
+            return this.selectQuery.getResultSet();
+        }
+
+        @Override
+        public void close() throws MintLeafException {
+           this.selectQuery.close();
+        }
+
+        @Override
+        public ResultSet first() throws MintLeafException {
+            try {
+                getResultSet().next();
+                return getResultSet();
+            } catch (SQLException e) {
+
+                logger.error(e);
+                throw new MintLeafException(e);
+            }
+        }
+
+        @Override
+        public <T> void iterate(DataRowListener<T> listener) throws MintLeafException, MintLeafException {
+            try {
+                int i = 0;
+                while (getResultSet().next()) {
+                    listener.eachRow(i++, new ResultSetRowWrapper<T>(getResultSet()));
+                }
+            } catch (SQLException e) {
+
+                logger.error(e);
+                throw new MintLeafException(e);
+            }
+        }
+
+        @Override
+        public RowListWrapper asRowListWrapper() throws MintLeafException {
+            ResultSetRowListWrapper rowListWrapper = new ResultSetRowListWrapper();
+            rowListWrapper.setResultSet(this.getResultSet());
+            return rowListWrapper;
+        }
     }
 }

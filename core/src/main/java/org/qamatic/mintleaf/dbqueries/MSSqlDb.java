@@ -33,38 +33,18 @@
  * /
  */
 
-package org.qamatic.mintleaf.dbs;
+package org.qamatic.mintleaf.dbqueries;
 
-import org.junit.BeforeClass;
-import org.qamatic.mintleaf.DatabaseContext;
-import org.qamatic.mintleaf.DbQueries;
-import org.qamatic.mintleaf.Mintleaf;
-import org.qamatic.mintleaf.core.JdbcDriverSource;
+import org.qamatic.mintleaf.ConnectionContext;
+import org.qamatic.mintleaf.core.StandardQueries;
 
 /**
- * Created by qamatic on 3/3/16.
+ * Created by qamatic on 3/6/16.
  */
-public class H2TestCase {
-    protected static DatabaseContext h2DatabaseContext;
-    protected static DbQueries h2DbQueries;
-
-    @BeforeClass
-    public static void setupDb() {
-
-        if (h2DatabaseContext != null)
-            return;
-
-        h2DatabaseContext = new Mintleaf.DatabaseBuilder().
-                withDriverSource(JdbcDriverSource.class).
-                withUrl("jdbc:h2:file:./target/H2DbScriptTests;mv_store=false;").
-                build();
-        h2DbQueries = h2DatabaseContext.getDbQueries();
-
-        /*
-            Database db = Database.builder().withUrl("").with
-
-         */
-
+public class MSSqlDb extends StandardQueries {
+    public MSSqlDb(ConnectionContext connectionContext) {
+        super(connectionContext);
     }
+
 
 }

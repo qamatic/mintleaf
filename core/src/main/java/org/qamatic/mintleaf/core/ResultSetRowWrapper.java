@@ -47,7 +47,7 @@ import java.sql.SQLException;
 /**
  * Created by qamatic on 3/3/16.
  */
-public class ResultSetRowWrapper implements ComparableRow {
+public class ResultSetRowWrapper<T> implements ComparableRow {
 
     private static final MintLeafLogger logger = MintLeafLogger.getLogger(ResultSetRowWrapper.class);
     private ResultSet resultSet;

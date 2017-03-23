@@ -33,7 +33,7 @@
  * /
  */
 
-package org.qamatic.mintleaf.dbs;
+package org.qamatic.mintleaf.dbqueries;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -59,7 +59,7 @@ public class ImportExportTests extends H2TestCase {
 
     @Before
     public void applyChangeSet() throws IOException, SQLException, MintLeafException {
-        ChangeSets.migrate(h2DatabaseContext.getNewConnection(), "res:/example-changesets.sql", "create schema,load seed data");
+        ChangeSets.migrate(h2Database.getNewConnection(), "res:/example-changesets.sql", "create schema,load seed data");
     }
 
 
@@ -72,7 +72,7 @@ public class ImportExportTests extends H2TestCase {
         assertFalse(new File("users.csv").exists());
 
         DataAction dataAction = new Mintleaf.DbToCsvBuilder().
-                withSourceDb(h2DatabaseContext).
+                withSourceDb(h2Database).
                 withSourceSql("select * from HRDB.USERS").
                 withTargetCsvFile("users.csv").
                 build();
@@ -89,7 +89,7 @@ public class ImportExportTests extends H2TestCase {
 
         DataAction action = new Mintleaf.CsvToDbBuilder().
                 withSourceCsvFile("users.csv").
-                withTargetDb(h2DatabaseContext).
+                withTargetDb(h2Database).
                 withTargetSqlTemplate("UPDATE HRDB.USERS SET USERNAME = '$USERNAME$-changed' WHERE USERID=$USERID$").
                 build();
 
@@ -112,12 +112,12 @@ public class ImportExportTests extends H2TestCase {
 
     @Test
     public void DbToDbImport() throws SQLException, IOException, MintLeafException {
-        ChangeSets.migrate(h2DatabaseContext.getNewConnection(), "res:/example-changesets.sql", "DROP_CREATE_USERS_IMPORT_TABLE");
+        ChangeSets.migrate(h2Database.getNewConnection(), "res:/example-changesets.sql", "DROP_CREATE_USERS_IMPORT_TABLE");
 
         DataAction action = new Mintleaf.DbToDbBuilder().
-                withSourceDb(h2DatabaseContext).
+                withSourceDb(h2Database).
                 withSourceSql("SELECT * FROM HRDB.USERS").
-                withTargetDb(h2DatabaseContext).
+                withTargetDb(h2Database).
                 withTargetSqlTemplate("INSERT INTO HRDB.USERS_IMPORT_TABLE (USERID, USERNAME) VALUES ($USERID$, '$USERNAME$')").
                 build();
 
@@ -129,11 +129,11 @@ public class ImportExportTests extends H2TestCase {
 
     @Test
     public void DbToDbImportNullIssue() throws SQLException, IOException, MintLeafException {
-        ChangeSets.migrate(h2DatabaseContext.getNewConnection(), "res:/example-changesets.sql", "DROP_CREATE_USERS_IMPORT_TABLE");
+        ChangeSets.migrate(h2Database.getNewConnection(), "res:/example-changesets.sql", "DROP_CREATE_USERS_IMPORT_TABLE");
 
-        DataAction action = new DbImporter(h2DatabaseContext.getNewConnection(),
+        DataAction action = new DbImporter(h2Database.getNewConnection(),
                 "SELECT * FROM HRDB.USERS",
-                h2DatabaseContext.getNewConnection(),
+                h2Database.getNewConnection(),
                 "INSERT INTO HRDB.USERS_IMPORT_TABLE (USERID, USERNAME, RATE) VALUES ($USERID$, '$USERNAME$', $RATE$)"
         );
         action.execute();

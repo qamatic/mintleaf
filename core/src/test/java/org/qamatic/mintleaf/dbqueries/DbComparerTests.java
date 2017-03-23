@@ -33,7 +33,7 @@
  * /
  */
 
-package org.qamatic.mintleaf.dbs;
+package org.qamatic.mintleaf.dbqueries;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -60,10 +60,10 @@ public class DbComparerTests extends H2TestCase {
     @Before
     public void applyChangeSet() throws IOException, SQLException, MintLeafException {
 
-        ChangeSets.migrate(h2DatabaseContext.getNewConnection(), "res:/example-changesets.sql", "create schema, DataForDbCompareTest, DROP_CREATE_USERS_IMPORT_TABLE");
-        DataAction action = new DbImporter(h2DatabaseContext.getNewConnection(),
+        ChangeSets.migrate(h2Database.getNewConnection(), "res:/example-changesets.sql", "create schema, DataForDbCompareTest, DROP_CREATE_USERS_IMPORT_TABLE");
+        DataAction action = new DbImporter(h2Database.getNewConnection(),
                 "SELECT * FROM HRDB.USERS",
-                h2DatabaseContext.getNewConnection(),
+                h2Database.getNewConnection(),
                 "INSERT INTO HRDB.USERS_IMPORT_TABLE (USERID, USERNAME) VALUES ($USERID$, '$USERNAME$')"
         );
         action.execute();
@@ -85,8 +85,8 @@ public class DbComparerTests extends H2TestCase {
             }
         };
 
-        FluentJdbc sourceTable = h2DatabaseContext.queryBuilder().withSql("SELECT * FROM HRDB.USERS");
-        FluentJdbc targetTable = h2DatabaseContext.queryBuilder().withSql("SELECT * FROM HRDB.USERS_IMPORT_TABLE");
+        FluentJdbc sourceTable = h2Database.queryBuilder().withSql("SELECT * FROM HRDB.USERS");
+        FluentJdbc targetTable = h2Database.queryBuilder().withSql("SELECT * FROM HRDB.USERS_IMPORT_TABLE");
 
         List<String> actuals = assertCompareTable(sourceTable.asRowListWrapper(), targetTable.asRowListWrapper());
 

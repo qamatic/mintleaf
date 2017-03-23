@@ -33,13 +33,14 @@
  * /
  */
 
-package org.qamatic.mintleaf.dbs.oracle;
+package org.qamatic.mintleaf.dbqueries.oracle;
 
 import org.junit.BeforeClass;
 import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.runners.MethodSorters;
-import org.qamatic.mintleaf.DatabaseContext;
+import org.qamatic.mintleaf.ConnectionContext;
+import org.qamatic.mintleaf.Database;
 import org.qamatic.mintleaf.MintLeafException;
 import org.qamatic.mintleaf.core.ChangeSets;
 
@@ -51,7 +52,7 @@ import static org.junit.Assert.assertEquals;
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class OraTransactionTest extends OracleTestCase {
 
-    private static DatabaseContext hrdb1 = createOracleDbContext("HRDB1", "HRDB1");
+    private static Database hrdb1 = createOracleDbContext("HRDB1", "HRDB1");
 
     @BeforeClass
     public static void migrate() throws MintLeafException {
@@ -61,7 +62,9 @@ public class OraTransactionTest extends OracleTestCase {
     @Test
     public void testCountriesCount() throws MintLeafException {
         ChangeSets.migrate(hrdb1.getNewConnection(), "res:/oracle/hrdb-changesets/hrdb-sampledata.sql", "seed data for countries");
-        assertEquals(12, hrdb1.getDbQueries().getCount("HRDB1.COUNTRIES"));
+        try (ConnectionContext ctx = hrdb1.getNewConnection()) {
+            assertEquals(12, ctx.getDbQueries().getCount("HRDB1.COUNTRIES"));
+        }
 
     }
 

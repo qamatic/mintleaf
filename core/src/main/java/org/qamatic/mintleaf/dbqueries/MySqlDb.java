@@ -33,16 +33,16 @@
  * /
  */
 
-package org.qamatic.mintleaf.dbs;
+package org.qamatic.mintleaf.dbqueries;
 
 import org.qamatic.mintleaf.ConnectionContext;
-import org.qamatic.mintleaf.core.Database;
+import org.qamatic.mintleaf.core.StandardQueries;
 
 /**
  * Created by qamatic on 3/6/16.
  */
-public class MSSqlDb extends Database {
-    public MSSqlDb(ConnectionContext connectionContext) {
+public class MySqlDb extends StandardQueries {
+    public MySqlDb(ConnectionContext connectionContext) {
         super(connectionContext);
     }
 

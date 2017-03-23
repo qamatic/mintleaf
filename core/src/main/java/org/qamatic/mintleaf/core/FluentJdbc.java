@@ -224,6 +224,7 @@ public class FluentJdbc {
     public static final class Builder {
         private String sql;
         private DataSource dataSource;
+        private ParameterBinding parameterBinding;
 
         public Builder() {
         }
@@ -238,8 +239,25 @@ public class FluentJdbc {
             return this;
         }
 
+        public Builder withParamValues(ParameterBinding parameterBinding) throws MintLeafException {
+            this.parameterBinding = parameterBinding;
+            return this;
+        }
+
         public FluentJdbc build() {
             return new FluentJdbc(this);
+        }
+
+        public SqlResultSet buildSelect() {
+
+            try {
+                return new SelectQuery(this.dataSource.getConnection(), this.sql, this.parameterBinding).execute();
+            } catch (SQLException e) {
+                MintLeafException.throwException(e.getMessage());
+            } catch (Exception e) {
+                MintLeafException.throwException(e.getMessage());
+            }
+            return null;
         }
     }
 }

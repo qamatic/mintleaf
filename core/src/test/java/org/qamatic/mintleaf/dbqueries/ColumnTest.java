@@ -33,7 +33,7 @@
  * /
  */
 
-package org.qamatic.mintleaf.dbs;
+package org.qamatic.mintleaf.dbqueries;
 
 import org.junit.Assert;
 import org.junit.Test;

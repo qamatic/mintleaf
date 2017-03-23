@@ -33,18 +33,39 @@
  * /
  */
 
-package org.qamatic.mintleaf.dbs;
+package org.qamatic.mintleaf.dbqueries.oracle;
 
-import org.qamatic.mintleaf.ConnectionContext;
-import org.qamatic.mintleaf.core.Database;
+import org.qamatic.mintleaf.Database;
+import org.qamatic.mintleaf.MintLeafException;
+import org.qamatic.mintleaf.Mintleaf;
+import org.qamatic.mintleaf.core.ChangeSets;
+import org.qamatic.mintleaf.dbqueries.ApacheBasicDataSource;
 
 /**
- * Created by qamatic on 3/6/16.
+ * Created by qamatic on 3/4/16.
  */
-public class MySqlDb extends Database {
-    public MySqlDb(ConnectionContext connectionContext) {
-        super(connectionContext);
+public class OracleTestCase {
+
+
+    private static Database oracleSysDbaCtx;
+
+    static {
+        oracleSysDbaCtx = createOracleDbContext(System.getenv("TEST_DB_MASTER_USERNAME"),
+                System.getenv("TEST_DB_MASTER_PASSWORD"));
+        try {
+            ChangeSets.migrate(oracleSysDbaCtx.getNewConnection(), "res:/oracle/hrdb-changesets/hrdb-schema-setup.sql", "create schema");
+        } catch (MintLeafException e) {
+            MintLeafException.throwException(e.getMessage());
+        }
     }
 
-
+    public static Database createOracleDbContext(String userName, String password) {
+        Database db = new Mintleaf.DatabaseBuilder().
+                withDriverSource(ApacheBasicDataSource.class).
+                withUrl(System.getenv("TEST_DB_URL")).
+                withUsername(userName).
+                withPassword(password).
+                build();
+        return db;
+    }
 }

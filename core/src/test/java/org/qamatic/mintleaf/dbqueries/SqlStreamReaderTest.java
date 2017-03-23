@@ -33,53 +33,88 @@
  * /
  */
 
-package org.qamatic.mintleaf.dbs;
+package org.qamatic.mintleaf.dbqueries;
 
 import org.junit.Test;
+import org.qamatic.mintleaf.ChangeSet;
+import org.qamatic.mintleaf.ChangeSetListener;
 import org.qamatic.mintleaf.MintLeafException;
-import org.qamatic.mintleaf.core.SqlStringReader;
+import org.qamatic.mintleaf.core.SqlStreamReader;
 
-import static org.junit.Assert.assertEquals;
+import java.io.InputStream;
 
-public class SqlStringReaderTest {
+import static org.junit.Assert.*;
+
+public class SqlStreamReaderTest {
 
     private String actual_emptypackage_block1;
     private String actual_emptypackage_block2;
 
-    private String getSamplePackageData() {
+    @Test
+    public void testDelimiterString() {
+        SqlStreamReader reader = new SqlStreamReader(null);
+        reader.setDelimiter(";");
+        assertEquals(";", reader.getDelimiter());
+    }
+
+    @Test
+    public void testDelimiterStringDefault() {
+        SqlStreamReader reader = new SqlStreamReader(null);
+        assertEquals("/", reader.getDelimiter());
+    }
+
+    @Test
+    public void testSqlReaderListnerDefault() {
+        SqlStreamReader reader = new SqlStreamReader(null);
+        assertNull(reader.getChangeSetListener());
+    }
+
+    @Test
+    public void testSqlReaderListnerTest1() {
+        SqlStreamReader reader = new SqlStreamReader(null);
+        reader.setChangeSetListener(new EmptyPackageReadListner());
+        assertNotNull(reader.getChangeSetListener());
+    }
+
+    @Test
+    public void testSqlReaderReadTest() throws MintLeafException {
+
+        InputStream iStream = this.getClass().getResourceAsStream("/EmptyPackage.sql");
+        SqlStreamReader reader = new SqlStreamReader(iStream);
+
+
+        final StringBuilder actual = new StringBuilder();
+        ChangeSetListener listner = new EmptyPackageReadListner() {
+            @Override
+            public void onChangeSetRead(StringBuilder sql, ChangeSet changeSet) throws MintLeafException {
+                actual.append(sql.toString());
+            }
+        };
+        reader.setChangeSetListener(listner);
+        reader.read();
+
         StringBuilder expected = new StringBuilder();
 
         expected.append("create or replace package EmptyPackage\n");
         expected.append("as\n");
         expected.append("\n");
-        expected.append("end EmptyPackage;\n");
-        expected.append("\n");
-        expected.append("/\n");
-        expected.append("\n");
+        expected.append("end EmptyPackage;");
         expected.append("create or replace\n");
         expected.append("package body EmptyPackage\n");
         expected.append("as\n");
         expected.append("\n");
-        expected.append("end EmptyPackage;\n");
-        expected.append("\n");
-        expected.append("/\n");
-        expected.append("\n");
-        return expected.toString();
-    }
+        expected.append("end EmptyPackage;");
 
+        assertEquals(expected.toString(), actual.toString());
+    }
 
     @Test
     public void testSqlReaderListnerTest2() throws MintLeafException {
 
-        SqlStringReader reader = new SqlStringReader(getSamplePackageData());
-
-        reader.setChangeSetListener((sql, changeSetInfo) -> {
-            if (actual_emptypackage_block1 == null) {
-                actual_emptypackage_block1 = sql.toString();
-            } else if (actual_emptypackage_block2 == null) {
-                actual_emptypackage_block2 = sql.toString();
-            }
-        });
+        ChangeSetListener listner = new EmptyPackageReadListner();
+        InputStream iStream = this.getClass().getResourceAsStream("/EmptyPackage.sql");
+        SqlStreamReader reader = new SqlStreamReader(iStream);
+        reader.setChangeSetListener(listner);
         actual_emptypackage_block1 = null;
         actual_emptypackage_block2 = null;
 
@@ -106,4 +141,17 @@ public class SqlStringReaderTest {
     }
 
 
+    private class EmptyPackageReadListner implements ChangeSetListener {
+
+        @Override
+        public void onChangeSetRead(StringBuilder sql, ChangeSet changeSet) throws MintLeafException {
+            if (actual_emptypackage_block1 == null) {
+                actual_emptypackage_block1 = sql.toString();
+            } else if (actual_emptypackage_block2 == null) {
+                actual_emptypackage_block2 = sql.toString();
+            }
+        }
+
+
+    }
 }

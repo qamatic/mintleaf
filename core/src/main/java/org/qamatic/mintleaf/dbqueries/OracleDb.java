@@ -33,11 +33,11 @@
  * /
  */
 
-package org.qamatic.mintleaf.dbs;
+package org.qamatic.mintleaf.dbqueries;
 
 
 import org.qamatic.mintleaf.*;
-import org.qamatic.mintleaf.core.Database;
+import org.qamatic.mintleaf.core.StandardQueries;
 import org.qamatic.mintleaf.core.FluentJdbc;
 
 import java.sql.SQLException;
@@ -46,7 +46,7 @@ import java.util.List;
 /**
  * Created by QAMatic on 4/6/15.
  */
-public class OracleDb extends Database {
+public class OracleDb extends StandardQueries {
 
     private static final MintLeafLogger logger = MintLeafLogger.getLogger(OracleDb.class);
 

@@ -33,20 +33,20 @@
  * /
  */
 
-package org.qamatic.mintleaf.dbs;
+package org.qamatic.mintleaf.dbqueries;
 
 import org.qamatic.mintleaf.Column;
 import org.qamatic.mintleaf.ColumnMetaDataCollection;
 import org.qamatic.mintleaf.ConnectionContext;
 import org.qamatic.mintleaf.MintLeafException;
-import org.qamatic.mintleaf.core.Database;
+import org.qamatic.mintleaf.core.StandardQueries;
 
 import java.util.regex.Pattern;
 
 /**
  * Created by qamatic on 3/6/16.
  */
-public class H2Db extends Database {
+public class H2Db extends StandardQueries {
 
     public H2Db(ConnectionContext connectionContext) {
         super(connectionContext);

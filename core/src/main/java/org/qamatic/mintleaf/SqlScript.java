@@ -38,7 +38,11 @@ package org.qamatic.mintleaf;
 /**
  * Created by qamatic on 7/16/16.
  */
-public interface SqlScript {
+public interface SqlScript extends AutoCloseable {
 
     void apply() throws MintLeafException;
+
+    default void close() throws MintLeafException{
+
+    }
 }

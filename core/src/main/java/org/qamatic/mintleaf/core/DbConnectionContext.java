@@ -35,11 +35,14 @@
 
 package org.qamatic.mintleaf.core;
 
-import org.qamatic.mintleaf.ConnectionContext;
-import org.qamatic.mintleaf.DriverSource;
-import org.qamatic.mintleaf.MintLeafException;
-import org.qamatic.mintleaf.MintLeafLogger;
+import org.qamatic.mintleaf.*;
+import org.qamatic.mintleaf.dbqueries.H2Db;
+import org.qamatic.mintleaf.dbqueries.MSSqlDb;
+import org.qamatic.mintleaf.dbqueries.MySqlDb;
+import org.qamatic.mintleaf.dbqueries.OracleDb;
 
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 import java.sql.Connection;
 import java.sql.SQLException;
 
@@ -132,7 +135,45 @@ public class DbConnectionContext implements ConnectionContext {
     }
 
     @Override
+    public DbQueries getDbQueries() {
+        return createDbQueryInstance(this.driverSource.getUrl(), this);
+    }
+
+    @Override
     public String toString() {
         return String.format("Driver: %s, InTransaction:%s, AutoCloseConnection:%s ", this.driverSource, this.inTransaction, isCloseable());
     }
+
+    private static DbQueries createDbQueryInstance(String url, ConnectionContext connectionContext) {
+        Class<? extends StandardQueries> queryImplClaz = StandardQueries.getQueryImplementation(url);
+        DbQueries dbQueries = null;
+        try {
+            Constructor constructor =
+                    queryImplClaz.getConstructor(new Class[]{ConnectionContext.class});
+            dbQueries = (DbQueries) constructor.newInstance(connectionContext);
+        } catch (InstantiationException e) {
+            logger.error(e);
+            MintLeafException.throwException(e);
+        } catch (IllegalAccessException e) {
+            logger.error(e);
+            MintLeafException.throwException(e);
+        } catch (NoSuchMethodException e) {
+            logger.error(e);
+            MintLeafException.throwException(e);
+        } catch (InvocationTargetException e) {
+            logger.error(e);
+            MintLeafException.throwException(e);
+        }
+
+        return dbQueries;
+    }
+
+
+    static {
+        StandardQueries.registerQueryImplementation(DbType.H2.getJdbcUrlPrefix(), H2Db.class);
+        StandardQueries.registerQueryImplementation(DbType.MSSQL.getJdbcUrlPrefix(), MSSqlDb.class);
+        StandardQueries.registerQueryImplementation(DbType.MYSQL.getJdbcUrlPrefix(), MySqlDb.class);
+        StandardQueries.registerQueryImplementation(DbType.ORACLE.getJdbcUrlPrefix(), OracleDb.class);
+    }
+
 }

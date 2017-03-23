@@ -33,39 +33,34 @@
  * /
  */
 
-package org.qamatic.mintleaf.dbs.oracle;
+package org.qamatic.mintleaf.dbqueries;
 
-import org.qamatic.mintleaf.DatabaseContext;
-import org.qamatic.mintleaf.MintLeafException;
-import org.qamatic.mintleaf.Mintleaf;
-import org.qamatic.mintleaf.core.ChangeSets;
-import org.qamatic.mintleaf.core.JdbcDriverSource;
+import org.apache.commons.dbcp.BasicDataSource;
+import org.qamatic.mintleaf.DriverSource;
 
 /**
- * Created by qamatic on 3/4/16.
+ * Created by qamatic on 3/5/16.
  */
-public class OracleTestCase {
+public class ApacheBasicDataSource extends BasicDataSource implements DriverSource {
 
 
-    private static DatabaseContext oracleSysDbaCtx;
-
-    static {
-        oracleSysDbaCtx = createOracleDbContext(System.getenv("TEST_DB_MASTER_USERNAME"),
-                System.getenv("TEST_DB_MASTER_PASSWORD"));
-        try {
-            ChangeSets.migrate(oracleSysDbaCtx.getNewConnection(), "res:/oracle/hrdb-changesets/hrdb-schema-setup.sql", "create schema");
-        } catch (MintLeafException e) {
-            MintLeafException.throwException(e.getMessage());
-        }
+    @Override
+    public boolean isDebugEnabled() {
+        return false;
     }
 
-    public static DatabaseContext createOracleDbContext(String userName, String password) {
-        DatabaseContext db = new Mintleaf.DatabaseBuilder().
-                withDriverSource(JdbcDriverSource.class).
-                withUrl(System.getenv("TEST_DB_URL")).
-                withUsername(userName).
-                withPassword(password).
-                build();
-        return db;
+    @Override
+    public void setDebugEnabled(boolean debug) {
+
+    }
+
+    @Override
+    public void setProperty(String propName, String value) {
+
+    }
+
+    @Override
+    public String getProperty(String propName) {
+        return null;
     }
 }

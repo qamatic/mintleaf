@@ -43,26 +43,26 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class Database implements DbQueries {
+public class StandardQueries implements DbQueries {
 
-    private static final MintLeafLogger logger = MintLeafLogger.getLogger(Database.class);
-    private static final Map<String, Class<? extends Database>> registeredQueries = new HashMap<>();
+    private static final MintLeafLogger logger = MintLeafLogger.getLogger(StandardQueries.class);
+    private static final Map<String, Class<? extends StandardQueries>> registeredQueries = new HashMap<>();
     protected final ConnectionContext connectionContext;
 
 
-    public Database(ConnectionContext connectionContext) {
+    public StandardQueries(ConnectionContext connectionContext) {
         this.connectionContext = connectionContext;
     }
 
-    public static void registerQueryImplementation(String jdbcUrlPrefix, Class<? extends Database> dbQueryClaz) {
+    public static void registerQueryImplementation(String jdbcUrlPrefix, Class<? extends StandardQueries> dbQueryClaz) {
         if (!registeredQueries.containsKey(jdbcUrlPrefix)) {
             registeredQueries.put(jdbcUrlPrefix, dbQueryClaz);
         }
     }
 
-    public static Class<? extends Database> getQueryImplementation(String url) {
+    public static Class<? extends StandardQueries> getQueryImplementation(String url) {
         if (DbType.getDbType(url) == null)
-            return Database.class;
+            return StandardQueries.class;
         return registeredQueries.get(DbType.getDbType(url).getJdbcUrlPrefix());
     }
 
@@ -112,6 +112,7 @@ public class Database implements DbQueries {
 
         return queryInt(sql, parameterBinding);
     }
+
 
     @Override
     public void executeSql(String sql, ParameterBinding parameterBinding) throws MintLeafException {

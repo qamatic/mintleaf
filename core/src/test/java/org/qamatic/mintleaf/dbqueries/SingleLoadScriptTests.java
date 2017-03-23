@@ -33,7 +33,7 @@
  * /
  */
 
-package org.qamatic.mintleaf.dbs;
+package org.qamatic.mintleaf.dbqueries;
 
 import org.junit.Assert;
 import org.junit.Test;
@@ -52,7 +52,7 @@ public class SingleLoadScriptTests extends H2TestCase {
 
     @Test
     public void simpleScriptLoad() throws SQLException, IOException, MintLeafException {
-        SqlScript script = new SqlScriptFile(h2DatabaseContext.getNewConnection(), "res:/h2singlescript.sql", ";");
+        SqlScript script = new SqlScriptFile(h2Database.getNewConnection(), "res:/h2singlescript.sql", ";");
         script.apply();
 
         Assert.assertTrue(h2DbQueries.isTableExists("HRDB.USERS"));

@@ -36,10 +36,10 @@
 package org.qamatic.mintleaf.core;
 
 import org.qamatic.mintleaf.*;
-import org.qamatic.mintleaf.dbs.H2Db;
-import org.qamatic.mintleaf.dbs.MSSqlDb;
-import org.qamatic.mintleaf.dbs.MySqlDb;
-import org.qamatic.mintleaf.dbs.OracleDb;
+import org.qamatic.mintleaf.dbqueries.H2Db;
+import org.qamatic.mintleaf.dbqueries.MSSqlDb;
+import org.qamatic.mintleaf.dbqueries.MySqlDb;
+import org.qamatic.mintleaf.dbqueries.OracleDb;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
@@ -47,16 +47,10 @@ import java.lang.reflect.InvocationTargetException;
 /**
  * Created by qamatic on 3/6/16.
  */
-public class BasicDatabaseContext implements DatabaseContext {
+public class BasicDatabase implements Database {
 
-    private static final MintLeafLogger logger = MintLeafLogger.getLogger(BasicDatabaseContext.class);
+    private static final MintLeafLogger logger = MintLeafLogger.getLogger(BasicDatabase.class);
 
-    static {
-        Database.registerQueryImplementation(DbType.H2.getJdbcUrlPrefix(), H2Db.class);
-        Database.registerQueryImplementation(DbType.MSSQL.getJdbcUrlPrefix(), MSSqlDb.class);
-        Database.registerQueryImplementation(DbType.MYSQL.getJdbcUrlPrefix(), MySqlDb.class);
-        Database.registerQueryImplementation(DbType.ORACLE.getJdbcUrlPrefix(), OracleDb.class);
-    }
 
     private Class<? extends DriverSource> driverSourceClazz;
     private String url;
@@ -64,7 +58,7 @@ public class BasicDatabaseContext implements DatabaseContext {
     private String password;
     private DriverSource driverSource;
 
-    public BasicDatabaseContext(Class<? extends DriverSource> driverSourceClazz, String url, String username, String password) {
+    public BasicDatabase(Class<? extends DriverSource> driverSourceClazz, String url, String username, String password) {
         this.driverSourceClazz = driverSourceClazz;
         this.url = url;
         this.username = username;
@@ -72,7 +66,7 @@ public class BasicDatabaseContext implements DatabaseContext {
     }
 
     //spring beans can configure props easily
-    public BasicDatabaseContext(DriverSource driverSource) {
+    public BasicDatabase(DriverSource driverSource) {
         this.driverSource = driverSource;
         this.url = driverSource.getUrl();
         this.username = driverSource.getUsername();
@@ -93,35 +87,7 @@ public class BasicDatabaseContext implements DatabaseContext {
         return driverSource;
     }
 
-    private static DbQueries createDbQueryInstance(String url, ConnectionContext connectionContext) {
-        Class<? extends Database> queryImplClaz = Database.getQueryImplementation(url);
-        DbQueries dbQueries = null;
-        try {
-            Constructor constructor =
-                    queryImplClaz.getConstructor(new Class[]{ConnectionContext.class});
-            dbQueries = (DbQueries) constructor.newInstance(connectionContext);
-        } catch (InstantiationException e) {
-            logger.error(e);
-            MintLeafException.throwException(e);
-        } catch (IllegalAccessException e) {
-            logger.error(e);
-            MintLeafException.throwException(e);
-        } catch (NoSuchMethodException e) {
-            logger.error(e);
-            MintLeafException.throwException(e);
-        } catch (InvocationTargetException e) {
-            logger.error(e);
-            MintLeafException.throwException(e);
-        }
 
-        return dbQueries;
-    }
-
-    public DbQueries getDbQueries() {
-
-        return createDbQueryInstance(this.url, this.getNewConnection());
-
-    }
 
     public DriverSource getDriverSource() {
         if (this.driverSource == null) {

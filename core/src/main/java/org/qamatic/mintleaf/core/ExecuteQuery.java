@@ -51,7 +51,7 @@ public class ExecuteQuery implements DbCallable<Boolean> {
 
     private static final MintLeafLogger logger = MintLeafLogger.getLogger(ExecuteQuery.class);
     private Connection connection;
-    private PreparedStatement preparedStatement;
+
     private String sql;
     private ParameterBinding parameterBinding;
 
@@ -63,14 +63,11 @@ public class ExecuteQuery implements DbCallable<Boolean> {
 
     @Override
     public Boolean execute() throws MintLeafException {
-
-        try {
-            this.preparedStatement = connection.prepareStatement(this.sql);
-
+        try (PreparedStatement preparedStatement = connection.prepareStatement(this.sql)) {
             if (parameterBinding != null) {
-                parameterBinding.bindParameters(new ParameterSets(this.preparedStatement));
+                parameterBinding.bindParameters(new ParameterSets(preparedStatement));
             }
-            return this.preparedStatement.execute();
+            return preparedStatement.execute();
 
         } catch (MintLeafException e) {
             logger.error("error fetching data", e);
@@ -78,8 +75,6 @@ public class ExecuteQuery implements DbCallable<Boolean> {
         } catch (SQLException e) {
             logger.error(e);
             throw new MintLeafException(e);
-        } finally {
-            close();
         }
     }
 
@@ -87,20 +82,6 @@ public class ExecuteQuery implements DbCallable<Boolean> {
     @Override
     public Connection getConnection() throws SQLException {
         return this.connection;
-    }
-
-    @Override
-    public void close() throws MintLeafException {
-        try {
-            if (this.preparedStatement != null) {
-                this.preparedStatement.close();
-            }
-
-            this.preparedStatement = null;
-        } catch (SQLException e) {
-            logger.error("FluentJdbc close()", e);
-            throw new MintLeafException(e);
-        }
     }
 
 

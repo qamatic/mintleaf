@@ -33,34 +33,33 @@
  * /
  */
 
-package org.qamatic.mintleaf.dbs;
+package org.qamatic.mintleaf.dbqueries;
 
-import org.apache.commons.dbcp.BasicDataSource;
-import org.qamatic.mintleaf.DriverSource;
+import org.junit.Test;
+import org.qamatic.mintleaf.DbType;
+import org.qamatic.mintleaf.core.BasicDatabase;
+import org.qamatic.mintleaf.core.StandardQueries;
 
-/**
- * Created by qamatic on 3/5/16.
- */
-public class ApacheBasicDataSource extends BasicDataSource implements DriverSource {
+import static org.junit.Assert.assertEquals;
 
+public class UtilTests {
 
-    @Override
-    public boolean isDebugEnabled() {
-        return false;
+    BasicDatabase builder = new BasicDatabase(null, null, null, null);
+
+    @Test
+    public void testDbType() {
+        assertEquals(DbType.H2, DbType.getDbType("jdbc:H2:/"));
+        assertEquals(DbType.MYSQL, DbType.getDbType("jdbc:MySql:/"));
+        assertEquals(DbType.MSSQL, DbType.getDbType("/jdbc:SqlServer:/"));
+        assertEquals(DbType.ORACLE, DbType.getDbType("jdbc:Oracle:/"));
     }
 
-    @Override
-    public void setDebugEnabled(boolean debug) {
-
+    @Test
+    public void testQueryImpl() {
+        assertEquals(H2Db.class, StandardQueries.getQueryImplementation("jdbc:H2:/"));
+        assertEquals(MySqlDb.class, StandardQueries.getQueryImplementation("jdbc:MySql:/"));
+        assertEquals(MSSqlDb.class, StandardQueries.getQueryImplementation("jdbc:SqlServer:/"));
+        assertEquals(OracleDb.class, StandardQueries.getQueryImplementation("jdbc:Oracle:/"));
     }
 
-    @Override
-    public void setProperty(String propName, String value) {
-
-    }
-
-    @Override
-    public String getProperty(String propName) {
-        return null;
-    }
 }

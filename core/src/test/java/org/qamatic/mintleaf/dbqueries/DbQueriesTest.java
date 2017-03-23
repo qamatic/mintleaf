@@ -33,34 +33,49 @@
  * /
  */
 
-package org.qamatic.mintleaf.dbs;
+package org.qamatic.mintleaf.dbqueries;
 
-import org.junit.Assert;
 import org.junit.Test;
-import org.qamatic.mintleaf.ChangeSet;
+import org.qamatic.mintleaf.ConnectionContext;
+import org.qamatic.mintleaf.MintLeafException;
+import org.qamatic.mintleaf.core.DbConnectionContext;
+import org.qamatic.mintleaf.core.ExecuteQuery;
 
-import static org.junit.Assert.assertEquals;
+import java.io.IOException;
+import java.sql.SQLException;
 
-public class MultiPartTest {
+import static junit.framework.TestCase.assertNull;
+import static org.mockito.Mockito.*;
+
+/**
+ * Created by qamatic on 3/6/16.
+ */
+public class DbQueriesTest extends H2TestCase {
+
 
     @Test
-    public void testChangeSet1() {
-        String serialize = new ChangeSet().toString();
-        Assert.assertTrue(serialize, serialize.contains("<changeSet id=\"\" delimiter=\"\"/>"));
+    public void contextCloseCall() throws SQLException, IOException, MintLeafException {
+
+        ConnectionContext ctx = mock(DbConnectionContext.class);
+
+        try (ConnectionContext connectionContext = ctx) {
+            assertNull(connectionContext.getConnection());
+        }
+
+        verify(ctx, times(1)).close();
+
     }
 
     @Test
-    public void testChangeSet2() {
-        String serialize = new ChangeSet("test", ";", "").toString();
-        Assert.assertTrue(serialize, serialize.contains("<changeSet id=\"test\" delimiter=\";\"/>"));
-    }
+    public void executeQueryCloseCall() throws SQLException, IOException, MintLeafException {
 
-    @Test
-    public void testMultiPartTagFromXml() {
-        String xml = "<changeSet id=\"part1\" delimiter=\"/\" />";
-        ChangeSet detail = ChangeSet.xmlToChangeSet(xml);
-        assertEquals("part1", detail.getId());
-        assertEquals("/", detail.getDelimiter());
+        ExecuteQuery query = mock(ExecuteQuery.class);
+
+        try (ExecuteQuery qry = query) {
+            assertNull(qry.getConnection());
+        }
+
+        verify(query, times(1)).close();
     }
 
 

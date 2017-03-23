@@ -42,7 +42,7 @@
         http://www.springframework.org/schema/beans/spring-beans.xsd">
 
     <!--List of Database Connections goes here  -->
-    <bean id="H2-HRDB" class="org.qamatic.mintleaf.core.BasicDatabaseContext">
+    <bean id="H2-HRDB" class="org.qamatic.mintleaf.core.BasicDatabase">
         <constructor-arg>
             <bean class="org.qamatic.mintleaf.core.JdbcDriverSource">
                 <property name="driverClassName" value="org.h2.Driver"/>

@@ -55,9 +55,6 @@ public abstract class BaseSqlScript implements SqlScript {
         close();
     }
 
-    protected void close() throws MintLeafException {
-        connectionContext.close();
-    }
 
 
     public ChangeSetListener getReadListener() {

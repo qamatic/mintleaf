@@ -35,7 +35,7 @@
 
 package org.qamatic.mintleaf;
 
-import org.qamatic.mintleaf.core.BasicDatabaseContext;
+import org.qamatic.mintleaf.core.BasicDatabase;
 import org.qamatic.mintleaf.core.JdbcDriverSource;
 import org.qamatic.mintleaf.core.ObjectRowListWrapper;
 import org.qamatic.mintleaf.core.ResultSetRowListWrapper;
@@ -192,8 +192,8 @@ public class Mintleaf {
             return this;
         }
 
-        public DatabaseContext build() {
-            BasicDatabaseContext databaseContext = new BasicDatabaseContext(this.driverSourceClazz, this.url, this.username, this.password);
+        public Database build() {
+            BasicDatabase databaseContext = new BasicDatabase(this.driverSourceClazz, this.url, this.username, this.password);
             return databaseContext;
         }
 
@@ -203,7 +203,7 @@ public class Mintleaf {
     public static final class DbToCsvBuilder {
         private String sourceSql;
         private ParameterBinding sqlaramValueBindings;
-        private DatabaseContext sourceDb;
+        private Database sourceDb;
 
         private String targetCsvFile;
 
@@ -212,7 +212,7 @@ public class Mintleaf {
             return this;
         }
 
-        public DbToCsvBuilder withSourceDb(DatabaseContext sourceDb) {
+        public DbToCsvBuilder withSourceDb(Database sourceDb) {
             this.sourceDb = sourceDb;
             return this;
         }
@@ -240,11 +240,11 @@ public class Mintleaf {
 
     public static final class CsvToDbBuilder {
 
-        private DatabaseContext targetDb;
+        private Database targetDb;
         private String targetSqlTemplate;
         private String sourceCsvFile;
 
-        public CsvToDbBuilder withTargetDb(DatabaseContext targetDb) {
+        public CsvToDbBuilder withTargetDb(Database targetDb) {
             this.targetDb = targetDb;
             return this;
         }
@@ -273,9 +273,9 @@ public class Mintleaf {
     public static final class DbToDbBuilder {
         private String sourceSql;
         private ParameterBinding sqlaramValueBindings;
-        private DatabaseContext sourceDb;
+        private Database sourceDb;
 
-        private DatabaseContext targetDb;
+        private Database targetDb;
         private String targetSqlTemplate;
 
         public DbToDbBuilder withSqlaramValueBindings(ParameterBinding sqlaramValueBindings) {
@@ -283,7 +283,7 @@ public class Mintleaf {
             return this;
         }
 
-        public DbToDbBuilder withSourceDb(DatabaseContext sourceDbDriverSource) {
+        public DbToDbBuilder withSourceDb(Database sourceDbDriverSource) {
             this.sourceDb = sourceDbDriverSource;
             return this;
         }
@@ -293,7 +293,7 @@ public class Mintleaf {
             return this;
         }
 
-        public DbToDbBuilder withTargetDb(DatabaseContext targetDbDriverSource) {
+        public DbToDbBuilder withTargetDb(Database targetDbDriverSource) {
             this.targetDb = targetDbDriverSource;
             return this;
         }

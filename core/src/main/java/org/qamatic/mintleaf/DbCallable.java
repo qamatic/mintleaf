@@ -41,7 +41,7 @@ import java.sql.SQLException;
 /**
  * Created by QAmatic Team on 7/19/16.
  */
-public interface DbCallable<V> {
+public interface DbCallable<V> extends AutoCloseable {
 
 
     Connection getConnection() throws SQLException;

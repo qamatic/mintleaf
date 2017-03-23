@@ -33,33 +33,35 @@
  * /
  */
 
-package org.qamatic.mintleaf.dbs;
+package org.qamatic.mintleaf.dbqueries;
 
+import org.junit.Assert;
 import org.junit.Test;
-import org.qamatic.mintleaf.DbType;
-import org.qamatic.mintleaf.core.BasicDatabaseContext;
-import org.qamatic.mintleaf.core.Database;
+import org.qamatic.mintleaf.ChangeSet;
 
 import static org.junit.Assert.assertEquals;
 
-public class UtilTests {
-
-    BasicDatabaseContext builder = new BasicDatabaseContext(null, null, null, null);
+public class MultiPartTest {
 
     @Test
-    public void testDbType() {
-        assertEquals(DbType.H2, DbType.getDbType("jdbc:H2:/"));
-        assertEquals(DbType.MYSQL, DbType.getDbType("jdbc:MySql:/"));
-        assertEquals(DbType.MSSQL, DbType.getDbType("/jdbc:SqlServer:/"));
-        assertEquals(DbType.ORACLE, DbType.getDbType("jdbc:Oracle:/"));
+    public void testChangeSet1() {
+        String serialize = new ChangeSet().toString();
+        Assert.assertTrue(serialize, serialize.contains("<changeSet id=\"\" delimiter=\"\"/>"));
     }
 
     @Test
-    public void testQueryImpl() {
-        assertEquals(H2Db.class, Database.getQueryImplementation("jdbc:H2:/"));
-        assertEquals(MySqlDb.class, Database.getQueryImplementation("jdbc:MySql:/"));
-        assertEquals(MSSqlDb.class, Database.getQueryImplementation("jdbc:SqlServer:/"));
-        assertEquals(OracleDb.class, Database.getQueryImplementation("jdbc:Oracle:/"));
+    public void testChangeSet2() {
+        String serialize = new ChangeSet("test", ";", "").toString();
+        Assert.assertTrue(serialize, serialize.contains("<changeSet id=\"test\" delimiter=\";\"/>"));
     }
+
+    @Test
+    public void testMultiPartTagFromXml() {
+        String xml = "<changeSet id=\"part1\" delimiter=\"/\" />";
+        ChangeSet detail = ChangeSet.xmlToChangeSet(xml);
+        assertEquals("part1", detail.getId());
+        assertEquals("/", detail.getDelimiter());
+    }
+
 
 }

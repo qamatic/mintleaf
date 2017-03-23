@@ -33,7 +33,7 @@
  * /
  */
 
-package org.qamatic.mintleaf.dbs;
+package org.qamatic.mintleaf.dbqueries;
 
 import org.junit.Assert;
 import org.junit.Before;
@@ -48,16 +48,16 @@ public class ChangeSetsTest extends H2TestCase {
 
     @Before
     public void cleanDb() throws MintLeafException {
-        ChangeSets.migrate(h2DatabaseContext.getNewConnection(), "res:/Testddl.sql", "clean db, create schema");
+        ChangeSets.migrate(h2Database.getNewConnection(), "res:/Testddl.sql", "clean db, create schema");
     }
 
     @Test
     public void testLoadFromFile() throws SQLException, IOException, MintLeafException {
-        ChangeSets.migrate(h2DatabaseContext.getNewConnection(), "res:/Testddl.sql", "create tables");
+        ChangeSets.migrate(h2Database.getNewConnection(), "res:/Testddl.sql", "create tables");
         Assert.assertTrue(h2DbQueries.isTableExists("mintleaf.TABLE1"));
         Assert.assertTrue(h2DbQueries.isTableExists("mintleaf.TABLE2"));
 
-        ChangeSets.migrate(h2DatabaseContext.getNewConnection(), "res:/Testddl.sql", "drop tables");
+        ChangeSets.migrate(h2Database.getNewConnection(), "res:/Testddl.sql", "drop tables");
         Assert.assertFalse(h2DbQueries.isTableExists("mintleaf.TABLE1"));
         Assert.assertFalse(h2DbQueries.isTableExists("mintleaf.TABLE2"));
 
@@ -86,11 +86,11 @@ public class ChangeSetsTest extends H2TestCase {
 
         builder.append(" ");
 
-        ChangeSets.applySource(h2DatabaseContext.getNewConnection(), builder.toString(), ";");
+        ChangeSets.applySource(h2Database.getNewConnection(), builder.toString(), ";");
         Assert.assertTrue(h2DbQueries.isTableExists("mintleaf.TABLE1"));
         Assert.assertTrue(h2DbQueries.isTableExists("mintleaf.TABLE2"));
 
-        ChangeSets.migrate(h2DatabaseContext.getNewConnection(), "res:/Testddl.sql", "drop tables");
+        ChangeSets.migrate(h2Database.getNewConnection(), "res:/Testddl.sql", "drop tables");
         Assert.assertFalse(h2DbQueries.isTableExists("mintleaf.TABLE1"));
         Assert.assertFalse(h2DbQueries.isTableExists("mintleaf.TABLE2"));
 
@@ -99,22 +99,22 @@ public class ChangeSetsTest extends H2TestCase {
 
     @Test
     public void testChangeSetScenario2() throws SQLException, IOException, MintLeafException {
-        ChangeSets.migrate(h2DatabaseContext.getNewConnection(), "res:/Testddl.sql", new String[]{"create tables"});
+        ChangeSets.migrate(h2Database.getNewConnection(), "res:/Testddl.sql", new String[]{"create tables"});
         Assert.assertTrue(h2DbQueries.isTableExists("mintleaf.TABLE1"));
         Assert.assertTrue(h2DbQueries.isTableExists("mintleaf.TABLE2"));
 
 
-        ChangeSets.migrate(h2DatabaseContext.getNewConnection(), "res:/Testddl.sql", new String[]{"drop tables", "create tables"});
+        ChangeSets.migrate(h2Database.getNewConnection(), "res:/Testddl.sql", new String[]{"drop tables", "create tables"});
         Assert.assertTrue(h2DbQueries.isTableExists("mintleaf.TABLE1"));
         Assert.assertTrue(h2DbQueries.isTableExists("mintleaf.TABLE2"));
 
 
-        ChangeSets.migrate(h2DatabaseContext.getNewConnection(), "res:/Testddl.sql", new String[]{"drop tables"});
+        ChangeSets.migrate(h2Database.getNewConnection(), "res:/Testddl.sql", new String[]{"drop tables"});
         Assert.assertFalse(h2DbQueries.isTableExists("mintleaf.TABLE1"));
         Assert.assertFalse(h2DbQueries.isTableExists("mintleaf.TABLE2"));
 
 
-        ChangeSets.migrate(h2DatabaseContext.getNewConnection(), "res:/Testddl.sql", new String[]{"drop tables", "create tables",
+        ChangeSets.migrate(h2Database.getNewConnection(), "res:/Testddl.sql", new String[]{"drop tables", "create tables",
                 "drop tables"});
         Assert.assertFalse(h2DbQueries.isTableExists("mintleaf.TABLE1"));
         Assert.assertFalse(h2DbQueries.isTableExists("mintleaf.TABLE2"));

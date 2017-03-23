@@ -40,7 +40,7 @@ import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 import java.util.List;
 import java.util.regex.Pattern;
 
-public interface DbQueries {
+public interface DbQueries extends AutoCloseable{
 
     int getCount(String tableName, String whereClause, ParameterBinding parameterBinding) throws MintLeafException;
 
@@ -55,6 +55,10 @@ public interface DbQueries {
     default boolean isTableExists(String tableName) throws MintLeafException {
         throw new NotImplementedException();
     }
+
+    default void close() throws MintLeafException{
+
+    };
 
     default boolean isDbOptionExists(String optionName) throws MintLeafException {
         throw new NotImplementedException();

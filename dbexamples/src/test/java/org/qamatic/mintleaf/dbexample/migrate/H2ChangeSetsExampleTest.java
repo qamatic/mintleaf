@@ -38,7 +38,7 @@ package org.qamatic.mintleaf.dbexample.migrate;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.qamatic.mintleaf.DatabaseContext;
+import org.qamatic.mintleaf.Database;
 import org.qamatic.mintleaf.MintLeafException;
 import org.qamatic.mintleaf.core.ChangeSets;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -58,21 +58,21 @@ public class H2ChangeSetsExampleTest {
 
     @Autowired()
     @Qualifier("H2-HRDB")
-    private DatabaseContext hrDatabaseContext;
+    private Database hrDatabase;
 
 
     @Before
     public void createDb() throws IOException, SQLException, MintLeafException {
-        if (hrDatabaseContext.getDbQueries().isTableExists("HRDB.USERS"))
+        if (hrDatabase.getNewConnection().getDbQueries().isTableExists("HRDB.USERS"))
             return;
 
-        ChangeSets.migrate(hrDatabaseContext.getNewConnection(), "res:/h2-changesets/v1/schema-v1.sql", "create schema, load seed data");
+        ChangeSets.migrate(hrDatabase.getNewConnection(), "res:/h2-changesets/v1/schema-v1.sql", "create schema, load seed data");
 
     }
 
     @Test
     public void testCount() throws MintLeafException {
-        assertEquals(7, hrDatabaseContext.getDbQueries().getCount("HRDB.USERS"));
+        assertEquals(7, hrDatabase.getNewConnection().getDbQueries().getCount("HRDB.USERS"));
     }
 
 
