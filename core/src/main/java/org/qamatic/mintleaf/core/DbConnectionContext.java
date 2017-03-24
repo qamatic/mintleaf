@@ -129,10 +129,6 @@ public class DbConnectionContext implements ConnectionContext {
         }
     }
 
-    @Override
-    public FluentJdbc queryBuilder() {
-        return new FluentJdbc.Builder().withDataSource(this.driverSource).build();
-    }
 
     @Override
     public DbQueries getDbQueries() {

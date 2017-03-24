@@ -52,6 +52,7 @@ public class ParameterSets {
 
     private static final MintLeafLogger logger = MintLeafLogger.getLogger(ParameterSets.class);
     private PreparedStatement preparedStatement;
+    private boolean batch = false;
 
     public ParameterSets(PreparedStatement preparedStatement) {
         this.preparedStatement = preparedStatement;
@@ -1525,5 +1526,17 @@ public class ParameterSets {
         }
     }
 
+    public void addBatch() throws MintLeafException {
+        batch = true;
+        try {
+            this.preparedStatement.addBatch();
+        } catch (SQLException e) {
+            throw new MintLeafException(e);
+        }
+    }
+
+    public boolean isBatch(){
+        return this.batch;
+    }
 
 }

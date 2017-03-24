@@ -39,7 +39,6 @@ import org.junit.Before;
 import org.junit.Test;
 import org.qamatic.mintleaf.*;
 import org.qamatic.mintleaf.core.ChangeSets;
-import org.qamatic.mintleaf.core.FluentJdbc;
 import org.qamatic.mintleaf.tools.DbImporter;
 
 import java.io.IOException;
@@ -48,6 +47,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
+import static org.qamatic.mintleaf.Mintleaf.selectQuery;
 
 
 /**
@@ -85,12 +85,17 @@ public class DbComparerTests extends H2TestCase {
             }
         };
 
-        FluentJdbc sourceTable = h2Database.queryBuilder().withSql("SELECT * FROM HRDB.USERS");
-        FluentJdbc targetTable = h2Database.queryBuilder().withSql("SELECT * FROM HRDB.USERS_IMPORT_TABLE");
+        try (ConnectionContext connectionContext = h2Database.getNewConnection()) {
 
-        List<String> actuals = assertCompareTable(sourceTable.asRowListWrapper(), targetTable.asRowListWrapper());
+            SqlResultSet sourceTable = selectQuery(connectionContext).withSql("SELECT * FROM HRDB.USERS").buildSelect();
 
-        assertEquals(expected, actuals);
+
+            SqlResultSet targetTable =  selectQuery(connectionContext).withSql("SELECT * FROM HRDB.USERS_IMPORT_TABLE").buildSelect();
+
+            List<String> actuals = assertCompareTable(sourceTable.asRowListWrapper(), targetTable.asRowListWrapper());
+
+            assertEquals(expected, actuals);
+        }
     }
 
 

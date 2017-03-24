@@ -47,7 +47,7 @@ public class CommandExecutor implements ChangeSetListener {
 
     @Override
     public void onChangeSetRead(StringBuilder sql, ChangeSet changeSetInfo) throws MintLeafException {
-        ExecuteQuery query = new ExecuteQuery(connectionContext.getConnection(), sql.toString(), null);
+        ExecuteQuery query = new ExecuteQuery(connectionContext, sql.toString(), null);
         try {
             logger.info(String.format("Executing Query: %s \n--\n", sql.toString()));
             query.execute();

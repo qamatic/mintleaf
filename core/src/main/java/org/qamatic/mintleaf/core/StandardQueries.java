@@ -43,6 +43,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static org.qamatic.mintleaf.Mintleaf.executeQuery;
+import static org.qamatic.mintleaf.Mintleaf.selectQuery;
+
 public class StandardQueries implements DbQueries {
 
     private static final MintLeafLogger logger = MintLeafLogger.getLogger(StandardQueries.class);
@@ -69,9 +72,10 @@ public class StandardQueries implements DbQueries {
     public <T> List<T> query(String sql, ParameterBinding parameterBinding, final DataRowListener<T> listener) throws MintLeafException {
 
         final List<T> rows = new ArrayList<T>();
-        FluentJdbc fluentJdbc = null;
-        try {
-            fluentJdbc = connectionContext.queryBuilder().withSql(sql).withParamValues(parameterBinding).query((row, dr) -> {
+
+        try (SqlResultSet sqlResultSet = selectQuery(connectionContext).withSql(sql).withParamValues(parameterBinding).buildSelect()) {
+
+            sqlResultSet.iterate((row, dr) -> {
                 try {
                     rows.add(listener.eachRow(row, dr));
                 } catch (MintLeafException e) {
@@ -79,24 +83,19 @@ public class StandardQueries implements DbQueries {
                 }
                 return null;
             });
-        } finally {
-            fluentJdbc.close();
         }
         return rows;
     }
 
     @Override
     public int queryInt(String sql, ParameterBinding parameterBinding) throws MintLeafException {
-        FluentJdbc fluentJdbc = null;
+        try (SqlResultSet sqlResultSet = selectQuery(connectionContext).withSql(sql).withParamValues(parameterBinding).buildSelect()) {
 
-        try {
-            fluentJdbc = connectionContext.queryBuilder().withSql(sql).withParamValues(parameterBinding).first();
-            return fluentJdbc.getResultSet().getInt(1);
-        } catch (SQLException e) {
-            throw new MintLeafException(e);
-        } finally {
-            if (fluentJdbc != null)
-                fluentJdbc.close();
+            try {
+                return sqlResultSet.first().getInt(1);
+            } catch (SQLException e) {
+                throw new MintLeafException(e);
+            }
         }
     }
 
@@ -115,7 +114,13 @@ public class StandardQueries implements DbQueries {
 
 
     @Override
-    public void executeSql(String sql, ParameterBinding parameterBinding) throws MintLeafException {
-        FluentJdbc.executeSql(connectionContext, sql, parameterBinding);
+    public int[] executeSql(String sql, ParameterBinding parameterBinding) throws MintLeafException {
+        try (DbCallable<int[]> callable = executeQuery(connectionContext).withSql(sql).withParamValues(parameterBinding).buildExecute()) {
+            try {
+                return callable.execute();
+            } catch (Exception e) {
+                throw new MintLeafException(e);
+            }
+        }
     }
 }

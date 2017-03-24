@@ -72,7 +72,7 @@ public class DbQueriesTest extends H2TestCase {
         ExecuteQuery query = mock(ExecuteQuery.class);
 
         try (ExecuteQuery qry = query) {
-            assertNull(qry.getConnection());
+            assertNull(qry.execute());
         }
 
         verify(query, times(1)).close();

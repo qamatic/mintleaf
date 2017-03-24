@@ -48,14 +48,14 @@ import java.sql.SQLException;
 public class SelectQuery implements DbCallable<SqlResultSet> {
 
     private static final MintLeafLogger logger = MintLeafLogger.getLogger(SelectQuery.class);
-    private Connection connection;
+    private ConnectionContext connectionContext;
     private PreparedStatement preparedStatement;
     private ResultSet resultSet;
     private String sql;
     private ParameterBinding parameterBinding;
 
-    public SelectQuery(Connection connection, String sql, ParameterBinding parameterBinding) {
-        this.connection = connection;
+    public SelectQuery(ConnectionContext connectionContext, String sql, ParameterBinding parameterBinding) {
+        this.connectionContext = connectionContext;
         this.parameterBinding = parameterBinding;
         this.sql = sql;
     }
@@ -63,7 +63,7 @@ public class SelectQuery implements DbCallable<SqlResultSet> {
     private ResultSet getResultSet() throws MintLeafException {
         if (this.resultSet == null) {
             try {
-                this.preparedStatement = connection.prepareStatement(this.sql);
+                this.preparedStatement = connectionContext.getConnection().prepareStatement(this.sql);
                 if (this.resultSet == null) {
                     if (parameterBinding != null) {
                         parameterBinding.bindParameters(new ParameterSets(this.preparedStatement));
@@ -83,10 +83,6 @@ public class SelectQuery implements DbCallable<SqlResultSet> {
         return this.resultSet;
     }
 
-
-    public Connection getConnection() throws SQLException {
-        return this.connection;
-    }
 
     @Override
     public void close() throws MintLeafException {

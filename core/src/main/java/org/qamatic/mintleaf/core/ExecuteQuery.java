@@ -35,39 +35,61 @@
 
 package org.qamatic.mintleaf.core;
 
-import org.qamatic.mintleaf.DbCallable;
-import org.qamatic.mintleaf.MintLeafException;
-import org.qamatic.mintleaf.MintLeafLogger;
-import org.qamatic.mintleaf.ParameterBinding;
+import org.qamatic.mintleaf.*;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.List;
 
 /**
  * Created by qamatic on 2/20/16.
  */
-public class ExecuteQuery implements DbCallable<Boolean> {
+public class ExecuteQuery implements DbCallable<int[]> {
 
     private static final MintLeafLogger logger = MintLeafLogger.getLogger(ExecuteQuery.class);
-    private Connection connection;
+    private ConnectionContext connectionContext;
 
     private String sql;
     private ParameterBinding parameterBinding;
+    private List<String> batchSqls; // ugly.. so need deferred execution but come back later
 
-    public ExecuteQuery(Connection connection, String sql, ParameterBinding parameterBinding) {
-        this.connection = connection;
+    public ExecuteQuery(ConnectionContext connectionContext, String sql, ParameterBinding parameterBinding) {
+        this.connectionContext = connectionContext;
         this.parameterBinding = parameterBinding;
         this.sql = sql;
     }
 
+    public ExecuteQuery(ConnectionContext connectionContext, List<String> batchSqls) {
+        this.connectionContext = connectionContext;
+        this.batchSqls = batchSqls;
+    }
+
     @Override
-    public Boolean execute() throws MintLeafException {
-        try (PreparedStatement preparedStatement = connection.prepareStatement(this.sql)) {
-            if (parameterBinding != null) {
-                parameterBinding.bindParameters(new ParameterSets(preparedStatement));
+    public int[] execute() throws MintLeafException {
+
+        if (batchSqls != null) {
+            try (Statement statement = connectionContext.getConnection().createStatement()) {
+                for (String sqlItem : batchSqls) {
+                    statement.addBatch(sqlItem);
+                }
+                return statement.executeBatch();
+            } catch (SQLException e) {
+                logger.error(e);
+                throw new MintLeafException(e);
             }
-            return preparedStatement.execute();
+        }
+
+        try (PreparedStatement preparedStatement = connectionContext.getConnection().prepareStatement(this.sql)) {
+            ParameterSets parameterSets = new ParameterSets(preparedStatement);
+            if (parameterBinding != null) {
+                parameterBinding.bindParameters(parameterSets);
+            }
+            if (parameterSets.isBatch()) {
+                return preparedStatement.executeBatch();
+            }
+            return new int[]{preparedStatement.execute() ? 1 : 0};
 
         } catch (MintLeafException e) {
             logger.error("error fetching data", e);
@@ -78,11 +100,6 @@ public class ExecuteQuery implements DbCallable<Boolean> {
         }
     }
 
-
-    @Override
-    public Connection getConnection() throws SQLException {
-        return this.connection;
-    }
 
 
 }

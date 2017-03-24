@@ -56,7 +56,5 @@ public interface ConnectionContext extends AutoCloseable {
 
     void rollbackTransaction() throws MintLeafException;
 
-    FluentJdbc queryBuilder();
-
     DbQueries getDbQueries();
 }

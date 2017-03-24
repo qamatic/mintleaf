@@ -114,9 +114,9 @@ public interface DbQueries extends AutoCloseable{
         return objectNames;
     }
 
-    void executeSql(String sql, ParameterBinding parameterBinding) throws MintLeafException;
+    int[]  executeSql(String sql, ParameterBinding parameterBinding) throws MintLeafException;
 
-    default void executeSql(String sql) throws MintLeafException {
-        executeSql(sql, null);
+    default int[]  executeSql(String sql) throws MintLeafException {
+       return executeSql(sql, null);
     }
 }

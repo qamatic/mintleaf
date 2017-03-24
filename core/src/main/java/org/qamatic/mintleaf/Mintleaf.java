@@ -35,10 +35,7 @@
 
 package org.qamatic.mintleaf;
 
-import org.qamatic.mintleaf.core.BasicDatabase;
-import org.qamatic.mintleaf.core.JdbcDriverSource;
-import org.qamatic.mintleaf.core.ObjectRowListWrapper;
-import org.qamatic.mintleaf.core.ResultSetRowListWrapper;
+import org.qamatic.mintleaf.core.*;
 import org.qamatic.mintleaf.data.*;
 import org.qamatic.mintleaf.tools.CsvExporter;
 import org.qamatic.mintleaf.tools.CsvImporter;
@@ -51,7 +48,7 @@ import java.util.List;
 /**
  * Created by qamatic on 3/1/16.
  */
-public class Mintleaf {
+public final class Mintleaf {
 
     private static final MintLeafLogger logger = MintLeafLogger.getLogger(Mintleaf.class);
 
@@ -313,6 +310,19 @@ public class Mintleaf {
             dbImporter.setSourceSqlParamValueBindings(sqlaramValueBindings);
             return dbImporter;
         }
+    }
+
+
+    public static FluentJdbc.Builder selectQuery(ConnectionContext connectionContext) {
+        return new FluentJdbc.Builder(connectionContext);
+    }
+
+    public static FluentJdbc.Builder executeQuery(ConnectionContext connectionContext) {
+        return new FluentJdbc.Builder(connectionContext);
+    }
+
+    public static DbCallable<int[]> executeBatchSqls(ConnectionContext connectionContext, List<String> batchSqls) {
+        return new ExecuteQuery(connectionContext, batchSqls);
     }
 
 }

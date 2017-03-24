@@ -38,6 +38,8 @@ package org.qamatic.mintleaf.tools;
 import org.qamatic.mintleaf.*;
 import org.qamatic.mintleaf.core.FluentJdbc;
 
+import static org.qamatic.mintleaf.Mintleaf.selectQuery;
+
 /**
  * Created by qamatic on 3/6/16.
  */
@@ -61,11 +63,9 @@ public class DbImporter extends ImpExpBase implements DataAction {
 
     @Override
     public void execute() throws MintLeafException {
-        FluentJdbc sourceDbQuery = this.sourceDb.queryBuilder().
-                withSql(sourceSql).
-                withParamValues(this.sourceSqlParamValueBindings);
-
-        importDataFrom(new DbImportFlavour(sourceDbQuery), this.targetSqlTemplate);
+        try (SqlResultSet sourceSqlResultSet = selectQuery(this.getConnectionContext()).withSql(sourceSql).withParamValues(sourceSqlParamValueBindings).buildSelect()) {
+            importDataFrom(new DbImportFlavour(sourceSqlResultSet), this.targetSqlTemplate);
+        }
     }
 
     @Override

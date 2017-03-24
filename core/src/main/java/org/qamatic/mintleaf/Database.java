@@ -54,10 +54,6 @@ public interface Database {
         return new DbConnectionContext(getDriverSource(), autoCloseable);
     }
 
-    default FluentJdbc queryBuilder() {
-        return getDriverSource().queryBuilder();
-    }
-
     default DbType getSupportedDbType() {
         return DbType.getDbType(getDriverSource().getUrl());
     }

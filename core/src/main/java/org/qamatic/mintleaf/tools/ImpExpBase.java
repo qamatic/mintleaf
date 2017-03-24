@@ -35,14 +35,15 @@
 
 package org.qamatic.mintleaf.tools;
 
-import org.qamatic.mintleaf.ConnectionContext;
-import org.qamatic.mintleaf.MintLeafException;
-import org.qamatic.mintleaf.MintLeafLogger;
-import org.qamatic.mintleaf.ParameterBinding;
-import org.qamatic.mintleaf.core.FluentJdbc;
+import org.qamatic.mintleaf.*;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import static org.qamatic.mintleaf.Mintleaf.executeBatchSqls;
+import static org.qamatic.mintleaf.Mintleaf.selectQuery;
 
 /**
  * Created by qamatic on 3/6/16.
@@ -58,32 +59,33 @@ public abstract class ImpExpBase {
         final Pattern columnPattern = Pattern.compile("\\$(\\w+)\\$", Pattern.DOTALL | Pattern.MULTILINE | Pattern.CASE_INSENSITIVE);
         final Matcher columns = columnPattern.matcher(sqlTemplate);
         logger.info("importing using template:" + sqlTemplate);
-        final FluentJdbc fluentJdbc = this.getConnectionContext().queryBuilder();
+        List<String> batchSqls = new ArrayList<>();
+        final DbCallable<int[]> batchCall = executeBatchSqls(getConnectionContext(), batchSqls);
         dataImport.doImport((rowNum, row) -> {
-
-
+            
             StringBuffer buffer = new StringBuffer(sqlTemplate);
             columns.reset();
             while (columns.find()) {
                 int idx = buffer.indexOf("$" + columns.group(1));
                 buffer.replace(idx, idx + columns.group(1).length() + 2, row.asString(columns.group(1)));
             }
-            fluentJdbc.addBatch(buffer.toString());
+            batchSqls.add(buffer.toString());
 
 
             return null;
         });
         dataImport.close();
-        fluentJdbc.executeBatch();
-        fluentJdbc.close();
+        try {
+            batchCall.execute();
+        } catch (Exception e) {
+            throw new MintLeafException(e);
+        }
+
     }
 
     protected void exportDataTo(final ExportFlavour dataExport, String sql, ParameterBinding parameterBinding) throws MintLeafException {
-        FluentJdbc fluentJdbc = this.getConnectionContext().queryBuilder().withSql(sql).withParamValues(parameterBinding);
-        try {
-            dataExport.export(fluentJdbc.getResultSet());
-        } finally {
-            fluentJdbc.close();
+        try (SqlResultSet sqlResultSet = selectQuery(this.getConnectionContext()).withSql(sql).withParamValues(parameterBinding).buildSelect()) {
+            dataExport.export(sqlResultSet.getResultSet());
         }
     }
 }

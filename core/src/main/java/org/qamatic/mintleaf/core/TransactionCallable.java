@@ -46,57 +46,6 @@ import java.util.concurrent.Callable;
  * Created by QAmatic Team on 3/19/17.
  */
 public class TransactionCallable<T> implements Callable<T> {
-
-    private static final MintLeafLogger logger = MintLeafLogger.getLogger(TransactionCallable.class);
-    private DbCallable dbCallable;
-
-    public TransactionCallable(DbCallable dbCallable) {
-
-        this.dbCallable = dbCallable;
-    }
-
-    public T doCall() throws MintLeafException {
-        T t = null;
-        boolean prevStatus = true;
-        Object prevStatusNullableObject = null;
-        try {
-            prevStatus = this.dbCallable.getConnection().getAutoCommit();
-            this.dbCallable.getConnection().setAutoCommit(false);
-            prevStatusNullableObject = prevStatus;
-            t = (T) this.dbCallable.execute();
-            this.dbCallable.getConnection().commit();
-
-        } catch (SQLException e) {
-            rollback();
-            logger.error("transaction error:", e);
-            throw new MintLeafException(e);
-        } catch (Exception e) {
-            rollback();
-            logger.error("transaction error:", e);
-            throw new MintLeafException(e);
-        } finally {
-            try {
-                if (prevStatusNullableObject != null) {
-                    this.dbCallable.getConnection().setAutoCommit(prevStatus);
-                }
-            } catch (SQLException e) {
-                logger.error("transaction error/error restoring previous autocommit status:", e);
-                throw new MintLeafException(e);
-            }
-        }
-
-        return t;
-    }
-
-    private void rollback() {
-        try {
-            this.dbCallable.getConnection().rollback();
-        } catch (SQLException e1) {
-            e1.printStackTrace();
-        }
-    }
-
-
     /**
      * Computes a result, or throws an exception if unable to do so.
      *
@@ -105,6 +54,67 @@ public class TransactionCallable<T> implements Callable<T> {
      */
     @Override
     public T call() throws Exception {
-        return doCall();
+        return null;
     }
+
+//    private static final MintLeafLogger logger = MintLeafLogger.getLogger(TransactionCallable.class);
+//    private DbCallable dbCallable;
+//
+//    public TransactionCallable(DbCallable dbCallable) {
+//
+//        this.dbCallable = dbCallable;
+//    }
+//
+//    public T doCall() throws MintLeafException {
+//        T t = null;
+//        boolean prevStatus = true;
+//        Object prevStatusNullableObject = null;
+//        try {
+//            prevStatus = this.dbCallable.getConnection().getAutoCommit();
+//            this.dbCallable.getConnection().setAutoCommit(false);
+//            prevStatusNullableObject = prevStatus;
+//            t = (T) this.dbCallable.execute();
+//            this.dbCallable.getConnection().commit();
+//
+//        } catch (SQLException e) {
+//            rollback();
+//            logger.error("transaction error:", e);
+//            throw new MintLeafException(e);
+//        } catch (Exception e) {
+//            rollback();
+//            logger.error("transaction error:", e);
+//            throw new MintLeafException(e);
+//        } finally {
+//            try {
+//                if (prevStatusNullableObject != null) {
+//                    this.dbCallable.getConnection().setAutoCommit(prevStatus);
+//                }
+//            } catch (SQLException e) {
+//                logger.error("transaction error/error restoring previous autocommit status:", e);
+//                throw new MintLeafException(e);
+//            }
+//        }
+//
+//        return t;
+//    }
+//
+//    private void rollback() {
+//        try {
+//            this.dbCallable.getConnection().rollback();
+//        } catch (SQLException e1) {
+//            e1.printStackTrace();
+//        }
+//    }
+//
+//
+//    /**
+//     * Computes a result, or throws an exception if unable to do so.
+//     *
+//     * @return computed result
+//     * @throws Exception if unable to compute a result
+//     */
+//    @Override
+//    public T call() throws Exception {
+//        return doCall();
+//    }
 }

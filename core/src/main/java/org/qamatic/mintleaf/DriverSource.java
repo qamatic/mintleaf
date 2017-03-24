@@ -84,9 +84,6 @@ public interface DriverSource extends DataSource, DbSettings {
         return false;
     }
 
-    default FluentJdbc queryBuilder() {
-        return new FluentJdbc.Builder().withDataSource(this).build();
-    }
 
     default String getInfo() {
         return toString();

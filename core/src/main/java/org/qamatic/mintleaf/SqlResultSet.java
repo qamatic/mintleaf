@@ -40,7 +40,7 @@ import java.sql.ResultSet;
 /**
  * Created by QAmatic Team on 3/16/17.
  */
-public interface SqlResultSet {
+public interface SqlResultSet extends AutoCloseable {
     ResultSet getResultSet() throws MintLeafException;
 
     void close() throws MintLeafException;

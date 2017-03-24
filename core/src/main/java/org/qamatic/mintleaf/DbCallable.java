@@ -43,9 +43,6 @@ import java.sql.SQLException;
  */
 public interface DbCallable<V> extends AutoCloseable {
 
-
-    Connection getConnection() throws SQLException;
-
     default void close() throws MintLeafException {
 
     }
