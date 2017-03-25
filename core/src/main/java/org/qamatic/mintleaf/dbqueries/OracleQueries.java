@@ -46,11 +46,11 @@ import java.util.List;
 /**
  * Created by QAMatic on 4/6/15.
  */
-public class OracleDb extends StandardQueries {
+public class OracleQueries extends StandardQueries {
 
-    private static final MintLeafLogger logger = MintLeafLogger.getLogger(OracleDb.class);
+    private static final MintLeafLogger logger = MintLeafLogger.getLogger(OracleQueries.class);
 
-    public OracleDb(ConnectionContext connectionContext) {
+    public OracleQueries(ConnectionContext connectionContext) {
         super(connectionContext);
     }
 

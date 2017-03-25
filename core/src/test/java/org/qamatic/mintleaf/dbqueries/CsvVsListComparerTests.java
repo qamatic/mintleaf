@@ -51,6 +51,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
+import static org.qamatic.mintleaf.Mintleaf.comparer;
 
 
 /**
@@ -91,7 +92,7 @@ public class CsvVsListComparerTests {
         };
 
 
-        DataComparer dataComparer = new Mintleaf.ComparerBuilder().
+        DataComparer dataComparer = comparer().
                 withSourceTable(csvRowListWrapper).
                 withTargetTable(targetUserList, getMetaData()).
                 withMatchingResult(new ComparerListener() {

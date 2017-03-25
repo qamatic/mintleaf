@@ -47,6 +47,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
+import static org.qamatic.mintleaf.Mintleaf.comparer;
 import static org.qamatic.mintleaf.Mintleaf.selectQuery;
 
 
@@ -102,7 +103,7 @@ public class DbComparerTests extends H2TestCase {
     private List<String> assertCompareTable(RowListWrapper sourceList, RowListWrapper targetListList) throws MintLeafException {
         final List<String> actuals = new ArrayList<>();
 
-        DataComparer dataComparer = new Mintleaf.ComparerBuilder().
+        DataComparer dataComparer = comparer().
                 withSourceTable(sourceList).
                 withTargetTable(targetListList).
                 withMatchingResult((sourceColumn, targetColumn) -> {

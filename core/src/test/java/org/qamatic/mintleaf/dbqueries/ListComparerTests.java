@@ -45,6 +45,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
+import static org.qamatic.mintleaf.Mintleaf.comparer;
 
 
 /**
@@ -63,7 +64,7 @@ public class ListComparerTests {
     private static List<String> assertCompareTable(List<User> sourceList, List<User> targetListList) throws MintLeafException {
         final List<String> actuals = new ArrayList<>();
         final ConsoleLogger logger = new ConsoleLogger(ListComparerTests.class);
-        DataComparer dataComparer = new Mintleaf.ComparerBuilder().
+        DataComparer dataComparer = comparer().
                 withSourceTable(sourceList, columnDefs).
                 withTargetTable(targetListList, columnDefs).
                 withMatchingResult((sourceCol, targetCol) -> {
@@ -135,7 +136,7 @@ public class ListComparerTests {
         List<User> sourceUserList = getSampleData2();
         List<User> targetUserList = getSampleData2();
 
-        DataComparer dataComparer = new Mintleaf.ComparerBuilder().
+        DataComparer dataComparer = comparer().
                 withSourceTable(sourceUserList, columnDefs).
                 withTargetTable(targetUserList, columnDefs).
                 withMatchingResult((sourceColumn, targetColumn) -> {

@@ -38,7 +38,7 @@ package org.qamatic.mintleaf;
 import java.sql.Statement;
 
 /**
- * Created by senips on 3/24/17.
+ * Created by QAmatic Team on 3/24/17.
  */
 public interface StatementListener {
     void onAfterExecuteSql(Statement statement);

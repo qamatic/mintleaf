@@ -40,7 +40,7 @@ import java.sql.Connection;
 /**
  * Created by QAmatic Team on 3/19/17.
  */
-public interface ConnectionContext extends AutoCloseable {
+public interface ConnectionContext<T extends DbQueries> extends AutoCloseable {
 
     Connection getConnection() throws MintLeafException;
 
@@ -54,5 +54,7 @@ public interface ConnectionContext extends AutoCloseable {
 
     void rollbackTransaction() throws MintLeafException;
 
-    DbQueries getDbQueries();
+    T getDbQueries();
+
+
 }

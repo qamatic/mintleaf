@@ -44,6 +44,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
+import static org.qamatic.mintleaf.Mintleaf.comparer;
 
 /**
  * Created by QAmatic Team on 3/12/17.
@@ -73,7 +74,7 @@ public class SelectedMatchTests {
 
         final List<String> actuals = new ArrayList<>();
 
-        DataComparer dataComparer = new Mintleaf.ComparerBuilder().
+        DataComparer dataComparer = comparer().
                 withSourceTable(sourceList, sourceColumnDefs).
                 withTargetTable(targetListList, targetColumnDefs).
                 withSelectedColumnMaps(selectedColumnMaps).

@@ -36,10 +36,10 @@
 package org.qamatic.mintleaf.core;
 
 import org.qamatic.mintleaf.*;
-import org.qamatic.mintleaf.dbqueries.H2Db;
-import org.qamatic.mintleaf.dbqueries.MSSqlDb;
-import org.qamatic.mintleaf.dbqueries.MySqlDb;
-import org.qamatic.mintleaf.dbqueries.OracleDb;
+import org.qamatic.mintleaf.dbqueries.H2Queries;
+import org.qamatic.mintleaf.dbqueries.MSSqlQueries;
+import org.qamatic.mintleaf.dbqueries.MySqlQueries;
+import org.qamatic.mintleaf.dbqueries.OracleQueries;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
@@ -49,16 +49,9 @@ import java.sql.SQLException;
 /**
  * Created by QAmatic Team on 3/19/17.
  */
-public class DbConnectionContext implements ConnectionContext {
+public class DbConnectionContext<T extends DbQueries> implements ConnectionContext<T> {
 
     private static final MintLeafLogger logger = MintLeafLogger.getLogger(DbConnectionContext.class);
-
-    static {
-        StandardQueries.registerQueryImplementation(DbType.H2.getJdbcUrlPrefix(), H2Db.class);
-        StandardQueries.registerQueryImplementation(DbType.MSSQL.getJdbcUrlPrefix(), MSSqlDb.class);
-        StandardQueries.registerQueryImplementation(DbType.MYSQL.getJdbcUrlPrefix(), MySqlDb.class);
-        StandardQueries.registerQueryImplementation(DbType.ORACLE.getJdbcUrlPrefix(), OracleDb.class);
-    }
 
     private Connection connection;
     private DriverSource driverSource;
@@ -163,9 +156,10 @@ public class DbConnectionContext implements ConnectionContext {
         }
     }
 
+
     @Override
-    public DbQueries getDbQueries() {
-        return createDbQueryInstance(this.driverSource.getUrl(), this);
+    public T getDbQueries() {
+        return (T) createDbQueryInstance(this.driverSource.getUrl(), this);
     }
 
     @Override

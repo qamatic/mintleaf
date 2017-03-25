@@ -41,8 +41,8 @@ import org.qamatic.mintleaf.core.StandardQueries;
 /**
  * Created by qamatic on 3/6/16.
  */
-public class MySqlDb extends StandardQueries {
-    public MySqlDb(ConnectionContext connectionContext) {
+public class MSSqlQueries extends StandardQueries {
+    public MSSqlQueries(ConnectionContext connectionContext) {
         super(connectionContext);
     }
 

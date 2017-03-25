@@ -33,39 +33,51 @@
  * /
  */
 
-package org.qamatic.mintleaf.dbqueries;
+package org.qamatic.mintleaf.builders;
 
-import org.junit.BeforeClass;
 import org.qamatic.mintleaf.Database;
-import org.qamatic.mintleaf.DbQueries;
-import org.qamatic.mintleaf.core.JdbcDriverSource;
-
-import static org.qamatic.mintleaf.Mintleaf.database;
+import org.qamatic.mintleaf.Executable;
+import org.qamatic.mintleaf.Mintleaf;
+import org.qamatic.mintleaf.ParameterBinding;
+import org.qamatic.mintleaf.tools.CsvExporter;
 
 /**
- * Created by qamatic on 3/3/16.
+ * Created by QAmatic Team on 3/25/17.
  */
-public class H2TestCase {
-    protected static Database h2Database;
-    protected static DbQueries h2DbQueries;
+public final class DbToCsvBuilder {
+    private String sourceSql;
+    private ParameterBinding sqlaramValueBindings;
+    private Database sourceDb;
 
-    @BeforeClass
-    public static void setupDb() {
+    private String targetCsvFile;
 
-        if (h2Database != null)
-            return;
-
-        h2Database = database().
-                withDriverSource(JdbcDriverSource.class).
-                withUrl("jdbc:h2:file:./target/H2DbScriptTests;mv_store=false;").
-                build();
-        h2DbQueries = h2Database.getNewConnection().getDbQueries();
-
-        /*
-            Database db = Database.builder().withUrl("").with
-
-         */
-
+    public DbToCsvBuilder withSqlaramValueBindings(ParameterBinding sqlaramValueBindings) {
+        this.sqlaramValueBindings = sqlaramValueBindings;
+        return this;
     }
 
+    public DbToCsvBuilder withSourceDb(Database sourceDb) {
+        this.sourceDb = sourceDb;
+        return this;
+    }
+
+    public DbToCsvBuilder withSourceSql(String sourceSql) {
+        this.sourceSql = sourceSql;
+        return this;
+    }
+
+    public DbToCsvBuilder withTargetCsvFile(String targetCsvFile) {
+        this.targetCsvFile = targetCsvFile;
+        return this;
+    }
+
+    public Executable<Boolean> build() {
+        CsvExporter csvExporter = new CsvExporter(
+                sourceDb.getNewConnection(),
+                sourceSql,
+                targetCsvFile
+        );
+        csvExporter.setSqlaramValueBindings(sqlaramValueBindings);
+        return csvExporter;
+    }
 }

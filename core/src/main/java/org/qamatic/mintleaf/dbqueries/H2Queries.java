@@ -46,9 +46,9 @@ import java.util.regex.Pattern;
 /**
  * Created by qamatic on 3/6/16.
  */
-public class H2Db extends StandardQueries {
+public class H2Queries extends StandardQueries {
 
-    public H2Db(ConnectionContext connectionContext) {
+    public H2Queries(ConnectionContext connectionContext) {
         super(connectionContext);
     }
 

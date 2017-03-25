@@ -35,37 +35,19 @@
 
 package org.qamatic.mintleaf.dbqueries;
 
-import org.junit.BeforeClass;
-import org.qamatic.mintleaf.Database;
-import org.qamatic.mintleaf.DbQueries;
-import org.qamatic.mintleaf.core.JdbcDriverSource;
-
-import static org.qamatic.mintleaf.Mintleaf.database;
+import org.qamatic.mintleaf.ConnectionContext;
 
 /**
- * Created by qamatic on 3/3/16.
+ * Created by QAmatic Team on 3/25/17.
  */
-public class H2TestCase {
-    protected static Database h2Database;
-    protected static DbQueries h2DbQueries;
+public class MyH2Queries extends H2Queries implements H2ExampleAssert {
 
-    @BeforeClass
-    public static void setupDb() {
-
-        if (h2Database != null)
-            return;
-
-        h2Database = database().
-                withDriverSource(JdbcDriverSource.class).
-                withUrl("jdbc:h2:file:./target/H2DbScriptTests;mv_store=false;").
-                build();
-        h2DbQueries = h2Database.getNewConnection().getDbQueries();
-
-        /*
-            Database db = Database.builder().withUrl("").with
-
-         */
-
+    public MyH2Queries(ConnectionContext connectionContext) {
+        super(connectionContext);
     }
 
+    @Override
+    public String returnSomeValue() {
+        return "test";
+    }
 }

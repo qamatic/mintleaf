@@ -53,6 +53,7 @@ public interface Database {
         return new DbConnectionContext(getDriverSource(), autoCloseable);
     }
 
+
     default DbType getSupportedDbType() {
         return DbType.getDbType(getDriverSource().getUrl());
     }

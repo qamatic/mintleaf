@@ -33,39 +33,44 @@
  * /
  */
 
-package org.qamatic.mintleaf.dbqueries;
+package org.qamatic.mintleaf.builders;
 
-import org.junit.BeforeClass;
 import org.qamatic.mintleaf.Database;
-import org.qamatic.mintleaf.DbQueries;
-import org.qamatic.mintleaf.core.JdbcDriverSource;
-
-import static org.qamatic.mintleaf.Mintleaf.database;
+import org.qamatic.mintleaf.Executable;
+import org.qamatic.mintleaf.Mintleaf;
+import org.qamatic.mintleaf.tools.CsvImporter;
 
 /**
- * Created by qamatic on 3/3/16.
+ * Created by QAmatic Team on 3/25/17.
  */
-public class H2TestCase {
-    protected static Database h2Database;
-    protected static DbQueries h2DbQueries;
+public final class CsvToDbBuilder {
 
-    @BeforeClass
-    public static void setupDb() {
+    private Database targetDb;
+    private String targetSqlTemplate;
+    private String sourceCsvFile;
 
-        if (h2Database != null)
-            return;
-
-        h2Database = database().
-                withDriverSource(JdbcDriverSource.class).
-                withUrl("jdbc:h2:file:./target/H2DbScriptTests;mv_store=false;").
-                build();
-        h2DbQueries = h2Database.getNewConnection().getDbQueries();
-
-        /*
-            Database db = Database.builder().withUrl("").with
-
-         */
-
+    public CsvToDbBuilder withTargetDb(Database targetDb) {
+        this.targetDb = targetDb;
+        return this;
     }
 
+    public CsvToDbBuilder withTargetSqlTemplate(String targetSqlTemplate) {
+        this.targetSqlTemplate = targetSqlTemplate;
+        return this;
+    }
+
+    public CsvToDbBuilder withSourceCsvFile(String sourceCsvFile) {
+        this.sourceCsvFile = sourceCsvFile;
+        return this;
+    }
+
+    public Executable<Boolean> build() {
+        CsvImporter csvImporter = new CsvImporter(
+                sourceCsvFile,
+                targetDb.getNewConnection(),
+                targetSqlTemplate);
+
+
+        return csvImporter;
+    }
 }

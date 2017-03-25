@@ -61,6 +61,13 @@ public class BasicDatabase implements Database {
         this.password = password;
     }
 
+    public BasicDatabase(String url, String username, String password) {
+        this.driverSourceClazz = JdbcDriverSource.class;
+        this.url = url;
+        this.username = username;
+        this.password = password;
+    }
+
     //spring beans can configure props easily
     public BasicDatabase(DriverSource driverSource) {
         this.driverSource = driverSource;

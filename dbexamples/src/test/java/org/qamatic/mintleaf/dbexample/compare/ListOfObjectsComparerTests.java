@@ -37,6 +37,7 @@ package org.qamatic.mintleaf.dbexample.compare;
 
 import org.junit.Test;
 import org.qamatic.mintleaf.*;
+import org.qamatic.mintleaf.builders.ComparerBuilder;
 import org.qamatic.mintleaf.data.ComparerListener;
 import org.qamatic.mintleaf.dbexample.reportgenerator.ComparisonResultReportGenerator;
 
@@ -47,6 +48,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
+import static org.qamatic.mintleaf.Mintleaf.comparer;
 
 
 /**
@@ -88,7 +90,7 @@ public class ListOfObjectsComparerTests {
 
     private void doCompare(List<User> sourceUserList, List<User> targetUserList, ComparerListener listener) throws MintLeafException {
 
-        DataComparer dataComparer = new Mintleaf.ComparerBuilder().
+        DataComparer dataComparer = comparer().
                 withSourceTable(sourceUserList, getMetaData()).
                 withTargetTable(targetUserList, getMetaData()).
                 withMatchingResult(listener).

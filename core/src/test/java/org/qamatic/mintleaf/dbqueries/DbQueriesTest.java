@@ -37,12 +37,11 @@ package org.qamatic.mintleaf.dbqueries;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.qamatic.mintleaf.ConnectionContext;
-import org.qamatic.mintleaf.Executable;
-import org.qamatic.mintleaf.MintLeafException;
+import org.qamatic.mintleaf.*;
 import org.qamatic.mintleaf.core.ChangeSets;
 import org.qamatic.mintleaf.core.DbConnectionContext;
 import org.qamatic.mintleaf.core.ExecuteQuery;
+import org.qamatic.mintleaf.core.StandardQueries;
 
 import java.io.IOException;
 import java.sql.SQLException;
@@ -166,6 +165,15 @@ public class DbQueriesTest extends H2TestCase {
                 assertEquals(3, ctx.getDbQueries().getCount("HRDB.USERS"));
             }
             assertEquals(3, ctx.getDbQueries().getCount("HRDB.USERS"));
+        }
+    }
+
+    @Test
+    public void reRegisterDbQueryTest() throws SQLException, IOException, MintLeafException {
+        StandardQueries.registerQueryImplementation(DbType.H2.getJdbcUrlPrefix(), MyH2Queries.class);
+
+        try (ConnectionContext<MyH2Queries> ctx = h2Database.getNewConnection()) {
+            assertEquals("test", ctx.getDbQueries().returnSomeValue());
         }
     }
 

@@ -56,10 +56,10 @@ public class UtilTests {
 
     @Test
     public void testQueryImpl() {
-        assertEquals(H2Db.class, StandardQueries.getQueryImplementation("jdbc:H2:/"));
-        assertEquals(MySqlDb.class, StandardQueries.getQueryImplementation("jdbc:MySql:/"));
-        assertEquals(MSSqlDb.class, StandardQueries.getQueryImplementation("jdbc:SqlServer:/"));
-        assertEquals(OracleDb.class, StandardQueries.getQueryImplementation("jdbc:Oracle:/"));
+        assertEquals(H2Queries.class, StandardQueries.getQueryImplementation("jdbc:H2:/"));
+        assertEquals(MySqlQueries.class, StandardQueries.getQueryImplementation("jdbc:MySql:/"));
+        assertEquals(MSSqlQueries.class, StandardQueries.getQueryImplementation("jdbc:SqlServer:/"));
+        assertEquals(OracleQueries.class, StandardQueries.getQueryImplementation("jdbc:Oracle:/"));
     }
 
 }

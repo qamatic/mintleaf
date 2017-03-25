@@ -51,6 +51,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
+import static org.qamatic.mintleaf.Mintleaf.comparer;
 
 
 /**
@@ -59,6 +60,7 @@ import static org.junit.Assert.assertEquals;
 public class CsvVsListComparerTests {
 
     private static final MintLeafLogger logger = MintLeafLogger.getLogger(CsvVsListComparerTests.class);
+
     private static ColumnMetaDataCollection getMetaData() throws MintLeafException {
 
         ColumnMetaDataCollection metaDataCollection = new ColumnMetaDataCollection("USERS");
@@ -86,8 +88,8 @@ public class CsvVsListComparerTests {
                 add(new User("qamatic"));
             }
         };
-        
-        DataComparer dataComparer = new Mintleaf.ComparerBuilder().
+
+        DataComparer dataComparer = comparer().
                 withSourceTable(csvRowListWrapper).
                 withTargetTable(targetUserList, getMetaData()).
                 withMatchingResult(new ComparerListener() {

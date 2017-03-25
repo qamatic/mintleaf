@@ -33,18 +33,46 @@
  * /
  */
 
-package org.qamatic.mintleaf.dbqueries;
+package org.qamatic.mintleaf.builders;
 
-import org.qamatic.mintleaf.ConnectionContext;
-import org.qamatic.mintleaf.core.StandardQueries;
+import org.qamatic.mintleaf.Database;
+import org.qamatic.mintleaf.DriverSource;
+import org.qamatic.mintleaf.core.BasicDatabase;
+import org.qamatic.mintleaf.core.JdbcDriverSource;
 
 /**
- * Created by qamatic on 3/6/16.
+ * Created by QAmatic Team on 3/25/17.
  */
-public class MSSqlDb extends StandardQueries {
-    public MSSqlDb(ConnectionContext connectionContext) {
-        super(connectionContext);
+public final class DatabaseBuilder {
+
+    private Class<? extends DriverSource> driverSourceClazz = JdbcDriverSource.class;
+    private String url;
+    private String username;
+    private String password;
+
+    public DatabaseBuilder withDriverSource(Class<? extends DriverSource> driverSourceClazz) {
+        this.driverSourceClazz = driverSourceClazz;
+        return this;
     }
 
+    public DatabaseBuilder withUrl(String url) {
+        this.url = url;
+        return this;
+    }
+
+    public DatabaseBuilder withUsername(String username) {
+        this.username = username;
+        return this;
+    }
+
+    public DatabaseBuilder withPassword(String password) {
+        this.password = password;
+        return this;
+    }
+
+    public Database build() {
+        BasicDatabase databaseContext = new BasicDatabase(this.driverSourceClazz, this.url, this.username, this.password);
+        return databaseContext;
+    }
 
 }

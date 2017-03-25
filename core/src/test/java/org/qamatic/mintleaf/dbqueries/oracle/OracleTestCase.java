@@ -37,9 +37,10 @@ package org.qamatic.mintleaf.dbqueries.oracle;
 
 import org.qamatic.mintleaf.Database;
 import org.qamatic.mintleaf.MintLeafException;
-import org.qamatic.mintleaf.Mintleaf;
 import org.qamatic.mintleaf.core.ChangeSets;
 import org.qamatic.mintleaf.dbqueries.ApacheBasicDataSource;
+
+import static org.qamatic.mintleaf.Mintleaf.database;
 
 /**
  * Created by qamatic on 3/4/16.
@@ -60,7 +61,7 @@ public class OracleTestCase {
     }
 
     public static Database createOracleDbContext(String userName, String password) {
-        Database db = new Mintleaf.DatabaseBuilder().
+        Database db = database().
                 withDriverSource(ApacheBasicDataSource.class).
                 withUrl(System.getenv("TEST_DB_URL")).
                 withUsername(userName).
