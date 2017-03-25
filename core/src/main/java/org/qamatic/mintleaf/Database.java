@@ -36,7 +36,6 @@
 package org.qamatic.mintleaf;
 
 import org.qamatic.mintleaf.core.DbConnectionContext;
-import org.qamatic.mintleaf.core.FluentJdbc;
 
 /**
  * Created by qamatic on 12/6/15.

@@ -60,15 +60,15 @@ public class FluentJdbc {
         }
 
 
-        public Builder withParamValues(ParameterBinding parameterBinding)  {
+        public Builder withParamValues(ParameterBinding parameterBinding) {
             this.parameterBinding = parameterBinding;
             return this;
         }
 
-        public Builder withParamValues(final Object[] parameterValues)  {
+        public Builder withParamValues(final Object[] parameterValues) {
             this.parameterBinding = parameterSets -> {
                 for (int i = 0; i < parameterValues.length; i++) {
-                    parameterSets.setObject(i+1, parameterValues[i]);
+                    parameterSets.setObject(i + 1, parameterValues[i]);
                 }
             };
             return this;
@@ -81,7 +81,7 @@ public class FluentJdbc {
         }
 
 
-        public DbCallable<int[]> buildExecute() {
+        public Executable<int[]> buildExecute() {
             try {
                 ExecuteQuery query = new ExecuteQuery(this.connectionContext, this.sql, this.parameterBinding);
                 query.setStatementListener(this.statementListener);

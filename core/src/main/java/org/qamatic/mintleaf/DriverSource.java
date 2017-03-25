@@ -35,8 +35,6 @@
 
 package org.qamatic.mintleaf;
 
-import org.qamatic.mintleaf.core.FluentJdbc;
-
 import javax.sql.DataSource;
 import java.io.PrintWriter;
 import java.sql.SQLException;

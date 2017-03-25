@@ -35,8 +35,6 @@
 
 package org.qamatic.mintleaf;
 
-import org.qamatic.mintleaf.core.FluentJdbc;
-
 import java.sql.Connection;
 
 /**
@@ -50,7 +48,7 @@ public interface ConnectionContext extends AutoCloseable {
 
     void close() throws MintLeafException;
 
-    void beginTransaction() throws MintLeafException;
+    ConnectionContext beginTransaction() throws MintLeafException;
 
     void commitTransaction() throws MintLeafException;
 

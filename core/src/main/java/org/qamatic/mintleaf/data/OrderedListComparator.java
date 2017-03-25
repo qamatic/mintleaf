@@ -62,7 +62,7 @@ public class OrderedListComparator implements DataComparer {
     }
 
     @Override
-    public void execute() throws MintLeafException {
+    public Boolean execute() throws MintLeafException {
         assertBefore();
         if (this.comparerListener != null) {
             this.comparerListener.OnBeginCompare(this.sourceTable, this.targetTable);
@@ -118,6 +118,7 @@ public class OrderedListComparator implements DataComparer {
         if (this.comparerListener != null) {
             this.comparerListener.OnEndCompare(sourceRowState, targetRowState);
         }
+        return true;
     }
 
     private void assertBefore() throws MintLeafException {

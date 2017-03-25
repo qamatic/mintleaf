@@ -56,7 +56,6 @@ public abstract class BaseSqlScript implements SqlScript {
     }
 
 
-
     public ChangeSetListener getReadListener() {
         if (changeSetListener == null) {
             changeSetListener = new CommandExecutor(connectionContext);

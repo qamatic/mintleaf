@@ -73,13 +73,13 @@ public class ParameterSets {
      * @param inputStream    An object that contains the data to set the parameter
      *                       value to.
      * @param length         the number of bytes in the parameter data.
-     * @throws MintLeafException               if parameterIndex does not correspond to a parameter
-     *                                         marker in the SQL statement; if a database access error occurs;
-     *                                         this method is called on a closed <code>PreparedStatement</code>;
-     *                                         if the length specified
-     *                                         is less than zero or if the number of bytes in the inputstream does not match
-     *                                         the specified length.
-     * @throws SQLFeatureNotSupportedException if the JDBC driver does not support this method
+     * @throws MintLeafException if parameterIndex does not correspond to a parameter
+     *                           marker in the SQL statement; if a database access error occurs;
+     *                           this method is called on a closed <code>PreparedStatement</code>;
+     *                           if the length specified
+     *                           is less than zero or if the number of bytes in the inputstream does not match
+     *                           the specified length.
+     * @throws MintLeafException if the JDBC driver does not support this method
      * @since 1.6
      */
     public void setBlob(int parameterIndex, InputStream inputStream, long length) throws MintLeafException {
@@ -99,10 +99,10 @@ public class ParameterSets {
      *
      * @param parameterIndex the first parameter is 1, the second is 2, ...
      * @param x              a <code>Blob</code> object that maps an SQL <code>BLOB</code> value
-     * @throws MintLeafException               if parameterIndex does not correspond to a parameter
-     *                                         marker in the SQL statement; if a database access error occurs or
-     *                                         this method is called on a closed <code>PreparedStatement</code>
-     * @throws SQLFeatureNotSupportedException if the JDBC driver does not support this method
+     * @throws MintLeafException if parameterIndex does not correspond to a parameter
+     *                           marker in the SQL statement; if a database access error occurs or
+     *                           this method is called on a closed <code>PreparedStatement</code>
+     * @throws MintLeafException if the JDBC driver does not support this method
      * @since 1.2
      */
     public void setBlob(int parameterIndex, Blob x) throws MintLeafException {
@@ -150,10 +150,10 @@ public class ParameterSets {
      *
      * @param parameterIndex the first parameter is 1, the second is 2, ...
      * @param x              the <code>java.net.URL</code> object to be set
-     * @throws MintLeafException               if parameterIndex does not correspond to a parameter
-     *                                         marker in the SQL statement; if a database access error occurs or
-     *                                         this method is called on a closed <code>PreparedStatement</code>
-     * @throws SQLFeatureNotSupportedException if the JDBC driver does not support this method
+     * @throws MintLeafException if parameterIndex does not correspond to a parameter
+     *                           marker in the SQL statement; if a database access error occurs or
+     *                           this method is called on a closed <code>PreparedStatement</code>
+     * @throws MintLeafException if the JDBC driver does not support this method
      * @since 1.4
      */
     public void setURL(int parameterIndex, URL x) throws MintLeafException {
@@ -171,21 +171,21 @@ public class ParameterSets {
      * driver does the necessary conversion from Java character format to
      * the national character set in the database.
      * <p>
-     * <P><B>Note:</B> This stream object can either be a standard
+     * <B>Note:</B> This stream object can either be a standard
      * Java stream object or your own subclass that implements the
      * standard interface.
-     * <P><B>Note:</B> Consult your JDBC driver documentation to determine if
+     * <B>Note:</B> Consult your JDBC driver documentation to determine if
      * it might be more efficient to use a version of
      * <code>setNCharacterStream</code> which takes a length parameter.
      *
      * @param parameterIndex of the first parameter is 1, the second is 2, ...
      * @param value          the parameter value
-     * @throws MintLeafException               if parameterIndex does not correspond to a parameter
-     *                                         marker in the SQL statement; if the driver does not support national
-     *                                         character sets;  if the driver can detect that a data conversion
-     *                                         error could occur; if a database access error occurs; or
-     *                                         this method is called on a closed <code>PreparedStatement</code>
-     * @throws SQLFeatureNotSupportedException if the JDBC driver does not support this method
+     * @throws MintLeafException if parameterIndex does not correspond to a parameter
+     *                           marker in the SQL statement; if the driver does not support national
+     *                           character sets;  if the driver can detect that a data conversion
+     *                           error could occur; if a database access error occurs; or
+     *                           this method is called on a closed <code>PreparedStatement</code>
+     * @throws MintLeafException if the JDBC driver does not support this method
      * @since 1.6
      */
     public void setNCharacterStream(int parameterIndex, Reader value) throws MintLeafException {
@@ -229,7 +229,7 @@ public class ParameterSets {
      * The byte format of the Unicode stream must be a Java UTF-8, as defined in the
      * Java Virtual Machine Specification.
      * <p>
-     * <P><B>Note:</B> This stream object can either be a standard
+     * <B>Note:</B> This stream object can either be a standard
      * Java stream object or your own subclass that implements the
      * standard interface.
      *
@@ -237,11 +237,11 @@ public class ParameterSets {
      * @param x              a <code>java.io.InputStream</code> object that contains the
      *                       Unicode parameter value
      * @param length         the number of bytes in the stream
-     * @throws MintLeafException               if parameterIndex does not correspond to a parameter
-     *                                         marker in the SQL statement; if a database access error occurs or
-     *                                         this method is called on a closed <code>PreparedStatement</code>
-     * @throws SQLFeatureNotSupportedException if the JDBC driver does not support
-     *                                         this method
+     * @throws MintLeafException if parameterIndex does not correspond to a parameter
+     *                           marker in the SQL statement; if a database access error occurs or
+     *                           this method is called on a closed <code>PreparedStatement</code>
+     * @throws MintLeafException if the JDBC driver does not support
+     *                           this method
      * @deprecated Use {@code setCharacterStream } catch (SQLException e) {             throw new MintLeafException(e);         }}
      */
     @Deprecated
@@ -255,7 +255,7 @@ public class ParameterSets {
 
     /**
      * Clears the current parameter values immediately.
-     * <P>In general, parameter values remain in force for repeated use of a
+     * In general, parameter values remain in force for repeated use of a
      * statement. Setting a parameter value automatically clears its
      * previous value.  However, in some cases it is useful to immediately
      * release the resources used by the current parameter values; this can
@@ -320,7 +320,7 @@ public class ParameterSets {
      * as needed until end-of-file is reached.  The JDBC driver will
      * do any necessary conversion from UNICODE to the database char format.
      * <p>
-     * <P><B>Note:</B> This stream object can either be a standard
+     * <B>Note:</B> This stream object can either be a standard
      * Java stream object or your own subclass that implements the
      * standard interface.
      *
@@ -349,17 +349,17 @@ public class ParameterSets {
      * driver may have to do extra work to determine whether the parameter
      * data should be sent to the server as a <code>LONGVARCHAR</code> or a <code>CLOB</code>
      * <p>
-     * <P><B>Note:</B> Consult your JDBC driver documentation to determine if
+     * <B>Note:</B> Consult your JDBC driver documentation to determine if
      * it might be more efficient to use a version of
      * <code>setClob</code> which takes a length parameter.
      *
      * @param parameterIndex index of the first parameter is 1, the second is 2, ...
      * @param reader         An object that contains the data to set the parameter value to.
-     * @throws MintLeafException               if parameterIndex does not correspond to a parameter
-     *                                         marker in the SQL statement; if a database access error occurs; this method is called on
-     *                                         a closed <code>PreparedStatement</code>or if parameterIndex does not correspond to a parameter
-     *                                         marker in the SQL statement
-     * @throws SQLFeatureNotSupportedException if the JDBC driver does not support this method
+     * @throws MintLeafException if parameterIndex does not correspond to a parameter
+     *                           marker in the SQL statement; if a database access error occurs; this method is called on
+     *                           a closed <code>PreparedStatement</code>or if parameterIndex does not correspond to a parameter
+     *                           marker in the SQL statement
+     * @throws MintLeafException if the JDBC driver does not support this method
      * @since 1.6
      */
     public void setClob(int parameterIndex, Reader reader) throws MintLeafException {
@@ -376,12 +376,12 @@ public class ParameterSets {
      *
      * @param parameterIndex of the first parameter is 1, the second is 2, ...
      * @param value          the parameter value
-     * @throws MintLeafException               if parameterIndex does not correspond to a parameter
-     *                                         marker in the SQL statement; if the driver does not support national
-     *                                         character sets;  if the driver can detect that a data conversion
-     *                                         error could occur; if a database access error occurs; or
-     *                                         this method is called on a closed <code>PreparedStatement</code>
-     * @throws SQLFeatureNotSupportedException if the JDBC driver does not support this method
+     * @throws MintLeafException if parameterIndex does not correspond to a parameter
+     *                           marker in the SQL statement; if the driver does not support national
+     *                           character sets;  if the driver can detect that a data conversion
+     *                           error could occur; if a database access error occurs; or
+     *                           this method is called on a closed <code>PreparedStatement</code>
+     * @throws MintLeafException if the JDBC driver does not support this method
      * @since 1.6
      */
     public void setNClob(int parameterIndex, NClob value) throws MintLeafException {
@@ -399,10 +399,10 @@ public class ParameterSets {
      *
      * @param parameterIndex the first parameter is 1, the second is 2, ...
      * @param x              the parameter value
-     * @throws MintLeafException               if parameterIndex does not correspond to a parameter
-     *                                         marker in the SQL statement; if a database access error occurs or
-     *                                         this method is called on a closed <code>PreparedStatement</code>
-     * @throws SQLFeatureNotSupportedException if the JDBC driver does not support this method
+     * @throws MintLeafException if parameterIndex does not correspond to a parameter
+     *                           marker in the SQL statement; if a database access error occurs or
+     *                           this method is called on a closed <code>PreparedStatement</code>
+     * @throws MintLeafException if the JDBC driver does not support this method
      * @since 1.6
      */
     public void setRowId(int parameterIndex, RowId x) throws MintLeafException {
@@ -440,10 +440,10 @@ public class ParameterSets {
      *
      * @param parameterIndex the first parameter is 1, the second is 2, ...
      * @param x              an SQL <code>REF</code> value
-     * @throws MintLeafException               if parameterIndex does not correspond to a parameter
-     *                                         marker in the SQL statement; if a database access error occurs or
-     *                                         this method is called on a closed <code>PreparedStatement</code>
-     * @throws SQLFeatureNotSupportedException if the JDBC driver does not support this method
+     * @throws MintLeafException if parameterIndex does not correspond to a parameter
+     *                           marker in the SQL statement; if a database access error occurs or
+     *                           this method is called on a closed <code>PreparedStatement</code>
+     * @throws MintLeafException if the JDBC driver does not support this method
      * @since 1.2
      */
     public void setRef(int parameterIndex, Ref x) throws MintLeafException {
@@ -483,7 +483,7 @@ public class ParameterSets {
      * as needed until end-of-file is reached.  The JDBC driver will
      * do any necessary conversion from ASCII to the database char format.
      * <p>
-     * <P><B>Note:</B> This stream object can either be a standard
+     * <B>Note:</B> This stream object can either be a standard
      * Java stream object or your own subclass that implements the
      * standard interface.
      *
@@ -511,7 +511,7 @@ public class ParameterSets {
      * <code>java.io.InputStream</code> object. The data will be read from the
      * stream as needed until end-of-file is reached.
      * <p>
-     * <P><B>Note:</B> This stream object can either be a standard
+     * <B>Note:</B> This stream object can either be a standard
      * Java stream object or your own subclass that implements the
      * standard interface.
      *
@@ -534,17 +534,16 @@ public class ParameterSets {
      * Sets the designated parameter to the given <code>java.sql.SQLXML</code> object.
      * The driver converts this to an
      * SQL <code>XML</code> value when it sends it to the database.
-     * <p>
      *
      * @param parameterIndex index of the first parameter is 1, the second is 2, ...
      * @param xmlObject      a <code>SQLXML</code> object that maps an SQL <code>XML</code> value
-     * @throws MintLeafException               if parameterIndex does not correspond to a parameter
-     *                                         marker in the SQL statement; if a database access error occurs;
-     *                                         this method is called on a closed <code>PreparedStatement</code>
-     *                                         or the <code>java.xml.transform.Result</code>,
-     *                                         <code>Writer</code> or <code>OutputStream</code> has not been closed for
-     *                                         the <code>SQLXML</code> object
-     * @throws SQLFeatureNotSupportedException if the JDBC driver does not support this method
+     * @throws MintLeafException if parameterIndex does not correspond to a parameter
+     *                           marker in the SQL statement; if a database access error occurs;
+     *                           this method is called on a closed <code>PreparedStatement</code>
+     *                           or the <code>java.xml.transform.Result</code>,
+     *                           <code>Writer</code> or <code>OutputStream</code> has not been closed for
+     *                           the <code>SQLXML</code> object
+     * @throws MintLeafException if the JDBC driver does not support this method
      * @since 1.6
      */
     public void setSQLXML(int parameterIndex, SQLXML xmlObject) throws MintLeafException {
@@ -569,14 +568,11 @@ public class ParameterSets {
      * By default, a <code>Statement</code> is not poolable when created, and
      * a <code>PreparedStatement</code> and <code>CallableStatement</code>
      * are poolable when created.
-     * <p>
      *
      * @param poolable requests that the statement be pooled if true and
      *                 that the statement not be pooled if false
-     *                 <p>
      * @throws MintLeafException if this method is called on a closed
      *                           <code>Statement</code>
-     *                           <p>
      * @since 1.6
      */
     public void setPoolable(boolean poolable) throws MintLeafException {
@@ -656,19 +652,19 @@ public class ParameterSets {
      * <code>java.io.InputStream</code> object. The data will be read from the
      * stream as needed until end-of-file is reached.
      * <p>
-     * <P><B>Note:</B> This stream object can either be a standard
+     * <B>Note:</B> This stream object can either be a standard
      * Java stream object or your own subclass that implements the
      * standard interface.
-     * <P><B>Note:</B> Consult your JDBC driver documentation to determine if
+     * <B>Note:</B> Consult your JDBC driver documentation to determine if
      * it might be more efficient to use a version of
      * <code>setBinaryStream</code> which takes a length parameter.
      *
      * @param parameterIndex the first parameter is 1, the second is 2, ...
      * @param x              the java input stream which contains the binary parameter value
-     * @throws MintLeafException               if parameterIndex does not correspond to a parameter
-     *                                         marker in the SQL statement; if a database access error occurs or
-     *                                         this method is called on a closed <code>PreparedStatement</code>
-     * @throws SQLFeatureNotSupportedException if the JDBC driver does not support this method
+     * @throws MintLeafException if parameterIndex does not correspond to a parameter
+     *                           marker in the SQL statement; if a database access error occurs or
+     *                           this method is called on a closed <code>PreparedStatement</code>
+     * @throws MintLeafException if the JDBC driver does not support this method
      * @since 1.6
      */
     public void setBinaryStream(int parameterIndex, InputStream x) throws MintLeafException {
@@ -682,20 +678,20 @@ public class ParameterSets {
     /**
      * Sets the designated parameter to SQL <code>NULL</code>.
      * <p>
-     * <P><B>Note:</B> You must specify the parameter's SQL type.
+     * <B>Note:</B> You must specify the parameter's SQL type.
      *
      * @param parameterIndex the first parameter is 1, the second is 2, ...
      * @param sqlType        the SQL type code defined in <code>java.sql.Types</code>
-     * @throws MintLeafException               if parameterIndex does not correspond to a parameter
-     *                                         marker in the SQL statement; if a database access error occurs or
-     *                                         this method is called on a closed <code>PreparedStatement</code>
-     * @throws SQLFeatureNotSupportedException if <code>sqlType</code> is
-     *                                         a <code>ARRAY</code>, <code>BLOB</code>, <code>CLOB</code>,
-     *                                         <code>DATALINK</code>, <code>JAVA_OBJECT</code>, <code>NCHAR</code>,
-     *                                         <code>NCLOB</code>, <code>NVARCHAR</code>, <code>LONGNVARCHAR</code>,
-     *                                         <code>REF</code>, <code>ROWID</code>, <code>SQLXML</code>
-     *                                         or  <code>STRUCT</code> data type and the JDBC driver does not support
-     *                                         this data type
+     * @throws MintLeafException if parameterIndex does not correspond to a parameter
+     *                           marker in the SQL statement; if a database access error occurs or
+     *                           this method is called on a closed <code>PreparedStatement</code>
+     * @throws MintLeafException if <code>sqlType</code> is
+     *                           a <code>ARRAY</code>, <code>BLOB</code>, <code>CLOB</code>,
+     *                           <code>DATALINK</code>, <code>JAVA_OBJECT</code>, <code>NCHAR</code>,
+     *                           <code>NCLOB</code>, <code>NVARCHAR</code>, <code>LONGNVARCHAR</code>,
+     *                           <code>REF</code>, <code>ROWID</code>, <code>SQLXML</code>
+     *                           or  <code>STRUCT</code> data type and the JDBC driver does not support
+     *                           this data type
      */
     public void setNull(int parameterIndex, int sqlType) throws MintLeafException {
         try {
@@ -731,10 +727,10 @@ public class ParameterSets {
      *
      * @param parameterIndex the first parameter is 1, the second is 2, ...
      * @param x              an <code>Array</code> object that maps an SQL <code>ARRAY</code> value
-     * @throws MintLeafException               if parameterIndex does not correspond to a parameter
-     *                                         marker in the SQL statement; if a database access error occurs or
-     *                                         this method is called on a closed <code>PreparedStatement</code>
-     * @throws SQLFeatureNotSupportedException if the JDBC driver does not support this method
+     * @throws MintLeafException if parameterIndex does not correspond to a parameter
+     *                           marker in the SQL statement; if a database access error occurs or
+     *                           this method is called on a closed <code>PreparedStatement</code>
+     * @throws MintLeafException if the JDBC driver does not support this method
      * @since 1.2
      */
     public void setArray(int parameterIndex, Array x) throws MintLeafException {
@@ -779,7 +775,7 @@ public class ParameterSets {
      * of user-defined types include: STRUCT, DISTINCT, JAVA_OBJECT, and
      * named array types.
      * <p>
-     * <P><B>Note:</B> To be portable, applications must give the
+     * <B>Note:</B> To be portable, applications must give the
      * SQL type code and the fully-qualified SQL type name when specifying
      * a NULL user-defined or REF parameter.  In the case of a user-defined type
      * the name is the type name of the parameter itself.  For a REF
@@ -796,16 +792,16 @@ public class ParameterSets {
      * @param sqlType        a value from <code>java.sql.Types</code>
      * @param typeName       the fully-qualified name of an SQL user-defined type;
      *                       ignored if the parameter is not a user-defined type or REF
-     * @throws MintLeafException               if parameterIndex does not correspond to a parameter
-     *                                         marker in the SQL statement; if a database access error occurs or
-     *                                         this method is called on a closed <code>PreparedStatement</code>
-     * @throws SQLFeatureNotSupportedException if <code>sqlType</code> is
-     *                                         a <code>ARRAY</code>, <code>BLOB</code>, <code>CLOB</code>,
-     *                                         <code>DATALINK</code>, <code>JAVA_OBJECT</code>, <code>NCHAR</code>,
-     *                                         <code>NCLOB</code>, <code>NVARCHAR</code>, <code>LONGNVARCHAR</code>,
-     *                                         <code>REF</code>, <code>ROWID</code>, <code>SQLXML</code>
-     *                                         or  <code>STRUCT</code> data type and the JDBC driver does not support
-     *                                         this data type or if the JDBC driver does not support this method
+     * @throws MintLeafException if parameterIndex does not correspond to a parameter
+     *                           marker in the SQL statement; if a database access error occurs or
+     *                           this method is called on a closed <code>PreparedStatement</code>
+     * @throws MintLeafException if <code>sqlType</code> is
+     *                           a <code>ARRAY</code>, <code>BLOB</code>, <code>CLOB</code>,
+     *                           <code>DATALINK</code>, <code>JAVA_OBJECT</code>, <code>NCHAR</code>,
+     *                           <code>NCLOB</code>, <code>NVARCHAR</code>, <code>LONGNVARCHAR</code>,
+     *                           <code>REF</code>, <code>ROWID</code>, <code>SQLXML</code>
+     *                           or  <code>STRUCT</code> data type and the JDBC driver does not support
+     *                           this data type or if the JDBC driver does not support this method
      * @since 1.2
      */
     public void setNull(int parameterIndex, int sqlType, String typeName) throws MintLeafException {
@@ -823,16 +819,16 @@ public class ParameterSets {
      * Object x, SQLType targetSqlType, int scaleOrLength) } catch (SQLException e) {             throw new MintLeafException(e);         }},
      * except that it assumes a scale of zero.
      * <p>
-     * The default implementation will throw {@code SQLFeatureNotSupportedException } catch (SQLException e) {             throw new MintLeafException(e);         }}
+     * The default implementation will throw {@code MintLeafException } catch (SQLException e) {             throw new MintLeafException(e);         }}
      *
      * @param parameterIndex the first parameter is 1, the second is 2, ...
      * @param x              the object containing the input parameter value
      * @param targetSqlType  the SQL type to be sent to the database
-     * @throws MintLeafException               if parameterIndex does not correspond to a
-     *                                         parameter marker in the SQL statement; if a database access error occurs
-     *                                         or this method is called on a closed {@code PreparedStatement } catch (SQLException e) {             throw new MintLeafException(e);         }}
-     * @throws SQLFeatureNotSupportedException if
-     *                                         the JDBC driver does not support the specified targetSqlType
+     * @throws MintLeafException if parameterIndex does not correspond to a
+     *                           parameter marker in the SQL statement; if a database access error occurs
+     *                           or this method is called on a closed {@code PreparedStatement } catch (SQLException e) {             throw new MintLeafException(e);         }}
+     * @throws MintLeafException if
+     *                           the JDBC driver does not support the specified targetSqlType
      * @see JDBCType
      * @see SQLType
      * @since 1.8
@@ -854,7 +850,7 @@ public class ParameterSets {
      * as needed until end-of-file is reached.  The JDBC driver will
      * do any necessary conversion from ASCII to the database char format.
      * <p>
-     * <P><B>Note:</B> This stream object can either be a standard
+     * <B>Note:</B> This stream object can either be a standard
      * Java stream object or your own subclass that implements the
      * standard interface.
      *
@@ -901,19 +897,19 @@ public class ParameterSets {
      * the server as a <code>NCLOB</code>.  When the <code>setCharacterStream</code> method is used, the
      * driver may have to do extra work to determine whether the parameter
      * data should be sent to the server as a <code>LONGNVARCHAR</code> or a <code>NCLOB</code>
-     * <P><B>Note:</B> Consult your JDBC driver documentation to determine if
+     * <B>Note:</B> Consult your JDBC driver documentation to determine if
      * it might be more efficient to use a version of
      * <code>setNClob</code> which takes a length parameter.
      *
      * @param parameterIndex index of the first parameter is 1, the second is 2, ...
      * @param reader         An object that contains the data to set the parameter value to.
-     * @throws MintLeafException               if parameterIndex does not correspond to a parameter
-     *                                         marker in the SQL statement;
-     *                                         if the driver does not support national character sets;
-     *                                         if the driver can detect that a data conversion
-     *                                         error could occur;  if a database access error occurs or
-     *                                         this method is called on a closed <code>PreparedStatement</code>
-     * @throws SQLFeatureNotSupportedException if the JDBC driver does not support this method
+     * @throws MintLeafException if parameterIndex does not correspond to a parameter
+     *                           marker in the SQL statement;
+     *                           if the driver does not support national character sets;
+     *                           if the driver can detect that a data conversion
+     *                           error could occur;  if a database access error occurs or
+     *                           this method is called on a closed <code>PreparedStatement</code>
+     * @throws MintLeafException if the JDBC driver does not support this method
      * @since 1.6
      */
     public void setNClob(int parameterIndex, Reader reader) throws MintLeafException {
@@ -961,7 +957,7 @@ public class ParameterSets {
      * as needed until end-of-file is reached.  The JDBC driver will
      * do any necessary conversion from UNICODE to the database char format.
      * <p>
-     * <P><B>Note:</B> This stream object can either be a standard
+     * <B>Note:</B> This stream object can either be a standard
      * Java stream object or your own subclass that implements the
      * standard interface.
      *
@@ -983,7 +979,7 @@ public class ParameterSets {
     }
 
     /**
-     * <p>Sets the value of the designated parameter with the given object.
+     * Sets the value of the designated parameter with the given object.
      * <p>
      * If the second argument is an {@code InputStream } catch (SQLException e) {             throw new MintLeafException(e);         }} then the stream
      * must contain the number of bytes specified by scaleOrLength.
@@ -992,7 +988,7 @@ public class ParameterSets {
      * conditions are not true the driver will generate a
      * {@code MintLeafException } catch (SQLException e) {             throw new MintLeafException(e);         }} when the prepared statement is executed.
      * <p>
-     * <p>The given Java object will be converted to the given targetSqlType
+     * The given Java object will be converted to the given targetSqlType
      * before being sent to the database.
      * <p>
      * If the object has a custom mapping (is of a class implementing the
@@ -1005,10 +1001,10 @@ public class ParameterSets {
      * or {@code Array } catch (SQLException e) {             throw new MintLeafException(e);         }}, the driver should pass it to the database as a
      * value of the corresponding SQL type.
      * <p>
-     * <p>Note that this method may be used to pass database-specific
+     * Note that this method may be used to pass database-specific
      * abstract data types.
      * <p>
-     * The default implementation will throw {@code SQLFeatureNotSupportedException } catch (SQLException e) {             throw new MintLeafException(e);         }}
+     * The default implementation will throw {@code MintLeafException } catch (SQLException e) {             throw new MintLeafException(e);         }}
      *
      * @param parameterIndex the first parameter is 1, the second is 2, ...
      * @param x              the object containing the input parameter value
@@ -1021,14 +1017,14 @@ public class ParameterSets {
      *                       this is the length
      *                       of the data in the stream or reader.  For all other types,
      *                       this value will be ignored.
-     * @throws MintLeafException               if parameterIndex does not correspond to a
-     *                                         parameter marker in the SQL statement; if a database access error occurs
-     *                                         or this method is called on a closed {@code PreparedStatement } catch (SQLException e) {             throw new MintLeafException(e);         }}  or
-     *                                         if the Java Object specified by x is an InputStream
-     *                                         or Reader object and the value of the scale parameter is less
-     *                                         than zero
-     * @throws SQLFeatureNotSupportedException if
-     *                                         the JDBC driver does not support the specified targetSqlType
+     * @throws MintLeafException if parameterIndex does not correspond to a
+     *                           parameter marker in the SQL statement; if a database access error occurs
+     *                           or this method is called on a closed {@code PreparedStatement } catch (SQLException e) {             throw new MintLeafException(e);         }}  or
+     *                           if the Java Object specified by x is an InputStream
+     *                           or Reader object and the value of the scale parameter is less
+     *                           than zero
+     * @throws MintLeafException if
+     *                           the JDBC driver does not support the specified targetSqlType
      * @see JDBCType
      * @see SQLType
      * @since 1.8
@@ -1051,12 +1047,12 @@ public class ParameterSets {
      *
      * @param parameterIndex of the first parameter is 1, the second is 2, ...
      * @param value          the parameter value
-     * @throws MintLeafException               if parameterIndex does not correspond to a parameter
-     *                                         marker in the SQL statement; if the driver does not support national
-     *                                         character sets;  if the driver can detect that a data conversion
-     *                                         error could occur; if a database access error occurs; or
-     *                                         this method is called on a closed <code>PreparedStatement</code>
-     * @throws SQLFeatureNotSupportedException if the JDBC driver does not support this method
+     * @throws MintLeafException if parameterIndex does not correspond to a parameter
+     *                           marker in the SQL statement; if the driver does not support national
+     *                           character sets;  if the driver can detect that a data conversion
+     *                           error could occur; if a database access error occurs; or
+     *                           this method is called on a closed <code>PreparedStatement</code>
+     * @throws MintLeafException if the JDBC driver does not support this method
      * @since 1.6
      */
     public void setNString(int parameterIndex, String value) throws MintLeafException {
@@ -1075,7 +1071,7 @@ public class ParameterSets {
      * the driver may have to do extra work to determine whether the parameter
      * data should be sent to the server as a <code>LONGVARBINARY</code> or a <code>BLOB</code>
      * <p>
-     * <P><B>Note:</B> Consult your JDBC driver documentation to determine if
+     * <B>Note:</B> Consult your JDBC driver documentation to determine if
      * it might be more efficient to use a version of
      * <code>setBlob</code> which takes a length parameter.
      *
@@ -1083,12 +1079,12 @@ public class ParameterSets {
      *                       the second is 2, ...
      * @param inputStream    An object that contains the data to set the parameter
      *                       value to.
-     * @throws MintLeafException               if parameterIndex does not correspond to a parameter
-     *                                         marker in the SQL statement; if a database access error occurs;
-     *                                         this method is called on a closed <code>PreparedStatement</code> or
-     *                                         if parameterIndex does not correspond
-     *                                         to a parameter marker in the SQL statement,
-     * @throws SQLFeatureNotSupportedException if the JDBC driver does not support this method
+     * @throws MintLeafException if parameterIndex does not correspond to a parameter
+     *                           marker in the SQL statement; if a database access error occurs;
+     *                           this method is called on a closed <code>PreparedStatement</code> or
+     *                           if parameterIndex does not correspond
+     *                           to a parameter marker in the SQL statement,
+     * @throws MintLeafException if the JDBC driver does not support this method
      * @since 1.6
      */
     public void setBlob(int parameterIndex, InputStream inputStream) throws MintLeafException {
@@ -1106,10 +1102,10 @@ public class ParameterSets {
      *
      * @param parameterIndex the first parameter is 1, the second is 2, ...
      * @param x              a <code>Clob</code> object that maps an SQL <code>CLOB</code> value
-     * @throws MintLeafException               if parameterIndex does not correspond to a parameter
-     *                                         marker in the SQL statement; if a database access error occurs or
-     *                                         this method is called on a closed <code>PreparedStatement</code>
-     * @throws SQLFeatureNotSupportedException if the JDBC driver does not support this method
+     * @throws MintLeafException if parameterIndex does not correspond to a parameter
+     *                           marker in the SQL statement; if a database access error occurs or
+     *                           this method is called on a closed <code>PreparedStatement</code>
+     * @throws MintLeafException if the JDBC driver does not support this method
      * @since 1.2
      */
     public void setClob(int parameterIndex, Clob x) throws MintLeafException {
@@ -1152,13 +1148,13 @@ public class ParameterSets {
      * @param parameterIndex index of the first parameter is 1, the second is 2, ...
      * @param reader         An object that contains the data to set the parameter value to.
      * @param length         the number of characters in the parameter data.
-     * @throws MintLeafException               if parameterIndex does not correspond to a parameter
-     *                                         marker in the SQL statement; if the length specified is less than zero;
-     *                                         if the driver does not support national character sets;
-     *                                         if the driver can detect that a data conversion
-     *                                         error could occur;  if a database access error occurs or
-     *                                         this method is called on a closed <code>PreparedStatement</code>
-     * @throws SQLFeatureNotSupportedException if the JDBC driver does not support this method
+     * @throws MintLeafException if parameterIndex does not correspond to a parameter
+     *                           marker in the SQL statement; if the length specified is less than zero;
+     *                           if the driver does not support national character sets;
+     *                           if the driver can detect that a data conversion
+     *                           error could occur;  if a database access error occurs or
+     *                           this method is called on a closed <code>PreparedStatement</code>
+     * @throws MintLeafException if the JDBC driver does not support this method
      * @since 1.6
      */
     public void setNClob(int parameterIndex, Reader reader, long length) throws MintLeafException {
@@ -1177,19 +1173,19 @@ public class ParameterSets {
      * as needed until end-of-file is reached.  The JDBC driver will
      * do any necessary conversion from ASCII to the database char format.
      * <p>
-     * <P><B>Note:</B> This stream object can either be a standard
+     * <B>Note:</B> This stream object can either be a standard
      * Java stream object or your own subclass that implements the
      * standard interface.
-     * <P><B>Note:</B> Consult your JDBC driver documentation to determine if
+     * <B>Note:</B> Consult your JDBC driver documentation to determine if
      * it might be more efficient to use a version of
      * <code>setAsciiStream</code> which takes a length parameter.
      *
      * @param parameterIndex the first parameter is 1, the second is 2, ...
      * @param x              the Java input stream that contains the ASCII parameter value
-     * @throws MintLeafException               if parameterIndex does not correspond to a parameter
-     *                                         marker in the SQL statement; if a database access error occurs or
-     *                                         this method is called on a closed <code>PreparedStatement</code>
-     * @throws SQLFeatureNotSupportedException if the JDBC driver does not support this method
+     * @throws MintLeafException if parameterIndex does not correspond to a parameter
+     *                           marker in the SQL statement; if a database access error occurs or
+     *                           this method is called on a closed <code>PreparedStatement</code>
+     * @throws MintLeafException if the JDBC driver does not support this method
      * @since 1.6
      */
     public void setAsciiStream(int parameterIndex, InputStream x) throws MintLeafException {
@@ -1228,12 +1224,12 @@ public class ParameterSets {
      * @param parameterIndex of the first parameter is 1, the second is 2, ...
      * @param value          the parameter value
      * @param length         the number of characters in the parameter data.
-     * @throws MintLeafException               if parameterIndex does not correspond to a parameter
-     *                                         marker in the SQL statement; if the driver does not support national
-     *                                         character sets;  if the driver can detect that a data conversion
-     *                                         error could occur; if a database access error occurs; or
-     *                                         this method is called on a closed <code>PreparedStatement</code>
-     * @throws SQLFeatureNotSupportedException if the JDBC driver does not support this method
+     * @throws MintLeafException if parameterIndex does not correspond to a parameter
+     *                           marker in the SQL statement; if the driver does not support national
+     *                           character sets;  if the driver can detect that a data conversion
+     *                           error could occur; if a database access error occurs; or
+     *                           this method is called on a closed <code>PreparedStatement</code>
+     * @throws MintLeafException if the JDBC driver does not support this method
      * @since 1.6
      */
     public void setNCharacterStream(int parameterIndex, Reader value, long length) throws MintLeafException {
@@ -1276,10 +1272,10 @@ public class ParameterSets {
      * @param parameterIndex index of the first parameter is 1, the second is 2, ...
      * @param reader         An object that contains the data to set the parameter value to.
      * @param length         the number of characters in the parameter data.
-     * @throws MintLeafException               if parameterIndex does not correspond to a parameter
-     *                                         marker in the SQL statement; if a database access error occurs; this method is called on
-     *                                         a closed <code>PreparedStatement</code> or if the length specified is less than zero.
-     * @throws SQLFeatureNotSupportedException if the JDBC driver does not support this method
+     * @throws MintLeafException if parameterIndex does not correspond to a parameter
+     *                           marker in the SQL statement; if a database access error occurs; this method is called on
+     *                           a closed <code>PreparedStatement</code> or if the length specified is less than zero.
+     * @throws MintLeafException if the JDBC driver does not support this method
      * @since 1.6
      */
     public void setClob(int parameterIndex, Reader reader, long length) throws MintLeafException {
@@ -1291,14 +1287,14 @@ public class ParameterSets {
     }
 
     /**
-     * <p>Sets the value of the designated parameter using the given object.
+     * Sets the value of the designated parameter using the given object.
      * <p>
-     * <p>The JDBC specification specifies a standard mapping from
+     * The JDBC specification specifies a standard mapping from
      * Java <code>Object</code> types to SQL types.  The given argument
      * will be converted to the corresponding SQL type before being
      * sent to the database.
      * <p>
-     * <p>Note that this method may be used to pass datatabase-
+     * Note that this method may be used to pass datatabase-
      * specific abstract data types, by using a driver-specific Java
      * type.
      * <p>
@@ -1371,20 +1367,20 @@ public class ParameterSets {
      * as needed until end-of-file is reached.  The JDBC driver will
      * do any necessary conversion from UNICODE to the database char format.
      * <p>
-     * <P><B>Note:</B> This stream object can either be a standard
+     * <B>Note:</B> This stream object can either be a standard
      * Java stream object or your own subclass that implements the
      * standard interface.
-     * <P><B>Note:</B> Consult your JDBC driver documentation to determine if
+     * <B>Note:</B> Consult your JDBC driver documentation to determine if
      * it might be more efficient to use a version of
      * <code>setCharacterStream</code> which takes a length parameter.
      *
      * @param parameterIndex the first parameter is 1, the second is 2, ...
      * @param reader         the <code>java.io.Reader</code> object that contains the
      *                       Unicode data
-     * @throws MintLeafException               if parameterIndex does not correspond to a parameter
-     *                                         marker in the SQL statement; if a database access error occurs or
-     *                                         this method is called on a closed <code>PreparedStatement</code>
-     * @throws SQLFeatureNotSupportedException if the JDBC driver does not support this method
+     * @throws MintLeafException if parameterIndex does not correspond to a parameter
+     *                           marker in the SQL statement; if a database access error occurs or
+     *                           this method is called on a closed <code>PreparedStatement</code>
+     * @throws MintLeafException if the JDBC driver does not support this method
      * @since 1.6
      */
     public void setCharacterStream(int parameterIndex, Reader reader) throws MintLeafException {
@@ -1406,11 +1402,11 @@ public class ParameterSets {
      * @param x              the object containing the input parameter value
      * @param targetSqlType  the SQL type (as defined in java.sql.Types) to be
      *                       sent to the database
-     * @throws MintLeafException               if parameterIndex does not correspond to a parameter
-     *                                         marker in the SQL statement; if a database access error occurs or this
-     *                                         method is called on a closed PreparedStatement
-     * @throws SQLFeatureNotSupportedException if
-     *                                         the JDBC driver does not support the specified targetSqlType
+     * @throws MintLeafException if parameterIndex does not correspond to a parameter
+     *                           marker in the SQL statement; if a database access error occurs or this
+     *                           method is called on a closed PreparedStatement
+     * @throws MintLeafException if
+     *                           the JDBC driver does not support the specified targetSqlType
      * @see Types
      */
     public void setObject(int parameterIndex, Object x, int targetSqlType) throws MintLeafException {
@@ -1422,7 +1418,7 @@ public class ParameterSets {
     }
 
     /**
-     * <p>Sets the value of the designated parameter with the given object.
+     * Sets the value of the designated parameter with the given object.
      * <p>
      * If the second argument is an <code>InputStream</code> then the stream must contain
      * the number of bytes specified by scaleOrLength.  If the second argument is a
@@ -1430,7 +1426,7 @@ public class ParameterSets {
      * by scaleOrLength. If these conditions are not true the driver will generate a
      * <code>MintLeafException</code> when the prepared statement is executed.
      * <p>
-     * <p>The given Java object will be converted to the given targetSqlType
+     * The given Java object will be converted to the given targetSqlType
      * before being sent to the database.
      * <p>
      * If the object has a custom mapping (is of a class implementing the
@@ -1443,7 +1439,7 @@ public class ParameterSets {
      * or <code>Array</code>, the driver should pass it to the database as a
      * value of the corresponding SQL type.
      * <p>
-     * <p>Note that this method may be used to pass database-specific
+     * Note that this method may be used to pass database-specific
      * abstract data types.
      *
      * @param parameterIndex the first parameter is 1, the second is 2, ...
@@ -1457,14 +1453,14 @@ public class ParameterSets {
      *                       this is the length
      *                       of the data in the stream or reader.  For all other types,
      *                       this value will be ignored.
-     * @throws MintLeafException               if parameterIndex does not correspond to a parameter
-     *                                         marker in the SQL statement; if a database access error occurs;
-     *                                         this method is called on a closed <code>PreparedStatement</code> or
-     *                                         if the Java Object specified by x is an InputStream
-     *                                         or Reader object and the value of the scale parameter is less
-     *                                         than zero
-     * @throws SQLFeatureNotSupportedException if
-     *                                         the JDBC driver does not support the specified targetSqlType
+     * @throws MintLeafException if parameterIndex does not correspond to a parameter
+     *                           marker in the SQL statement; if a database access error occurs;
+     *                           this method is called on a closed <code>PreparedStatement</code> or
+     *                           if the Java Object specified by x is an InputStream
+     *                           or Reader object and the value of the scale parameter is less
+     *                           than zero
+     * @throws MintLeafException if
+     *                           the JDBC driver does not support the specified targetSqlType
      * @see Types
      */
     public void setObject(int parameterIndex, Object x, int targetSqlType, int scaleOrLength) throws MintLeafException {
@@ -1506,7 +1502,7 @@ public class ParameterSets {
      * <code>java.io.InputStream</code> object. The data will be read from the
      * stream as needed until end-of-file is reached.
      * <p>
-     * <P><B>Note:</B> This stream object can either be a standard
+     * <B>Note:</B> This stream object can either be a standard
      * Java stream object or your own subclass that implements the
      * standard interface.
      *
@@ -1535,7 +1531,7 @@ public class ParameterSets {
         }
     }
 
-    public boolean isBatch(){
+    public boolean isBatch() {
         return this.batch;
     }
 

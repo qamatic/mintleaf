@@ -37,11 +37,10 @@ package org.qamatic.mintleaf;
 
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
-import java.sql.Statement;
 import java.util.List;
 import java.util.regex.Pattern;
 
-public interface DbQueries extends AutoCloseable{
+public interface DbQueries extends AutoCloseable {
 
     int getCount(String tableName, String whereClause, ParameterBinding parameterBinding) throws MintLeafException;
 
@@ -57,9 +56,11 @@ public interface DbQueries extends AutoCloseable{
         throw new NotImplementedException();
     }
 
-    default void close() throws MintLeafException{
+    default void close() throws MintLeafException {
 
-    };
+    }
+
+    ;
 
     default boolean isDbOptionExists(String optionName) throws MintLeafException {
         throw new NotImplementedException();

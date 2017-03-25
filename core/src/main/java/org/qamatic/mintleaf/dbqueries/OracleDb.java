@@ -96,8 +96,8 @@ public class OracleDb extends StandardQueries {
     public void truncateTable(String tableName) throws MintLeafException {
         final String[] objectNames = getObjectNames(tableName.toUpperCase());
         String sql = String.format("truncate  table %s.%s", objectNames[0], objectNames[1]);
-        try (DbCallable<int[]> dbCallable = new FluentJdbc.Builder(connectionContext).withSql(sql).buildExecute()) {
-            dbCallable.execute();
+        try (Executable<int[]> executable = new FluentJdbc.Builder(connectionContext).withSql(sql).buildExecute()) {
+            executable.execute();
         }
     }
 

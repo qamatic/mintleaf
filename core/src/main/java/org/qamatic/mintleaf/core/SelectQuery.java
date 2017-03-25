@@ -37,7 +37,6 @@ package org.qamatic.mintleaf.core;
 
 import org.qamatic.mintleaf.*;
 
-import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -45,7 +44,7 @@ import java.sql.SQLException;
 /**
  * Created by qamatic on 2/20/16.
  */
-public class SelectQuery implements DbCallable<SqlResultSet> {
+public class SelectQuery implements Executable<SqlResultSet> {
 
     private static final MintLeafLogger logger = MintLeafLogger.getLogger(SelectQuery.class);
     private ConnectionContext connectionContext;
@@ -106,7 +105,7 @@ public class SelectQuery implements DbCallable<SqlResultSet> {
      * Computes a result, or throws an exception if unable to do so.
      *
      * @return computed result
-     * @throws Exception if unable to compute a result
+     * @throws MintLeafException if unable to compute a result
      */
     @Override
     public SqlResultSet execute() throws MintLeafException {
@@ -127,7 +126,7 @@ public class SelectQuery implements DbCallable<SqlResultSet> {
 
         @Override
         public void close() throws MintLeafException {
-           this.selectQuery.close();
+            this.selectQuery.close();
         }
 
         @Override

@@ -37,7 +37,7 @@ package org.qamatic.mintleaf.dbqueries;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.qamatic.mintleaf.DataAction;
+import org.qamatic.mintleaf.Executable;
 import org.qamatic.mintleaf.MintLeafException;
 import org.qamatic.mintleaf.Mintleaf;
 import org.qamatic.mintleaf.core.ChangeSets;
@@ -71,7 +71,7 @@ public class ImportExportTests extends H2TestCase {
 
         assertFalse(new File("users.csv").exists());
 
-        DataAction dataAction = new Mintleaf.DbToCsvBuilder().
+        Executable dataAction = new Mintleaf.DbToCsvBuilder().
                 withSourceDb(h2Database).
                 withSourceSql("select * from HRDB.USERS").
                 withTargetCsvFile("users.csv").
@@ -87,7 +87,7 @@ public class ImportExportTests extends H2TestCase {
     public void importCSVTest() throws SQLException, IOException, MintLeafException {
         writeCSVTest();//dependent..
 
-        DataAction action = new Mintleaf.CsvToDbBuilder().
+        Executable action = new Mintleaf.CsvToDbBuilder().
                 withSourceCsvFile("users.csv").
                 withTargetDb(h2Database).
                 withTargetSqlTemplate("UPDATE HRDB.USERS SET USERNAME = '$USERNAME$-changed' WHERE USERID=$USERID$").
@@ -114,7 +114,7 @@ public class ImportExportTests extends H2TestCase {
     public void DbToDbImport() throws SQLException, IOException, MintLeafException {
         ChangeSets.migrate(h2Database.getNewConnection(), "res:/example-changesets.sql", "DROP_CREATE_USERS_IMPORT_TABLE");
 
-        DataAction action = new Mintleaf.DbToDbBuilder().
+        Executable action = new Mintleaf.DbToDbBuilder().
                 withSourceDb(h2Database).
                 withSourceSql("SELECT * FROM HRDB.USERS").
                 withTargetDb(h2Database).
@@ -131,7 +131,7 @@ public class ImportExportTests extends H2TestCase {
     public void DbToDbImportNullIssue() throws SQLException, IOException, MintLeafException {
         ChangeSets.migrate(h2Database.getNewConnection(), "res:/example-changesets.sql", "DROP_CREATE_USERS_IMPORT_TABLE");
 
-        DataAction action = new DbImporter(h2Database.getNewConnection(),
+        Executable action = new DbImporter(h2Database.getNewConnection(),
                 "SELECT * FROM HRDB.USERS",
                 h2Database.getNewConnection(),
                 "INSERT INTO HRDB.USERS_IMPORT_TABLE (USERID, USERNAME, RATE) VALUES ($USERID$, '$USERNAME$', $RATE$)"

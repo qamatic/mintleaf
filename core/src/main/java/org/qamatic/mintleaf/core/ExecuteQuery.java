@@ -45,7 +45,7 @@ import java.util.List;
 /**
  * Created by qamatic on 2/20/16.
  */
-public class ExecuteQuery implements DbCallable<int[]> {
+public class ExecuteQuery implements Executable<int[]> {
 
     private static final MintLeafLogger logger = MintLeafLogger.getLogger(ExecuteQuery.class);
     private ConnectionContext connectionContext;
@@ -75,7 +75,7 @@ public class ExecuteQuery implements DbCallable<int[]> {
                     statement.addBatch(sqlItem);
                 }
                 int[] result = statement.executeBatch();
-                if (this.statementListener != null){
+                if (this.statementListener != null) {
                     this.statementListener.onAfterExecuteSql(statement);
                 }
                 return result;
@@ -91,11 +91,11 @@ public class ExecuteQuery implements DbCallable<int[]> {
                 parameterBinding.bindParameters(parameterSets);
             }
             if (parameterSets.isBatch()) {
-                 return preparedStatement.executeBatch();
+                return preparedStatement.executeBatch();
 
             }
             int[] result = new int[]{preparedStatement.execute() ? 1 : 0};
-            if (this.statementListener != null){
+            if (this.statementListener != null) {
                 this.statementListener.onAfterExecuteSql(preparedStatement);
             }
             return result;

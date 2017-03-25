@@ -40,7 +40,7 @@ import org.qamatic.mintleaf.data.ComparerListener;
 /**
  * Created by qamatic on 3/5/16.
  */
-public interface DataComparer extends DataAction {
+public interface DataComparer extends Executable<Boolean> {
 
     void setComparerListener(ComparerListener comparerListener);
 

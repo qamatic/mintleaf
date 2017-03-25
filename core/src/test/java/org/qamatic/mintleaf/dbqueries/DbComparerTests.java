@@ -61,7 +61,7 @@ public class DbComparerTests extends H2TestCase {
     public void applyChangeSet() throws IOException, SQLException, MintLeafException {
 
         ChangeSets.migrate(h2Database.getNewConnection(), "res:/example-changesets.sql", "create schema, DataForDbCompareTest, DROP_CREATE_USERS_IMPORT_TABLE");
-        DataAction action = new DbImporter(h2Database.getNewConnection(),
+        Executable action = new DbImporter(h2Database.getNewConnection(),
                 "SELECT * FROM HRDB.USERS",
                 h2Database.getNewConnection(),
                 "INSERT INTO HRDB.USERS_IMPORT_TABLE (USERID, USERNAME) VALUES ($USERID$, '$USERNAME$')"
@@ -90,7 +90,7 @@ public class DbComparerTests extends H2TestCase {
             SqlResultSet sourceTable = selectQuery(connectionContext, "SELECT * FROM HRDB.USERS");
 
 
-            SqlResultSet targetTable =  selectQuery(connectionContext,"SELECT * FROM HRDB.USERS_IMPORT_TABLE");
+            SqlResultSet targetTable = selectQuery(connectionContext, "SELECT * FROM HRDB.USERS_IMPORT_TABLE");
 
             List<String> actuals = assertCompareTable(sourceTable.asRowListWrapper(), targetTable.asRowListWrapper());
 

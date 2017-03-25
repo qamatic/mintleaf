@@ -35,14 +35,10 @@
 
 package org.qamatic.mintleaf.core;
 
-import org.qamatic.mintleaf.*;
-import org.qamatic.mintleaf.dbqueries.H2Db;
-import org.qamatic.mintleaf.dbqueries.MSSqlDb;
-import org.qamatic.mintleaf.dbqueries.MySqlDb;
-import org.qamatic.mintleaf.dbqueries.OracleDb;
-
-import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
+import org.qamatic.mintleaf.Database;
+import org.qamatic.mintleaf.DriverSource;
+import org.qamatic.mintleaf.MintLeafException;
+import org.qamatic.mintleaf.MintLeafLogger;
 
 /**
  * Created by qamatic on 3/6/16.
@@ -86,7 +82,6 @@ public class BasicDatabase implements Database {
         }
         return driverSource;
     }
-
 
 
     public DriverSource getDriverSource() {

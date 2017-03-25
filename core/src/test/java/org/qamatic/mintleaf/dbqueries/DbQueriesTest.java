@@ -36,10 +36,9 @@
 package org.qamatic.mintleaf.dbqueries;
 
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 import org.qamatic.mintleaf.ConnectionContext;
-import org.qamatic.mintleaf.DbCallable;
+import org.qamatic.mintleaf.Executable;
 import org.qamatic.mintleaf.MintLeafException;
 import org.qamatic.mintleaf.core.ChangeSets;
 import org.qamatic.mintleaf.core.DbConnectionContext;
@@ -93,10 +92,10 @@ public class DbQueriesTest extends H2TestCase {
 
         try (ConnectionContext ctx = h2Database.getNewConnection()) {
 
-            try (DbCallable<int[]> dbCallable = executeSql(ctx, "DELETE HRDB.USERS WHERE USERID=1")) {
+            try (Executable<int[]> executable = executeSql(ctx, "DELETE HRDB.USERS WHERE USERID=1")) {
 
                 assertEquals(2, ctx.getDbQueries().getCount("HRDB.USERS"));
-                dbCallable.execute();
+                executable.execute();
                 assertEquals(1, ctx.getDbQueries().getCount("HRDB.USERS"));
             }
 
@@ -108,7 +107,7 @@ public class DbQueriesTest extends H2TestCase {
 
         try (ConnectionContext ctx = h2Database.getNewConnection()) {
             final int[] pkey = {-1};
-            try (DbCallable<int[]> dbCallable = executeSql(ctx).
+            try (Executable<int[]> executable = executeSql(ctx).
                     withSql("INSERT INTO HRDB.USERS (USERID, USERNAME) VALUES (9, 'TN')").
                     withListener(statement -> {
                         pkey[0] = 1;
@@ -116,7 +115,7 @@ public class DbQueriesTest extends H2TestCase {
                     buildExecute()) {
 
                 assertEquals(2, ctx.getDbQueries().getCount("HRDB.USERS"));
-                dbCallable.execute();
+                executable.execute();
                 assertEquals(1, pkey[0]);
                 assertEquals(3, ctx.getDbQueries().getCount("HRDB.USERS"));
             }
@@ -129,13 +128,44 @@ public class DbQueriesTest extends H2TestCase {
 
         try (ConnectionContext ctx = h2Database.getNewConnection()) {
 
-            try (DbCallable<int[]> dbCallable = executeSql(ctx, "INSERT INTO HRDB.USERS (USERID, USERNAME) VALUES (?, ?)", new Object[]{11, "HI"})) {
+            try (Executable<int[]> executable = executeSql(ctx, "INSERT INTO HRDB.USERS (USERID, USERNAME) VALUES (?, ?)", new Object[]{11, "HI"})) {
 
                 assertEquals(2, ctx.getDbQueries().getCount("HRDB.USERS"));
-                dbCallable.execute();
+                executable.execute();
                 assertEquals(3, ctx.getDbQueries().getCount("HRDB.USERS"));
             }
 
+        }
+    }
+
+
+    @Test
+    public void rollBackTest() throws SQLException, IOException, MintLeafException {
+
+        try (ConnectionContext ctx = h2Database.getNewConnection().beginTransaction()) {
+            try (Executable<int[]> executable = executeSql(ctx, "INSERT INTO HRDB.USERS (USERID, USERNAME) VALUES (?, ?)", new Object[]{11, "HI"})) {
+
+                assertEquals(2, ctx.getDbQueries().getCount("HRDB.USERS"));
+                executable.execute();
+                assertEquals(3, ctx.getDbQueries().getCount("HRDB.USERS"));
+            }
+            ctx.rollbackTransaction();
+            assertEquals(2, ctx.getDbQueries().getCount("HRDB.USERS"));
+        }
+    }
+
+    @Test
+    public void commitTest() throws SQLException, IOException, MintLeafException {
+
+        try (ConnectionContext ctx = h2Database.getNewConnection().beginTransaction()) {
+            ctx.beginTransaction();
+            try (Executable<int[]> executable = executeSql(ctx, "INSERT INTO HRDB.USERS (USERID, USERNAME) VALUES (?, ?)", new Object[]{11, "HI"})) {
+
+                assertEquals(2, ctx.getDbQueries().getCount("HRDB.USERS"));
+                executable.execute();
+                assertEquals(3, ctx.getDbQueries().getCount("HRDB.USERS"));
+            }
+            assertEquals(3, ctx.getDbQueries().getCount("HRDB.USERS"));
         }
     }
 

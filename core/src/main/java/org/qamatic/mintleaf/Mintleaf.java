@@ -52,6 +52,29 @@ public final class Mintleaf {
 
     private static final MintLeafLogger logger = MintLeafLogger.getLogger(Mintleaf.class);
 
+    public static FluentJdbc.Builder selectQuery(ConnectionContext connectionContext) {
+        return new FluentJdbc.Builder(connectionContext);
+    }
+
+    public static SqlResultSet selectQuery(ConnectionContext connectionContext, String sql) {
+        return selectQuery(connectionContext).withSql(sql).buildSelect();
+    }
+
+    public static FluentJdbc.Builder executeSql(ConnectionContext connectionContext) {
+        return new FluentJdbc.Builder(connectionContext);
+    }
+
+    public static Executable<int[]> executeBatchSqls(ConnectionContext connectionContext, List<String> batchSqls) {
+        return new ExecuteQuery(connectionContext, batchSqls);
+    }
+
+    public static Executable<int[]> executeSql(ConnectionContext connectionContext, String sql) {
+        return executeSql(connectionContext).withSql(sql).buildExecute();
+    }
+
+    public static Executable<int[]> executeSql(ConnectionContext connectionContext, String sql, Object[] parameterValues) {
+        return executeSql(connectionContext).withSql(sql).withParamValues(parameterValues).buildExecute();
+    }
 
     public static final class ComparerBuilder {
 
@@ -196,7 +219,6 @@ public final class Mintleaf {
 
     }
 
-
     public static final class DbToCsvBuilder {
         private String sourceSql;
         private ParameterBinding sqlaramValueBindings;
@@ -224,7 +246,7 @@ public final class Mintleaf {
             return this;
         }
 
-        public DataAction build() {
+        public Executable<Boolean> build() {
             CsvExporter csvExporter = new CsvExporter(
                     sourceDb.getNewConnection(),
                     sourceSql,
@@ -256,7 +278,7 @@ public final class Mintleaf {
             return this;
         }
 
-        public DataAction build() {
+        public Executable<Boolean> build() {
             CsvImporter csvImporter = new CsvImporter(
                     sourceCsvFile,
                     targetDb.getNewConnection(),
@@ -300,7 +322,7 @@ public final class Mintleaf {
             return this;
         }
 
-        public DataAction build() {
+        public Executable<Boolean> build() {
             DbImporter dbImporter = new DbImporter(
                     sourceDb.getNewConnection(),
                     sourceSql,
@@ -310,29 +332,5 @@ public final class Mintleaf {
             dbImporter.setSourceSqlParamValueBindings(sqlaramValueBindings);
             return dbImporter;
         }
-    }
-
-
-    public static FluentJdbc.Builder selectQuery(ConnectionContext connectionContext) {
-        return new FluentJdbc.Builder(connectionContext);
-    }
-
-    public static SqlResultSet selectQuery(ConnectionContext connectionContext, String sql) {
-        return selectQuery(connectionContext).withSql(sql).buildSelect();
-    }
-
-    public static FluentJdbc.Builder executeSql(ConnectionContext connectionContext) {
-        return new FluentJdbc.Builder(connectionContext);
-    }
-
-    public static DbCallable<int[]> executeBatchSqls(ConnectionContext connectionContext, List<String> batchSqls) {
-        return new ExecuteQuery(connectionContext, batchSqls);
-    }
-
-    public static DbCallable<int[]> executeSql(ConnectionContext connectionContext, String sql) {
-        return executeSql(connectionContext).withSql(sql).buildExecute();
-    }
-    public static DbCallable<int[]> executeSql(ConnectionContext connectionContext, String sql, Object[] parameterValues) {
-        return executeSql(connectionContext).withSql(sql).withParamValues(parameterValues).buildExecute();
     }
 }

@@ -42,7 +42,7 @@ public interface SqlScript extends AutoCloseable {
 
     void apply() throws MintLeafException;
 
-    default void close() throws MintLeafException{
+    default void close() throws MintLeafException {
 
     }
 }

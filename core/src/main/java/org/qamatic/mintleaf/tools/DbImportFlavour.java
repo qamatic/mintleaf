@@ -39,7 +39,6 @@ import org.qamatic.mintleaf.DataRowListener;
 import org.qamatic.mintleaf.MintLeafException;
 import org.qamatic.mintleaf.MintLeafLogger;
 import org.qamatic.mintleaf.SqlResultSet;
-import org.qamatic.mintleaf.core.FluentJdbc;
 import org.qamatic.mintleaf.core.ResultSetRowWrapper;
 
 import java.sql.SQLException;

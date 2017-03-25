@@ -36,7 +36,7 @@
 package org.qamatic.mintleaf.tools;
 
 import org.qamatic.mintleaf.ConnectionContext;
-import org.qamatic.mintleaf.DataAction;
+import org.qamatic.mintleaf.Executable;
 import org.qamatic.mintleaf.MintLeafException;
 import org.qamatic.mintleaf.MintLeafLogger;
 
@@ -47,7 +47,7 @@ import java.io.IOException;
 /**
  * Created by qamatic on 3/6/16.
  */
-public class CsvImporter extends ImpExpBase implements DataAction {
+public class CsvImporter extends ImpExpBase implements Executable<Boolean> {
 
     private static final MintLeafLogger logger = MintLeafLogger.getLogger(CsvImporter.class);
     private String sourceCsvFile;
@@ -63,7 +63,7 @@ public class CsvImporter extends ImpExpBase implements DataAction {
     }
 
     @Override
-    public void execute() throws MintLeafException {
+    public Boolean execute() throws MintLeafException {
 
         try {
             File f = new File(this.sourceCsvFile);
@@ -73,6 +73,7 @@ public class CsvImporter extends ImpExpBase implements DataAction {
             }
 
             importDataFrom(new CsvImportFlavour(new FileReader(f)), this.targetSqlTemplate);
+            return true;
 
         } catch (IOException e) {
             throw new MintLeafException(e);

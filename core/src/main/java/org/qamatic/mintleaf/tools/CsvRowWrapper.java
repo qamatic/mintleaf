@@ -41,7 +41,7 @@ import org.qamatic.mintleaf.MetaDataCollection;
 import org.qamatic.mintleaf.MintLeafException;
 
 /**
- * Created by Senthil on 3/10/2017.
+ * Created by QAmatic on 3/10/2017.
  */
 public class CsvRowWrapper implements ComparableRow {
     private CSVRecord record;

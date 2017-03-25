@@ -37,7 +37,6 @@ package org.qamatic.mintleaf.tools;
 
 import org.qamatic.mintleaf.*;
 
-import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -61,9 +60,9 @@ public abstract class ImpExpBase {
         final Matcher columns = columnPattern.matcher(sqlTemplate);
         logger.info("importing using template:" + sqlTemplate);
         List<String> batchSqls = new ArrayList<>();
-        final DbCallable<int[]> batchCall = executeBatchSqls(getConnectionContext(), batchSqls);
+        final Executable<int[]> batchCall = executeBatchSqls(getConnectionContext(), batchSqls);
         dataImport.doImport((rowNum, row) -> {
-            
+
             StringBuffer buffer = new StringBuffer(sqlTemplate);
             columns.reset();
             while (columns.find()) {

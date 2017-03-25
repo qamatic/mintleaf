@@ -52,15 +52,46 @@ import java.sql.SQLException;
 public class DbConnectionContext implements ConnectionContext {
 
     private static final MintLeafLogger logger = MintLeafLogger.getLogger(DbConnectionContext.class);
+
+    static {
+        StandardQueries.registerQueryImplementation(DbType.H2.getJdbcUrlPrefix(), H2Db.class);
+        StandardQueries.registerQueryImplementation(DbType.MSSQL.getJdbcUrlPrefix(), MSSqlDb.class);
+        StandardQueries.registerQueryImplementation(DbType.MYSQL.getJdbcUrlPrefix(), MySqlDb.class);
+        StandardQueries.registerQueryImplementation(DbType.ORACLE.getJdbcUrlPrefix(), OracleDb.class);
+    }
+
     private Connection connection;
     private DriverSource driverSource;
     private boolean autoCloseable = true;
     private boolean inTransaction = false;
 
-
     public DbConnectionContext(DriverSource driverSource, boolean autoCloseable) {
         this.driverSource = driverSource;
         this.autoCloseable = autoCloseable;
+    }
+
+    private static DbQueries createDbQueryInstance(String url, ConnectionContext connectionContext) {
+        Class<? extends StandardQueries> queryImplClaz = StandardQueries.getQueryImplementation(url);
+        DbQueries dbQueries = null;
+        try {
+            Constructor constructor =
+                    queryImplClaz.getConstructor(new Class[]{ConnectionContext.class});
+            dbQueries = (DbQueries) constructor.newInstance(connectionContext);
+        } catch (InstantiationException e) {
+            logger.error(e);
+            MintLeafException.throwException(e);
+        } catch (IllegalAccessException e) {
+            logger.error(e);
+            MintLeafException.throwException(e);
+        } catch (NoSuchMethodException e) {
+            logger.error(e);
+            MintLeafException.throwException(e);
+        } catch (InvocationTargetException e) {
+            logger.error(e);
+            MintLeafException.throwException(e);
+        }
+
+        return dbQueries;
     }
 
     @Override
@@ -93,10 +124,13 @@ public class DbConnectionContext implements ConnectionContext {
     }
 
     @Override
-    public void beginTransaction() throws MintLeafException {
+    public ConnectionContext beginTransaction() throws MintLeafException {
         try {
-            inTransaction = true;
-            getConnection().setAutoCommit(false);
+            if (!inTransaction) {
+                inTransaction = true;
+                getConnection().setAutoCommit(false);
+            }
+            return this;
         } catch (SQLException e) {
             throw new MintLeafException(e);
         }
@@ -129,7 +163,6 @@ public class DbConnectionContext implements ConnectionContext {
         }
     }
 
-
     @Override
     public DbQueries getDbQueries() {
         return createDbQueryInstance(this.driverSource.getUrl(), this);
@@ -138,38 +171,6 @@ public class DbConnectionContext implements ConnectionContext {
     @Override
     public String toString() {
         return String.format("Driver: %s, InTransaction:%s, AutoCloseConnection:%s ", this.driverSource, this.inTransaction, isCloseable());
-    }
-
-    private static DbQueries createDbQueryInstance(String url, ConnectionContext connectionContext) {
-        Class<? extends StandardQueries> queryImplClaz = StandardQueries.getQueryImplementation(url);
-        DbQueries dbQueries = null;
-        try {
-            Constructor constructor =
-                    queryImplClaz.getConstructor(new Class[]{ConnectionContext.class});
-            dbQueries = (DbQueries) constructor.newInstance(connectionContext);
-        } catch (InstantiationException e) {
-            logger.error(e);
-            MintLeafException.throwException(e);
-        } catch (IllegalAccessException e) {
-            logger.error(e);
-            MintLeafException.throwException(e);
-        } catch (NoSuchMethodException e) {
-            logger.error(e);
-            MintLeafException.throwException(e);
-        } catch (InvocationTargetException e) {
-            logger.error(e);
-            MintLeafException.throwException(e);
-        }
-
-        return dbQueries;
-    }
-
-
-    static {
-        StandardQueries.registerQueryImplementation(DbType.H2.getJdbcUrlPrefix(), H2Db.class);
-        StandardQueries.registerQueryImplementation(DbType.MSSQL.getJdbcUrlPrefix(), MSSqlDb.class);
-        StandardQueries.registerQueryImplementation(DbType.MYSQL.getJdbcUrlPrefix(), MySqlDb.class);
-        StandardQueries.registerQueryImplementation(DbType.ORACLE.getJdbcUrlPrefix(), OracleDb.class);
     }
 
 }
