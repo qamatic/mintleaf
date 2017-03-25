@@ -317,7 +317,11 @@ public final class Mintleaf {
         return new FluentJdbc.Builder(connectionContext);
     }
 
-    public static FluentJdbc.Builder executeQuery(ConnectionContext connectionContext) {
+    public static SqlResultSet selectQuery(ConnectionContext connectionContext, String sql) {
+        return selectQuery(connectionContext).withSql(sql).buildSelect();
+    }
+
+    public static FluentJdbc.Builder executeSql(ConnectionContext connectionContext) {
         return new FluentJdbc.Builder(connectionContext);
     }
 
@@ -325,4 +329,10 @@ public final class Mintleaf {
         return new ExecuteQuery(connectionContext, batchSqls);
     }
 
+    public static DbCallable<int[]> executeSql(ConnectionContext connectionContext, String sql) {
+        return executeSql(connectionContext).withSql(sql).buildExecute();
+    }
+    public static DbCallable<int[]> executeSql(ConnectionContext connectionContext, String sql, Object[] parameterValues) {
+        return executeSql(connectionContext).withSql(sql).withParamValues(parameterValues).buildExecute();
+    }
 }

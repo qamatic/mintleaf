@@ -38,12 +38,12 @@ package org.qamatic.mintleaf.core;
 import org.qamatic.mintleaf.*;
 
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static org.qamatic.mintleaf.Mintleaf.executeQuery;
 import static org.qamatic.mintleaf.Mintleaf.selectQuery;
 
 public class StandardQueries implements DbQueries {
@@ -112,15 +112,4 @@ public class StandardQueries implements DbQueries {
         return queryInt(sql, parameterBinding);
     }
 
-
-    @Override
-    public int[] executeSql(String sql, ParameterBinding parameterBinding) throws MintLeafException {
-        try (DbCallable<int[]> callable = executeQuery(connectionContext).withSql(sql).withParamValues(parameterBinding).buildExecute()) {
-            try {
-                return callable.execute();
-            } catch (Exception e) {
-                throw new MintLeafException(e);
-            }
-        }
-    }
 }

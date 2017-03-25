@@ -35,18 +35,11 @@
 
 package org.qamatic.mintleaf;
 
-import java.sql.Connection;
-import java.sql.SQLException;
+import java.sql.Statement;
 
 /**
- * Created by QAmatic Team on 7/19/16.
+ * Created by senips on 3/24/17.
  */
-public interface DbCallable<V> extends AutoCloseable {
-
-    default void close() throws MintLeafException {
-
-    }
-
-    V execute() throws MintLeafException;
-
+public interface StatementListener {
+    void onAfterExecuteSql(Statement statement);
 }

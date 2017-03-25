@@ -87,10 +87,10 @@ public class DbComparerTests extends H2TestCase {
 
         try (ConnectionContext connectionContext = h2Database.getNewConnection()) {
 
-            SqlResultSet sourceTable = selectQuery(connectionContext).withSql("SELECT * FROM HRDB.USERS").buildSelect();
+            SqlResultSet sourceTable = selectQuery(connectionContext, "SELECT * FROM HRDB.USERS");
 
 
-            SqlResultSet targetTable =  selectQuery(connectionContext).withSql("SELECT * FROM HRDB.USERS_IMPORT_TABLE").buildSelect();
+            SqlResultSet targetTable =  selectQuery(connectionContext,"SELECT * FROM HRDB.USERS_IMPORT_TABLE");
 
             List<String> actuals = assertCompareTable(sourceTable.asRowListWrapper(), targetTable.asRowListWrapper());
 

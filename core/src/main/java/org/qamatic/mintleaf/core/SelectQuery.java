@@ -109,7 +109,7 @@ public class SelectQuery implements DbCallable<SqlResultSet> {
      * @throws Exception if unable to compute a result
      */
     @Override
-    public SqlResultSet execute() throws Exception {
+    public SqlResultSet execute() throws MintLeafException {
         return new SelectQueryWrapper(this);
     }
 

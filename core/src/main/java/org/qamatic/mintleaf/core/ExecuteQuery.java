@@ -37,7 +37,6 @@ package org.qamatic.mintleaf.core;
 
 import org.qamatic.mintleaf.*;
 
-import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -50,6 +49,7 @@ public class ExecuteQuery implements DbCallable<int[]> {
 
     private static final MintLeafLogger logger = MintLeafLogger.getLogger(ExecuteQuery.class);
     private ConnectionContext connectionContext;
+    private StatementListener statementListener;
 
     private String sql;
     private ParameterBinding parameterBinding;
@@ -74,7 +74,11 @@ public class ExecuteQuery implements DbCallable<int[]> {
                 for (String sqlItem : batchSqls) {
                     statement.addBatch(sqlItem);
                 }
-                return statement.executeBatch();
+                int[] result = statement.executeBatch();
+                if (this.statementListener != null){
+                    this.statementListener.onAfterExecuteSql(statement);
+                }
+                return result;
             } catch (SQLException e) {
                 logger.error(e);
                 throw new MintLeafException(e);
@@ -87,9 +91,14 @@ public class ExecuteQuery implements DbCallable<int[]> {
                 parameterBinding.bindParameters(parameterSets);
             }
             if (parameterSets.isBatch()) {
-                return preparedStatement.executeBatch();
+                 return preparedStatement.executeBatch();
+
             }
-            return new int[]{preparedStatement.execute() ? 1 : 0};
+            int[] result = new int[]{preparedStatement.execute() ? 1 : 0};
+            if (this.statementListener != null){
+                this.statementListener.onAfterExecuteSql(preparedStatement);
+            }
+            return result;
 
         } catch (MintLeafException e) {
             logger.error("error fetching data", e);
@@ -101,5 +110,7 @@ public class ExecuteQuery implements DbCallable<int[]> {
     }
 
 
-
+    public void setStatementListener(StatementListener statementListener) {
+        this.statementListener = statementListener;
+    }
 }

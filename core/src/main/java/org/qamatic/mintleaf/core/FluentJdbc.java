@@ -37,9 +37,6 @@ package org.qamatic.mintleaf.core;
 
 import org.qamatic.mintleaf.*;
 
-import javax.sql.DataSource;
-import java.sql.*;
-
 /**
  * Created by qamatic on 2/20/16.
  */
@@ -51,6 +48,7 @@ public class FluentJdbc {
         private String sql;
         private ParameterBinding parameterBinding;
         private ConnectionContext connectionContext;
+        private StatementListener statementListener;
 
         public Builder(ConnectionContext connectionContext) {
             this.connectionContext = connectionContext;
@@ -61,14 +59,33 @@ public class FluentJdbc {
             return this;
         }
 
-        public Builder withParamValues(ParameterBinding parameterBinding) throws MintLeafException {
+
+        public Builder withParamValues(ParameterBinding parameterBinding)  {
             this.parameterBinding = parameterBinding;
             return this;
         }
 
+        public Builder withParamValues(final Object[] parameterValues)  {
+            this.parameterBinding = parameterSets -> {
+                for (int i = 0; i < parameterValues.length; i++) {
+                    parameterSets.setObject(i+1, parameterValues[i]);
+                }
+            };
+            return this;
+        }
+
+
+        public Builder withListener(StatementListener statementListener) throws MintLeafException {
+            this.statementListener = statementListener;
+            return this;
+        }
+
+
         public DbCallable<int[]> buildExecute() {
             try {
-                return new ExecuteQuery(this.connectionContext, this.sql, this.parameterBinding);
+                ExecuteQuery query = new ExecuteQuery(this.connectionContext, this.sql, this.parameterBinding);
+                query.setStatementListener(this.statementListener);
+                return query;
             } catch (Exception e) {
                 MintLeafException.throwException(e.getMessage());
             }
@@ -79,8 +96,6 @@ public class FluentJdbc {
 
             try {
                 return new SelectQuery(this.connectionContext, this.sql, this.parameterBinding).execute();
-            } catch (SQLException e) {
-                MintLeafException.throwException(e.getMessage());
             } catch (Exception e) {
                 MintLeafException.throwException(e.getMessage());
             }

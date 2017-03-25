@@ -37,6 +37,7 @@ package org.qamatic.mintleaf;
 
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
+import java.sql.Statement;
 import java.util.List;
 import java.util.regex.Pattern;
 
@@ -114,9 +115,4 @@ public interface DbQueries extends AutoCloseable{
         return objectNames;
     }
 
-    int[]  executeSql(String sql, ParameterBinding parameterBinding) throws MintLeafException;
-
-    default int[]  executeSql(String sql) throws MintLeafException {
-       return executeSql(sql, null);
-    }
 }

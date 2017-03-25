@@ -37,8 +37,8 @@ package org.qamatic.mintleaf.dbqueries;
 
 
 import org.qamatic.mintleaf.*;
-import org.qamatic.mintleaf.core.StandardQueries;
 import org.qamatic.mintleaf.core.FluentJdbc;
+import org.qamatic.mintleaf.core.StandardQueries;
 
 import java.sql.SQLException;
 import java.util.List;
@@ -96,7 +96,9 @@ public class OracleDb extends StandardQueries {
     public void truncateTable(String tableName) throws MintLeafException {
         final String[] objectNames = getObjectNames(tableName.toUpperCase());
         String sql = String.format("truncate  table %s.%s", objectNames[0], objectNames[1]);
-        executeSql(sql);
+        try (DbCallable<int[]> dbCallable = new FluentJdbc.Builder(connectionContext).withSql(sql).buildExecute()) {
+            dbCallable.execute();
+        }
     }
 
     @Override

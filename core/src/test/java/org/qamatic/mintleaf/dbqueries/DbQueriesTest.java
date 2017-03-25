@@ -35,23 +35,33 @@
 
 package org.qamatic.mintleaf.dbqueries;
 
+import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 import org.qamatic.mintleaf.ConnectionContext;
+import org.qamatic.mintleaf.DbCallable;
 import org.qamatic.mintleaf.MintLeafException;
+import org.qamatic.mintleaf.core.ChangeSets;
 import org.qamatic.mintleaf.core.DbConnectionContext;
 import org.qamatic.mintleaf.core.ExecuteQuery;
 
 import java.io.IOException;
 import java.sql.SQLException;
 
+import static junit.framework.TestCase.assertEquals;
 import static junit.framework.TestCase.assertNull;
 import static org.mockito.Mockito.*;
+import static org.qamatic.mintleaf.Mintleaf.executeSql;
 
 /**
  * Created by qamatic on 3/6/16.
  */
 public class DbQueriesTest extends H2TestCase {
 
+    @Before
+    public void cleanDb() throws MintLeafException {
+        ChangeSets.migrate(h2Database.getNewConnection(), "res:/example-changesets.sql", "create schema, DataForDbCompareTest, DROP_CREATE_USERS_IMPORT_TABLE");
+    }
 
     @Test
     public void contextCloseCall() throws SQLException, IOException, MintLeafException {
@@ -78,5 +88,55 @@ public class DbQueriesTest extends H2TestCase {
         verify(query, times(1)).close();
     }
 
+    @Test
+    public void statementCallTest() throws SQLException, IOException, MintLeafException {
+
+        try (ConnectionContext ctx = h2Database.getNewConnection()) {
+
+            try (DbCallable<int[]> dbCallable = executeSql(ctx, "DELETE HRDB.USERS WHERE USERID=1")) {
+
+                assertEquals(2, ctx.getDbQueries().getCount("HRDB.USERS"));
+                dbCallable.execute();
+                assertEquals(1, ctx.getDbQueries().getCount("HRDB.USERS"));
+            }
+
+        }
+    }
+
+    @Test
+    public void statementListenTest() throws SQLException, IOException, MintLeafException {
+
+        try (ConnectionContext ctx = h2Database.getNewConnection()) {
+            final int[] pkey = {-1};
+            try (DbCallable<int[]> dbCallable = executeSql(ctx).
+                    withSql("INSERT INTO HRDB.USERS (USERID, USERNAME) VALUES (9, 'TN')").
+                    withListener(statement -> {
+                        pkey[0] = 1;
+                    }).
+                    buildExecute()) {
+
+                assertEquals(2, ctx.getDbQueries().getCount("HRDB.USERS"));
+                dbCallable.execute();
+                assertEquals(1, pkey[0]);
+                assertEquals(3, ctx.getDbQueries().getCount("HRDB.USERS"));
+            }
+
+        }
+    }
+
+    @Test
+    public void insertUsingBindingTest() throws SQLException, IOException, MintLeafException {
+
+        try (ConnectionContext ctx = h2Database.getNewConnection()) {
+
+            try (DbCallable<int[]> dbCallable = executeSql(ctx, "INSERT INTO HRDB.USERS (USERID, USERNAME) VALUES (?, ?)", new Object[]{11, "HI"})) {
+
+                assertEquals(2, ctx.getDbQueries().getCount("HRDB.USERS"));
+                dbCallable.execute();
+                assertEquals(3, ctx.getDbQueries().getCount("HRDB.USERS"));
+            }
+
+        }
+    }
 
 }
