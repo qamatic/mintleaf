@@ -99,7 +99,7 @@ public class CsvRowListWrapper implements RowListWrapper {
     }
 
     @Override
-    public ComparableRow row() throws MintLeafException {
+    public Row row() throws MintLeafException {
         csvRowWrapper.setMetaData(this.metaDataCollection);
         return csvRowWrapper;
     }

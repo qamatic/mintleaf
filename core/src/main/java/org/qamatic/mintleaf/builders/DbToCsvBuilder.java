@@ -44,7 +44,7 @@ import org.qamatic.mintleaf.tools.CsvExporter;
 /**
  * Created by QAmatic Team on 3/25/17.
  */
-public final class DbToCsvBuilder {
+public class DbToCsvBuilder {
     private String sourceSql;
     private ParameterBinding sqlaramValueBindings;
     private Database sourceDb;

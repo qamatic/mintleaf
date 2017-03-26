@@ -43,7 +43,7 @@ import org.qamatic.mintleaf.tools.CsvImporter;
 /**
  * Created by QAmatic Team on 3/25/17.
  */
-public final class CsvToDbBuilder {
+public class CsvToDbBuilder {
 
     private Database targetDb;
     private String targetSqlTemplate;

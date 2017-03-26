@@ -35,14 +35,14 @@
 
 package org.qamatic.mintleaf.dbqueries;
 
-import org.qamatic.mintleaf.ComparableRow;
+import org.qamatic.mintleaf.Row;
 import org.qamatic.mintleaf.MetaDataCollection;
 import org.qamatic.mintleaf.MintLeafException;
 
 /**
  * Created by QAmatic Team on 3/11/17.
  */
-public class User implements ComparableRow {
+public class User implements Row {
 
     private MetaDataCollection metaDataCollection;
     private int id;

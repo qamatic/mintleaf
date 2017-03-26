@@ -66,11 +66,15 @@ public class CsvExporter extends ImpExpBase implements Executable<Boolean> {
 
         try {
             File f = new File(this.targetCsvFile);
-            exportDataTo(new CsvExportFlavour(new FileWriter(f)), this.sourceSql, this.sqlaramValueBindings);
+            exportDataTo(createFlavour(f), this.sourceSql, this.sqlaramValueBindings);
             return true;
         } catch (IOException e) {
             throw new MintLeafException(e);
         }
+    }
+
+    protected CsvExportFlavour createFlavour(File f) throws IOException {
+        return new CsvExportFlavour(new FileWriter(f));
     }
 
     public void setSqlaramValueBindings(ParameterBinding sqlaramValueBindings) {

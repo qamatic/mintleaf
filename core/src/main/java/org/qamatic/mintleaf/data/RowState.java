@@ -35,7 +35,6 @@
 
 package org.qamatic.mintleaf.data;
 
-import org.qamatic.mintleaf.ComparableRow;
 import org.qamatic.mintleaf.MetaDataCollection;
 import org.qamatic.mintleaf.MintLeafException;
 
@@ -46,7 +45,7 @@ public class RowState {
     public int ColumnNumber = -1;
     public int RowNumber = -1;
     public int IsSurplusRow;
-    public ComparableRow Row;
+    public org.qamatic.mintleaf.Row Row;
     private MetaDataCollection metaDataCollection;
 
     @Override

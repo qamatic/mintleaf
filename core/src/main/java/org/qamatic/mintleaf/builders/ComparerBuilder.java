@@ -47,7 +47,7 @@ import java.util.List;
 /**
  * Created by QAmatic Team on 3/25/17.
  */
-public final class ComparerBuilder {
+public class ComparerBuilder {
     private static final MintLeafLogger logger = MintLeafLogger.getLogger(ComparerBuilder.class);
     private RowListWrapper sourceTable;
     private RowListWrapper targetTable;
@@ -55,7 +55,7 @@ public final class ComparerBuilder {
     private ColumnMatcher columnMatcher;
     private String selectedColumnMaps;
 
-    public ComparerBuilder withSourceTable(List<? extends ComparableRow> sourceTable, MetaDataCollection metaDataCollection) {
+    public ComparerBuilder withSourceTable(List<? extends Row> sourceTable, MetaDataCollection metaDataCollection) {
         this.sourceTable = new ObjectRowListWrapper(sourceTable, metaDataCollection);
         return this;
     }
@@ -65,7 +65,7 @@ public final class ComparerBuilder {
         return this;
     }
 
-    public ComparerBuilder withTargetTable(List<? extends ComparableRow> targetTable, MetaDataCollection metaDataCollection) {
+    public ComparerBuilder withTargetTable(List<? extends Row> targetTable, MetaDataCollection metaDataCollection) {
         this.targetTable = new ObjectRowListWrapper(targetTable, metaDataCollection);
         return this;
     }

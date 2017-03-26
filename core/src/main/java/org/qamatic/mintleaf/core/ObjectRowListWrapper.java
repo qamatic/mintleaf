@@ -35,7 +35,7 @@
 
 package org.qamatic.mintleaf.core;
 
-import org.qamatic.mintleaf.ComparableRow;
+import org.qamatic.mintleaf.Row;
 import org.qamatic.mintleaf.MetaDataCollection;
 import org.qamatic.mintleaf.MintLeafException;
 import org.qamatic.mintleaf.RowListWrapper;
@@ -47,11 +47,11 @@ import java.util.List;
  */
 public class ObjectRowListWrapper implements RowListWrapper {
 
-    private List<? extends ComparableRow> list;
+    private List<? extends Row> list;
     private int current = -1;
     private MetaDataCollection metaDataCollection;
 
-    public ObjectRowListWrapper(List<? extends ComparableRow> list, MetaDataCollection metaDataCollection) {
+    public ObjectRowListWrapper(List<? extends Row> list, MetaDataCollection metaDataCollection) {
 
         this.metaDataCollection = metaDataCollection;
         this.list = list;
@@ -73,11 +73,11 @@ public class ObjectRowListWrapper implements RowListWrapper {
     }
 
     @Override
-    public ComparableRow row() throws MintLeafException {
+    public Row row() throws MintLeafException {
         if (this.current >= this.list.size()) {
             return null;
         }
-        ComparableRow row = this.list.get(current);
+        Row row = this.list.get(current);
         row.setMetaData(this.metaDataCollection);
         return row;
     }

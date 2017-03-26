@@ -63,9 +63,13 @@ public class DbImporter extends ImpExpBase implements Executable<Boolean> {
     @Override
     public Boolean execute() throws MintLeafException {
         try (SqlResultSet sourceSqlResultSet = selectQuery(this.getConnectionContext()).withSql(sourceSql).withParamValues(sourceSqlParamValueBindings).buildSelect()) {
-            importDataFrom(new DbImportFlavour(sourceSqlResultSet), this.targetSqlTemplate);
+            importDataFrom(createFlavour(sourceSqlResultSet), this.targetSqlTemplate);
             return true;
         }
+    }
+
+    protected DbImportFlavour createFlavour(SqlResultSet sourceSqlResultSet) {
+        return new DbImportFlavour(sourceSqlResultSet);
     }
 
     @Override

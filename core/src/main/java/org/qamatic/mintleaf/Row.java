@@ -41,7 +41,7 @@ import java.sql.SQLException;
 /**
  * Created by qamatic on 3/3/16.
  */
-public interface ComparableRow {
+public interface Row {
 
     Object getValue(int columnIndex) throws MintLeafException;
 

@@ -43,7 +43,7 @@ import org.qamatic.mintleaf.core.JdbcDriverSource;
 /**
  * Created by QAmatic Team on 3/25/17.
  */
-public final class DatabaseBuilder {
+public class DatabaseBuilder {
 
     private Class<? extends DriverSource> driverSourceClazz = JdbcDriverSource.class;
     private String url;

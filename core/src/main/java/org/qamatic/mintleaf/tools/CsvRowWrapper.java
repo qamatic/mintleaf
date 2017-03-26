@@ -36,14 +36,14 @@
 package org.qamatic.mintleaf.tools;
 
 import org.apache.commons.csv.CSVRecord;
-import org.qamatic.mintleaf.ComparableRow;
+import org.qamatic.mintleaf.Row;
 import org.qamatic.mintleaf.MetaDataCollection;
 import org.qamatic.mintleaf.MintLeafException;
 
 /**
  * Created by QAmatic on 3/10/2017.
  */
-public class CsvRowWrapper implements ComparableRow {
+public class CsvRowWrapper implements Row {
     private CSVRecord record;
     private MetaDataCollection metaDataCollection;
 

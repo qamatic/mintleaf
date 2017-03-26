@@ -44,7 +44,7 @@ import org.qamatic.mintleaf.tools.DbImporter;
 /**
  * Created by QAmatic Team on 3/25/17.
  */
-public final class DbToDbBuilder {
+public class DbToDbBuilder {
     private String sourceSql;
     private ParameterBinding sqlaramValueBindings;
     private Database sourceDb;

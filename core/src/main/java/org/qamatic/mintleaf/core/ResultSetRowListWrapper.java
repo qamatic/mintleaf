@@ -65,7 +65,7 @@ public class ResultSetRowListWrapper implements RowListWrapper {
     }
 
     @Override
-    public ComparableRow row() throws MintLeafException {
+    public Row row() throws MintLeafException {
         return new ResultSetRowWrapper(resultSet);
     }
 

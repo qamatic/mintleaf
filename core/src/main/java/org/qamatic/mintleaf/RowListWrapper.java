@@ -44,7 +44,7 @@ public interface RowListWrapper {
 
     boolean moveNext() throws MintLeafException;
 
-    ComparableRow row() throws MintLeafException;
+    Row row() throws MintLeafException;
 
     MetaDataCollection getMetaData() throws MintLeafException;
 }
