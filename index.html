@@ -230,7 +230,7 @@
 <h3 id="features">Features</h3>
 
 <ul>
-<li>Simplified Database Migration (either from command line or programatic approach)</li>
+<li>Simplified Database Migration</li>
 <li>Compare Data between database tables/csv/spreadsheets/list of objects/any custom data sources</li>
 <li>Data export/import: database table to CSV, CSV to database table and, between database tables<br></li>
 <li>Unit testing: write automated tests and run them on migrated database schemas, objects, data integrity checks during CI/CD.</li>
@@ -261,17 +261,17 @@
 
 <h4 id="version-control-systems-v-s-database-migration-versions">Version Control Systems v.s Database Migration Versions?</h4>
 
-<p>Teams of software developers usually use version control systems to manage and collaborate on changes made to versions of source code. Different developers can develop on divergent, relatively older or newer branches of the same source code to make changes and additions during development.  So version control system by itself does not maintain database versions but data migration tools does it for you.  So using Mintleaf you can maintain your database versions either upgrade to a newer version or degrade it a older version. </p>
+<p>Teams of software developers usually use version control systems to manage and collaborate on changes made to versions of source code. Different developers can develop on divergent, relatively older or newer branches of the same source code to make changes and additions during development.  So version control system by itself does not maintain database versions but data migration tools does it for you.  So using Mintleaf you can maintain your database versions either upgrade to a newer version or degrade it a older version.</p>
 
 <h2 id="why-mintleaf">Why MintLeaf?</h2>
 
-<p>Schema migration to a production database is always a risky task. Production databases are usually huge, old, and full of surprise things like the following </p>
+<p>Schema migration to a production database is always a risky task. Production databases are usually huge, old, and full of surprise things like the following</p>
 
 <ul>
-<li>Assumptions on certian data conditions </li>
+<li>Assumptions on certian data conditions</li>
 <li>Implied dependencies which no body knows</li>
-<li>Unclean / stale data which are hard to resolve </li>
-<li>Direct schema patches for bug fixes </li>
+<li>Unclean / stale data which are hard to resolve</li>
+<li>Direct schema patches for bug fixes</li>
 <li>Direct performance fixes
 and so on&hellip;.</li>
 </ul>
@@ -288,7 +288,7 @@ and so on&hellip;.</li>
 
 <h2 id="change-sets">Change-sets</h2>
 
-<p>Changesets are basically contains one ore more changes that are to be applied during a database migration.  Mintleaf changesets are stored in plain old sql files but changeset information is described using sql comment lines as shown below </p>
+<p>Changesets are basically contains one ore more changes that are to be applied during a database migration.  Mintleaf changesets are stored in plain old sql files but changeset information is described using sql comment lines as shown below</p>
 <pre class="highlight sql tab-sql"><code> <span class="c1">-- &lt;ChangeSet id="{a-change-set-id}" delimiter=";" userdata="" /&gt;</span>
 </code></pre>
 <p>where,</p>
@@ -318,7 +318,7 @@ and so on&hellip;.</li>
 <span class="k">DROP</span> <span class="k">SCHEMA</span> <span class="n">IF</span> <span class="k">EXISTS</span> <span class="n">ABCDB</span><span class="p">;</span>
 <span class="k">CREATE</span> <span class="k">SCHEMA</span> <span class="n">IF</span> <span class="k">NOT</span> <span class="k">EXISTS</span> <span class="n">ABCDB</span><span class="p">;</span>
 
-<span class="c1">-- &lt;ChangeSet id="create tables" delimiter=";" userdata="" /&gt; </span>
+<span class="c1">-- &lt;ChangeSet id="create tables" delimiter=";" userdata="" /&gt;</span>
 <span class="k">CREATE</span> <span class="k">TABLE</span> <span class="n">IF</span> <span class="k">NOT</span> <span class="k">EXISTS</span> <span class="n">ABCDB</span><span class="p">.</span><span class="n">USERS</span>
 <span class="p">(</span>
   <span class="n">USERID</span>      <span class="n">INT</span> <span class="k">NOT</span> <span class="k">NULL</span><span class="p">,</span>
@@ -341,8 +341,8 @@ and so on&hellip;.</li>
 
 <!--- And repeat as much as changeset that you like and you can create as many as sql files as you like to spread them up-->
 
-<aside class="notice"> 
-It&rsquo;s very easy to add changeset definition on your exising sql files if you would like.  So nothing much to do apart from this comment line declaration. 
+<aside class="notice">
+It&rsquo;s very easy to add changeset definition on your exising sql files if you would like.  So nothing much to do apart from this comment line declaration.
 </aside>
 
 <h2 id="configuration-file">Configuration file</h2>
@@ -376,13 +376,93 @@ It&rsquo;s very easy to add changeset definition on your exising sql files if yo
 
 <p><img src="images/mintleaf.png" alt="Mintleaf" />  </p>
 
+<h1 id="connection-queries">Connection &amp; Queries</h1>
+
+<h2 id="connecting-to-database">Connecting to database</h2>
+
+<p>In order to connect to a database, you would need jdbc url, username and a password.</p>
+
+<h3 id="usage">usage</h3>
+<pre class="highlight java tab-java"><code>     <span class="kn">import</span> <span class="nn">static</span> <span class="n">org</span><span class="o">.</span><span class="na">qamatic</span><span class="o">.</span><span class="na">mintleaf</span><span class="o">.</span><span class="na">Mintleaf</span><span class="o">.</span><span class="na">database</span><span class="o">;</span>
+
+     <span class="n">Database</span> <span class="n">db</span> <span class="o">=</span> <span class="n">database</span><span class="o">().</span>          
+                    <span class="n">withUrl</span><span class="o">(</span><span class="s">"&lt; your jdbc url &gt;"</span><span class="o">).</span>
+                    <span class="n">withUsername</span><span class="o">(</span><span class="s">"user name"</span><span class="o">).</span>
+                    <span class="n">withPassword</span><span class="o">(</span><span class="s">"password"</span><span class="o">).</span>
+                    <span class="n">build</span><span class="o">();</span>
+</code></pre>
+<h3 id="connection-context">Connection Context</h3>
+
+<p>Every database connection establishes an exclusive context in which it deals with queries and transactions inside.  It is one of the well managed construct in Mintleaf that offers you handle transactions nicely.</p>
+
+<aside> it is recommended that Mintleaf users to use try-resource block in order to release connection and open resources automatically at the of the database operations
+</aside>
+
+<p>Use getNewConnection() method to create a connection context that is required for any database operations either in transactional mode or non-transactional mode.</p>
+<pre class="highlight java tab-java"><code>  <span class="kn">import</span> <span class="nn">static</span> <span class="n">org</span><span class="o">.</span><span class="na">qamatic</span><span class="o">.</span><span class="na">mintleaf</span><span class="o">.</span><span class="na">Mintleaf</span><span class="o">.</span><span class="na">database</span><span class="o">;</span>
+  <span class="kn">import</span> <span class="nn">static</span> <span class="n">org</span><span class="o">.</span><span class="na">qamatic</span><span class="o">.</span><span class="na">mintleaf</span><span class="o">.</span><span class="na">Mintleaf</span><span class="o">.</span><span class="na">executeSql</span><span class="o">;</span>
+
+<span class="c1">//example for user handles connection close()</span>
+  <span class="n">ConnectionContext</span> <span class="n">connectionContext</span> <span class="o">=</span> <span class="n">h2Database</span><span class="o">.</span><span class="na">getNewConnection</span><span class="o">();</span>
+  <span class="n">executeSql</span><span class="o">(</span><span class="n">connectionContext</span><span class="o">,</span> <span class="s">"INSERT INTO USERS VALUES (1, 'EXAMPLE-USER')"</span><span class="o">);</span>
+  <span class="n">connectionContext</span><span class="o">.</span><span class="na">close</span><span class="o">()</span>  <span class="c1">// you must call close here</span>
+
+<span class="c1">//example for auto closable</span>
+  <span class="k">try</span> <span class="o">(</span><span class="n">ConnectionContext</span> <span class="n">connectionContext</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="na">getNewConnection</span><span class="o">()){</span>
+    <span class="n">executeSql</span><span class="o">(</span><span class="n">connectionContext</span><span class="o">,</span> <span class="s">"INSERT INTO USERS VALUES (1, 'EXAMPLE-USER')"</span><span class="o">);</span>
+  <span class="o">}</span>
+</code></pre>
+<p>This method has an optional parameter for auto close connection.  By default, it is set to auto closable but bear in mind that try-resource must be used in order to auto close your connection at the end of the operations otherwise you should call close() method in order to close the connection and release any resources as explained in above example.</p>
+
+<h2 id="transactional-operations">Transactional operations</h2>
+
+<p>Use beginTransaction() to start a transaction and finally call either commitTransaction() or rollbackTransaction accordingly.</p>
+<pre class="highlight java tab-java"><code>  <span class="k">try</span> <span class="o">(</span><span class="n">ConnectionContext</span> <span class="n">connectionContext</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="na">getNewConnection</span><span class="o">().</span><span class="na">beginTransaction</span><span class="o">()){</span>    
+    <span class="n">executeSql</span><span class="o">(</span><span class="n">connectionContext</span><span class="o">,</span> <span class="s">"INSERT INTO USERS VALUES (1, 'EXAMPLE-USER')"</span><span class="o">);</span>    
+  <span class="o">}</span>
+</code></pre>
+<p>in the above example <em>db.getNewConnection().beginTransaction()</em> in try-resource block will automatically call commitTransaction() otherwise you will have to call it explicitly.    </p>
+<pre class="highlight java tab-java"><code>  <span class="k">try</span> <span class="o">(</span><span class="n">ConnectionContext</span> <span class="n">connectionContext</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="na">getNewConnection</span><span class="o">().</span><span class="na">beginTransaction</span><span class="o">()){</span>    
+    <span class="n">executeSql</span><span class="o">(</span><span class="n">connectionContext</span><span class="o">,</span> <span class="s">"INSERT INTO USERS VALUES (1, 'EXAMPLE-USER')"</span><span class="o">);</span>    
+  <span class="o">}</span>
+  <span class="k">catch</span> <span class="o">(</span><span class="n">MintLeafException</span> <span class="n">e</span><span class="o">){</span>
+     <span class="n">connectionContext</span><span class="o">.</span><span class="na">rollbackTransaction</span><span class="o">();</span>
+  <span class="o">}</span>
+</code></pre>
+<h3 id="explicit-handling-of-transaction">Explicit handling of transaction</h3>
+<pre class="highlight java tab-java"><code>  <span class="n">ConnectionContext</span> <span class="n">connectionContext</span> <span class="o">=</span> <span class="n">h2Database</span><span class="o">.</span><span class="na">getNewConnection</span><span class="o">();</span>
+  <span class="n">connectionContext</span><span class="o">.</span><span class="na">beginTransaction</span><span class="o">();</span>
+  <span class="k">try</span> <span class="o">{</span>
+    <span class="n">executeSql</span><span class="o">(</span><span class="n">connectionContext</span><span class="o">,</span> <span class="s">"INSERT INTO USERS VALUES (1, 'EXAMPLE-USER')"</span><span class="o">);</span>
+    <span class="n">connectionContext</span><span class="o">.</span><span class="na">commitTransaction</span><span class="o">();</span>
+  <span class="o">}</span>
+  <span class="k">catch</span> <span class="o">(</span><span class="n">MintLeafException</span> <span class="n">e</span><span class="o">){</span>
+     <span class="n">connectionContext</span><span class="o">.</span><span class="na">rollbackTransaction</span><span class="o">();</span>
+  <span class="o">}</span>
+  <span class="k">finally</span><span class="o">{</span>  
+     <span class="n">connectionContext</span><span class="o">.</span><span class="na">close</span><span class="o">()</span>
+  <span class="o">}</span>
+</code></pre>
+<h2 id="database-select-queries">Database Select Queries</h2>
+<pre class="highlight java tab-java"><code>
+  <span class="kn">import</span> <span class="nn">static</span> <span class="n">org</span><span class="o">.</span><span class="na">qamatic</span><span class="o">.</span><span class="na">mintleaf</span><span class="o">.</span><span class="na">Mintleaf</span><span class="o">.</span><span class="na">selectQuery</span>
+
+  <span class="nf">try</span> <span class="o">(</span><span class="n">ConnectionContext</span> <span class="n">connectionContext</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="na">getNewConnection</span><span class="o">()){</span>
+
+     <span class="n">SqlResultSet</span> <span class="n">SqlResultSet</span> <span class="o">=</span> <span class="n">selectQuery</span><span class="o">(</span><span class="n">connectionContext</span><span class="o">).</span>
+                                   <span class="n">withSql</span><span class="o">(</span><span class="s">"SELECT * FROM USERS"</span><span class="o">).</span>
+                                   <span class="n">buildSelect</span><span class="o">();</span>
+
+
+  <span class="o">}</span>
+</code></pre>
 <h1 id="creating-test-data">Creating test data</h1>
 
-<p>Before run your test you should load your test data to target test database so that your tests can be run for to prove to be working with developer code changes. So generally, your test scenearios may be involved with one or more database tables that needs to be populated with data in order to verify developer code changes either stored procedure side or application side. Mintleaf simplifies the test data creation process as easy as possible.  Here are the possible ways that one can think of creating test data with Mintleaf, </p>
+<p>Before run your test you should load your test data to target test database so that your tests can be run for to prove to be working with developer code changes. So generally, your test scenarios may be involved with one or more database tables that needs to be populated with data in order to verify developer code changes either stored procedure side or application side. Mintleaf simplifies the test data creation process as easy as possible.  Here are the possible ways that one can think of creating test data with Mintleaf,</p>
 
 <ul>
 <li>Create your own data set in a csv file format and load it to your target test database</li>
-<li>Or copy data from existing database to a csv file and later use it for loading in to your target test database </li>
+<li>Or copy data from existing database to a csv file and later use it for loading in to your target test database</li>
 <li>Or directly copy data from one database to another database/your target test database</li>
 </ul>
 
@@ -397,7 +477,7 @@ It&rsquo;s very easy to add changeset definition on your exising sql files if yo
 
 <h2 id="database-to-csv">Database to CSV</h2>
 
-<p>For example, if we want to dump data from a table called HRDB.USERS in abcd-db to a CSV file then you run like the following </p>
+<p>For example, if we want to dump data from a table called HRDB.USERS in abcd-db to a CSV file then you run like the following</p>
 <pre class="highlight java tab-java"><code>
         <span class="c1">//connect to a database, below is an example for H2 database but you can change to any database</span>
         <span class="n">DatabaseContext</span> <span class="n">h2db</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Mintleaf</span><span class="o">.</span><span class="na">DatabaseBuilder</span><span class="o">().</span>
@@ -512,7 +592,7 @@ It&rsquo;s very easy to add changeset definition on your exising sql files if yo
                 <span class="n">withTargetTable</span><span class="o">(</span><span class="n">targetListList</span><span class="o">).</span>
                 <span class="n">withMatchingResult</span><span class="o">((</span><span class="n">sourceColumn</span><span class="o">,</span> <span class="n">targetColumn</span><span class="o">)</span> <span class="o">-&gt;</span> <span class="o">{</span>
 
-                    <span class="c1">//here is where you add your compare criteria </span>
+                    <span class="c1">//here is where you add your compare criteria</span>
 
                     <span class="k">if</span> <span class="o">(</span><span class="n">sourceColumn</span><span class="o">.</span><span class="na">equals</span><span class="o">(</span><span class="n">targetColumn</span><span class="o">)){</span>
                         <span class="n">logger</span><span class="o">.</span><span class="na">info</span><span class="o">(</span><span class="s">"matches"</span><span class="o">);</span>
@@ -532,11 +612,11 @@ It&rsquo;s very easy to add changeset definition on your exising sql files if yo
 </code></pre>
 <h2 id="compare-two-list-of-objects">Compare two list of objects</h2>
 
-<p>For example you have a pojo class looks like the following.  For simplicity purpose no getter/setters for now but it has just two member columns UserName and Country. </p>
+<p>For example you have a pojo class looks like the following.  For simplicity purpose no getter/setters for now but it has just two member columns UserName and Country.</p>
 <pre class="highlight java tab-java"><code>   <span class="kd">public</span> <span class="kd">class</span> <span class="nc">User</span> <span class="o">{</span>         
         <span class="kd">public</span> <span class="n">String</span> <span class="n">UserName</span><span class="o">;</span>
         <span class="kd">public</span> <span class="n">String</span> <span class="n">Country</span><span class="o">;</span>
-   <span class="o">}</span> 
+   <span class="o">}</span>
 
 </code></pre>
 <p>In order to do compare between <em>sourceUserList and targetUserList</em>, you must implement an interface <strong>ComparableRow</strong> on User class.   When you implement <strong>ComparableRow</strong> interface, you will have to override <strong>getMetaData()</strong>,  <strong>setMetaData()</strong> and <strong>getValue()</strong> methods as shown below.   Basically you provide column information as opposed a object properties so this way one can easily deal with nest objects and calculated column values manipluated before returning them.  So you can also implemnent some custom auto inferring mechanism like spring beans via annotations is an idea for those who wants it but its is not the scope here and Mintleaf provides complete freedom to the user as how they would like to implement it.  </p>
@@ -546,8 +626,8 @@ It&rsquo;s very easy to add changeset definition on your exising sql files if yo
              <span class="kd">public</span> <span class="n">String</span> <span class="n">UserName</span><span class="o">;</span>
              <span class="kd">public</span> <span class="n">String</span> <span class="n">Country</span><span class="o">;</span>
 
-            <span class="c1">//add this line </span>
-            <span class="kd">private</span> <span class="n">MetaDataCollection</span> <span class="n">metaDataCollection</span><span class="o">;</span> 
+            <span class="c1">//add this line</span>
+            <span class="kd">private</span> <span class="n">MetaDataCollection</span> <span class="n">metaDataCollection</span><span class="o">;</span>
 
             <span class="c1">//add this override to map your bean members to column***********</span>
             <span class="nd">@Override</span>
@@ -575,7 +655,7 @@ It&rsquo;s very easy to add changeset definition on your exising sql files if yo
         <span class="o">}</span>
 
 </code></pre>
-<p><strong>now create two different list of Users and populate with some data.</strong> </p>
+<p><strong>now create two different list of Users and populate with some data.</strong></p>
 <pre class="highlight java tab-java"><code>
     <span class="c1">//create a source list of users</span>
    <span class="n">List</span><span class="o">&lt;</span><span class="n">User</span><span class="o">&gt;</span> <span class="n">sourceUserList</span> <span class="o">=</span> <span class="k">new</span> <span class="n">ArrayList</span><span class="o">&lt;</span><span class="n">User</span><span class="o">&gt;</span> <span class="o">();</span>
@@ -611,7 +691,7 @@ It&rsquo;s very easy to add changeset definition on your exising sql files if yo
                 <span class="n">withTargetTable</span><span class="o">(</span><span class="n">targetUserList</span><span class="o">,</span> <span class="n">metaDataCollection</span><span class="o">).</span>
                 <span class="n">withMatchingResult</span><span class="o">((</span><span class="n">sourceColumn</span><span class="o">,</span> <span class="n">targetColumn</span><span class="o">)</span> <span class="o">-&gt;</span> <span class="o">{</span>
 
-                    <span class="c1">//here is where you add your compare criteria </span>
+                    <span class="c1">//here is where you add your compare criteria</span>
 
                     <span class="k">if</span> <span class="o">(</span><span class="n">sourceColumn</span><span class="o">.</span><span class="na">equals</span><span class="o">(</span><span class="n">targetColumn</span><span class="o">)){</span>
                         <span class="n">logger</span><span class="o">.</span><span class="na">info</span><span class="o">(</span><span class="s">"matches"</span><span class="o">);</span>
@@ -626,7 +706,7 @@ It&rsquo;s very easy to add changeset definition on your exising sql files if yo
         <span class="c1">//compare now</span>
         <span class="n">dataComparer</span><span class="o">.</span><span class="na">execute</span><span class="o">();</span>
 </code></pre>
-<p>For selected column comparison, use <strong>withSelectedColumnMaps()</strong> </p>
+<p>For selected column comparison, use <strong>withSelectedColumnMaps()</strong></p>
 <pre class="highlight java tab-java"><code>
         <span class="c1">//logger</span>
         <span class="kd">final</span> <span class="n">ConsoleLogger</span> <span class="n">logger</span> <span class="o">=</span> <span class="k">new</span> <span class="n">ConsoleLogger</span><span class="o">();</span>
