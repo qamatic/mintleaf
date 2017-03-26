@@ -246,7 +246,7 @@
 <pre class="highlight xml tab-xml"><code>    <span class="nt">&lt;dependency&gt;</span>
         <span class="nt">&lt;groupId&gt;</span>org.qamatic<span class="nt">&lt;/groupId&gt;</span>
         <span class="nt">&lt;artifactId&gt;</span>mintleaf-core<span class="nt">&lt;/artifactId&gt;</span>
-        <span class="nt">&lt;version&gt;</span>1.8.19<span class="nt">&lt;/version&gt;</span>
+        <span class="nt">&lt;version&gt;</span>1.8.21<span class="nt">&lt;/version&gt;</span>
     <span class="nt">&lt;/dependency&gt;</span>
 </code></pre>
 <h1 id="understanding-mintleaf">Understanding Mintleaf</h1>
@@ -385,7 +385,7 @@ It&rsquo;s very easy to add changeset definition on your exising sql files if yo
 <h3 id="usage">usage</h3>
 <pre class="highlight java tab-java"><code>     <span class="kn">import</span> <span class="nn">static</span> <span class="n">org</span><span class="o">.</span><span class="na">qamatic</span><span class="o">.</span><span class="na">mintleaf</span><span class="o">.</span><span class="na">Mintleaf</span><span class="o">.</span><span class="na">database</span><span class="o">;</span>
 
-     <span class="n">Database</span> <span class="n">db</span> <span class="o">=</span> <span class="n">database</span><span class="o">().</span>          
+     <span class="n">Database</span> <span class="n">db</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Mintleaf</span><span class="o">.</span><span class="na">DatabaseBuilder</span><span class="o">().</span>          
                     <span class="n">withUrl</span><span class="o">(</span><span class="s">"&lt; your jdbc url &gt;"</span><span class="o">).</span>
                     <span class="n">withUsername</span><span class="o">(</span><span class="s">"user name"</span><span class="o">).</span>
                     <span class="n">withPassword</span><span class="o">(</span><span class="s">"password"</span><span class="o">).</span>
