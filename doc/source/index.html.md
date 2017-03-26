@@ -4,7 +4,6 @@ title: Mintleaf Documentation
 toc_footers:  
   - <a href='http://getmintleaf.org'>getmintleaf.org</a>
   - <a href='https://github.com/qamatic/mintleaf'>Source @ github</a>  
- 
 
 includes:
   
@@ -16,7 +15,7 @@ search: true
 Welcome to the Mintleaf! Mintleaf is a light weight framework tool helps you to advance your database developement on continuous integration / continuous delivery model as easy as possible.
 
 ### Features
-- Simplified Database Migration (either from command line or programatic approach)
+- Simplified Database Migration 
 - Compare Data between database tables/csv/spreadsheets/list of objects/any custom data sources
 - Data export/import: database table to CSV, CSV to database table and, between database tables  
 - Unit testing: write automated tests and run them on migrated database schemas, objects, data integrity checks during CI/CD.
@@ -168,6 +167,38 @@ Version profile is a configuration file which contains list of changesets to be 
 
 ![Mintleaf](/images/mintleaf.png)  
 
+
+# Connection & Queries
+
+## Connecting to database
+
+
+### usage
+
+```java
+     Database db = database().          
+                withUrl("< your jdbc url >").
+                withUsername("user name").
+                withPassword("password").
+                build();
+                
+     try (ConnectionContext ctx = db.getNewConnection()){
+         .....
+             here you do database queries
+         .....
+     }
+```
+
+### Connection Context
+
+Every database connection establishes a context in which it deals with queries and transactions.  It is one of the well managed construct in Mintleaf for you to handle it nicely.
+
+<aside class="warning"> it is recommended for Mintleaf users to use try-resource block to auto close connection or any open resources
+</aside>
+
+
+## getDbQueries()mvn release:clean release:prepare release:perform  -Darguments="-Dgpg.passphrase=vallalar" -Dgpg.passphrase=vallalar
+    
  
 # Creating test data
 

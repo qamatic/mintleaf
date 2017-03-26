@@ -48,13 +48,13 @@ import static org.qamatic.mintleaf.Mintleaf.database;
 public class OracleTestCase {
 
 
-    private static Database oracleSysDbaCtx;
+    private static Database oraSysDb;
 
     static {
-        oracleSysDbaCtx = createOracleDbContext(System.getenv("TEST_DB_MASTER_USERNAME"),
+        oraSysDb = createOracleDbContext(System.getenv("TEST_DB_MASTER_USERNAME"),
                 System.getenv("TEST_DB_MASTER_PASSWORD"));
         try {
-            ChangeSets.migrate(oracleSysDbaCtx.getNewConnection(), "res:/oracle/hrdb-changesets/hrdb-schema-setup.sql", "create schema");
+            ChangeSets.migrate(oraSysDb.getNewConnection(), "res:/oracle/hrdb-changesets/hrdb-schema-setup.sql", "create schema");
         } catch (MintLeafException e) {
             MintLeafException.throwException(e.getMessage());
         }
