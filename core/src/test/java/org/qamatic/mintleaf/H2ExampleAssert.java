@@ -33,58 +33,13 @@
  * /
  */
 
-package org.qamatic.mintleaf.core;
+package org.qamatic.mintleaf;
 
-import org.qamatic.mintleaf.MetaDataCollection;
-import org.qamatic.mintleaf.MintLeafException;
-import org.qamatic.mintleaf.Row;
-import org.qamatic.mintleaf.RowListWrapper;
-
-import java.util.List;
+import org.qamatic.mintleaf.DbQueries;
 
 /**
- * Created by qamatic on 3/4/16.
+ * Created by QAmatic Team on 3/25/17.
  */
-public class ObjectRowListWrapper implements RowListWrapper {
-
-    private List<? extends Row> list;
-    private int current = -1;
-    private MetaDataCollection metaDataCollection;
-
-    public ObjectRowListWrapper(List<? extends Row> list, MetaDataCollection metaDataCollection) {
-
-        this.metaDataCollection = metaDataCollection;
-        this.list = list;
-    }
-
-    @Override
-    public void resetAll() throws MintLeafException {
-        current = -1;
-    }
-
-    @Override
-    public boolean moveNext() throws MintLeafException {
-        current++;
-        if (this.current >= this.list.size()) {
-            return false;
-        }
-
-        return true;
-    }
-
-    @Override
-    public Row row() throws MintLeafException {
-        if (this.current >= this.list.size()) {
-            return null;
-        }
-        Row row = this.list.get(current);
-        row.setMetaData(this.metaDataCollection);
-        return row;
-    }
-
-    @Override
-    public MetaDataCollection getMetaData() throws MintLeafException {
-        return this.metaDataCollection;
-    }
-
+public interface H2ExampleAssert extends DbQueries {
+    String returnSomeValue();
 }

@@ -35,11 +35,14 @@
 
 package org.qamatic.mintleaf;
 
-import org.qamatic.mintleaf.builders.*;
-import org.qamatic.mintleaf.core.ExecuteQuery;
-import org.qamatic.mintleaf.core.FluentJdbc;
-import org.qamatic.mintleaf.core.JdbcDriverSource;
+import org.qamatic.mintleaf.core.*;
+import org.qamatic.mintleaf.data.*;
+import org.qamatic.mintleaf.tools.CsvExporter;
+import org.qamatic.mintleaf.tools.CsvImporter;
+import org.qamatic.mintleaf.tools.DbImporter;
 
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 
 /**
@@ -73,28 +76,268 @@ public final class Mintleaf {
         return executeSql(connectionContext).withSql(sql).withParamValues(parameterValues).buildExecute();
     }
 
-    public static ComparerBuilder comparer() {
-        return new ComparerBuilder();
-    }
-
-    public static DatabaseBuilder database() {
-        return new DatabaseBuilder();
-    }
-
     public static Database database(String url, String username, String password) {
         return new DatabaseBuilder().withDriverSource(JdbcDriverSource.class).withUrl(url).withUsername(username).withPassword(password).build();
     }
 
-    public static DbToCsvBuilder dbTocsvTransfer() {
-        return new DbToCsvBuilder();
+    /* Builder classes
+    * */
+    public static final class DbToDbDataTransferBuilder {
+        private String sourceSql;
+        private ParameterBinding sqlaramValueBindings;
+        private Database sourceDb;
+
+        private Database targetDb;
+        private String targetSqlTemplate;
+
+        public DbToDbDataTransferBuilder withSqlaramValueBindings(ParameterBinding sqlaramValueBindings) {
+            this.sqlaramValueBindings = sqlaramValueBindings;
+            return this;
+        }
+
+        public DbToDbDataTransferBuilder withSourceDb(Database sourceDbDriverSource) {
+            this.sourceDb = sourceDbDriverSource;
+            return this;
+        }
+
+        public DbToDbDataTransferBuilder withSourceSql(String sourceSql) {
+            this.sourceSql = sourceSql;
+            return this;
+        }
+
+        public DbToDbDataTransferBuilder withTargetDb(Database targetDbDriverSource) {
+            this.targetDb = targetDbDriverSource;
+            return this;
+        }
+
+        public DbToDbDataTransferBuilder withTargetSqlTemplate(String targetSqlTemplate) {
+            this.targetSqlTemplate = targetSqlTemplate;
+            return this;
+        }
+
+        public Executable<Boolean> build() {
+            DbImporter dbImporter = new DbImporter(
+                    sourceDb.getNewConnection(),
+                    sourceSql,
+                    targetDb.getNewConnection(),
+                    targetSqlTemplate);
+
+            dbImporter.setSourceSqlParamValueBindings(sqlaramValueBindings);
+            return dbImporter;
+        }
     }
 
-    public static CsvToDbBuilder csvTodbTransfer() {
-        return new CsvToDbBuilder();
+    public static final class DbToCsvDataTransferBuilder {
+        private String sourceSql;
+        private ParameterBinding sqlaramValueBindings;
+        private Database sourceDb;
+
+        private String targetCsvFile;
+
+        public DbToCsvDataTransferBuilder withSqlaramValueBindings(ParameterBinding sqlaramValueBindings) {
+            this.sqlaramValueBindings = sqlaramValueBindings;
+            return this;
+        }
+
+        public DbToCsvDataTransferBuilder withSourceDb(Database sourceDb) {
+            this.sourceDb = sourceDb;
+            return this;
+        }
+
+        public DbToCsvDataTransferBuilder withSourceSql(String sourceSql) {
+            this.sourceSql = sourceSql;
+            return this;
+        }
+
+        public DbToCsvDataTransferBuilder withTargetCsvFile(String targetCsvFile) {
+            this.targetCsvFile = targetCsvFile;
+            return this;
+        }
+
+        public Executable<Boolean> build() {
+            CsvExporter csvExporter = new CsvExporter(
+                    sourceDb.getNewConnection(),
+                    sourceSql,
+                    targetCsvFile
+            );
+            csvExporter.setSqlaramValueBindings(sqlaramValueBindings);
+            return csvExporter;
+        }
     }
 
-    public static DbToDbBuilder dbTodbTransfer() {
-        return new DbToDbBuilder();
+    public static final class CsvToDbDataTransferBuilder {
+
+        private Database targetDb;
+        private String targetSqlTemplate;
+        private String sourceCsvFile;
+
+        public CsvToDbDataTransferBuilder withTargetDb(Database targetDb) {
+            this.targetDb = targetDb;
+            return this;
+        }
+
+        public CsvToDbDataTransferBuilder withTargetSqlTemplate(String targetSqlTemplate) {
+            this.targetSqlTemplate = targetSqlTemplate;
+            return this;
+        }
+
+        public CsvToDbDataTransferBuilder withSourceCsvFile(String sourceCsvFile) {
+            this.sourceCsvFile = sourceCsvFile;
+            return this;
+        }
+
+        public Executable<Boolean> build() {
+            CsvImporter csvImporter = new CsvImporter(
+                    sourceCsvFile,
+                    targetDb.getNewConnection(),
+                    targetSqlTemplate);
+
+
+            return csvImporter;
+        }
+    }
+
+    public static final class DataComparerBuilder {
+        private static final MintLeafLogger logger = MintLeafLogger.getLogger(DataComparerBuilder.class);
+        private RowListWrapper sourceTable;
+        private RowListWrapper targetTable;
+        private ComparerListener comparerListener;//= new ConsoleComparerListener();
+        private ColumnMatcher columnMatcher;
+        private String selectedColumnMaps;
+
+        public DataComparerBuilder withSourceTable(List<? extends Row> sourceTable, MetaDataCollection metaDataCollection) {
+            this.sourceTable = new ObjectRowListWrapper(sourceTable, metaDataCollection);
+            return this;
+        }
+
+        public DataComparerBuilder withSourceTable(RowListWrapper sourceTable) {
+            this.sourceTable = sourceTable;
+            return this;
+        }
+
+        public DataComparerBuilder withTargetTable(List<? extends Row> targetTable, MetaDataCollection metaDataCollection) {
+            this.targetTable = new ObjectRowListWrapper(targetTable, metaDataCollection);
+            return this;
+        }
+
+        public DataComparerBuilder withTargetTable(RowListWrapper targetTable) {
+            this.targetTable = targetTable;
+            return this;
+        }
+
+        public DataComparerBuilder withColumnMatchingLogic(ColumnMatcher columnMatcher) {
+            this.columnMatcher = columnMatcher;
+            return this;
+        }
+
+
+        public DataComparerBuilder withSelectedColumnMaps(String selectedColumnMaps) {
+            this.selectedColumnMaps = selectedColumnMaps;
+            return this;
+        }
+
+
+        public DataComparerBuilder withMatchingResult(ComparerListener comparerListener) {
+            this.comparerListener = comparerListener;
+            return this;
+        }
+
+
+        public DataComparer buildWith(Class<? extends DataComparer> dataComparerClazz) {
+
+            DataComparer listComparator = null;
+            try {
+                Constructor constructor =
+                        dataComparerClazz.getConstructor(new Class[]{RowListWrapper.class, RowListWrapper.class});
+                listComparator = (DataComparer) constructor.newInstance(this.sourceTable, this.targetTable);
+                if (this.columnMatcher != null) {
+                    listComparator.setColumnMatcher(this.columnMatcher);
+                } else {
+
+                    if (this.selectedColumnMaps == null) {
+                        listComparator.setColumnMatcher(getOrderedColumnMatcher(sourceTable instanceof ResultSetRowListWrapper,
+                                targetTable instanceof ResultSetRowListWrapper));
+                    } else {
+                        listComparator.setColumnMatcher(new SelectedColumnMatcher(this.selectedColumnMaps));
+                    }
+
+
+                }
+                listComparator.setComparerListener(this.comparerListener);
+
+            } catch (InstantiationException e) {
+                logger.error(e);
+                MintLeafException.throwException(e);
+            } catch (IllegalAccessException e) {
+                logger.error(e);
+                MintLeafException.throwException(e);
+            } catch (NoSuchMethodException e) {
+                logger.error(e);
+                MintLeafException.throwException(e);
+            } catch (InvocationTargetException e) {
+                logger.error(e);
+                MintLeafException.throwException(e);
+            }
+
+
+            return listComparator;
+        }
+
+        private OrderedColumnMatcher getOrderedColumnMatcher(final boolean dbSourceColumnState, final boolean dbTargetColumnState) {
+            return new OrderedColumnMatcher() {
+                @Override
+                protected ColumnState createSourceColumnStateInstance() {
+                    if (dbSourceColumnState)
+                        return new DbColumnState();
+                    return super.createSourceColumnStateInstance();
+                }
+
+                @Override
+                protected ColumnState createTargetColumnStateInstance() {
+                    if (dbTargetColumnState)
+                        return new DbColumnState();
+                    return super.createTargetColumnStateInstance();
+                }
+            };
+        }
+
+        public DataComparer build() {
+            return buildWith(OrderedListComparator.class);
+        }
+    }
+
+    public static final class DatabaseBuilder {
+
+        private Class<? extends DriverSource> driverSourceClazz = JdbcDriverSource.class;
+        private String url;
+        private String username;
+        private String password;
+
+        public DatabaseBuilder withDriverSource(Class<? extends DriverSource> driverSourceClazz) {
+            this.driverSourceClazz = driverSourceClazz;
+            return this;
+        }
+
+        public DatabaseBuilder withUrl(String url) {
+            this.url = url;
+            return this;
+        }
+
+        public DatabaseBuilder withUsername(String username) {
+            this.username = username;
+            return this;
+        }
+
+        public DatabaseBuilder withPassword(String password) {
+            this.password = password;
+            return this;
+        }
+
+        public Database build() {
+            BasicDatabase databaseContext = new BasicDatabase(this.driverSourceClazz, this.url, this.username, this.password);
+            return databaseContext;
+        }
+
     }
 
 }

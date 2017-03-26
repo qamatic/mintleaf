@@ -33,53 +33,61 @@
  * /
  */
 
-package org.qamatic.mintleaf.core;
+package org.qamatic.mintleaf;
 
+import org.qamatic.mintleaf.Row;
 import org.qamatic.mintleaf.MetaDataCollection;
 import org.qamatic.mintleaf.MintLeafException;
-import org.qamatic.mintleaf.Row;
-import org.qamatic.mintleaf.RowListWrapper;
-
-import java.util.List;
 
 /**
- * Created by qamatic on 3/4/16.
+ * Created by QAmatic Team on 3/11/17.
  */
-public class ObjectRowListWrapper implements RowListWrapper {
+public class User implements Row {
 
-    private List<? extends Row> list;
-    private int current = -1;
     private MetaDataCollection metaDataCollection;
+    private int id;
+    private String firstName;
+    private String lastName;
+    private String country;
 
-    public ObjectRowListWrapper(List<? extends Row> list, MetaDataCollection metaDataCollection) {
 
-        this.metaDataCollection = metaDataCollection;
-        this.list = list;
+    public User(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public User(int id, String firstName, String lastName) {
+        this.firstName = firstName;
+        this.id = id;
+        this.lastName = lastName;
+    }
+
+
+    public User(String firstName, String country) {
+        this.firstName = firstName;
+        this.country = country;
+    }
+
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
     }
 
     @Override
-    public void resetAll() throws MintLeafException {
-        current = -1;
-    }
-
-    @Override
-    public boolean moveNext() throws MintLeafException {
-        current++;
-        if (this.current >= this.list.size()) {
-            return false;
+    public Object getValue(int columnIndex) throws MintLeafException {
+        switch (columnIndex) {
+            case 0:
+                return firstName;
+            case 1:
+                return country;
+            case 2:
+                return lastName;
+            case 3:
+                return id;
         }
-
-        return true;
-    }
-
-    @Override
-    public Row row() throws MintLeafException {
-        if (this.current >= this.list.size()) {
-            return null;
-        }
-        Row row = this.list.get(current);
-        row.setMetaData(this.metaDataCollection);
-        return row;
+        return null;
     }
 
     @Override
@@ -87,4 +95,16 @@ public class ObjectRowListWrapper implements RowListWrapper {
         return this.metaDataCollection;
     }
 
+    @Override
+    public void setMetaData(MetaDataCollection metaDataCollection) {
+        this.metaDataCollection = metaDataCollection;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
 }

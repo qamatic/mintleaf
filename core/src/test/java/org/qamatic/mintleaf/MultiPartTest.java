@@ -33,58 +33,35 @@
  * /
  */
 
-package org.qamatic.mintleaf.core;
+package org.qamatic.mintleaf;
 
-import org.qamatic.mintleaf.MetaDataCollection;
-import org.qamatic.mintleaf.MintLeafException;
-import org.qamatic.mintleaf.Row;
-import org.qamatic.mintleaf.RowListWrapper;
+import org.junit.Assert;
+import org.junit.Test;
+import org.qamatic.mintleaf.ChangeSet;
 
-import java.util.List;
+import static org.junit.Assert.assertEquals;
 
-/**
- * Created by qamatic on 3/4/16.
- */
-public class ObjectRowListWrapper implements RowListWrapper {
+public class MultiPartTest {
 
-    private List<? extends Row> list;
-    private int current = -1;
-    private MetaDataCollection metaDataCollection;
-
-    public ObjectRowListWrapper(List<? extends Row> list, MetaDataCollection metaDataCollection) {
-
-        this.metaDataCollection = metaDataCollection;
-        this.list = list;
+    @Test
+    public void testChangeSet1() {
+        String serialize = new ChangeSet().toString();
+        Assert.assertTrue(serialize, serialize.contains("<changeSet id=\"\" delimiter=\"\"/>"));
     }
 
-    @Override
-    public void resetAll() throws MintLeafException {
-        current = -1;
+    @Test
+    public void testChangeSet2() {
+        String serialize = new ChangeSet("test", ";", "").toString();
+        Assert.assertTrue(serialize, serialize.contains("<changeSet id=\"test\" delimiter=\";\"/>"));
     }
 
-    @Override
-    public boolean moveNext() throws MintLeafException {
-        current++;
-        if (this.current >= this.list.size()) {
-            return false;
-        }
-
-        return true;
+    @Test
+    public void testMultiPartTagFromXml() {
+        String xml = "<changeSet id=\"part1\" delimiter=\"/\" />";
+        ChangeSet detail = ChangeSet.xmlToChangeSet(xml);
+        assertEquals("part1", detail.getId());
+        assertEquals("/", detail.getDelimiter());
     }
 
-    @Override
-    public Row row() throws MintLeafException {
-        if (this.current >= this.list.size()) {
-            return null;
-        }
-        Row row = this.list.get(current);
-        row.setMetaData(this.metaDataCollection);
-        return row;
-    }
-
-    @Override
-    public MetaDataCollection getMetaData() throws MintLeafException {
-        return this.metaDataCollection;
-    }
 
 }

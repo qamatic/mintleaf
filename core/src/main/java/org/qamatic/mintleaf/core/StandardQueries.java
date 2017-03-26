@@ -36,10 +36,10 @@
 package org.qamatic.mintleaf.core;
 
 import org.qamatic.mintleaf.*;
-import org.qamatic.mintleaf.dbqueries.H2Queries;
-import org.qamatic.mintleaf.dbqueries.MSSqlQueries;
-import org.qamatic.mintleaf.dbqueries.MySqlQueries;
-import org.qamatic.mintleaf.dbqueries.OracleQueries;
+import org.qamatic.mintleaf.H2Queries;
+import org.qamatic.mintleaf.MSSqlQueries;
+import org.qamatic.mintleaf.MySqlQueries;
+import org.qamatic.mintleaf.OracleQueries;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -53,7 +53,6 @@ public class StandardQueries implements DbQueries {
 
     private static final MintLeafLogger logger = MintLeafLogger.getLogger(StandardQueries.class);
     private static final Map<String, Class<? extends StandardQueries>> registeredQueries = new HashMap<>();
-    protected final ConnectionContext connectionContext;
 
     static {
         StandardQueries.registerQueryImplementation(DbType.H2.getJdbcUrlPrefix(), H2Queries.class);
@@ -61,6 +60,8 @@ public class StandardQueries implements DbQueries {
         StandardQueries.registerQueryImplementation(DbType.MYSQL.getJdbcUrlPrefix(), MySqlQueries.class);
         StandardQueries.registerQueryImplementation(DbType.ORACLE.getJdbcUrlPrefix(), OracleQueries.class);
     }
+
+    protected final ConnectionContext connectionContext;
 
     public StandardQueries(ConnectionContext connectionContext) {
         this.connectionContext = connectionContext;

@@ -33,58 +33,38 @@
  * /
  */
 
-package org.qamatic.mintleaf.core;
+package org.qamatic.mintleaf.oracle;
 
-import org.qamatic.mintleaf.MetaDataCollection;
+import org.junit.BeforeClass;
+import org.junit.Test;
+import org.qamatic.mintleaf.ConnectionContext;
+import org.qamatic.mintleaf.Database;
 import org.qamatic.mintleaf.MintLeafException;
-import org.qamatic.mintleaf.Row;
-import org.qamatic.mintleaf.RowListWrapper;
+import org.qamatic.mintleaf.core.ChangeSets;
 
-import java.util.List;
+import static org.junit.Assert.assertEquals;
 
 /**
  * Created by qamatic on 3/4/16.
  */
-public class ObjectRowListWrapper implements RowListWrapper {
 
-    private List<? extends Row> list;
-    private int current = -1;
-    private MetaDataCollection metaDataCollection;
+public class OraTransactionTest extends OracleTestCase {
 
-    public ObjectRowListWrapper(List<? extends Row> list, MetaDataCollection metaDataCollection) {
+    private static Database hrdb1 = createOracleDbContext("HRDB1", "HRDB1");
 
-        this.metaDataCollection = metaDataCollection;
-        this.list = list;
+    @BeforeClass
+    public static void migrate() throws MintLeafException {
+        ChangeSets.migrate(hrdb1.getNewConnection(), "res:/oracle/hrdb-changesets/hrdb-ddl.sql", "create countries");
     }
 
-    @Override
-    public void resetAll() throws MintLeafException {
-        current = -1;
-    }
-
-    @Override
-    public boolean moveNext() throws MintLeafException {
-        current++;
-        if (this.current >= this.list.size()) {
-            return false;
+    @Test
+    public void testCountriesCount() throws MintLeafException {
+        ChangeSets.migrate(hrdb1.getNewConnection(), "res:/oracle/hrdb-changesets/hrdb-sampledata.sql", "seed data for countries");
+        try (ConnectionContext ctx = hrdb1.getNewConnection()) {
+            assertEquals(12, ctx.getDbQueries().getCount("HRDB1.COUNTRIES"));
         }
 
-        return true;
     }
 
-    @Override
-    public Row row() throws MintLeafException {
-        if (this.current >= this.list.size()) {
-            return null;
-        }
-        Row row = this.list.get(current);
-        row.setMetaData(this.metaDataCollection);
-        return row;
-    }
-
-    @Override
-    public MetaDataCollection getMetaData() throws MintLeafException {
-        return this.metaDataCollection;
-    }
 
 }

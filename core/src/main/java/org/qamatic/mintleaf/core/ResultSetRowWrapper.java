@@ -35,10 +35,10 @@
 
 package org.qamatic.mintleaf.core;
 
-import org.qamatic.mintleaf.Row;
 import org.qamatic.mintleaf.MetaDataCollection;
 import org.qamatic.mintleaf.MintLeafException;
 import org.qamatic.mintleaf.MintLeafLogger;
+import org.qamatic.mintleaf.Row;
 
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;

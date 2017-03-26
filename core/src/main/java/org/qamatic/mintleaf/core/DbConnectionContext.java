@@ -36,10 +36,6 @@
 package org.qamatic.mintleaf.core;
 
 import org.qamatic.mintleaf.*;
-import org.qamatic.mintleaf.dbqueries.H2Queries;
-import org.qamatic.mintleaf.dbqueries.MSSqlQueries;
-import org.qamatic.mintleaf.dbqueries.MySqlQueries;
-import org.qamatic.mintleaf.dbqueries.OracleQueries;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;

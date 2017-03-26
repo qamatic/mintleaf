@@ -33,58 +33,33 @@
  * /
  */
 
-package org.qamatic.mintleaf.core;
+package org.qamatic.mintleaf;
 
-import org.qamatic.mintleaf.MetaDataCollection;
-import org.qamatic.mintleaf.MintLeafException;
-import org.qamatic.mintleaf.Row;
-import org.qamatic.mintleaf.RowListWrapper;
+import org.junit.Test;
+import org.qamatic.mintleaf.core.BasicDatabase;
+import org.qamatic.mintleaf.core.StandardQueries;
 
-import java.util.List;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
-/**
- * Created by qamatic on 3/4/16.
- */
-public class ObjectRowListWrapper implements RowListWrapper {
+public class UtilTests {
 
-    private List<? extends Row> list;
-    private int current = -1;
-    private MetaDataCollection metaDataCollection;
+    BasicDatabase builder = new BasicDatabase(null, null, null, null);
 
-    public ObjectRowListWrapper(List<? extends Row> list, MetaDataCollection metaDataCollection) {
-
-        this.metaDataCollection = metaDataCollection;
-        this.list = list;
+    @Test
+    public void testDbType() {
+        assertEquals(DbType.H2, DbType.getDbType("jdbc:H2:/"));
+        assertEquals(DbType.MYSQL, DbType.getDbType("jdbc:MySql:/"));
+        assertEquals(DbType.MSSQL, DbType.getDbType("/jdbc:SqlServer:/"));
+        assertEquals(DbType.ORACLE, DbType.getDbType("jdbc:Oracle:/"));
     }
 
-    @Override
-    public void resetAll() throws MintLeafException {
-        current = -1;
-    }
-
-    @Override
-    public boolean moveNext() throws MintLeafException {
-        current++;
-        if (this.current >= this.list.size()) {
-            return false;
-        }
-
-        return true;
-    }
-
-    @Override
-    public Row row() throws MintLeafException {
-        if (this.current >= this.list.size()) {
-            return null;
-        }
-        Row row = this.list.get(current);
-        row.setMetaData(this.metaDataCollection);
-        return row;
-    }
-
-    @Override
-    public MetaDataCollection getMetaData() throws MintLeafException {
-        return this.metaDataCollection;
+    @Test
+    public void testQueryImpl() {
+        assertTrue("registerd dbqueries is not of type DbQueries interface", DbQueries.class.isAssignableFrom(StandardQueries.getQueryImplementation("jdbc:H2:/")));
+        assertEquals(MySqlQueries.class, StandardQueries.getQueryImplementation("jdbc:MySql:/"));
+        assertEquals(MSSqlQueries.class, StandardQueries.getQueryImplementation("jdbc:SqlServer:/"));
+        assertEquals(OracleQueries.class, StandardQueries.getQueryImplementation("jdbc:Oracle:/"));
     }
 
 }

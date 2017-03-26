@@ -33,58 +33,34 @@
  * /
  */
 
-package org.qamatic.mintleaf.core;
+package org.qamatic.mintleaf;
 
-import org.qamatic.mintleaf.MetaDataCollection;
-import org.qamatic.mintleaf.MintLeafException;
-import org.qamatic.mintleaf.Row;
-import org.qamatic.mintleaf.RowListWrapper;
-
-import java.util.List;
+import org.apache.commons.dbcp.BasicDataSource;
+import org.qamatic.mintleaf.DriverSource;
 
 /**
- * Created by qamatic on 3/4/16.
+ * Created by qamatic on 3/5/16.
  */
-public class ObjectRowListWrapper implements RowListWrapper {
+public class ApacheBasicDataSource extends BasicDataSource implements DriverSource {
 
-    private List<? extends Row> list;
-    private int current = -1;
-    private MetaDataCollection metaDataCollection;
 
-    public ObjectRowListWrapper(List<? extends Row> list, MetaDataCollection metaDataCollection) {
-
-        this.metaDataCollection = metaDataCollection;
-        this.list = list;
+    @Override
+    public boolean isDebugEnabled() {
+        return false;
     }
 
     @Override
-    public void resetAll() throws MintLeafException {
-        current = -1;
+    public void setDebugEnabled(boolean debug) {
+
     }
 
     @Override
-    public boolean moveNext() throws MintLeafException {
-        current++;
-        if (this.current >= this.list.size()) {
-            return false;
-        }
+    public void setProperty(String propName, String value) {
 
-        return true;
     }
 
     @Override
-    public Row row() throws MintLeafException {
-        if (this.current >= this.list.size()) {
-            return null;
-        }
-        Row row = this.list.get(current);
-        row.setMetaData(this.metaDataCollection);
-        return row;
+    public String getProperty(String propName) {
+        return null;
     }
-
-    @Override
-    public MetaDataCollection getMetaData() throws MintLeafException {
-        return this.metaDataCollection;
-    }
-
 }

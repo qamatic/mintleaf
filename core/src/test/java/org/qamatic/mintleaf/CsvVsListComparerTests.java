@@ -33,10 +33,9 @@
  * /
  */
 
-package org.qamatic.mintleaf.dbexample.compare;
+package org.qamatic.mintleaf;
 
 import org.junit.Test;
-import org.qamatic.mintleaf.*;
 import org.qamatic.mintleaf.core.BaseSqlReader;
 import org.qamatic.mintleaf.data.ColumnState;
 import org.qamatic.mintleaf.data.ComparerListener;
@@ -65,6 +64,8 @@ public class CsvVsListComparerTests {
         ColumnMetaDataCollection metaDataCollection = new ColumnMetaDataCollection("USERS");
         metaDataCollection.add(new Column("UserName"));
         metaDataCollection.add(new Column("Country"));
+        metaDataCollection.add(new Column("UserLastName"));
+        metaDataCollection.add(new Column("Id"));
 
         return metaDataCollection;
     }
@@ -87,6 +88,7 @@ public class CsvVsListComparerTests {
                 add(new User("qamatic"));
             }
         };
+
 
         DataComparer dataComparer = new Mintleaf.DataComparerBuilder().
                 withSourceTable(csvRowListWrapper).

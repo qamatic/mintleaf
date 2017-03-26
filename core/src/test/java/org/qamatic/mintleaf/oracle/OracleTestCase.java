@@ -33,58 +33,39 @@
  * /
  */
 
-package org.qamatic.mintleaf.core;
+package org.qamatic.mintleaf.oracle;
 
-import org.qamatic.mintleaf.MetaDataCollection;
+import org.qamatic.mintleaf.ApacheBasicDataSource;
+import org.qamatic.mintleaf.Database;
 import org.qamatic.mintleaf.MintLeafException;
-import org.qamatic.mintleaf.Row;
-import org.qamatic.mintleaf.RowListWrapper;
-
-import java.util.List;
+import org.qamatic.mintleaf.Mintleaf;
+import org.qamatic.mintleaf.core.ChangeSets;
 
 /**
  * Created by qamatic on 3/4/16.
  */
-public class ObjectRowListWrapper implements RowListWrapper {
+public class OracleTestCase {
 
-    private List<? extends Row> list;
-    private int current = -1;
-    private MetaDataCollection metaDataCollection;
 
-    public ObjectRowListWrapper(List<? extends Row> list, MetaDataCollection metaDataCollection) {
+    private static Database oraSysDb;
 
-        this.metaDataCollection = metaDataCollection;
-        this.list = list;
-    }
-
-    @Override
-    public void resetAll() throws MintLeafException {
-        current = -1;
-    }
-
-    @Override
-    public boolean moveNext() throws MintLeafException {
-        current++;
-        if (this.current >= this.list.size()) {
-            return false;
+    static {
+        oraSysDb = createOracleDbContext(System.getenv("TEST_DB_MASTER_USERNAME"),
+                System.getenv("TEST_DB_MASTER_PASSWORD"));
+        try {
+            ChangeSets.migrate(oraSysDb.getNewConnection(), "res:/oracle/hrdb-changesets/hrdb-schema-setup.sql", "create schema");
+        } catch (MintLeafException e) {
+            MintLeafException.throwException(e.getMessage());
         }
-
-        return true;
     }
 
-    @Override
-    public Row row() throws MintLeafException {
-        if (this.current >= this.list.size()) {
-            return null;
-        }
-        Row row = this.list.get(current);
-        row.setMetaData(this.metaDataCollection);
-        return row;
+    public static Database createOracleDbContext(String userName, String password) {
+        Database db = new Mintleaf.DatabaseBuilder().
+                withDriverSource(ApacheBasicDataSource.class).
+                withUrl(System.getenv("TEST_DB_URL")).
+                withUsername(userName).
+                withPassword(password).
+                build();
+        return db;
     }
-
-    @Override
-    public MetaDataCollection getMetaData() throws MintLeafException {
-        return this.metaDataCollection;
-    }
-
 }

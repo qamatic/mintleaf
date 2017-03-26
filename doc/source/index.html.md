@@ -34,7 +34,7 @@ Welcome to the Mintleaf! Mintleaf is a light weight framework tool helps you to 
     <dependency>
         <groupId>org.qamatic</groupId>
         <artifactId>mintleaf-core</artifactId>
-        <version>1.8.19</version>
+        <version>1.8.21</version>
     </dependency>
 ```
 
@@ -176,7 +176,7 @@ Version profile is a configuration file which contains list of changesets to be 
 ### usage
 
 ```java
-     Database db = database().          
+     Database db = new Mintleaf.DatabaseBuilder().          
                 withUrl("< your jdbc url >").
                 withUsername("user name").
                 withPassword("password").

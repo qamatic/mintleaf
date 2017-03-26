@@ -33,58 +33,58 @@
  * /
  */
 
-package org.qamatic.mintleaf.core;
+package org.qamatic.mintleaf;
 
-import org.qamatic.mintleaf.MetaDataCollection;
-import org.qamatic.mintleaf.MintLeafException;
-import org.qamatic.mintleaf.Row;
-import org.qamatic.mintleaf.RowListWrapper;
+import org.junit.Test;
+import org.qamatic.mintleaf.DbSettings;
+import org.qamatic.mintleaf.core.JdbcDriverSource;
 
-import java.util.List;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 
-/**
- * Created by qamatic on 3/4/16.
- */
-public class ObjectRowListWrapper implements RowListWrapper {
 
-    private List<? extends Row> list;
-    private int current = -1;
-    private MetaDataCollection metaDataCollection;
+public class ConnectionParameterTest {
 
-    public ObjectRowListWrapper(List<? extends Row> list, MetaDataCollection metaDataCollection) {
 
-        this.metaDataCollection = metaDataCollection;
-        this.list = list;
+    @Test
+    public void testDefaultDevMode() {
+        DbSettings settings = new JdbcDriverSource();
+        assertFalse(settings.isDebugEnabled());
     }
 
-    @Override
-    public void resetAll() throws MintLeafException {
-        current = -1;
+    @Test
+    public void testJdbcUrl() {
+        DbSettings settings = new JdbcDriverSource();
+        settings.setUrl("jdbc:");
+        assertEquals("jdbc:", settings.getUrl());
     }
 
-    @Override
-    public boolean moveNext() throws MintLeafException {
-        current++;
-        if (this.current >= this.list.size()) {
-            return false;
-        }
-
-        return true;
+    @Test
+    public void testUsername() {
+        DbSettings settings = new JdbcDriverSource();
+        settings.setUsername("sys");
+        assertEquals("sys", settings.getUsername());
     }
 
-    @Override
-    public Row row() throws MintLeafException {
-        if (this.current >= this.list.size()) {
-            return null;
-        }
-        Row row = this.list.get(current);
-        row.setMetaData(this.metaDataCollection);
-        return row;
+    @Test
+    public void testPassword() {
+        DbSettings settings = new JdbcDriverSource();
+        settings.setPassword("1234");
+        assertEquals("1234", settings.getPassword());
     }
 
-    @Override
-    public MetaDataCollection getMetaData() throws MintLeafException {
-        return this.metaDataCollection;
+    @Test
+    public void testDebug() {
+        DbSettings settings = new JdbcDriverSource();
+        settings.setPassword("debug");
+        assertEquals("debug", settings.getPassword());
+    }
+
+    @Test
+    public void testDriverClassName() {
+        DbSettings settings = new JdbcDriverSource();
+        settings.setDriverClassName("org.h2.Driver");
+        assertEquals("org.h2.Driver", settings.getDriverClassName());
     }
 
 }

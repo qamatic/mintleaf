@@ -33,58 +33,33 @@
  * /
  */
 
-package org.qamatic.mintleaf.core;
+package org.qamatic.mintleaf;
 
-import org.qamatic.mintleaf.MetaDataCollection;
-import org.qamatic.mintleaf.MintLeafException;
-import org.qamatic.mintleaf.Row;
-import org.qamatic.mintleaf.RowListWrapper;
-
-import java.util.List;
+import org.junit.BeforeClass;
+import org.qamatic.mintleaf.Database;
+import org.qamatic.mintleaf.DbQueries;
+import org.qamatic.mintleaf.Mintleaf;
+import org.qamatic.mintleaf.core.JdbcDriverSource;
 
 /**
- * Created by qamatic on 3/4/16.
+ * Created by qamatic on 3/3/16.
  */
-public class ObjectRowListWrapper implements RowListWrapper {
+public class H2TestCase {
+    protected static Database testDb;
+    protected static DbQueries testDbQueries;
 
-    private List<? extends Row> list;
-    private int current = -1;
-    private MetaDataCollection metaDataCollection;
+    @BeforeClass
+    public static void setupDb() {
 
-    public ObjectRowListWrapper(List<? extends Row> list, MetaDataCollection metaDataCollection) {
+        if (testDb != null)
+            return;
 
-        this.metaDataCollection = metaDataCollection;
-        this.list = list;
-    }
+        testDb = new Mintleaf.DatabaseBuilder().
+                withDriverSource(JdbcDriverSource.class).
+                withUrl("jdbc:h2:file:./target/h2testdb;mv_store=false;").
+                build();
+        testDbQueries = testDb.getNewConnection().getDbQueries();
 
-    @Override
-    public void resetAll() throws MintLeafException {
-        current = -1;
-    }
-
-    @Override
-    public boolean moveNext() throws MintLeafException {
-        current++;
-        if (this.current >= this.list.size()) {
-            return false;
-        }
-
-        return true;
-    }
-
-    @Override
-    public Row row() throws MintLeafException {
-        if (this.current >= this.list.size()) {
-            return null;
-        }
-        Row row = this.list.get(current);
-        row.setMetaData(this.metaDataCollection);
-        return row;
-    }
-
-    @Override
-    public MetaDataCollection getMetaData() throws MintLeafException {
-        return this.metaDataCollection;
     }
 
 }
