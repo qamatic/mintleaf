@@ -36,12 +36,11 @@
   ~ */
   -->
 
-<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://maven.apache.org/POM/4.0.0"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
         <artifactId>mintleaf</artifactId>
         <groupId>org.qamatic</groupId>
-        <version>1.8.21-SNAPSHOT</version>
+        <version>1.8.21</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
@@ -65,7 +64,7 @@
         <dependency>
             <groupId>org.qamatic</groupId>
             <artifactId>mintleaf-core</artifactId>
-            <version>1.8.21-SNAPSHOT</version>
+            <version>1.8.21</version>
         </dependency>
         <dependency>
             <groupId>commons-dbcp</groupId>
