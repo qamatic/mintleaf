@@ -276,6 +276,22 @@ in the above example *db.getNewConnection().beginTransaction()* in try-resource 
 
 # Standard Queries
 
+Standard queries contains frequently used functions during life cylce of your tests.  However you can create your own extensions! see advanced section for detail.
+
+Once you get a connection context then you should be able to use getDbQueries() method to access all standard functions.  
+
+```java
+
+  import static org.qamatic.mintleaf.Mintleaf.selectQuery
+
+  try (ConnectionContext connectionContext = db.getNewConnection()){
+
+    connectionContext.getDbQueries().<Standard queriy functions>
+
+  }
+
+```
+
 
 ## getCount()
 
@@ -283,33 +299,47 @@ getCount(String tableName)
 
 ```java
 
-  import static org.qamatic.mintleaf.Mintleaf.selectQuery
-
-  try (ConnectionContext connectionContext = db.getNewConnection()){
-
     int count = connectionContext.getDbQueries().getCount("HRDB.USERS");
-
-  }
-
+    
 ```
 
  
 ## getMetaData() 
 
-getMetaData(String objectName) - can used to get meta data for any sql objects but not limited to table structures alone. 
+getMetaData(String objectName) - is used to get meta data for any sql objects but not limited to table structures alone.  You can use it get structure of a view, types etc., 
 
 
 ```java
 
-  import static org.qamatic.mintleaf.Mintleaf.selectQuery
-
-  try (ConnectionContext connectionContext = db.getNewConnection()){
-
     ColumnMetaDataCollection metaDataCollection = connectionContext.getDbQueries().getMetaData("HRDB.USERS");
 
-  }
+```
+
+## getPrimaryKeys()
+
+_List<String> getPrimaryKeys(String ownerName, String tableName)_ - It returns primary keys of given table with a ownerName 
+
+```java
+
+    // to get list of all available Package bodies
+    List<String> pkeys = connectionContext.getDbQueries().getPrimaryKeys("HRDB.USERS"); 
+
 
 ```
+
+## getSqlObjects()
+
+_List<String> getSqlObjects(String objectType) _  - It returns list of objects under an objec type. For example, get all Table Types or View Types etc.
+
+```java
+
+    // to get list of all available Package bodies
+    List<String> list = connectionContext.getDbQueries().getSqlObjects("PACKAGE BODY");  //for oracle database
+
+
+```
+
+
 
 
 # Creating test data

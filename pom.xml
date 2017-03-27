@@ -272,6 +272,7 @@
                                     <head>Example :</head>
                                 </tag>
                             </tags>
+                            <excludePackageNames></excludePackageNames>
                         </configuration>
                     </plugin>
                     <plugin>

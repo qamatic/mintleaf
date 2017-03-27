@@ -36,16 +36,13 @@
 package org.qamatic.mintleaf.core;
 
 import org.qamatic.mintleaf.*;
-import org.qamatic.mintleaf.H2Queries;
-import org.qamatic.mintleaf.MSSqlQueries;
-import org.qamatic.mintleaf.MySqlQueries;
-import org.qamatic.mintleaf.OracleQueries;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Pattern;
 
 import static org.qamatic.mintleaf.Mintleaf.selectQuery;
 
@@ -107,6 +104,13 @@ public class StandardQueries implements DbQueries {
         }
     }
 
+    public static String[] utilsSplitDottedObjectNames(String objectName) throws MintLeafException {
+        final String[] objectNames = objectName.split(Pattern.quote("."));
+        if (objectNames.length != 2) {
+            throw new MintLeafException(String.format("getMetaData expects objectName parameter to be <SCHEMA NAME>.<OBJECT NAME> for example HRDB.COUNTRIES.  Invalid value: %s", objectName));
+        }
+        return objectNames;
+    }
 
 
 }

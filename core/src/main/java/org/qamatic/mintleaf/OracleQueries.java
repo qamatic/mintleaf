@@ -55,7 +55,7 @@ public class OracleQueries extends StandardQueries {
 
     @Override
     public boolean isSqlObjectExists(String objectName, String objectType, boolean ignoreValidity) throws MintLeafException {
-        final String[] objectNames = getObjectNames(objectName.toUpperCase());
+        final String[] objectNames = utilsSplitDottedObjectNames(objectName.toUpperCase());
         String validSql = ignoreValidity ? "" : "status='VALID' AND ";
         int cnt = queryInt("SELECT COUNT(*) FROM ALL_OBJECTS WHERE "+validSql + "OWNER = ? AND object_name = ? AND Object_Type = ?", parameterSets -> {
             parameterSets.setString(1, objectNames[0]);
@@ -67,7 +67,7 @@ public class OracleQueries extends StandardQueries {
 
 
     public boolean isColumnExists(String tableName, String columnName) throws MintLeafException {
-        final String[] objectNames = getObjectNames(tableName.toUpperCase());
+        final String[] objectNames = utilsSplitDottedObjectNames(tableName.toUpperCase());
         int cnt = queryInt("SELECT COUNT(*) FROM ALL_TAB_COLUMNS WHERE OWNER = ? AND table_name = ? AND column_name = ?", parameterSets -> {
             parameterSets.setString(1, objectNames[0]);
             parameterSets.setString(2, objectNames[1]);
@@ -93,7 +93,7 @@ public class OracleQueries extends StandardQueries {
 
     @Override
     public void truncateTable(String tableName) throws MintLeafException {
-        final String[] objectNames = getObjectNames(tableName.toUpperCase());
+        final String[] objectNames = utilsSplitDottedObjectNames(tableName.toUpperCase());
         String sql = String.format("truncate  table %s.%s", objectNames[0], objectNames[1]);
         try (Executable<int[]> executable = new FluentJdbc.Builder(connectionContext).withSql(sql).buildExecute()) {
             executable.execute();
@@ -139,7 +139,7 @@ public class OracleQueries extends StandardQueries {
 
     private String getSqlObjectMetaSql(String objectName) throws SQLException, MintLeafException {
 
-        final String[] objectNames = getObjectNames(objectName);
+        final String[] objectNames = utilsSplitDottedObjectNames(objectName);
 
         final StringBuilder sql = new StringBuilder(
                 String.format(

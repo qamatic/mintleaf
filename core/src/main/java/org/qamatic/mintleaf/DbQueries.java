@@ -107,12 +107,5 @@ public interface DbQueries extends AutoCloseable {
     }
 
 
-    default String[] getObjectNames(String objectName) throws MintLeafException {
-        final String[] objectNames = objectName.split(Pattern.quote("."));
-        if (objectNames.length != 2) {
-            throw new MintLeafException(String.format("getMetaData expects objectName parameter to be <SCHEMA NAME>.<OBJECT NAME> for example HRDB.COUNTRIES.  Invalid value: %s", objectName));
-        }
-        return objectNames;
-    }
 
 }
