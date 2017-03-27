@@ -2,7 +2,8 @@
 title: Mintleaf Documentation
 
 toc_footers:  
-  - <a href='http://getmintleaf.org'>getmintleaf.org</a>
+  - <a href='apidocs'>API Documentation</a>
+  - <a href='http://getmintleaf.org'>getmintleaf.org</a>    
   - <a href='https://github.com/qamatic/mintleaf'>Source @ github</a>  
 
 includes:
@@ -36,7 +37,7 @@ Welcome to the Mintleaf! Mintleaf is a light weight framework tool helps you to 
     <dependency>
         <groupId>org.qamatic</groupId>
         <artifactId>mintleaf-core</artifactId>
-        <version>1.8.21</version>
+        <version>1.8.22</version>
     </dependency>
 ```
 

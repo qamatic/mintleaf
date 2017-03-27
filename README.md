@@ -14,11 +14,14 @@ Welcome to the Mintleaf! Mintleaf is a light weight framework tool helps you to 
 
 - [Documentation](https://qamatic.github.io/mintleaf/)
 
+- [API Reference](https://qamatic.github.io/mintleaf/apidocs)
+
+
 ## Maven 
     <dependency>
         <groupId>org.qamatic</groupId>
         <artifactId>mintleaf-core</artifactId>
-        <version>1.8.21</version>
+        <version>1.8.22</version>
     </dependency>
 
 ## License
