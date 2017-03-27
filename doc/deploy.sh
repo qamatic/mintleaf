@@ -18,6 +18,7 @@ Options:
 "
 
 bundle exec middleman build --clean
+cp -r ../core/target/site/apidocs/. ./build/apidocs
 
 parse_args() {
   # Set args from a local environment file.
