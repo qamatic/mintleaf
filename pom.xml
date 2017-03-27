@@ -9,7 +9,7 @@
     <version>1.8.22-SNAPSHOT</version>
 
     <name>Mintleaf</name>
-    <description>Mintleaf is a tool for apply database changes and acceptance testing database</description>
+    <description>Welcome to the Mintleaf! Database Migration and Testing simplified! Mintleaf is a light weight framework tool helps you to advance your database developement on continuous integration / continuous delivery model as easy as possible.</description>
     <url>http://www.mintleafdata.org</url>
 
     <modules>
