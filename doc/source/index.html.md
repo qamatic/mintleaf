@@ -6,7 +6,9 @@ toc_footers:
   - <a href='https://github.com/qamatic/mintleaf'>Source @ github</a>  
 
 includes:
-
+ 
+language_tabs:
+ 
 search: true
 ---
 
@@ -174,7 +176,7 @@ Version profile is a configuration file which contains list of changesets to be 
 
 In order to connect to a database, you would need jdbc url, username and a password.
 
-### usage
+### Usage
 
 ```java
      import static org.qamatic.mintleaf.Mintleaf.database;
@@ -189,10 +191,10 @@ In order to connect to a database, you would need jdbc url, username and a passw
 ### Connection Context
 
 Every database connection establishes an exclusive context in which it deals with queries and transactions inside.  It is one of the well managed construct in Mintleaf that offers you handle transactions nicely.
-
-<aside> it is recommended that Mintleaf users to use try-resource block in order to release connection and open resources automatically at the of the database operations
+ 
+<aside class="notice"> It is recommended that Mintleaf users to use try-resource block in order to release connection and open resources automatically at the of the database operations
 </aside>
-
+ 
 
 Use getNewConnection() method to create a connection context that is required for any database operations either in transactional mode or non-transactional mode.
 
@@ -210,6 +212,8 @@ Use getNewConnection() method to create a connection context that is required fo
     executeSql(connectionContext, "INSERT INTO USERS VALUES (1, 'EXAMPLE-USER')");
   }
 ```
+
+ 
 
 This method has an optional parameter for auto close connection.  By default, it is set to auto closable but bear in mind that try-resource must be used in order to auto close your connection at the end of the operations otherwise you should call close() method in order to close the connection and release any resources as explained in above example.
 
@@ -282,11 +286,7 @@ So over all you can use csv file and database-to-database copy of data for your 
 <aside class="warning"> Mintleaf copy data process is intended for to use for test data creation purpose only so it is not meant for production use   
 </aside>
 
-### _Usage:_
-
-**mintleaf -config=&lt;[configuration file](#configuration-file)&gt; -targetdb=&lt;db id&gt; -file=&lt;csv file to save&gt; -task=&lt;dbtocsv|csvtodb|dbtodb&gt; -targetsql=&lt;a select query&gt;**
-
-
+ 
 ## Database to CSV
 
 For example, if we want to dump data from a table called HRDB.USERS in abcd-db to a CSV file then you run like the following
@@ -361,7 +361,7 @@ Suppose you have a data in a CSV file called abcd.csv and want to load it in to 
 
 
 
-#Supported databases
+# Supported databases
 
 ## Oracle
 ```java
