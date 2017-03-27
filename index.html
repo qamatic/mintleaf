@@ -458,6 +458,34 @@ It&rsquo;s very easy to add changeset definition on your exising sql files if yo
 
   <span class="o">}</span>
 </code></pre>
+<h1 id="standard-queries">Standard Queries</h1>
+
+<h2 id="getcount">getCount()</h2>
+
+<p>getCount(String tableName) </p>
+<pre class="highlight java tab-java"><code>
+  <span class="kn">import</span> <span class="nn">static</span> <span class="n">org</span><span class="o">.</span><span class="na">qamatic</span><span class="o">.</span><span class="na">mintleaf</span><span class="o">.</span><span class="na">Mintleaf</span><span class="o">.</span><span class="na">selectQuery</span>
+
+  <span class="nf">try</span> <span class="o">(</span><span class="n">ConnectionContext</span> <span class="n">connectionContext</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="na">getNewConnection</span><span class="o">()){</span>
+
+    <span class="kt">int</span> <span class="n">count</span> <span class="o">=</span> <span class="n">connectionContext</span><span class="o">.</span><span class="na">getDbQueries</span><span class="o">().</span><span class="na">getCount</span><span class="o">(</span><span class="s">"HRDB.USERS"</span><span class="o">);</span>
+
+  <span class="o">}</span>
+
+</code></pre>
+<h2 id="getmetadata">getMetaData()</h2>
+
+<p>getMetaData(String objectName) - can used to get meta data for any sql objects but not limited to table structures alone. </p>
+<pre class="highlight java tab-java"><code>
+  <span class="kn">import</span> <span class="nn">static</span> <span class="n">org</span><span class="o">.</span><span class="na">qamatic</span><span class="o">.</span><span class="na">mintleaf</span><span class="o">.</span><span class="na">Mintleaf</span><span class="o">.</span><span class="na">selectQuery</span>
+
+  <span class="nf">try</span> <span class="o">(</span><span class="n">ConnectionContext</span> <span class="n">connectionContext</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="na">getNewConnection</span><span class="o">()){</span>
+
+    <span class="n">ColumnMetaDataCollection</span> <span class="n">metaDataCollection</span> <span class="o">=</span> <span class="n">connectionContext</span><span class="o">.</span><span class="na">getDbQueries</span><span class="o">().</span><span class="na">getMetaData</span><span class="o">(</span><span class="s">"HRDB.USERS"</span><span class="o">);</span>
+
+  <span class="o">}</span>
+
+</code></pre>
 <h1 id="creating-test-data">Creating test data</h1>
 
 <p>Before run your test you should load your test data to target test database so that your tests can be run for to prove to be working with developer code changes. So generally, your test scenarios may be involved with one or more database tables that needs to be populated with data in order to verify developer code changes either stored procedure side or application side. Mintleaf simplifies the test data creation process as easy as possible.  Here are the possible ways that one can think of creating test data with Mintleaf,</p>
