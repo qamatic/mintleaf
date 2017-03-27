@@ -460,30 +460,49 @@ It&rsquo;s very easy to add changeset definition on your exising sql files if yo
 </code></pre>
 <h1 id="standard-queries">Standard Queries</h1>
 
-<h2 id="getcount">getCount()</h2>
+<p>Standard queries contains frequently used functions during life cylce of your tests.  However you can create your own extensions! see advanced section for detail.</p>
 
-<p>getCount(String tableName) </p>
+<p>Once you get a connection context then you should be able to use getDbQueries() method to access all standard functions.  </p>
 <pre class="highlight java tab-java"><code>
   <span class="kn">import</span> <span class="nn">static</span> <span class="n">org</span><span class="o">.</span><span class="na">qamatic</span><span class="o">.</span><span class="na">mintleaf</span><span class="o">.</span><span class="na">Mintleaf</span><span class="o">.</span><span class="na">selectQuery</span>
 
   <span class="nf">try</span> <span class="o">(</span><span class="n">ConnectionContext</span> <span class="n">connectionContext</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="na">getNewConnection</span><span class="o">()){</span>
 
-    <span class="kt">int</span> <span class="n">count</span> <span class="o">=</span> <span class="n">connectionContext</span><span class="o">.</span><span class="na">getDbQueries</span><span class="o">().</span><span class="na">getCount</span><span class="o">(</span><span class="s">"HRDB.USERS"</span><span class="o">);</span>
+    <span class="n">connectionContext</span><span class="o">.</span><span class="na">getDbQueries</span><span class="o">().&lt;</span><span class="n">Standard</span> <span class="n">queriy</span> <span class="n">functions</span><span class="o">&gt;</span>
 
   <span class="o">}</span>
 
 </code></pre>
+<h2 id="getcount">getCount()</h2>
+
+<p>getCount(String tableName) </p>
+<pre class="highlight java tab-java"><code>
+    <span class="kt">int</span> <span class="n">count</span> <span class="o">=</span> <span class="n">connectionContext</span><span class="o">.</span><span class="na">getDbQueries</span><span class="o">().</span><span class="na">getCount</span><span class="o">(</span><span class="s">"HRDB.USERS"</span><span class="o">);</span>
+
+</code></pre>
 <h2 id="getmetadata">getMetaData()</h2>
 
-<p>getMetaData(String objectName) - can used to get meta data for any sql objects but not limited to table structures alone. </p>
+<p>getMetaData(String objectName) - is used to get meta data for any sql objects but not limited to table structures alone.  You can use it get structure of a view, types etc., </p>
 <pre class="highlight java tab-java"><code>
-  <span class="kn">import</span> <span class="nn">static</span> <span class="n">org</span><span class="o">.</span><span class="na">qamatic</span><span class="o">.</span><span class="na">mintleaf</span><span class="o">.</span><span class="na">Mintleaf</span><span class="o">.</span><span class="na">selectQuery</span>
-
-  <span class="nf">try</span> <span class="o">(</span><span class="n">ConnectionContext</span> <span class="n">connectionContext</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="na">getNewConnection</span><span class="o">()){</span>
-
     <span class="n">ColumnMetaDataCollection</span> <span class="n">metaDataCollection</span> <span class="o">=</span> <span class="n">connectionContext</span><span class="o">.</span><span class="na">getDbQueries</span><span class="o">().</span><span class="na">getMetaData</span><span class="o">(</span><span class="s">"HRDB.USERS"</span><span class="o">);</span>
 
-  <span class="o">}</span>
+</code></pre>
+<h2 id="getprimarykeys">getPrimaryKeys()</h2>
+
+<p><em>List<String> getPrimaryKeys(String ownerName, String tableName)</em> - It returns primary keys of given table with a ownerName </p>
+<pre class="highlight java tab-java"><code>
+    <span class="c1">// to get list of all available Package bodies</span>
+    <span class="n">List</span><span class="o">&lt;</span><span class="n">String</span><span class="o">&gt;</span> <span class="n">pkeys</span> <span class="o">=</span> <span class="n">connectionContext</span><span class="o">.</span><span class="na">getDbQueries</span><span class="o">().</span><span class="na">getPrimaryKeys</span><span class="o">(</span><span class="s">"HRDB.USERS"</span><span class="o">);</span> 
+
+
+</code></pre>
+<h2 id="getsqlobjects">getSqlObjects()</h2>
+
+<p>_List<String> getSqlObjects(String objectType) _  - It returns list of objects under an objec type. For example, get all Table Types or View Types etc.</p>
+<pre class="highlight java tab-java"><code>
+    <span class="c1">// to get list of all available Package bodies</span>
+    <span class="n">List</span><span class="o">&lt;</span><span class="n">String</span><span class="o">&gt;</span> <span class="n">list</span> <span class="o">=</span> <span class="n">connectionContext</span><span class="o">.</span><span class="na">getDbQueries</span><span class="o">().</span><span class="na">getSqlObjects</span><span class="o">(</span><span class="s">"PACKAGE BODY"</span><span class="o">);</span>  <span class="c1">//for oracle database</span>
+
 
 </code></pre>
 <h1 id="creating-test-data">Creating test data</h1>
