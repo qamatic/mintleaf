@@ -382,7 +382,7 @@ It&rsquo;s very easy to add changeset definition on your exising sql files if yo
 
 <p>In order to connect to a database, you would need jdbc url, username and a password.</p>
 
-<h3 id="usage">usage</h3>
+<h3 id="usage">Usage</h3>
 <pre class="highlight java tab-java"><code>     <span class="kn">import</span> <span class="nn">static</span> <span class="n">org</span><span class="o">.</span><span class="na">qamatic</span><span class="o">.</span><span class="na">mintleaf</span><span class="o">.</span><span class="na">Mintleaf</span><span class="o">.</span><span class="na">database</span><span class="o">;</span>
 
      <span class="n">Database</span> <span class="n">db</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Mintleaf</span><span class="o">.</span><span class="na">DatabaseBuilder</span><span class="o">().</span>          
@@ -395,8 +395,9 @@ It&rsquo;s very easy to add changeset definition on your exising sql files if yo
 
 <p>Every database connection establishes an exclusive context in which it deals with queries and transactions inside.  It is one of the well managed construct in Mintleaf that offers you handle transactions nicely.</p>
 
-<aside> it is recommended that Mintleaf users to use try-resource block in order to release connection and open resources automatically at the of the database operations
+<aside class="notice"> It is recommended that Mintleaf users to use try-resource block in order to release connection and open resources automatically at the of the database operations
 </aside>
+ 
 
 <p>Use getNewConnection() method to create a connection context that is required for any database operations either in transactional mode or non-transactional mode.</p>
 <pre class="highlight java tab-java"><code>  <span class="kn">import</span> <span class="nn">static</span> <span class="n">org</span><span class="o">.</span><span class="na">qamatic</span><span class="o">.</span><span class="na">mintleaf</span><span class="o">.</span><span class="na">Mintleaf</span><span class="o">.</span><span class="na">database</span><span class="o">;</span>
@@ -470,10 +471,6 @@ It&rsquo;s very easy to add changeset definition on your exising sql files if yo
 
 <aside class="warning"> Mintleaf copy data process is intended for to use for test data creation purpose only so it is not meant for production use   
 </aside>
-
-<h3 id="usage"><em>Usage:</em></h3>
-
-<p><strong>mintleaf -config=&lt;<a href="#configuration-file">configuration file</a>&gt; -targetdb=&lt;db id&gt; -file=&lt;csv file to save&gt; -task=&lt;dbtocsv|csvtodb|dbtodb&gt; -targetsql=&lt;a select query&gt;</strong></p>
 
 <h2 id="database-to-csv">Database to CSV</h2>
 
