@@ -42,14 +42,13 @@ import java.util.regex.Pattern;
 
 public interface DbQueries extends AutoCloseable {
 
-    int getCount(String tableName, String whereClause, ParameterBinding parameterBinding) throws MintLeafException;
 
     default boolean isSqlObjectExists(String objectName, String objectType, boolean ignoreValidity) throws MintLeafException {
         throw new NotImplementedException();
     }
 
     default int getCount(String tableName) throws MintLeafException {
-        return getCount(tableName, null, null);
+        return queryInt(String.format("select count(*) from %s", tableName), null);
     }
 
     default boolean isTableExists(String tableName) throws MintLeafException {

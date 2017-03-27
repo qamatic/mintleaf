@@ -107,17 +107,6 @@ public class StandardQueries implements DbQueries {
         }
     }
 
-    @Override
-    public int getCount(String tableName, String whereClause, ParameterBinding parameterBinding) throws MintLeafException {
 
-        String sql = "";
-        if (whereClause != null) {
-            sql = String.format("select count(*) from %s where %s", tableName, whereClause);
-        } else {
-            sql = String.format("select count(*) from %s", tableName);
-        }
-
-        return queryInt(sql, parameterBinding);
-    }
 
 }

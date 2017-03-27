@@ -238,6 +238,7 @@ in the above example *db.getNewConnection().beginTransaction()* in try-resource 
      connectionContext.rollbackTransaction();
   }
 ```
+
 ### Explicit handling of transaction
 
 ```java
@@ -270,6 +271,44 @@ in the above example *db.getNewConnection().beginTransaction()* in try-resource 
                                            
 
   }
+```
+
+
+# Standard Queries
+
+
+## getCount()
+
+getCount(String tableName) 
+
+```java
+
+  import static org.qamatic.mintleaf.Mintleaf.selectQuery
+
+  try (ConnectionContext connectionContext = db.getNewConnection()){
+
+    int count = connectionContext.getDbQueries().getCount("HRDB.USERS");
+
+  }
+
+```
+
+ 
+## getMetaData() 
+
+getMetaData(String objectName) - can used to get meta data for any sql objects but not limited to table structures alone. 
+
+
+```java
+
+  import static org.qamatic.mintleaf.Mintleaf.selectQuery
+
+  try (ConnectionContext connectionContext = db.getNewConnection()){
+
+    ColumnMetaDataCollection metaDataCollection = connectionContext.getDbQueries().getMetaData("HRDB.USERS");
+
+  }
+
 ```
 
 
