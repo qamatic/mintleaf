@@ -578,19 +578,18 @@ For example, if we want to dump data from a table called HRDB.USERS in abcd-db t
 ```java
 
         //connect to a database, below is an example for H2 database but you can change to any database
-        DatabaseContext h2db = new Mintleaf.DatabaseBuilder().
-                        withDriverSource(JdbcDataSource.class).
+        Database h2db = new Mintleaf.DatabaseBuilder().
                         withUrl("jdbc:h2:file:./target/H2DbTests;mv_store=false;").
                         build();
 
         //export to csv
-        DataAction dataAction = new Mintleaf.DbToCsvBuilder().
+        Executable action = new Mintleaf.DbToCsvDataTransferBuilder().
                 withSourceDb(h2db).
                 withSourceSql("select * from HRDB.USERS").
                 withTargetCsvFile("users.csv").
                 build();
 
-        dataAction.execute();
+        action.execute();
 
 ```  
 
@@ -604,19 +603,18 @@ Suppose you have a data in a CSV file called abcd.csv and want to load it in to 
 ```java
 
         //connect to a database, below is an example for H2 database but you can change to any database
-        DatabaseContext h2db = new Mintleaf.DatabaseBuilder().
-                        withDriverSource(JdbcDataSource.class).
+        Database h2db = new Mintleaf.DatabaseBuilder().                        
                         withUrl("jdbc:h2:file:./target/H2DbTests;mv_store=false;").
                         build();
 
         //import from csv
-        DataAction action = new Mintleaf.CsvToDbBuilder().
+        Executable action = new Mintleaf.CsvToDbDataTransferBuilder().
                 withSourceCsvFile("users.csv").
-                withTargetDb(h2DatabaseContext).
+                withTargetDb(h2db).
                 withTargetSqlTemplate("UPDATE HRDB.USERS SET USERNAME = '$USERNAME$-changed' WHERE USERID=$USERID$").
                 build();
 
-        dataAction.execute();
+        action.execute();
 
 ```  
 
@@ -625,21 +623,24 @@ Suppose you have a data in a CSV file called abcd.csv and want to load it in to 
 
 ```java
 
-        //connect to a database, below is an example for H2 database but you can change to any database
-        DatabaseContext h2db = new Mintleaf.DatabaseBuilder().
-                        withDriverSource(JdbcDataSource.class).
-                        withUrl("jdbc:h2:file:./target/H2DbTests;mv_store=false;").
+        Database oracleSourceDb = new Mintleaf.DatabaseBuilder().                        
+                        withUrl("jdbc:oracle:thin:your-db-connection-url-here").
+                        withUsername("your-user-name").
+                        withPassword("your-Password").
                         build();
 
-        //import from csv
-         DataAction action = new Mintleaf.DbToDbBuilder().
-                withSourceDb(h2DatabaseContext).
+        Database h2TargetDb = new Mintleaf.DatabaseBuilder().                        
+                        withUrl("jdbc:h2:file:./target/H2DbTests;mv_store=false;").
+                        build();        
+
+         Executable action = new Mintleaf.DbToDbDataTransferBuilder().
+                withSourceDb(oracleSourceDb).               //source db
                 withSourceSql("SELECT * FROM HRDB.USERS").  // from users table
-                withTargetDb(h2DatabaseContext).  //any target databse, here used the same database
+                withTargetDb(h2TargetDb).                   //target db
                 withTargetSqlTemplate("INSERT INTO HRDB.USERS_IMPORT_TABLE (USERID, USERNAME) VALUES ($USERID$, '$USERNAME$')").
                 build();
 
-        dataAction.execute();
+        action.execute();
 
 ```  
 
@@ -650,8 +651,7 @@ Suppose you have a data in a CSV file called abcd.csv and want to load it in to 
 ## Oracle
 ```java
 
-        DatabaseContext oracleDb = new Mintleaf.DatabaseBuilder(DbType.ORACLE).
-                        withDriverSource(JdbcDataSource.class).                      
+        Database oracleDb = new Mintleaf.DatabaseBuilder(DbType.ORACLE).                                         
                         withUrl("jdbc:oracle:thin:@localhost:1521:xe").
                         build();    
 
@@ -661,8 +661,7 @@ Suppose you have a data in a CSV file called abcd.csv and want to load it in to 
 
 ```java
 
-        DatabaseContext oracleDb = new Mintleaf.DatabaseBuilder(DbType.MSSQL).
-                        withDriverSource(JdbcDataSource.class).                      
+        Database oracleDb = new Mintleaf.DatabaseBuilder(DbType.MSSQL).                                          
                         withUrl("jdbc:sqlserver://localhost:1433/hrdb").
                         build();    
 
@@ -673,8 +672,7 @@ Suppose you have a data in a CSV file called abcd.csv and want to load it in to 
 
 ```java
 
-        DatabaseContext h2db = new Mintleaf.DatabaseBuilder().
-                        withDriverSource(JdbcDataSource.class).
+        Database h2db = new Mintleaf.DatabaseBuilder().                        
                         withUrl("jdbc:h2:file:./target/H2DbTests;mv_store=false;").
                         build();
 
@@ -686,8 +684,7 @@ Suppose you have a data in a CSV file called abcd.csv and want to load it in to 
 
 ```java
 
-        DatabaseContext h2db = new Mintleaf.DatabaseBuilder(DbType.MYSQL).
-                        withDriverSource(JdbcDataSource.class).
+        Database h2db = new Mintleaf.DatabaseBuilder(DbType.MYSQL).                        
                         withUrl("jdbc:mysql://localhost:3306/hrdb").
                         build();
 
@@ -704,99 +701,97 @@ With Mintleaf, you can compare two data sets of any kind and it is not just limi
 
 ```java
 
-        DatabaseContext db = new Mintleaf.DatabaseBuilder().
-                withDriverSource(JdbcDataSource.class).
+     Database testDb = new Mintleaf.DatabaseBuilder().                
                 withUrl("jdbc:h2:file:./target/H2DbScriptTests;mv_store=false;").
                 build();
 
        //this db has two tables called USERS and USERS_IMPORTED_TABLE
-       //tables can come from two different databases too but for this example just one database having two tables
-       FluentJdbc sourceTable = db.queryBuilder().withSql("SELECT * FROM HRDB.USERS");
-       FluentJdbc targetTable = db.queryBuilder().withSql("SELECT * FROM HRDB.USERS_IMPORTED_TABLE");
+       //tables can come from two different databases too but for this example just one database having two tables compared here
 
-       //so here is how you compare between HRDB.USERS and HRDB.USERS_IMPORTED_TABLE
+     try (ConnectionContext connectionContext = testDb.getNewConnection()) {
 
-        final ConsoleLogger logger = new ConsoleLogger();
-        DataComparer dataComparer = new Mintleaf.ComparerBuilder().
+        SqlResultSet sourceTable = selectQuery(connectionContext, "SELECT * FROM HRDB.USERS");
+        SqlResultSet targetTable = selectQuery(connectionContext, "SELECT * FROM HRDB.USERS_IMPORT_TABLE");
+
+        DataComparer dataComparer = new Mintleaf.DataComparerBuilder().
                 withSourceTable(sourceList).
                 withTargetTable(targetListList).
                 withMatchingResult((sourceColumn, targetColumn) -> {
 
                     //here is where you add your compare criteria
-
                     if (sourceColumn.equals(targetColumn)){
-                        logger.info("matches");
+                        System.out.println("matches");
                     }else {
-                        logger.info("no match");
+                        System.out.println(("no match");
                     }
 
-                    //logger.info(String.format("[Source:%s] [Target:%s]", sourceRowState, targetRowState));
-                }).
-                build();
+                }).build();
 
+          //run data compare
+          dataComparer.execute();
 
-        //run data compare
-        dataComparer.execute();   
-
-
+      }     
 ```
-
-
-
 
 
 ## Compare two list of objects
 
-For example you have a pojo class looks like the following.  For simplicity purpose no getter/setters for now but it has just two member columns UserName and Country.
+For example you have a POJO class looks like the following.  
 
 
 ```java   
    public class User {         
-        public String UserName;
-        public String Country;
+     private String firstName;
+     private String country;
+
+     public User(String firstName, String country) {
+         this.firstName = firstName;
+         this.country = country;
+     }
+
    }
 
 ```
 
-
-In order to do compare between _sourceUserList and targetUserList_, you must implement an interface **ComparableRow** on User class.   When you implement **ComparableRow** interface, you will have to override **getMetaData()**,  **setMetaData()** and **getValue()** methods as shown below.   Basically you provide column information as opposed a object properties so this way one can easily deal with nest objects and calculated column values manipluated before returning them.  So you can also implemnent some custom auto inferring mechanism like spring beans via annotations is an idea for those who wants it but its is not the scope here and Mintleaf provides complete freedom to the user as how they would like to implement it.  
+We are going two different list of users namely sourceUserList and targetUserList. In order to do compare between _sourceUserList and targetUserList_, you must implement an interface **Row** on User class.   When you implement **Row** interface on your bean class, you will have to override **getMetaData()**,  **setMetaData()** and **getValue()** methods as shown below.   Basically you provide column information as opposed a object properties so this way one can easily deal with nest objects and calculated column values manipulated before returning them.  So you can also implement some custom auto inferring mechanism like spring beans via annotations is an idea for those who wants it but its is not the scope here and Mintleaf provides complete freedom to the user as how they would like to implement it.  
 
 
 
 ```java
 
-        private class User implements ComparableRow {
+public class User implements Row {  // implement Row interface
 
-             public String UserName;
-             public String Country;
+    private MetaDataCollection metaDataCollection;  //add a meta data collection
+    private String firstName;
+    private String country;
 
-            //add this line
-            private MetaDataCollection metaDataCollection;
+    public User(String firstName, String country) {
+        this.firstName = firstName;
+        this.country = country;
+    }
 
-            //add this override to map your bean members to column***********
-            @Override
-            public Object getValue(int columnIndex) throws MintLeafException {
-                switch (columnIndex) {
-                    case 0:
-                        return UserName;
-                    case 1:
-                        return Country;
-                }
-                return null;
-            }
-
-            //add this override to return column meta data information********************
-            @Override
-            public MetaDataCollection getMetaData() throws MintLeafException {
-                return this.metaDataCollection;
-            }
-
-             //add this override to set column meta data information- framework injects the value********************
-            @Override
-            public void setMetaData(MetaDataCollection metaDataCollection) {
-                this.metaDataCollection = metaDataCollection;
-            }
+    @Override
+    public Object getValue(int columnIndex) throws MintLeafException {
+        switch (columnIndex) {
+            case 0:
+                return firstName;
+            case 1:
+                return country;
         }
+        return null;
+    }
+
+    @Override
+    public MetaDataCollection getMetaData() throws MintLeafException {
+        return this.metaDataCollection;
+    }
+
+    @Override
+    public void setMetaData(MetaDataCollection metaDataCollection) {
+        this.metaDataCollection = metaDataCollection;
+    }
+
+}
 
 ```
 
@@ -807,21 +802,11 @@ In order to do compare between _sourceUserList and targetUserList_, you must imp
 
     //create a source list of users
    List<User> sourceUserList = new ArrayList<User> ();
-   sourceUserList.add(new User(){
-                                      {
-                                          UserName = "Tomatoe";
-                                          Country = "USA";
-                                      }
-                                  });
+   sourceUserList.add(new User("Tomatoe", "USA"));
 
    //create a target list of users to be compared                               
    List<User> targetUserList = new ArrayList<User> ();
-   targetUserList.add(new User(){
-                                         {
-                                             UserName = "Tomatoe";
-                                             Country = "USA";
-                                         }
-                                     });
+   targetUserList.add(new User("Tomatoe", "USA"));
 ```
 
 
@@ -831,17 +816,17 @@ Lets see how compare works between sourceUserList and targetUserList,
 ```java
 
         // create column metadata
-        ColumnMetaDataCollection metaDataCollection = new ColumnMetaDataCollection("USERS");
-        metaDataCollection.add(new Column("UserName"));
+        ColumnMetaDataCollection columnDefs = new ColumnMetaDataCollection("USERS");
+        metaDataCollection.add(new Column("FirstName"));
         metaDataCollection.add(new Column("Country"));
 
         //logger
         final ConsoleLogger logger = new ConsoleLogger();
 
         //create comparer
-        DataComparer dataComparer = new Mintleaf.ComparerBuilder().
-                withSourceTable(sourceUserList, metaDataCollection).
-                withTargetTable(targetUserList, metaDataCollection).
+        DataComparer dataComparer = new Mintleaf.DataComparerBuilder().
+                withSourceTable(sourceUserList, columnDefs).
+                withTargetTable(targetUserList, columnDefs).
                 withMatchingResult((sourceColumn, targetColumn) -> {
 
                     //here is where you add your compare criteria
@@ -860,6 +845,7 @@ Lets see how compare works between sourceUserList and targetUserList,
         dataComparer.execute();
 ```
 
+## Selected Columns
 
 For selected column comparison, use **withSelectedColumnMaps()**
 
@@ -869,7 +855,7 @@ For selected column comparison, use **withSelectedColumnMaps()**
         final ConsoleLogger logger = new ConsoleLogger();
 
         //create comparer
-        DataComparer dataComparer = new Mintleaf.ComparerBuilder().
+        DataComparer dataComparer = new Mintleaf.DataComparerBuilder().
                 withSourceTable(sourceUserList).
                 withTargetTable(targetUserList).
                 withSelectedColumnMaps("USERNAME=USERNAME,ID=ID").
