@@ -438,7 +438,7 @@ html, body {
     }
 
     td {
-      padding: 10px;
+      padding: 3px;
     }
 
     tr:last-child {
@@ -544,7 +544,7 @@ html, body {
 // This is all the stuff that appears in the right half of the page
 
 .content {
-  pre, blockquote {
+  pre {
     //background-color: $code-bg;
     color: #fff;
 
@@ -573,14 +573,18 @@ html, body {
     @extend %code-font;
   }
 
+  blockquote{
+    background-color: #dee3e9;
+    padding: 0 1em;
+    color: #6a737d;
+    border-left: 0.5em solid #64D2FA;
+  }
+
   blockquote {
     &>p {
       background-color: $code-annotation-bg;
-      border-radius: 5px;
       padding: $code-annotation-padding;
-      color: #ffffff;
-      border-top: 1px solid #000;
-      border-bottom: 1px solid #404040;
+      color: #280A05;
       font-size:1.2em;
     }
   }

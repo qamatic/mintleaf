@@ -7,9 +7,9 @@ toc_footers:
   - <a href='https://github.com/qamatic/mintleaf'>Source @ github</a>  
 
 includes:
- 
+
 language_tabs:
- 
+
 search: true
 ---
 
@@ -192,10 +192,10 @@ In order to connect to a database, you would need jdbc url, username and a passw
 ### Connection Context
 
 Every database connection establishes an exclusive context in which it deals with queries and transactions inside.  It is one of the well managed construct in Mintleaf that offers you handle transactions nicely.
- 
+
 <aside class="notice"> It is recommended that Mintleaf users to use try-resource block in order to release connection and open resources automatically at the of the database operations
 </aside>
- 
+
 
 Use getNewConnection() method to create a connection context that is required for any database operations either in transactional mode or non-transactional mode.
 
@@ -214,7 +214,7 @@ Use getNewConnection() method to create a connection context that is required fo
   }
 ```
 
- 
+
 
 This method has an optional parameter for auto close connection.  By default, it is set to auto closable but bear in mind that try-resource must be used in order to auto close your connection at the end of the operations otherwise you should call close() method in order to close the connection and release any resources as explained in above example.
 
@@ -268,7 +268,7 @@ in the above example *db.getNewConnection().beginTransaction()* in try-resource 
      SqlResultSet SqlResultSet = selectQuery(connectionContext).
                                    withSql("SELECT * FROM USERS").
                                    buildSelect();
-                                           
+
 
   }
 ```
@@ -286,27 +286,68 @@ Once you get a connection context then you should be able to use getDbQueries() 
 
   try (ConnectionContext connectionContext = db.getNewConnection()){
 
-    connectionContext.getDbQueries().<Standard queriy functions>
+    connectionContext.getDbQueries().<Standard query functions listed below>
 
   }
 
 ```
 
+## 	query()
+
+> <T> List<T>	query(String sql, DataRowListener<T> listener)  
+
+where,
+
+Parameter | Description
+--------- | -----------
+sql | select query to be executed
+listener | an iterator listener that does call back for every row of a result set
+
+For example, you want to execute a query and the result set needs to collected as list of objects / beans
+
+```java
+
+    public class User{
+       private String userName;
+       private int rowNumber;
+       public User(int rowNum,String userName){
+         this.userName = rowNumber;
+         this.rowNumber = rowNumber;
+       }
+    }
+
+    List<User> users = connectionContext.getDbQueries().query(
+                         "SELECT USERNAME FROM HRDB.USERS",
+                          (rowNum, resultSet) -> {
+                            User user = new User(rowNum, resultSet.asString("USERNAME"));                            
+                            return user;
+                          }
+                        );
+
+// OR something like getting an array list of user names                      
+    List<String> userNames = connectionContext.getDbQueries().query(
+                         "SELECT USERNAME FROM HRDB.USERS",
+                          (rowNum, resultSet) -> {                                                       
+                            return resultSet.asString("USERNAME");
+                          }
+                        );
+```
+
 
 ## getCount()
 
-getCount(String tableName) 
+getCount(String tableName)
 
 ```java
 
     int count = connectionContext.getDbQueries().getCount("HRDB.USERS");
-    
+
 ```
 
- 
-## getMetaData() 
 
-getMetaData(String objectName) - is used to get meta data for any sql objects but not limited to table structures alone.  You can use it get structure of a view, types etc., 
+## getMetaData()
+
+getMetaData(String objectName) - is used to get meta data for any sql objects but not limited to table structures alone.  You can use it get structure of a view, types etc.,
 
 
 ```java
@@ -317,19 +358,19 @@ getMetaData(String objectName) - is used to get meta data for any sql objects bu
 
 ## getPrimaryKeys()
 
-_List<String> getPrimaryKeys(String ownerName, String tableName)_ - It returns primary keys of given table with a ownerName 
+_List<String> getPrimaryKeys(String ownerName, String tableName)_ - It returns primary keys of given table with a ownerName
 
 ```java
 
     // to get list of all available Package bodies
-    List<String> pkeys = connectionContext.getDbQueries().getPrimaryKeys("HRDB.USERS"); 
+    List<String> pkeys = connectionContext.getDbQueries().getPrimaryKeys("HRDB.USERS");
 
 
 ```
 
 ## getSqlObjects()
 
-_List<String> getSqlObjects(String objectType) _  - It returns list of objects under an objec type. For example, get all Table Types or View Types etc.
+_List<String> getSqlObjects(String objectType)_  - It returns list of objects under an objec type. For example, get all Table Types or View Types etc.
 
 ```java
 
@@ -339,6 +380,83 @@ _List<String> getSqlObjects(String objectType) _  - It returns list of objects u
 
 ```
 
+
+
+## isColumnExists()
+
+_boolean isColumnExists(String tableName, String columnName)_  - It returns true/false for given table and column name
+
+```java
+
+    // to get list of all available Package bodies
+    if (connectionContext.getDbQueries().isColumnExists("HRDB.USERS", "USERID") ){
+      // do something
+    }
+```
+
+
+## isPrivilegeExists()
+
+_boolean	isPrivilegeExists(String granteeName, String privilegeName, String objectName)_   
+
+where,
+
+Parameter | Description
+--------- | -----------
+granteeName | user name
+privilegeName | valid privileges such as SELECT, INSERT and so on
+objectName | check on objects like TABLE, PROCEDURE, VIEW and so on.
+
+
+```java
+    // to get list of all available Package bodies
+    if (connectionContext.getDbQueries().isPrivilegeExists("USER1", "SELECT", "HRDB.USERS_IMPORT_TABLE") ){
+      //do something
+    }
+```
+## isSqlObjectExists()
+
+_boolean	isSqlObjectExists(String objectName, String objectType, boolean ignoreValidity)_   
+
+where,
+
+Parameter | Description
+--------- | -----------
+objectName |a table name / view name / procedure name
+objectType | a TABLE / PROCEDURE / VIEW / PACKAGE and so on
+ignoreValidity | look only for valid object/compiled ones if parameter set to false
+
+```java
+
+    // to get list of all available Package bodies
+    if (connectionContext.getDbQueries().isSqlObjectExists("HRDB.USERS", "TABLE", false) ){
+      //do something
+    }
+```
+
+## isTableExists()
+
+_boolean isTableExists(String tableName)_  - It returns true/false for a given table exists or not
+
+```java
+
+    // to get list of all available Package bodies
+    if (connectionContext.getDbQueries().isTableExists("HRDB.USERS") ){
+      // do something
+    }
+```
+
+## 	isUserExists()
+
+_boolean 	isUserExists(String userName)_  - It returns true/false for a given database user exists or not
+
+```java
+
+    // to get list of all available Package bodies
+    if (connectionContext.getDbQueries().isUserExists("TINTIN") ){
+      // do something
+    }
+```
 
 
 
@@ -356,7 +474,7 @@ So over all you can use csv file and database-to-database copy of data for your 
 <aside class="warning"> Mintleaf copy data process is intended for to use for test data creation purpose only so it is not meant for production use   
 </aside>
 
- 
+
 ## Database to CSV
 
 For example, if we want to dump data from a table called HRDB.USERS in abcd-db to a CSV file then you run like the following
