@@ -294,9 +294,9 @@ Once you get a connection context then you should be able to use getDbQueries() 
 
 ## 	query()
 
-> <T> List<T>	query(String sql, DataRowListener<T> listener)  
-
-where,
+```code
+  <T> List<T>	query(String sql, DataRowListener<T> listener)  
+```
 
 Parameter | Description
 --------- | -----------
@@ -335,20 +335,27 @@ For example, you want to execute a query and the result set needs to collected a
 
 
 ## getCount()
-
+```code
 getCount(String tableName)
-
-```java
-
-    int count = connectionContext.getDbQueries().getCount("HRDB.USERS");
-
 ```
 
+Parameter | Description
+--------- | -----------
+tableName | name of the table
+
+```java
+    int count = connectionContext.getDbQueries().getCount("HRDB.USERS");
+```
 
 ## getMetaData()
 
-getMetaData(String objectName) - is used to get meta data for any sql objects but not limited to table structures alone.  You can use it get structure of a view, types etc.,
+```code
+getMetaData(String objectName)
+```
 
+Parameter | Description
+--------- | -----------
+objectName | get meta data for any sql objects but not limited to table structures alone.  You can use it get structure of a view, types etc.,
 
 ```java
 
@@ -358,33 +365,51 @@ getMetaData(String objectName) - is used to get meta data for any sql objects bu
 
 ## getPrimaryKeys()
 
-_List<String> getPrimaryKeys(String ownerName, String tableName)_ - It returns primary keys of given table with a ownerName
+```code
+List<String> getPrimaryKeys(String ownerName, String tableName)
+```
+
+Parameter | Description
+--------- | -----------
+ownerName | schema owner name
+tableName | table name
+
 
 ```java
 
     // to get list of all available Package bodies
     List<String> pkeys = connectionContext.getDbQueries().getPrimaryKeys("HRDB.USERS");
-
-
 ```
 
 ## getSqlObjects()
 
-_List<String> getSqlObjects(String objectType)_  - It returns list of objects under an objec type. For example, get all Table Types or View Types etc.
+```code
+ List<String> getSqlObjects(String objectType)
+```
+
+Parameter | Description
+--------- | -----------
+objectType | sql objects of a type will be used to filter
+
 
 ```java
 
     // to get list of all available Package bodies
     List<String> list = connectionContext.getDbQueries().getSqlObjects("PACKAGE BODY");  //for oracle database
 
-
 ```
-
-
 
 ## isColumnExists()
 
-_boolean isColumnExists(String tableName, String columnName)_  - It returns true/false for given table and column name
+```code
+boolean isColumnExists(String tableName, String columnName)
+```
+
+Parameter | Description
+--------- | -----------
+tableName |  schema name.table name
+columnName | column name
+
 
 ```java
 
@@ -397,16 +422,15 @@ _boolean isColumnExists(String tableName, String columnName)_  - It returns true
 
 ## isPrivilegeExists()
 
-_boolean	isPrivilegeExists(String granteeName, String privilegeName, String objectName)_   
-
-where,
+```code
+boolean	isPrivilegeExists(String granteeName, String privilegeName, String objectName)
+```
 
 Parameter | Description
 --------- | -----------
 granteeName | user name
 privilegeName | valid privileges such as SELECT, INSERT and so on
 objectName | check on objects like TABLE, PROCEDURE, VIEW and so on.
-
 
 ```java
     // to get list of all available Package bodies
@@ -416,9 +440,9 @@ objectName | check on objects like TABLE, PROCEDURE, VIEW and so on.
 ```
 ## isSqlObjectExists()
 
-_boolean	isSqlObjectExists(String objectName, String objectType, boolean ignoreValidity)_   
-
-where,
+```code
+boolean	isSqlObjectExists(String objectName, String objectType, boolean ignoreValidity)
+```
 
 Parameter | Description
 --------- | -----------
@@ -436,7 +460,11 @@ ignoreValidity | look only for valid object/compiled ones if parameter set to fa
 
 ## isTableExists()
 
-_boolean isTableExists(String tableName)_  - It returns true/false for a given table exists or not
+It returns true/false for a given table exists or not
+
+```code
+boolean isTableExists(String tableName)
+```
 
 ```java
 
@@ -448,7 +476,11 @@ _boolean isTableExists(String tableName)_  - It returns true/false for a given t
 
 ## 	isUserExists()
 
-_boolean 	isUserExists(String userName)_  - It returns true/false for a given database user exists or not
+It returns true/false for a given database user exists or not
+
+```code
+boolean 	isUserExists(String userName)
+```
 
 ```java
 

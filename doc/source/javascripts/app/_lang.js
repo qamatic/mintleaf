@@ -174,7 +174,7 @@
 
     $(".tab-sql code").prepend('<b class="langmargin">SQL:</b> </br>');
     $(".tab-shell code").prepend('<b class="langmargin">Shell:</b> </br>');
-    $(".tab-java code").prepend('<b class="langmargin">Java:</b> </br>');
+    $(".tab-java code").prepend('<b class="langmargin">Example:</b> </br>');
     $(".tab-xml code").prepend('<b class="langmargin">XML:</b> </br>');
     $(".lang-selector a").on("click", function() {
       var language = $(this).data("language-name");

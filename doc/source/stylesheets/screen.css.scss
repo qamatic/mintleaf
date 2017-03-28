@@ -429,11 +429,11 @@ html, body {
       text-align: left;
       vertical-align: top;
       line-height: 1.6;
+      border: 1px solid #ccc;
     }
 
     th {
       padding: 5px 10px;
-      border-bottom: 1px solid #ccc;
       vertical-align: bottom;
     }
 
@@ -441,12 +441,9 @@ html, body {
       padding: 3px;
     }
 
-    tr:last-child {
-      border-bottom: 1px solid #ccc;
-    }
 
     tr:nth-child(odd)>td {
-      background-color: lighten($main-bg,4.2%);
+      background-color: lighten($main-bg,1.2%);
     }
 
     tr:nth-child(even)>td {
@@ -657,4 +654,11 @@ html, body {
 
 .langmargin{
   margin-top:-10px;
+}
+
+
+.highlight.plaintext{
+  background-color: #efefef;
+  color:black;
+  border-left: 0.5em solid #64D2FA;
 }
