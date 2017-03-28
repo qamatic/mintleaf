@@ -398,7 +398,6 @@ It&rsquo;s very easy to add changeset definition on your exising sql files if yo
 
 <aside class="notice"> It is recommended that Mintleaf users to use try-resource block in order to release connection and open resources automatically at the of the database operations
 </aside>
- 
 
 <p>Use getNewConnection() method to create a connection context that is required for any database operations either in transactional mode or non-transactional mode.</p>
 <pre class="highlight java tab-java"><code>  <span class="kn">import</span> <span class="nn">static</span> <span class="n">org</span><span class="o">.</span><span class="na">qamatic</span><span class="o">.</span><span class="na">mintleaf</span><span class="o">.</span><span class="na">Mintleaf</span><span class="o">.</span><span class="na">database</span><span class="o">;</span>
@@ -468,42 +467,306 @@ It&rsquo;s very easy to add changeset definition on your exising sql files if yo
 
   <span class="nf">try</span> <span class="o">(</span><span class="n">ConnectionContext</span> <span class="n">connectionContext</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="na">getNewConnection</span><span class="o">()){</span>
 
-    <span class="n">connectionContext</span><span class="o">.</span><span class="na">getDbQueries</span><span class="o">().&lt;</span><span class="n">Standard</span> <span class="n">queriy</span> <span class="n">functions</span><span class="o">&gt;</span>
+    <span class="n">connectionContext</span><span class="o">.</span><span class="na">getDbQueries</span><span class="o">().&lt;</span><span class="n">Standard</span> <span class="n">query</span> <span class="n">functions</span> <span class="n">listed</span> <span class="n">below</span><span class="o">&gt;</span>
 
   <span class="o">}</span>
 
 </code></pre>
-<h2 id="getcount">getCount()</h2>
+<h2 id="query">query()</h2>
+<pre class="highlight plaintext"><code>  &lt;T&gt; List&lt;T&gt;   query(String sql, DataRowListener&lt;T&gt; listener)  
+</code></pre>
+<table><thead>
+<tr>
+<th>Parameter</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>sql</td>
+<td>select query to be executed</td>
+</tr>
+<tr>
+<td>listener</td>
+<td>an iterator listener that does call back for every row of a result set</td>
+</tr>
+</tbody></table>
 
-<p>getCount(String tableName) </p>
+<p>For example, you want to execute a query and the result set needs to collected as list of objects / beans</p>
 <pre class="highlight java tab-java"><code>
-    <span class="kt">int</span> <span class="n">count</span> <span class="o">=</span> <span class="n">connectionContext</span><span class="o">.</span><span class="na">getDbQueries</span><span class="o">().</span><span class="na">getCount</span><span class="o">(</span><span class="s">"HRDB.USERS"</span><span class="o">);</span>
+    <span class="kd">public</span> <span class="kd">class</span> <span class="nc">User</span><span class="o">{</span>
+       <span class="kd">private</span> <span class="n">String</span> <span class="n">userName</span><span class="o">;</span>
+       <span class="kd">private</span> <span class="kt">int</span> <span class="n">rowNumber</span><span class="o">;</span>
+       <span class="kd">public</span> <span class="nf">User</span><span class="o">(</span><span class="kt">int</span> <span class="n">rowNum</span><span class="o">,</span><span class="n">String</span> <span class="n">userName</span><span class="o">){</span>
+         <span class="k">this</span><span class="o">.</span><span class="na">userName</span> <span class="o">=</span> <span class="n">rowNumber</span><span class="o">;</span>
+         <span class="k">this</span><span class="o">.</span><span class="na">rowNumber</span> <span class="o">=</span> <span class="n">rowNumber</span><span class="o">;</span>
+       <span class="o">}</span>
+    <span class="o">}</span>
+
+    <span class="n">List</span><span class="o">&lt;</span><span class="n">User</span><span class="o">&gt;</span> <span class="n">users</span> <span class="o">=</span> <span class="n">connectionContext</span><span class="o">.</span><span class="na">getDbQueries</span><span class="o">().</span><span class="na">query</span><span class="o">(</span>
+                     <span class="s">"SELECT USERNAME FROM HRDB.USERS"</span><span class="o">,</span>                               <span class="err">√</span>
+
+                      <span class="o">(</span><span class="n">rowNum</span><span class="o">,</span> <span class="n">resultSet</span><span class="o">)</span> <span class="o">-&gt;</span> <span class="o">{</span>
+                        <span class="n">User</span> <span class="n">user</span> <span class="o">=</span> <span class="k">new</span> <span class="n">User</span><span class="o">(</span><span class="n">rowNum</span><span class="o">,</span> <span class="n">resultSet</span><span class="o">.</span><span class="na">asString</span><span class="o">(</span><span class="s">"USERNAME"</span><span class="o">));</span> <span class="c1">// iterator listener                             </span>
+                        <span class="k">return</span> <span class="n">user</span><span class="o">;</span>
+                      <span class="o">}</span>
+
+                    <span class="o">);</span>
+
+<span class="c1">// OR something like getting an array list of user names                      </span>
+    <span class="n">List</span><span class="o">&lt;</span><span class="n">String</span><span class="o">&gt;</span> <span class="n">userNames</span> <span class="o">=</span> <span class="n">connectionContext</span><span class="o">.</span><span class="na">getDbQueries</span><span class="o">().</span><span class="na">query</span><span class="o">(</span>
+
+                         <span class="s">"SELECT USERNAME FROM HRDB.USERS"</span><span class="o">,</span>         <span class="c1">// sql</span>
+
+                          <span class="o">(</span><span class="n">rowNum</span><span class="o">,</span> <span class="n">resultSet</span><span class="o">)</span> <span class="o">-&gt;</span> <span class="o">{</span>                                                       
+                            <span class="k">return</span> <span class="n">resultSet</span><span class="o">.</span><span class="na">asString</span><span class="o">(</span><span class="s">"USERNAME"</span><span class="o">);</span>  <span class="c1">// iterator listener  </span>
+                          <span class="o">}</span>
+
+                        <span class="o">);</span>
+</code></pre>
+<h2 id="query-binding">query() binding</h2>
+<pre class="highlight plaintext"><code>  &lt;T&gt; List&lt;T&gt;   query(String sql, ParameterBinding parameterBinding, DataRowListener&lt;T&gt; listener)   
+</code></pre>
+<table><thead>
+<tr>
+<th>Parameter</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>sql</td>
+<td>select query to be executed</td>
+</tr>
+<tr>
+<td>parameterBinding</td>
+<td>binding parameters</td>
+</tr>
+<tr>
+<td>listener</td>
+<td>an iterator listener that does call back for every row of a result set</td>
+</tr>
+</tbody></table>
+
+<p>For example, you want to execute a query with binding parameter values and the result set needs to collected as list of objects / beans</p>
+<pre class="highlight java tab-java"><code>
+    <span class="n">List</span><span class="o">&lt;</span><span class="n">String</span><span class="o">&gt;</span> <span class="n">userNames</span> <span class="o">=</span> <span class="n">connectionContext</span><span class="o">.</span><span class="na">getDbQueries</span><span class="o">().</span><span class="na">query</span><span class="o">(</span>
+                         <span class="s">"SELECT USERNAME FROM HRDB.USERS WHERE USERID &gt; ? AND USERID &lt; ?"</span><span class="o">,</span>  <span class="c1">//sql</span>
+
+                          <span class="o">(</span><span class="n">parameterSets</span><span class="o">)</span> <span class="o">-&gt;</span> <span class="o">{</span>                               <span class="c1">// parameter values binding</span>
+                                     <span class="n">parameterSets</span><span class="o">.</span><span class="na">setInt</span><span class="o">(</span><span class="mi">1</span><span class="o">,</span> <span class="mi">77</span><span class="o">);</span>  
+                                     <span class="n">parameterSets</span><span class="o">.</span><span class="na">setInt</span><span class="o">(</span><span class="mi">2</span><span class="o">,</span> <span class="mi">100</span><span class="o">);</span>                                  
+                          <span class="o">},</span>                                                          
+
+                         <span class="o">(</span><span class="n">rowNum</span><span class="o">,</span> <span class="n">resultSet</span><span class="o">)</span> <span class="o">-&gt;</span> <span class="o">{</span>                           <span class="c1">// iterator listener                                                         </span>
+                            <span class="k">return</span> <span class="n">resultSet</span><span class="o">.</span><span class="na">asString</span><span class="o">(</span><span class="s">"USERNAME"</span><span class="o">);</span>
+                          <span class="o">}</span>
+                        <span class="o">);</span>
+</code></pre>
+<h2 id="queryint">queryInt()</h2>
+
+<p>This method returns int value of the first column of the first row of a resultSet for the given sql query.
+Suitable for scalar queries like MAX(), MIN(), AVG(), COUNT() and so on  </p>
+<pre class="highlight plaintext"><code>int queryInt(String sql, ParameterBinding parameterBinding)
+</code></pre>
+<table><thead>
+<tr>
+<th>Parameter</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>sql</td>
+<td>select query to be executed</td>
+</tr>
+<tr>
+<td>parameterBinding</td>
+<td>binding parameters</td>
+</tr>
+</tbody></table>
+<pre class="highlight java tab-java"><code>    <span class="kt">int</span> <span class="n">tableCount</span> <span class="o">=</span> <span class="n">connectionContext</span><span class="o">.</span><span class="na">getDbQueries</span><span class="o">().</span><span class="na">getInt</span><span class="o">(</span><span class="s">"SELECT COUNT(*) FROM HRDB.USERS"</span><span class="o">,</span> <span class="kc">null</span><span class="o">);</span>
+
+    <span class="kt">int</span> <span class="n">tableCountWithRange</span> <span class="o">=</span> <span class="n">connectionContext</span><span class="o">.</span><span class="na">getDbQueries</span><span class="o">().</span><span class="na">getInt</span><span class="o">(</span>
+                      <span class="s">"SELECT COUNT(*) FROM HRDB.USERS WHERE USERID &gt; ? AND USERID &lt; ?"</span><span class="o">,</span>  <span class="c1">//sql</span>
+
+                       <span class="o">(</span><span class="n">parameterSets</span><span class="o">)</span> <span class="o">-&gt;</span> <span class="o">{</span>                                   <span class="c1">// parameter values binding</span>
+                                  <span class="n">parameterSets</span><span class="o">.</span><span class="na">setInt</span><span class="o">(</span><span class="mi">1</span><span class="o">,</span> <span class="mi">77</span><span class="o">);</span>  
+                                  <span class="n">parameterSets</span><span class="o">.</span><span class="na">setInt</span><span class="o">(</span><span class="mi">2</span><span class="o">,</span> <span class="mi">100</span><span class="o">);</span>                                  
+                       <span class="o">}</span>
+                     <span class="o">);</span>
 
 </code></pre>
+<h2 id="getcount">getCount()</h2>
+<pre class="highlight plaintext"><code>int getCount(String tableName)
+</code></pre>
+<table><thead>
+<tr>
+<th>Parameter</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>tableName</td>
+<td>name of the table</td>
+</tr>
+</tbody></table>
+<pre class="highlight java tab-java"><code>    <span class="kt">int</span> <span class="n">count</span> <span class="o">=</span> <span class="n">connectionContext</span><span class="o">.</span><span class="na">getDbQueries</span><span class="o">().</span><span class="na">getCount</span><span class="o">(</span><span class="s">"HRDB.USERS"</span><span class="o">);</span>
+</code></pre>
 <h2 id="getmetadata">getMetaData()</h2>
-
-<p>getMetaData(String objectName) - is used to get meta data for any sql objects but not limited to table structures alone.  You can use it get structure of a view, types etc., </p>
+<pre class="highlight plaintext"><code>ColumnMetaDataCollection getMetaData(String objectName)
+</code></pre>
+<table><thead>
+<tr>
+<th>Parameter</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>objectName</td>
+<td>get meta data for any sql objects but not limited to table structures alone.  You can use it get structure of a view, types etc.,</td>
+</tr>
+</tbody></table>
 <pre class="highlight java tab-java"><code>
     <span class="n">ColumnMetaDataCollection</span> <span class="n">metaDataCollection</span> <span class="o">=</span> <span class="n">connectionContext</span><span class="o">.</span><span class="na">getDbQueries</span><span class="o">().</span><span class="na">getMetaData</span><span class="o">(</span><span class="s">"HRDB.USERS"</span><span class="o">);</span>
 
 </code></pre>
 <h2 id="getprimarykeys">getPrimaryKeys()</h2>
-
-<p><em>List<String> getPrimaryKeys(String ownerName, String tableName)</em> - It returns primary keys of given table with a ownerName </p>
+<pre class="highlight plaintext"><code>List&lt;String&gt; getPrimaryKeys(String ownerName, String tableName)
+</code></pre>
+<table><thead>
+<tr>
+<th>Parameter</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>ownerName</td>
+<td>schema owner name</td>
+</tr>
+<tr>
+<td>tableName</td>
+<td>table name</td>
+</tr>
+</tbody></table>
 <pre class="highlight java tab-java"><code>
     <span class="c1">// to get list of all available Package bodies</span>
-    <span class="n">List</span><span class="o">&lt;</span><span class="n">String</span><span class="o">&gt;</span> <span class="n">pkeys</span> <span class="o">=</span> <span class="n">connectionContext</span><span class="o">.</span><span class="na">getDbQueries</span><span class="o">().</span><span class="na">getPrimaryKeys</span><span class="o">(</span><span class="s">"HRDB.USERS"</span><span class="o">);</span> 
-
-
+    <span class="n">List</span><span class="o">&lt;</span><span class="n">String</span><span class="o">&gt;</span> <span class="n">pkeys</span> <span class="o">=</span> <span class="n">connectionContext</span><span class="o">.</span><span class="na">getDbQueries</span><span class="o">().</span><span class="na">getPrimaryKeys</span><span class="o">(</span><span class="s">"HRDB.USERS"</span><span class="o">);</span>
 </code></pre>
 <h2 id="getsqlobjects">getSqlObjects()</h2>
-
-<p>_List<String> getSqlObjects(String objectType) _  - It returns list of objects under an objec type. For example, get all Table Types or View Types etc.</p>
+<pre class="highlight plaintext"><code> List&lt;String&gt; getSqlObjects(String objectType)
+</code></pre>
+<table><thead>
+<tr>
+<th>Parameter</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>objectType</td>
+<td>sql objects of a type will be used to filter</td>
+</tr>
+</tbody></table>
 <pre class="highlight java tab-java"><code>
     <span class="c1">// to get list of all available Package bodies</span>
     <span class="n">List</span><span class="o">&lt;</span><span class="n">String</span><span class="o">&gt;</span> <span class="n">list</span> <span class="o">=</span> <span class="n">connectionContext</span><span class="o">.</span><span class="na">getDbQueries</span><span class="o">().</span><span class="na">getSqlObjects</span><span class="o">(</span><span class="s">"PACKAGE BODY"</span><span class="o">);</span>  <span class="c1">//for oracle database</span>
 
+</code></pre>
+<h2 id="iscolumnexists">isColumnExists()</h2>
+<pre class="highlight plaintext"><code>boolean isColumnExists(String tableName, String columnName)
+</code></pre>
+<table><thead>
+<tr>
+<th>Parameter</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>tableName</td>
+<td>schema name.table name</td>
+</tr>
+<tr>
+<td>columnName</td>
+<td>column name</td>
+</tr>
+</tbody></table>
+<pre class="highlight java tab-java"><code>
+    <span class="c1">// to get list of all available Package bodies</span>
+    <span class="k">if</span> <span class="o">(</span><span class="n">connectionContext</span><span class="o">.</span><span class="na">getDbQueries</span><span class="o">().</span><span class="na">isColumnExists</span><span class="o">(</span><span class="s">"HRDB.USERS"</span><span class="o">,</span> <span class="s">"USERID"</span><span class="o">)</span> <span class="o">){</span>
+      <span class="c1">// do something</span>
+    <span class="o">}</span>
+</code></pre>
+<h2 id="isprivilegeexists">isPrivilegeExists()</h2>
+<pre class="highlight plaintext"><code>boolean isPrivilegeExists(String granteeName, String privilegeName, String objectName)
+</code></pre>
+<table><thead>
+<tr>
+<th>Parameter</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>granteeName</td>
+<td>user name</td>
+</tr>
+<tr>
+<td>privilegeName</td>
+<td>valid privileges such as SELECT, INSERT and so on</td>
+</tr>
+<tr>
+<td>objectName</td>
+<td>check on objects like TABLE, PROCEDURE, VIEW and so on.</td>
+</tr>
+</tbody></table>
+<pre class="highlight java tab-java"><code>    <span class="c1">// to get list of all available Package bodies</span>
+    <span class="k">if</span> <span class="o">(</span><span class="n">connectionContext</span><span class="o">.</span><span class="na">getDbQueries</span><span class="o">().</span><span class="na">isPrivilegeExists</span><span class="o">(</span><span class="s">"USER1"</span><span class="o">,</span> <span class="s">"SELECT"</span><span class="o">,</span> <span class="s">"HRDB.USERS_IMPORT_TABLE"</span><span class="o">)</span> <span class="o">){</span>
+      <span class="c1">//do something</span>
+    <span class="o">}</span>
+</code></pre>
+<h2 id="issqlobjectexists">isSqlObjectExists()</h2>
+<pre class="highlight plaintext"><code>boolean isSqlObjectExists(String objectName, String objectType, boolean ignoreValidity)
+</code></pre>
+<table><thead>
+<tr>
+<th>Parameter</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>objectName</td>
+<td>a table name / view name / procedure name</td>
+</tr>
+<tr>
+<td>objectType</td>
+<td>a TABLE / PROCEDURE / VIEW / PACKAGE and so on</td>
+</tr>
+<tr>
+<td>ignoreValidity</td>
+<td>look only for valid object/compiled ones if parameter set to false</td>
+</tr>
+</tbody></table>
+<pre class="highlight java tab-java"><code>
+    <span class="c1">// to get list of all available Package bodies</span>
+    <span class="k">if</span> <span class="o">(</span><span class="n">connectionContext</span><span class="o">.</span><span class="na">getDbQueries</span><span class="o">().</span><span class="na">isSqlObjectExists</span><span class="o">(</span><span class="s">"HRDB.USERS"</span><span class="o">,</span> <span class="s">"TABLE"</span><span class="o">,</span> <span class="kc">false</span><span class="o">)</span> <span class="o">){</span>
+      <span class="c1">//do something</span>
+    <span class="o">}</span>
+</code></pre>
+<h2 id="istableexists">isTableExists()</h2>
 
+<p>It returns true/false for a given table exists or not</p>
+<pre class="highlight plaintext"><code>boolean isTableExists(String tableName)
+</code></pre><pre class="highlight java tab-java"><code>
+    <span class="c1">// to get list of all available Package bodies</span>
+    <span class="k">if</span> <span class="o">(</span><span class="n">connectionContext</span><span class="o">.</span><span class="na">getDbQueries</span><span class="o">().</span><span class="na">isTableExists</span><span class="o">(</span><span class="s">"HRDB.USERS"</span><span class="o">)</span> <span class="o">){</span>
+      <span class="c1">// do something</span>
+    <span class="o">}</span>
+</code></pre>
+<h2 id="isuserexists">isUserExists()</h2>
+
+<p>It returns true/false for a given database user exists or not</p>
+<pre class="highlight plaintext"><code>boolean     isUserExists(String userName)
+</code></pre><pre class="highlight java tab-java"><code>
+    <span class="c1">// to get list of all available Package bodies</span>
+    <span class="k">if</span> <span class="o">(</span><span class="n">connectionContext</span><span class="o">.</span><span class="na">getDbQueries</span><span class="o">().</span><span class="na">isUserExists</span><span class="o">(</span><span class="s">"TINTIN"</span><span class="o">)</span> <span class="o">){</span>
+      <span class="c1">// do something</span>
+    <span class="o">}</span>
 </code></pre>
 <h1 id="creating-test-data">Creating test data</h1>
 
