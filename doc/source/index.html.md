@@ -317,26 +317,90 @@ For example, you want to execute a query and the result set needs to collected a
     }
 
     List<User> users = connectionContext.getDbQueries().query(
-                         "SELECT USERNAME FROM HRDB.USERS",
-                          (rowNum, resultSet) -> {
-                            User user = new User(rowNum, resultSet.asString("USERNAME"));                            
-                            return user;
-                          }
-                        );
+                     "SELECT USERNAME FROM HRDB.USERS",                               √
+
+                      (rowNum, resultSet) -> {
+                        User user = new User(rowNum, resultSet.asString("USERNAME")); // iterator listener                             
+                        return user;
+                      }
+
+                    );
 
 // OR something like getting an array list of user names                      
     List<String> userNames = connectionContext.getDbQueries().query(
-                         "SELECT USERNAME FROM HRDB.USERS",
+
+                         "SELECT USERNAME FROM HRDB.USERS",         // sql
+
                           (rowNum, resultSet) -> {                                                       
+                            return resultSet.asString("USERNAME");  // iterator listener  
+                          }
+
+                        );
+```
+
+##  query() binding
+
+```code
+  <T> List<T>	query(String sql, ParameterBinding parameterBinding, DataRowListener<T> listener)   
+```
+
+Parameter | Description
+--------- | -----------
+sql | select query to be executed
+parameterBinding | binding parameters
+listener | an iterator listener that does call back for every row of a result set
+
+For example, you want to execute a query with binding parameter values and the result set needs to collected as list of objects / beans
+
+```java
+
+    List<String> userNames = connectionContext.getDbQueries().query(
+                         "SELECT USERNAME FROM HRDB.USERS WHERE USERID > ? AND USERID < ?",  //sql
+
+                          (parameterSets) -> {                               // parameter values binding
+                                     parameterSets.setInt(1, 77);  
+                                     parameterSets.setInt(2, 100);                                  
+                          },                                                          
+
+                         (rowNum, resultSet) -> {                           // iterator listener                                                         
                             return resultSet.asString("USERNAME");
                           }
                         );
 ```
 
 
+## queryInt()
+
+This method returns int value of the first column of the first row of a resultSet for the given sql query.
+Suitable for scalar queries like MAX(), MIN(), AVG(), COUNT() and so on  
+
+```code
+int queryInt(String sql, ParameterBinding parameterBinding)
+```
+
+Parameter | Description
+--------- | -----------
+sql | select query to be executed
+parameterBinding | binding parameters
+
+```java
+    int tableCount = connectionContext.getDbQueries().getInt("SELECT COUNT(*) FROM HRDB.USERS", null);
+
+    int tableCountWithRange = connectionContext.getDbQueries().getInt(
+                      "SELECT COUNT(*) FROM HRDB.USERS WHERE USERID > ? AND USERID < ?",  //sql
+
+                       (parameterSets) -> {                                   // parameter values binding
+                                  parameterSets.setInt(1, 77);  
+                                  parameterSets.setInt(2, 100);                                  
+                       }
+                     );
+
+```
+
+
 ## getCount()
 ```code
-getCount(String tableName)
+int getCount(String tableName)
 ```
 
 Parameter | Description
@@ -350,7 +414,7 @@ tableName | name of the table
 ## getMetaData()
 
 ```code
-getMetaData(String objectName)
+ColumnMetaDataCollection getMetaData(String objectName)
 ```
 
 Parameter | Description
