@@ -42,7 +42,7 @@ import org.qamatic.mintleaf.ColumnMetaDataCollection;
 import org.qamatic.mintleaf.Database;
 import org.qamatic.mintleaf.MintLeafException;
 import org.qamatic.mintleaf.core.ChangeSets;
-import org.qamatic.mintleaf.core.StandardQueries;
+import org.qamatic.mintleaf.core.stdqueries.StandardQueries;
 
 import static junit.framework.TestCase.assertTrue;
 import static org.junit.Assert.assertEquals;

@@ -37,7 +37,10 @@ package org.qamatic.mintleaf;
 
 import org.junit.Test;
 import org.qamatic.mintleaf.core.BasicDatabase;
-import org.qamatic.mintleaf.core.StandardQueries;
+import org.qamatic.mintleaf.core.stdqueries.StandardQueries;
+import org.qamatic.mintleaf.core.stdqueries.MSSqlQueries;
+import org.qamatic.mintleaf.core.stdqueries.MySqlQueries;
+import org.qamatic.mintleaf.core.stdqueries.OracleQueries;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;

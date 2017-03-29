@@ -33,13 +33,12 @@
  * /
  */
 
-package org.qamatic.mintleaf;
+package org.qamatic.mintleaf.core.stdqueries;
 
 import org.qamatic.mintleaf.Column;
 import org.qamatic.mintleaf.ColumnMetaDataCollection;
 import org.qamatic.mintleaf.ConnectionContext;
 import org.qamatic.mintleaf.MintLeafException;
-import org.qamatic.mintleaf.core.StandardQueries;
 
 import java.util.regex.Pattern;
 

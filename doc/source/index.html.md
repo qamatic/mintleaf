@@ -137,7 +137,7 @@ It's very easy to add changeset definition on your exising sql files if you woul
 
 ## Configuration file
 
-Version profile is a configuration file which contains list of changesets to be applied for a particular version of a database migration.  Typically you will have all versions from the beginning to the latest.   So the Mintleaf looks for a default version profile at the folder where it is being execution location.
+Version profile is a configuration file which contains list of changesets to be applied for a particular version of a database migration.  Typically you will have all versions from the beginning to the latest.   So the Mintleaf looks for a default version profile at the folder where it is being executed.
 
  **dbconfig.xml**
 

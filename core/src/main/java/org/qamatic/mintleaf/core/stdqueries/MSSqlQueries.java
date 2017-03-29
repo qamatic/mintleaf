@@ -33,10 +33,9 @@
  * /
  */
 
-package org.qamatic.mintleaf;
+package org.qamatic.mintleaf.core.stdqueries;
 
 import org.qamatic.mintleaf.ConnectionContext;
-import org.qamatic.mintleaf.core.StandardQueries;
 
 /**
  * Created by qamatic on 3/6/16.

@@ -40,7 +40,7 @@ import org.junit.Test;
 import org.qamatic.mintleaf.core.ChangeSets;
 import org.qamatic.mintleaf.core.DbConnectionContext;
 import org.qamatic.mintleaf.core.ExecuteQuery;
-import org.qamatic.mintleaf.core.StandardQueries;
+import org.qamatic.mintleaf.core.stdqueries.StandardQueries;
 
 import java.io.IOException;
 import java.sql.SQLException;

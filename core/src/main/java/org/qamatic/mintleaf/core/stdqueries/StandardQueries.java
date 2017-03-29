@@ -33,7 +33,7 @@
  * /
  */
 
-package org.qamatic.mintleaf.core;
+package org.qamatic.mintleaf.core.stdqueries;
 
 import org.qamatic.mintleaf.*;
 

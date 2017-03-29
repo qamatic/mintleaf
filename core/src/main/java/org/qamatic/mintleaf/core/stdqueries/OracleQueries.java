@@ -33,11 +33,11 @@
  * /
  */
 
-package org.qamatic.mintleaf;
+package org.qamatic.mintleaf.core.stdqueries;
 
 
+import org.qamatic.mintleaf.*;
 import org.qamatic.mintleaf.core.FluentJdbc;
-import org.qamatic.mintleaf.core.StandardQueries;
 
 import java.sql.SQLException;
 import java.util.List;

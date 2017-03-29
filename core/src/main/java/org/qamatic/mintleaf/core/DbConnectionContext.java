@@ -36,6 +36,7 @@
 package org.qamatic.mintleaf.core;
 
 import org.qamatic.mintleaf.*;
+import org.qamatic.mintleaf.core.stdqueries.StandardQueries;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
