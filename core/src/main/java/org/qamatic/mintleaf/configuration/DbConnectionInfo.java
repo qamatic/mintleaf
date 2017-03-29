@@ -51,7 +51,7 @@ public class DbConnectionInfo {
     private String url;
     private String username;
     private String password;
-    private List<String> connectionProperties = new ArrayList<>();
+    private ConnectionProperties connectionProperties = new ConnectionProperties();
 
 
     public DbConnectionInfo() {
@@ -114,11 +114,11 @@ public class DbConnectionInfo {
     }
 
 
-    public List<String> getConnectionProperties() {
+    public ConnectionProperties getConnectionProperties() {
         return connectionProperties;
     }
 
-    public void setConnectionProperties(List<String> connectionProperties) {
+    public void setConnectionProperties(ConnectionProperties connectionProperties) {
         this.connectionProperties = connectionProperties;
     }
 }

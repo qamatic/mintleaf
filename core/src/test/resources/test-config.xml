@@ -38,17 +38,19 @@
     <description>Database connections and Schema version configuration file</description>
     <databases>
         <id>abcdb</id>
-        <type>H2</type>
-        <url></url>
-        <connectionProperties>poolSize=100</connectionProperties>
+        <type>ORACLE</type>
+        <url>jdbc:oracle:thin:your-db-connection-url-here</url>
+        <username>your-user-name</username>
+        <password>your-password</password>
+        <connectionProperties>
+            <add key="poolsize" value="100"/>
+            <add key="internal_logon" value="sysdba"/>
+        </connectionProperties>
     </databases>
     <schemaVersions>
         <version>
             <id>1.0</id>
-            <changeSets>
-                create schema,
-                load seed data
-            </changeSets>
+            <changeSets>create schema, load seed data</changeSets>
             <scriptLocation>./path/*.sql</scriptLocation>
         </version>
     </schemaVersions>

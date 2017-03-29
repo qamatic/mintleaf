@@ -36,6 +36,7 @@ package org.qamatic.mintleaf;
 
 import org.junit.Test;
 import org.qamatic.mintleaf.configuration.ConfigurationRoot;
+import org.qamatic.mintleaf.configuration.Property;
 import org.qamatic.mintleaf.configuration.DbConnectionInfo;
 import org.qamatic.mintleaf.configuration.SchemaInfo;
 import org.qamatic.mintleaf.core.BaseSqlReader;
@@ -56,9 +57,13 @@ public class MigrationConfigTest {
 
 
         ConfigurationRoot dbConfiguration = new ConfigurationRoot();
-        DbConnectionInfo dbConnectionSetting = new DbConnectionInfo("abcdb", DbType.H2, "");
+        DbConnectionInfo dbConnectionSetting = new DbConnectionInfo("abcdb", DbType.ORACLE,
+                    "jdbc:oracle:thin:your-db-connection-url-here", "your-user-name", "your-password");
         dbConfiguration.getDatabases().add(dbConnectionSetting);
-        dbConnectionSetting.getConnectionProperties().add("poolSize=100");
+        dbConnectionSetting.getConnectionProperties().getItems().add(new Property("poolsize","100"));
+        dbConnectionSetting.getConnectionProperties().getItems().add(new Property("internal_logon","sysdba"));
+
+
         SchemaInfo versionSetting = new SchemaInfo();
         versionSetting.setId("1.0");
         versionSetting.setChangeSets("create schema, load seed data");

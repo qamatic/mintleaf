@@ -142,22 +142,24 @@ Version profile is a configuration file which contains list of changesets to be 
  **dbconfig.xml**
 
 ```xml
+
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <mintleaf version="1.0">
     <description>Database connections and Schema version configuration file</description>
     <databases>
         <id>abcdb</id>
-        <type>H2</type>
-        <url>jdbc:h2:file:./target/H2Db;mv_store=false;</url>
-        <connectionProperties>poolSize=100</connectionProperties>
+        <type>ORACLE</type>
+        <url>jdbc:oracle:thin:your-db-connection-url-here</url>
+        <username>your-user-name</username>
+        <password>your-password</password>
+        <connectionProperties>
+            <add key="poolsize" value="100"/>            
+        </connectionProperties>
     </databases>
     <schemaVersions>
         <version>
             <id>1.0</id>
-            <changeSets>
-                create schema,
-                load seed data
-            </changeSets>
+            <changeSets>create schema, load seed data</changeSets>
             <scriptLocation>./path/*.sql</scriptLocation>
         </version>
     </schemaVersions>
