@@ -38,10 +38,13 @@ package org.qamatic.mintleaf.configuration;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
+import javax.xml.bind.Unmarshaller;
 import javax.xml.bind.annotation.*;
+import java.io.StringReader;
 import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by qamatic on 3/6/16.
@@ -94,6 +97,29 @@ public class ConfigurationRoot {
 
     @Override
     public String toString() {
+        return serialize();
+    }
+
+    public static ConfigurationRoot deSerialize(String configXml, final Map<String, String> userArgs){
+        try {
+            JAXBContext jc = JAXBContext.newInstance(ConfigurationRoot.class);
+            Unmarshaller marshaller = jc.createUnmarshaller();
+            if (userArgs != null) {
+                ArgPatternHandler argPatternHandler = new ArgPatternHandler(configXml);
+                argPatternHandler.setUserProperties(userArgs);
+                configXml = argPatternHandler.getText();
+            }
+            StringReader sr = new StringReader(configXml);
+            ConfigurationRoot configurationRoot = (ConfigurationRoot) marshaller.unmarshal(sr);
+            return configurationRoot;
+
+        } catch (JAXBException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    private String serialize() {
         try {
             JAXBContext jc = JAXBContext.newInstance(ConfigurationRoot.class);
             Marshaller marshaller = jc.createMarshaller();

@@ -12,9 +12,7 @@ import java.util.regex.Pattern;
  */
 public class ArgPatternHandler {
 
-
     private static final MintLeafLogger logger = MintLeafLogger.getLogger(ArgPatternHandler.class);
-
 
     private final static Pattern p = Pattern.compile("\\$\\{(.+?)\\}", Pattern.CASE_INSENSITIVE | Pattern.MULTILINE);
     private String text;
@@ -38,6 +36,7 @@ public class ArgPatternHandler {
 
     public String getText() {
         if (!bDone){
+            bDone=true;
             relacewithUserVars();
             relacewithVMArgs();
             relacewithSystemArgs();
