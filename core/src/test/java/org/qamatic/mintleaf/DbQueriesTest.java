@@ -176,4 +176,13 @@ public class DbQueriesTest extends H2TestCase {
         }
     }
 
+    @Test
+    public void resultSetFirstTest() throws SQLException, IOException, MintLeafException {
+        try (ConnectionContext ctx = testDb.getNewConnection()) {
+            SqlResultSet resultSet = Mintleaf.selectQuery(ctx).withSql("Select count(*) from HRDB.USERS").buildSelect();
+            assertEquals(2, resultSet.first().getInt(1));
+        }
+    }
+
+
 }
