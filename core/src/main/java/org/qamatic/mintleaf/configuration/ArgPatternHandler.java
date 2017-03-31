@@ -38,20 +38,46 @@ public class ArgPatternHandler {
 
     public String getText() {
         if (!bDone){
-            Matcher m = p.matcher(this.text);
-            StringBuffer sb = new StringBuffer();
-            while(m.find()) {
-
-                if (getUserProperties().containsKey(m.group(1))){
-                    m.appendReplacement(sb, getUserProperties().get(m.group(1)));
-                } else{
-                    logger.warn("parameter value not found"+m.group(0));
-                }
-            }
-            m.appendTail(sb);
-            this.text = sb.toString();
+            relacewithUserVars();
+            relacewithVMArgs();
+            relacewithSystemArgs();
         }
         return this.text;
+    }
+
+    private void relacewithSystemArgs() {
+        Matcher m = p.matcher(this.text);
+        StringBuffer sb = new StringBuffer();
+        while(m.find()) {
+            if (System.getenv(m.group(1)) !=null){
+                m.appendReplacement(sb, System.getenv(m.group(1)));
+            }
+        }
+        m.appendTail(sb);
+        this.text = sb.toString();
+    }
+    private void relacewithVMArgs() {
+        Matcher m = p.matcher(this.text);
+        StringBuffer sb = new StringBuffer();
+        while(m.find()) {
+            if (System.getProperty(m.group(1)) !=null){
+                m.appendReplacement(sb, System.getProperty(m.group(1)));
+            }
+        }
+        m.appendTail(sb);
+        this.text = sb.toString();
+    }
+
+    private void relacewithUserVars() {
+        Matcher m = p.matcher(this.text);
+        StringBuffer sb = new StringBuffer();
+        while(m.find()) {
+            if (getUserProperties().containsKey(m.group(1))){
+                m.appendReplacement(sb, getUserProperties().get(m.group(1)));
+            }
+        }
+        m.appendTail(sb);
+        this.text = sb.toString();
     }
 
     @Override
