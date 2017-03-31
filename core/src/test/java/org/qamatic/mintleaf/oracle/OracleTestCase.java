@@ -47,10 +47,8 @@ import org.qamatic.mintleaf.core.ChangeSets;
 public class OracleTestCase {
 
 
-    private static Database oraSysDb;
-
     static {
-        oraSysDb = createOracleDbContext(System.getenv("TEST_DB_MASTER_USERNAME"),
+        Database oraSysDb = createOracleDbContext(System.getenv("TEST_DB_MASTER_USERNAME"),
                 System.getenv("TEST_DB_MASTER_PASSWORD"));
         try {
             ChangeSets.migrate(oraSysDb.getNewConnection(), "res:/oracle/hrdb-changesets/hrdb-schema-setup.sql", "create schema");

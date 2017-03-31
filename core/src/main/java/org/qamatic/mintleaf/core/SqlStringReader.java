@@ -61,7 +61,7 @@ public class SqlStringReader extends BaseSqlReader {
                     continue;
                 }
 
-                if ((getDelimiter().equals("/") && line.equals("/")) || (getDelimiter().equals(";") && line.endsWith(";"))) {
+                if (isDelimiter(line)) {
 
                     String[] splits = line.split(getDelimiter());
                     if (splits.length >= 1) {

@@ -46,55 +46,48 @@ import java.io.InputStreamReader;
 public class SqlStreamReader extends BaseSqlReader {
 
     private final static MintLeafLogger logger = MintLeafLogger.getLogger(SqlStreamReader.class);
-    protected InputStream mvstream;
+    protected InputStream inputStream;
+    protected String resource;
+    protected final StringBuilder childContents = new StringBuilder();
 
     public SqlStreamReader(InputStream stream) {
-        this.mvstream = stream;
+        this.inputStream = stream;
 
     }
 
-    protected boolean isDelimiterFound(String line) {
-        return (getDelimiter().equals("/") && line.equals("/") || getDelimiter().equals(";") && line.endsWith(";"));
+    public SqlStreamReader(String resource) {
+        this.resource = resource;
+
+    }
+
+
+    protected InputStream getInputStream() throws IOException {
+        if (this.inputStream == null) {
+            //logger.info(String.format("reading resource : %s", this.resource));
+            this.inputStream = BaseSqlReader.getInputStreamFromFile(this.resource);
+        }
+        return this.inputStream;
     }
 
     @Override
     public void read() throws MintLeafException {
-
-        StringBuilder childContents = new StringBuilder();
-        StringBuilder contents = new StringBuilder();
+        this.childContents.setLength(0);
         BufferedReader input = null;
+
         try {
             try {
-                input = new BufferedReader(new InputStreamReader(mvstream, "UTF-8"));
-
-                String line = null; // not declared within while loop
+                input = new BufferedReader(new InputStreamReader(getInputStream(), "UTF-8"));
+                String line = null;
                 while ((line = input.readLine()) != null) {
-
                     line = line.trim();
-
-                    if (line.startsWith("show err") || line.startsWith("--") && !line.contains("--@")) {
+                    if (line.length() == 0) {
                         continue;
                     }
 
-                    contents.append(line);
-                    contents.append("\n");
-
-                    if (isDelimiterFound(line)) {
-
-                        String[] splits = line.split(getDelimiter());
-                        if (splits.length >= 1) {
-                            childContents.append(splits[0]);
-                        }
-                        String sql = childContents.toString().trim();
-                        if (changeSetListener != null && sql.length() != 0) {
-                            changeSetListener.onChangeSetRead(new StringBuilder(sql), null);
-                        }
-                        childContents.setLength(0);
-
-                    } else {
-                        childContents.append(line);
-                        childContents.append("\n");
+                    if (!getLineProcessor().processInternal(line)){
+                        continue;
                     }
+
                 }
             } finally {
                 if (input != null) {
@@ -105,7 +98,36 @@ public class SqlStreamReader extends BaseSqlReader {
             logger.error(e);
             throw new MintLeafException(e);
         }
-        //return contents.toString();
+    }
+
+    protected SqlLineProcessor getLineProcessor() {
+        return line -> {
+                if (line.startsWith("show err") || line.startsWith("--") && !line.contains("--@")) {
+                    return false;
+                }
+
+                if (isDelimiter(line)) {
+
+                    String[] splits = line.split(getDelimiter());
+                    if (splits.length >= 1) {
+                        childContents.append(splits[0]);
+                    }
+                    String sql = childContents.toString().trim();
+                    if (changeSetListener != null && sql.length() != 0) {
+                        changeSetListener.onChangeSetRead(new StringBuilder(sql), null);
+                    }
+                    childContents.setLength(0);
+
+                } else {
+                    childContents.append(line);
+                    childContents.append("\n");
+                }
+                return true;
+            };
+    }
+
+    protected interface SqlLineProcessor {
+        boolean processInternal(String line) throws MintLeafException;
     }
 
 }

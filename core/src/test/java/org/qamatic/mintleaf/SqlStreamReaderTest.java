@@ -37,6 +37,7 @@ package org.qamatic.mintleaf;
 
 import org.junit.Test;
 import org.qamatic.mintleaf.core.SqlStreamReader;
+import org.qamatic.mintleaf.core.SqlStringReader;
 
 import java.io.InputStream;
 
@@ -49,26 +50,26 @@ public class SqlStreamReaderTest {
 
     @Test
     public void testDelimiterString() {
-        SqlStreamReader reader = new SqlStreamReader(null);
+        SqlStreamReader reader = new SqlStreamReader("nofile");
         reader.setDelimiter(";");
         assertEquals(";", reader.getDelimiter());
     }
 
     @Test
     public void testDelimiterStringDefault() {
-        SqlStreamReader reader = new SqlStreamReader(null);
+        SqlStreamReader reader = new SqlStreamReader("nofile");
         assertEquals("/", reader.getDelimiter());
     }
 
     @Test
     public void testSqlReaderListnerDefault() {
-        SqlStreamReader reader = new SqlStreamReader(null);
+        SqlStreamReader reader = new SqlStreamReader("nofile");
         assertNull(reader.getChangeSetListener());
     }
 
     @Test
     public void testSqlReaderListnerTest1() {
-        SqlStreamReader reader = new SqlStreamReader(null);
+        SqlStreamReader reader = new SqlStreamReader("nofile");
         reader.setChangeSetListener(new EmptyPackageReadListner());
         assertNotNull(reader.getChangeSetListener());
     }
@@ -94,12 +95,10 @@ public class SqlStreamReaderTest {
 
         expected.append("create or replace package EmptyPackage\n");
         expected.append("as\n");
-        expected.append("\n");
         expected.append("end EmptyPackage;");
         expected.append("create or replace\n");
         expected.append("package body EmptyPackage\n");
         expected.append("as\n");
-        expected.append("\n");
         expected.append("end EmptyPackage;");
 
         assertEquals(expected.toString(), actual.toString());
@@ -121,7 +120,6 @@ public class SqlStreamReaderTest {
 
         expected.append("create or replace package EmptyPackage\n");
         expected.append("as\n");
-        expected.append("\n");
         expected.append("end EmptyPackage;");
 
         assertEquals(expected.toString(), actual_emptypackage_block1);
@@ -130,13 +128,11 @@ public class SqlStreamReaderTest {
         expected.append("create or replace\n");
         expected.append("package body EmptyPackage\n");
         expected.append("as\n");
-        expected.append("\n");
         expected.append("end EmptyPackage;");
 
         assertEquals(expected.toString(), actual_emptypackage_block2);
 
     }
-
 
     private class EmptyPackageReadListner implements ChangeSetListener {
 

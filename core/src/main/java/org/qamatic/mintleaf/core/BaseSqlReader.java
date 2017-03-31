@@ -50,6 +50,15 @@ public abstract class BaseSqlReader implements SqlReader {
     protected ChangeSetListener changeSetListener;
     private String delimiter = "/";
 
+    protected boolean isDelimiter(String line) {
+        //external config needed.
+        return ((getDelimiter().equals("/") && line.equals("/")) ||
+                (getDelimiter().equals(";") && line.endsWith(";")) ||
+                (getDelimiter().equalsIgnoreCase("GO") && line.equalsIgnoreCase("GO"))
+        );
+    }
+
+
     public static InputStream getInputStreamFromFile(String resourceOrFileName) {
         InputStream stream = null;
         logger.info("reading file: " + resourceOrFileName);
@@ -77,7 +86,7 @@ public abstract class BaseSqlReader implements SqlReader {
 
     @Override
     public void setDelimiter(String delimStr) {
-        this.delimiter = delimStr;
+        this.delimiter = delimStr.toUpperCase();
 
     }
 

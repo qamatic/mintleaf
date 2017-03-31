@@ -55,6 +55,7 @@ public class SqlChangeSets extends BaseSqlScript {
 
     @Override
     public void apply() throws MintLeafException {
+        this.changeSetReader.read();
         for (String changeSetName : changeSetsToApply) {
             if (changeSetReader.getChangeSets().containsKey(changeSetName.trim())) {
                 final ChangeSet section = changeSetReader.getChangeSet(changeSetName.trim());

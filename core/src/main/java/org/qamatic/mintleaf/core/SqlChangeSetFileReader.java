@@ -46,22 +46,18 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.HashMap;
 
-public class SqlChangeSetFileReader extends BaseSqlReader implements ChangeSetReader {
+public class SqlChangeSetFileReader extends SqlStreamReader implements ChangeSetReader {
 
     private static final MintLeafLogger logger = MintLeafLogger.getLogger(SqlChangeSetFileReader.class);
     private final HashMap<String, ChangeSet> changeSets = new HashMap<>();
-    protected InputStream inputStream;
-    private String resource;
-    private boolean bRead;
+    private ChangeSet currentChangeSet;
 
     public SqlChangeSetFileReader(InputStream stream) {
-        this.inputStream = stream;
-
+        super(stream);
     }
 
     public SqlChangeSetFileReader(String resource) {
-        this.resource = resource;
-
+        super(resource);
     }
 
     @Override
@@ -71,90 +67,58 @@ public class SqlChangeSetFileReader extends BaseSqlReader implements ChangeSetRe
 
     @Override
     public HashMap<String, ChangeSet> getChangeSets() {
-
-        try {
-            read();
-        } catch (Exception e) {
-            new MintLeafException(e);
-        }
-
         return changeSets;
-    }
-
-    private InputStream getInputStream() throws IOException {
-        if (this.inputStream == null) {
-            //logger.info(String.format("reading resource : %s", this.resource));
-            this.inputStream = BaseSqlReader.getInputStreamFromFile(this.resource);
-        }
-        return this.inputStream;
     }
 
     @Override
     public void read() throws MintLeafException {
+        this.changeSets.clear();
 
-        if (bRead) {
-            return;
-        }
-        bRead = true;
-        StringBuilder childContents = new StringBuilder();
-        BufferedReader input = null;
-        try {
-            input = new BufferedReader(new InputStreamReader(getInputStream(), "UTF-8"));
-            ChangeSet currentChangeSet = null;
-            try {
-                String line = null; // not declared within while loop
+        super.read();
 
-                while ((line = input.readLine()) != null) {
-                    line = line.trim();
-                    if (line.length() == 0) {
-                        continue;
-                    }
-
-                    if ((line.trim().contains("<ChangeSet")) && ChangeSet.xmlToChangeSet(line) != null) {
-                        if (currentChangeSet == null) {
-                            currentChangeSet = ChangeSet.xmlToChangeSet(line);
-                        }
-                        String sql = childContents.toString().trim();
-                        if (sql.length() != 0) {
-                            if (changeSetListener != null) {
-                                changeSetListener.onChangeSetRead(new StringBuilder(sql), currentChangeSet);
-                            }
-                            currentChangeSet.setChangeSetSource(sql);
-                            getChangeSets().put(currentChangeSet.getId(), currentChangeSet);
-                            currentChangeSet = ChangeSet.xmlToChangeSet(line);
-                        }
-                        childContents.setLength(0);
-                        continue;
-                    }
-                    childContents.append(line);
-                    childContents.append("\n");
-                }
-            } finally {
-                input.close();
+        String sql = childContents.toString().trim();
+        if ((currentChangeSet != null) && (currentChangeSet.getId() != null) && (currentChangeSet.getId().length() != 0) && (sql.length() != 0)) {
+            if (changeSetListener != null) {
+                changeSetListener.onChangeSetRead(new StringBuilder(sql), null);
             }
-
-            String sql = childContents.toString().trim();
-            if ((currentChangeSet != null) && (currentChangeSet.getId() != null) && (currentChangeSet.getId().length() != 0) && (sql.length() != 0)) {
-                if (changeSetListener != null) {
-                    changeSetListener.onChangeSetRead(new StringBuilder(sql), null);
-                }
-                currentChangeSet.setChangeSetSource(sql);
-                getChangeSets().put(currentChangeSet.getId(), currentChangeSet);
-            }
-        } catch (IOException e) {
-            logger.error("error reading changeset ", e);
-            throw new MintLeafException(e);
+            currentChangeSet.setChangeSetSource(sql);
+            getChangeSets().put(currentChangeSet.getId(), currentChangeSet);
         }
+    }
+
+    @Override
+    protected SqlLineProcessor getLineProcessor() {
+        return line -> {
+            if ((line.trim().contains("<ChangeSet")) && ChangeSet.xmlToChangeSet(line) != null) {
+                if (currentChangeSet == null) {
+                    currentChangeSet = ChangeSet.xmlToChangeSet(line);
+                }
+                String sql = childContents.toString().trim();
+                if (sql.length() != 0) {
+                    if (changeSetListener != null) {
+                        changeSetListener.onChangeSetRead(new StringBuilder(sql), currentChangeSet);
+                    }
+                    currentChangeSet.setChangeSetSource(sql);
+                    getChangeSets().put(currentChangeSet.getId(), currentChangeSet);
+                    currentChangeSet = ChangeSet.xmlToChangeSet(line);
+                }
+                childContents.setLength(0);
+                return false;
+            }
+            childContents.append(line);
+            childContents.append("\n");
+            return true;
+        };
     }
 
     @Override
     public String getDelimiter() {
-        throw new UnsupportedOperationException("changeset reader does not support delimiters but declared as part changeset");
+        throw new UnsupportedOperationException("Not applicable");
     }
 
     @Override
     public void setDelimiter(String delimStr) {
-        throw new UnsupportedOperationException("changeset reader does not support delimiters but declared as part changeset");
+        throw new UnsupportedOperationException("Not applicable");
     }
 
 }
