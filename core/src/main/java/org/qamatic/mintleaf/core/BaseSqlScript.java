@@ -64,8 +64,6 @@ public abstract class BaseSqlScript implements SqlScript {
         return changeSetListener;
     }
 
-    protected abstract SqlReader getReader();
-
     protected void execute(SqlReader reader) throws MintLeafException {
         reader.setChangeSetListener(getReadListener());
         reader.read();

@@ -51,7 +51,7 @@ public class OracleTestCase {
         Database oraSysDb = createOracleDbContext(System.getenv("TEST_DB_MASTER_USERNAME"),
                 System.getenv("TEST_DB_MASTER_PASSWORD"));
         try {
-            ChangeSets.migrate(oraSysDb.getNewConnection(), "res:/oracle/hrdb-changesets/hrdb-schema-setup.sql", "create schema");
+            ChangeSets.migrate(oraSysDb.getNewConnection(), "res:/oracle/hrdb-changesets/hrdb-schema-setup.sql", "create users");
         } catch (MintLeafException e) {
             MintLeafException.throwException(e.getMessage());
         }

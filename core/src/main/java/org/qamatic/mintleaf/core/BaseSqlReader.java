@@ -44,6 +44,7 @@ import org.qamatic.mintleaf.configuration.ArgPatternHandler;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
+import java.util.HashMap;
 import java.util.Map;
 
 public abstract class BaseSqlReader implements SqlReader {
@@ -103,10 +104,16 @@ public abstract class BaseSqlReader implements SqlReader {
         this.changeSetListener = changeSetListener;
     }
 
+    @Override
     public Map<String, String> getUserVariableMapping() {
+        if (userVariableMapping == null)
+        {
+            userVariableMapping = new HashMap<>();
+        }
         return userVariableMapping;
     }
 
+    @Override
     public void setUserVariableMapping(Map<String, String> userVariableMapping) {
         this.userVariableMapping = userVariableMapping;
     }

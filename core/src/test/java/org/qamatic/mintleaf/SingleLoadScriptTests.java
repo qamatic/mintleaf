@@ -36,6 +36,7 @@
 package org.qamatic.mintleaf;
 
 import org.junit.Assert;
+import org.junit.BeforeClass;
 import org.junit.Test;
 import org.qamatic.mintleaf.core.SqlScriptFile;
 
@@ -48,11 +49,25 @@ import java.sql.SQLException;
 public class SingleLoadScriptTests extends H2TestCase {
 
 
-    @Test
-    public void simpleScriptLoad() throws SQLException, IOException, MintLeafException {
+    @BeforeClass
+    public static void setup() throws MintLeafException {
         SqlScript script = new SqlScriptFile(testDb.getNewConnection(), "res:/h2singlescript.sql", ";");
         script.apply();
+    }
 
+    @Test
+    public void simpleScriptLoad() throws SQLException, IOException, MintLeafException {
+
+        Assert.assertTrue(testDbQueries.isTableExists("HRDB.USERS"));
+    }
+
+    @Test
+    public void simpleScriptLoadWithVar() throws  MintLeafException {
+
+        SqlScript script = new SqlScriptFile(testDb.getNewConnection(), "res:/variable-changesets.sql", ";");
+        script.getReader().getUserVariableMapping().put("user_id", "1");
+        script.getReader().getUserVariableMapping().put("user_name", "TINTIN");
+        script.apply();
         Assert.assertTrue(testDbQueries.isTableExists("HRDB.USERS"));
     }
 

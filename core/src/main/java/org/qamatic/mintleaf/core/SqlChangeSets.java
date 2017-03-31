@@ -61,7 +61,7 @@ public class SqlChangeSets extends BaseSqlScript {
                 final ChangeSet section = changeSetReader.getChangeSet(changeSetName.trim());
                 SqlScript script = new BaseSqlScript(connectionContext) {
                     @Override
-                    protected SqlReader getReader() {
+                    public SqlReader getReader() {
                         SqlReader reader = new SqlStringReader(section.getChangeSetSource());
                         reader.setDelimiter(section.getDelimiter());
                         return reader;
@@ -87,7 +87,7 @@ public class SqlChangeSets extends BaseSqlScript {
     }
 
     @Override
-    protected SqlReader getReader() {
+    public SqlReader getReader() {
         return this.changeSetReader;
     }
 }

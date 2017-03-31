@@ -49,6 +49,7 @@ public class SqlScriptFile extends BaseSqlScript {
     private final static MintLeafLogger logger = MintLeafLogger.getLogger(SqlScriptFile.class);
     private final String filename;
     private final String delimiter;
+    private SqlReader reader;
 
     public SqlScriptFile(ConnectionContext connectionContext, String filename, String delimiter) {
         super(connectionContext);
@@ -57,12 +58,13 @@ public class SqlScriptFile extends BaseSqlScript {
     }
 
     @Override
-    protected SqlReader getReader() {
-        InputStream stream = BaseSqlReader.getInputStreamFromFile(this.filename);
-
-        SqlReader reader = new SqlStreamReader(stream);
-        reader.setDelimiter(this.delimiter);
-        return reader;
+    public SqlReader getReader() {
+        if (this.reader == null) {
+            InputStream stream = BaseSqlReader.getInputStreamFromFile(this.filename);
+            this.reader = new SqlStreamReader(stream);
+            this.reader.setDelimiter(this.delimiter);
+        }
+        return this.reader;
     }
 
 

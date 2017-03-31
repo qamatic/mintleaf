@@ -1,4 +1,4 @@
--- <ChangeSet id="create schema" delimiter="/" />
+-- <ChangeSet id="create users" delimiter="/" />
 
 DECLARE
 
@@ -35,6 +35,7 @@ DECLARE
 BEGIN
   CREATE_TESTUSER('HRDB1', 'HRDB1');
   CREATE_TESTUSER('HRDB2', 'HRDB2');
+  CREATE_TESTUSER('PAYROLL1', 'PAYROLL1');
 END;
 
 /

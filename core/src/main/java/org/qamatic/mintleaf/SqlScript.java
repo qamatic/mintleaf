@@ -45,4 +45,6 @@ public interface SqlScript extends AutoCloseable {
     default void close() throws MintLeafException {
 
     }
+
+    SqlReader getReader();
 }

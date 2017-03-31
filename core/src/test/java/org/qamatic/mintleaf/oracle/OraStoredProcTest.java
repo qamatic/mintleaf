@@ -33,53 +33,41 @@
  * /
  */
 
-package org.qamatic.mintleaf;
+package org.qamatic.mintleaf.oracle;
 
 import org.junit.Assert;
+import org.junit.BeforeClass;
 import org.junit.Test;
-import org.qamatic.mintleaf.core.SqlStringReader;
+import org.qamatic.mintleaf.ColumnMetaDataCollection;
+import org.qamatic.mintleaf.Database;
+import org.qamatic.mintleaf.MintLeafException;
+import org.qamatic.mintleaf.core.ChangeSets;
+import org.qamatic.mintleaf.core.stdqueries.StandardQueries;
 
-import java.util.HashMap;
-import java.util.Map;
-
+import static junit.framework.TestCase.assertTrue;
 import static org.junit.Assert.assertEquals;
 
-public class MultiPartTest {
+/**
+ * Created by qamatic on 3/4/16.
+ */
 
-    @Test
-    public void testChangeSet1() {
-        String serialize = new ChangeSet().toString();
-        Assert.assertTrue(serialize, serialize.contains("<changeSet id=\"\" delimiter=\"\"/>"));
+public class OraStoredProcTest extends OracleTestCase {
+
+    private static Database hrdb2 = createOracleDbContext("PAYROLL1", "PAYROLL1");
+
+    @BeforeClass
+    public static void migrate() throws MintLeafException {
+
+        //do some DDL
+        ChangeSets.migrate(hrdb2.getNewConnection(), "res:/oracle/payroll-changesets/payroll-ddl.sql", "create countries, few countries");
     }
 
     @Test
-    public void testChangeSet2() {
-        String serialize = new ChangeSet("test", ";", "").toString();
-        Assert.assertTrue(serialize, serialize.contains("<changeSet id=\"test\" delimiter=\";\"/>"));
+    public void testCountriesCount() throws MintLeafException {
+
+        assertEquals(12, hrdb2.getNewConnection().getDbQueries().getCount("PAYROLL1.COUNTRIES"));
+
     }
 
-    @Test
-    public void testMultiPartTagFromXml() {
-        String xml = "<changeSet id=\"part1\" delimiter=\"/\" />";
-        ChangeSet detail = ChangeSet.xmlToChangeSet(xml);
-        assertEquals("part1", detail.getId());
-        assertEquals("/", detail.getDelimiter());
-    }
-
-
-    @Test
-    public void testSqlReaderWithVariablesTest() throws MintLeafException {
-        SqlStringReader reader = new SqlStringReader("INSERT INTO ${table_name} (USERID, USERNAME) VALUES (9, 'TN');");
-        reader.getUserVariableMapping().put("table_name", "HRDB.USERS");
-        reader.setDelimiter(";");
-        final StringBuilder actual = new StringBuilder();
-
-        reader.setChangeSetListener((sql, changeSetInfo) -> {
-            actual.append(sql);
-        });
-        reader.read();
-
-        assertEquals("INSERT INTO HRDB.USERS (USERID, USERNAME) VALUES (9, 'TN')", actual.toString());
-    }
 
 }

@@ -35,6 +35,8 @@
 
 package org.qamatic.mintleaf;
 
+import java.util.Map;
+
 public interface SqlReader {
     String getDelimiter();
 
@@ -45,4 +47,8 @@ public interface SqlReader {
     void setChangeSetListener(ChangeSetListener mvreaderListener);
 
     void read() throws MintLeafException;
+
+    Map<String, String> getUserVariableMapping();
+
+    void setUserVariableMapping(Map<String, String> userVariableMapping);
 }
