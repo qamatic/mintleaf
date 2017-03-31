@@ -30,8 +30,9 @@ public class ArgPatternHandler {
         return userProperties;
     }
 
-    public void setUserProperties(Map<String, String> userProperties) {
+    public ArgPatternHandler withUserProperties(Map<String, String> userProperties) {
         this.userProperties = userProperties;
+        return this;
     }
 
     public String getText() {

@@ -39,16 +39,19 @@ import org.qamatic.mintleaf.ChangeSetListener;
 import org.qamatic.mintleaf.MintLeafException;
 import org.qamatic.mintleaf.MintLeafLogger;
 import org.qamatic.mintleaf.SqlReader;
+import org.qamatic.mintleaf.configuration.ArgPatternHandler;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
+import java.util.Map;
 
 public abstract class BaseSqlReader implements SqlReader {
 
     private final static MintLeafLogger logger = MintLeafLogger.getLogger(BaseSqlReader.class);
     protected ChangeSetListener changeSetListener;
     private String delimiter = "/";
+    private Map<String, String> userVariableMapping;
 
     protected boolean isDelimiter(String line) {
         //external config needed.
@@ -87,7 +90,6 @@ public abstract class BaseSqlReader implements SqlReader {
     @Override
     public void setDelimiter(String delimStr) {
         this.delimiter = delimStr.toUpperCase();
-
     }
 
     @Override
@@ -99,5 +101,13 @@ public abstract class BaseSqlReader implements SqlReader {
 
     public void setChangeSetListener(ChangeSetListener changeSetListener) {
         this.changeSetListener = changeSetListener;
+    }
+
+    public Map<String, String> getUserVariableMapping() {
+        return userVariableMapping;
+    }
+
+    public void setUserVariableMapping(Map<String, String> userVariableMapping) {
+        this.userVariableMapping = userVariableMapping;
     }
 }

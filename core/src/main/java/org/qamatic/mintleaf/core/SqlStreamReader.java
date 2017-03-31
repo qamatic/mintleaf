@@ -37,6 +37,7 @@ package org.qamatic.mintleaf.core;
 
 import org.qamatic.mintleaf.MintLeafException;
 import org.qamatic.mintleaf.MintLeafLogger;
+import org.qamatic.mintleaf.configuration.ArgPatternHandler;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -112,7 +113,11 @@ public class SqlStreamReader extends BaseSqlReader {
                     if (splits.length >= 1) {
                         childContents.append(splits[0]);
                     }
-                    String sql = childContents.toString().trim();
+
+                    String sql = new ArgPatternHandler(childContents.toString().trim()).
+                            withUserProperties(this.getUserVariableMapping()).
+                            getText();
+
                     if (changeSetListener != null && sql.length() != 0) {
                         changeSetListener.onChangeSetRead(new StringBuilder(sql), null);
                     }

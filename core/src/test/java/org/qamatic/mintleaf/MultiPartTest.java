@@ -37,6 +37,10 @@ package org.qamatic.mintleaf;
 
 import org.junit.Assert;
 import org.junit.Test;
+import org.qamatic.mintleaf.core.SqlStringReader;
+
+import java.util.HashMap;
+import java.util.Map;
 
 import static org.junit.Assert.assertEquals;
 
@@ -62,5 +66,22 @@ public class MultiPartTest {
         assertEquals("/", detail.getDelimiter());
     }
 
+
+    @Test
+    public void testSqlReaderWithVariablesTest() throws MintLeafException {
+        SqlStringReader reader = new SqlStringReader("INSERT INTO ${table_name} (USERID, USERNAME) VALUES (9, 'TN');");
+        Map<String, String> userVars = new HashMap<>();
+        userVars.put("table_name", "HRDB.USERS");
+        reader.setUserVariableMapping(userVars);
+        reader.setDelimiter(";");
+        final StringBuilder actual = new StringBuilder();
+
+        reader.setChangeSetListener((sql, changeSetInfo) -> {
+            actual.append(sql);
+        });
+        reader.read();
+
+        assertEquals("INSERT INTO HRDB.USERS (USERID, USERNAME) VALUES (9, 'TN')", actual.toString());
+    }
 
 }

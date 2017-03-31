@@ -69,7 +69,7 @@ public class ConfigurationRoot {
             Unmarshaller marshaller = jc.createUnmarshaller();
             if (userArgs != null) {
                 ArgPatternHandler argPatternHandler = new ArgPatternHandler(configXml);
-                argPatternHandler.setUserProperties(userArgs);
+                argPatternHandler.withUserProperties(userArgs);
                 configXml = argPatternHandler.getText();
             }
             StringReader sr = new StringReader(configXml);

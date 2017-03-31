@@ -39,6 +39,7 @@ import org.qamatic.mintleaf.ChangeSet;
 import org.qamatic.mintleaf.ChangeSetReader;
 import org.qamatic.mintleaf.MintLeafException;
 import org.qamatic.mintleaf.MintLeafLogger;
+import org.qamatic.mintleaf.configuration.ArgPatternHandler;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -93,7 +94,9 @@ public class SqlChangeSetFileReader extends SqlStreamReader implements ChangeSet
                 if (currentChangeSet == null) {
                     currentChangeSet = ChangeSet.xmlToChangeSet(line);
                 }
-                String sql = childContents.toString().trim();
+                String sql = new ArgPatternHandler(childContents.toString().trim()).
+                        withUserProperties(this.getUserVariableMapping()).
+                        getText();
                 if (sql.length() != 0) {
                     if (changeSetListener != null) {
                         changeSetListener.onChangeSetRead(new StringBuilder(sql), currentChangeSet);
