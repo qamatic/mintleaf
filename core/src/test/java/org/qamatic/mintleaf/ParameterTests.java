@@ -26,7 +26,13 @@ public class ParameterTests {
     @Test
     public void substitueAntVarSysVar(){
         ArgPatternHandler argPatternHandler = new ArgPatternHandler("select ${JAVA_HOME}");
-
         assertTrue(!argPatternHandler.getText().contains("JAVA_HOME"));
+    }
+
+    @Test
+    public void substitueAntVarSysVarOverUser(){
+        ArgPatternHandler argPatternHandler = new ArgPatternHandler("select ${JAVA_HOME}");
+        argPatternHandler.getUserProperties().put("JAVA_HOME", "mytable");
+        assertEquals("select mytable",argPatternHandler.getText());
     }
 }
