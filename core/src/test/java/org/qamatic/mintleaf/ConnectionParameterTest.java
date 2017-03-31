@@ -36,7 +36,6 @@
 package org.qamatic.mintleaf;
 
 import org.junit.Test;
-import org.qamatic.mintleaf.DbSettings;
 import org.qamatic.mintleaf.core.JdbcDriverSource;
 
 import static org.junit.Assert.assertEquals;

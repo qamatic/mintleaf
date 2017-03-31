@@ -19,12 +19,12 @@ public class ArgPatternHandler {
     private Map<String, String> userProperties;
     private boolean bDone;
 
-    public ArgPatternHandler(String text){
+    public ArgPatternHandler(String text) {
         this.text = text;
     }
 
     public Map<String, String> getUserProperties() {
-        if (userProperties == null){
+        if (userProperties == null) {
             userProperties = new HashMap<>();
         }
         return userProperties;
@@ -35,8 +35,8 @@ public class ArgPatternHandler {
     }
 
     public String getText() {
-        if (!bDone){
-            bDone=true;
+        if (!bDone) {
+            bDone = true;
             relacewithUserVars();
             relacewithVMArgs();
             relacewithSystemArgs();
@@ -47,19 +47,20 @@ public class ArgPatternHandler {
     private void relacewithSystemArgs() {
         Matcher m = p.matcher(this.text);
         StringBuffer sb = new StringBuffer();
-        while(m.find()) {
-            if (System.getenv(m.group(1)) !=null){
+        while (m.find()) {
+            if (System.getenv(m.group(1)) != null) {
                 m.appendReplacement(sb, System.getenv(m.group(1)));
             }
         }
         m.appendTail(sb);
         this.text = sb.toString();
     }
+
     private void relacewithVMArgs() {
         Matcher m = p.matcher(this.text);
         StringBuffer sb = new StringBuffer();
-        while(m.find()) {
-            if (System.getProperty(m.group(1)) !=null){
+        while (m.find()) {
+            if (System.getProperty(m.group(1)) != null) {
                 m.appendReplacement(sb, System.getProperty(m.group(1)));
             }
         }
@@ -70,8 +71,8 @@ public class ArgPatternHandler {
     private void relacewithUserVars() {
         Matcher m = p.matcher(this.text);
         StringBuffer sb = new StringBuffer();
-        while(m.find()) {
-            if (getUserProperties().containsKey(m.group(1))){
+        while (m.find()) {
+            if (getUserProperties().containsKey(m.group(1))) {
                 m.appendReplacement(sb, getUserProperties().get(m.group(1)));
             }
         }
@@ -81,7 +82,7 @@ public class ArgPatternHandler {
 
     @Override
     public String toString() {
-        return  getText();
+        return getText();
     }
 
 

@@ -4,12 +4,9 @@ import org.junit.Test;
 import org.qamatic.mintleaf.configuration.ArgPatternHandler;
 import org.qamatic.mintleaf.configuration.ConfigurationRoot;
 import org.qamatic.mintleaf.configuration.DbConnectionInfo;
-import org.qamatic.mintleaf.configuration.Property;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import static junit.framework.TestCase.assertEquals;
 import static junit.framework.TestCase.assertTrue;
@@ -20,36 +17,35 @@ import static junit.framework.TestCase.assertTrue;
 public class ParameterTests {
 
     @Test
-    public void substitueAntVar(){
+    public void substitueAntVar() {
         ArgPatternHandler argPatternHandler = new ArgPatternHandler("select ${col_name},${col_name} from ${table_name}");
         argPatternHandler.getUserProperties().put("col_name", "mycol");
         argPatternHandler.getUserProperties().put("table_name", "mytable");
-        assertEquals("select mycol,mycol from mytable",argPatternHandler.getText());
+        assertEquals("select mycol,mycol from mytable", argPatternHandler.getText());
     }
 
-
     @Test
-    public void substitueAntVarSysVar(){
+    public void substitueAntVarSysVar() {
         ArgPatternHandler argPatternHandler = new ArgPatternHandler("select ${JAVA_HOME}");
         assertTrue(!argPatternHandler.getText().contains("JAVA_HOME"));
     }
 
     @Test
-    public void substitueAntVarSysVarOverUser(){
+    public void substitueAntVarSysVarOverUser() {
         ArgPatternHandler argPatternHandler = new ArgPatternHandler("select ${JAVA_HOME}");
         argPatternHandler.getUserProperties().put("JAVA_HOME", "mytable");
-        assertEquals("select mytable",argPatternHandler.getText());
+        assertEquals("select mytable", argPatternHandler.getText());
     }
 
     @Test
-    public void substitueAntVarSysVarOverVmArg(){
+    public void substitueAntVarSysVarOverVmArg() {
         ArgPatternHandler argPatternHandler = new ArgPatternHandler("select ${JAVA_HOME}");
-        System.setProperty("JAVA_HOME","VMArgMytable");
-        assertEquals("select VMArgMytable",argPatternHandler.getText());
+        System.setProperty("JAVA_HOME", "VMArgMytable");
+        assertEquals("select VMArgMytable", argPatternHandler.getText());
     }
 
     @Test
-    public void dbconfigVarTest(){
+    public void dbconfigVarTest() {
         ConfigurationRoot dbConfiguration = new ConfigurationRoot();
         dbConfiguration.getDatabases().add(new DbConnectionInfo("abcdb", DbType.ORACLE,
                 "jdbc:oracle:thin:${url}", "${user-name}", "${password}"));
@@ -63,7 +59,7 @@ public class ParameterTests {
         assertEquals("<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?><mintleaf version=\"1.0\"><description>Database connections and Schema version configuration file</description>" +
                 "<databases><id>abcdb</id><type>ORACLE</type><url>jdbc:oracle:thin:10.2.1.1:1044</url>" +
                 "<username>testuser</username><password>testpassword</password><connectionProperties/></databases>" +
-                "<schemaVersions/></mintleaf>",newConfig.toString());
+                "<schemaVersions/></mintleaf>", newConfig.toString());
     }
 }
 

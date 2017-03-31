@@ -38,8 +38,6 @@ package org.qamatic.mintleaf.configuration;
 import org.qamatic.mintleaf.DbType;
 
 import javax.xml.bind.annotation.XmlType;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by qamatic on 3/6/16.

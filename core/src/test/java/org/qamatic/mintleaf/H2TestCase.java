@@ -36,9 +36,6 @@
 package org.qamatic.mintleaf;
 
 import org.junit.BeforeClass;
-import org.qamatic.mintleaf.Database;
-import org.qamatic.mintleaf.DbQueries;
-import org.qamatic.mintleaf.Mintleaf;
 import org.qamatic.mintleaf.core.JdbcDriverSource;
 
 /**

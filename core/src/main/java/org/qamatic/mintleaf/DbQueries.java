@@ -38,7 +38,6 @@ package org.qamatic.mintleaf;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import java.util.List;
-import java.util.regex.Pattern;
 
 public interface DbQueries extends AutoCloseable {
 
@@ -105,7 +104,6 @@ public interface DbQueries extends AutoCloseable {
     default boolean isColumnExists(String tableName, String columnName) throws MintLeafException {
         throw new NotImplementedException();
     }
-
 
 
 }

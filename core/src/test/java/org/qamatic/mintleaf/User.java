@@ -35,10 +35,6 @@
 
 package org.qamatic.mintleaf;
 
-import org.qamatic.mintleaf.Row;
-import org.qamatic.mintleaf.MetaDataCollection;
-import org.qamatic.mintleaf.MintLeafException;
-
 /**
  * Created by QAmatic Team on 3/11/17.
  */

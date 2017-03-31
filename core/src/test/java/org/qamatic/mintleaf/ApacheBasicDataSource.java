@@ -36,7 +36,6 @@
 package org.qamatic.mintleaf;
 
 import org.apache.commons.dbcp.BasicDataSource;
-import org.qamatic.mintleaf.DriverSource;
 
 /**
  * Created by qamatic on 3/5/16.

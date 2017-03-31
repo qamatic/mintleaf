@@ -57,7 +57,7 @@ public class OracleQueries extends StandardQueries {
     public boolean isSqlObjectExists(String objectName, String objectType, boolean ignoreValidity) throws MintLeafException {
         final String[] objectNames = utilsSplitDottedObjectNames(objectName.toUpperCase());
         String validSql = ignoreValidity ? "" : "status='VALID' AND ";
-        int cnt = queryInt("SELECT COUNT(*) FROM ALL_OBJECTS WHERE "+validSql + "OWNER = ? AND object_name = ? AND Object_Type = ?", parameterSets -> {
+        int cnt = queryInt("SELECT COUNT(*) FROM ALL_OBJECTS WHERE " + validSql + "OWNER = ? AND object_name = ? AND Object_Type = ?", parameterSets -> {
             parameterSets.setString(1, objectNames[0]);
             parameterSets.setString(2, objectNames[1]);
             parameterSets.setString(3, objectType);

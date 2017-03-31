@@ -37,7 +37,6 @@ package org.qamatic.mintleaf;
 
 import org.junit.Assert;
 import org.junit.Test;
-import org.qamatic.mintleaf.ChangeSet;
 
 import static org.junit.Assert.assertEquals;
 

@@ -12,11 +12,11 @@ public class Property {
     @XmlAttribute
     private String value;
 
-    public Property(){
+    public Property() {
 
     }
 
-    public Property(String key, String value){
+    public Property(String key, String value) {
 
         this.key = key;
         this.value = value;

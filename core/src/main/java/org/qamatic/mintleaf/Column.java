@@ -91,12 +91,12 @@ public class Column {
         return nullable;
     }
 
-    public void setNullable(boolean nullable) {
-        this.nullable = nullable;
-    }
-
     public void setNullable(int nullable) {
         this.nullable = nullable == 1;
+    }
+
+    public void setNullable(boolean nullable) {
+        this.nullable = nullable;
     }
 
     public int getColumnSize() {

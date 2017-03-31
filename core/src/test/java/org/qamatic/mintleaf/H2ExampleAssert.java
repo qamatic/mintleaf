@@ -35,8 +35,6 @@
 
 package org.qamatic.mintleaf;
 
-import org.qamatic.mintleaf.DbQueries;
-
 /**
  * Created by QAmatic Team on 3/25/17.
  */

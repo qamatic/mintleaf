@@ -74,6 +74,14 @@ public class StandardQueries implements DbQueries {
         return registeredQueries.get(DbType.getDbType(url).getJdbcUrlPrefix());
     }
 
+    public static String[] utilsSplitDottedObjectNames(String objectName) throws MintLeafException {
+        final String[] objectNames = objectName.split(Pattern.quote("."));
+        if (objectNames.length != 2) {
+            throw new MintLeafException(String.format("getMetaData expects objectName parameter to be <SCHEMA NAME>.<OBJECT NAME> for example HRDB.COUNTRIES.  Invalid value: %s", objectName));
+        }
+        return objectNames;
+    }
+
     public <T> List<T> query(String sql, ParameterBinding parameterBinding, final DataRowListener<T> listener) throws MintLeafException {
 
         final List<T> rows = new ArrayList<T>();
@@ -102,14 +110,6 @@ public class StandardQueries implements DbQueries {
                 throw new MintLeafException(e);
             }
         }
-    }
-
-    public static String[] utilsSplitDottedObjectNames(String objectName) throws MintLeafException {
-        final String[] objectNames = objectName.split(Pattern.quote("."));
-        if (objectNames.length != 2) {
-            throw new MintLeafException(String.format("getMetaData expects objectName parameter to be <SCHEMA NAME>.<OBJECT NAME> for example HRDB.COUNTRIES.  Invalid value: %s", objectName));
-        }
-        return objectNames;
     }
 
 

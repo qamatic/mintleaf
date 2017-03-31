@@ -36,8 +36,6 @@
 package org.qamatic.mintleaf;
 
 import org.junit.Test;
-import org.qamatic.mintleaf.ColumnMetaDataCollection;
-import org.qamatic.mintleaf.MintLeafException;
 import org.qamatic.mintleaf.core.BaseSqlReader;
 import org.qamatic.mintleaf.tools.CsvRowListWrapper;
 

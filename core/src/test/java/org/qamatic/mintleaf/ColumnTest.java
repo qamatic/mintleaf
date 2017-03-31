@@ -37,9 +37,6 @@ package org.qamatic.mintleaf;
 
 import org.junit.Assert;
 import org.junit.Test;
-import org.qamatic.mintleaf.Column;
-import org.qamatic.mintleaf.ColumnMetaDataCollection;
-import org.qamatic.mintleaf.MintLeafException;
 
 import java.sql.Date;
 import java.sql.Types;

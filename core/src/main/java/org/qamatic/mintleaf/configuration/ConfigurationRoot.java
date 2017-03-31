@@ -63,6 +63,25 @@ public class ConfigurationRoot {
     private List<DbConnectionInfo> databases = new Databases();
     private SchemaVersions schemaVersions = new SchemaVersions();
 
+    public static ConfigurationRoot deSerialize(String configXml, final Map<String, String> userArgs) {
+        try {
+            JAXBContext jc = JAXBContext.newInstance(ConfigurationRoot.class);
+            Unmarshaller marshaller = jc.createUnmarshaller();
+            if (userArgs != null) {
+                ArgPatternHandler argPatternHandler = new ArgPatternHandler(configXml);
+                argPatternHandler.setUserProperties(userArgs);
+                configXml = argPatternHandler.getText();
+            }
+            StringReader sr = new StringReader(configXml);
+            ConfigurationRoot configurationRoot = (ConfigurationRoot) marshaller.unmarshal(sr);
+            return configurationRoot;
+
+        } catch (JAXBException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
     public List<DbConnectionInfo> getDatabases() {
         return databases;
     }
@@ -98,25 +117,6 @@ public class ConfigurationRoot {
     @Override
     public String toString() {
         return serialize();
-    }
-
-    public static ConfigurationRoot deSerialize(String configXml, final Map<String, String> userArgs){
-        try {
-            JAXBContext jc = JAXBContext.newInstance(ConfigurationRoot.class);
-            Unmarshaller marshaller = jc.createUnmarshaller();
-            if (userArgs != null) {
-                ArgPatternHandler argPatternHandler = new ArgPatternHandler(configXml);
-                argPatternHandler.setUserProperties(userArgs);
-                configXml = argPatternHandler.getText();
-            }
-            StringReader sr = new StringReader(configXml);
-            ConfigurationRoot configurationRoot = (ConfigurationRoot) marshaller.unmarshal(sr);
-            return configurationRoot;
-
-        } catch (JAXBException e) {
-            e.printStackTrace();
-        }
-        return null;
     }
 
     private String serialize() {
