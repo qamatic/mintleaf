@@ -35,16 +35,16 @@
 
 package org.qamatic.mintleaf.oracle;
 
-import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import org.qamatic.mintleaf.ColumnMetaDataCollection;
-import org.qamatic.mintleaf.Database;
-import org.qamatic.mintleaf.MintLeafException;
+import org.qamatic.mintleaf.*;
 import org.qamatic.mintleaf.core.ChangeSets;
-import org.qamatic.mintleaf.core.stdqueries.StandardQueries;
+import org.qamatic.mintleaf.core.ParameterSets;
+import org.qamatic.mintleaf.core.StoredProcedure;
 
-import static junit.framework.TestCase.assertTrue;
+import java.sql.CallableStatement;
+import java.sql.Statement;
+
 import static org.junit.Assert.assertEquals;
 
 /**
@@ -53,21 +53,75 @@ import static org.junit.Assert.assertEquals;
 
 public class OraStoredProcTest extends OracleTestCase {
 
-    private static Database hrdb2 = createOracleDbContext("PAYROLL1", "PAYROLL1");
+    private static Database payrollDb = createOracleDbContext("PAYROLL1", "PAYROLL1");
 
     @BeforeClass
     public static void migrate() throws MintLeafException {
-
-        //do some DDL
-        ChangeSets.migrate(hrdb2.getNewConnection(), "res:/oracle/payroll-changesets/payroll-ddl.sql", "create countries, few countries");
+        ChangeSets.migrate(payrollDb.getNewConnection(), "res:/oracle/payroll-changesets/payroll-ddl.sql", "create countries, few countries, create procs");
     }
 
     @Test
-    public void testCountriesCount() throws MintLeafException {
-
-        assertEquals(12, hrdb2.getNewConnection().getDbQueries().getCount("PAYROLL1.COUNTRIES"));
-
+    public void testProcName() throws MintLeafException {
+        StoredProcedure proc = new StoredProcedure(null, "add_country(?, ?)", StoredProcedure.CALLTYPE.PROC, null);
+        assertEquals("{ CALL ADD_COUNTRY(?, ?) }", proc.getSql());
     }
 
+    @Test
+    public void testProcNameWithCall() throws MintLeafException {
+        StoredProcedure proc = new StoredProcedure(null, "call add_country(?, ?)", StoredProcedure.CALLTYPE.PROC, null);
+        assertEquals("CALL ADD_COUNTRY(?, ?)", proc.getSql());
+    }
+
+    @Test
+    public void testProcNameFunction() throws MintLeafException {
+        StoredProcedure proc = new StoredProcedure(null, "add_country(?, ?)", StoredProcedure.CALLTYPE.FUNCTION, null);
+        assertEquals("{ ? = CALL ADD_COUNTRY(?, ?) }", proc.getSql());
+    }
+
+    @Test
+    public void testProcNameCustom() throws MintLeafException {
+        StoredProcedure proc = new StoredProcedure(null, "declare begin end;", StoredProcedure.CALLTYPE.CUSTOMCALL, null);
+        assertEquals("DECLARE BEGIN END;", proc.getSql());
+    }
+
+
+    @Test
+    public void testInsertCountrySP() throws MintLeafException {
+        try (ConnectionContext ctx = payrollDb.getNewConnection()) {
+
+            StoredProcedure proc = new StoredProcedure(ctx, "add_country(?, ?)", StoredProcedure.CALLTYPE.PROC, new ParameterBinding() {
+                @Override
+                public void bindParameters(ParameterSets parameterSets) throws MintLeafException {
+                    parameterSets.setInt(1, 13);
+                    parameterSets.setString(2, "Lost Country");
+                }
+            });
+
+            proc.execute();
+            assertEquals(13, ctx.getDbQueries().getCount("PAYROLL1.COUNTRIES"));
+        }
+    }
+//
+//    @Test
+//    public void testGetCountryNameSP() throws MintLeafException {
+//        try (ConnectionContext ctx = payrollDb.getNewConnection()) {
+//
+//            StoredProcedure proc = new StoredProcedure(ctx, "get_country(?)", StoredProcedure.CALLTYPE.FUNCTION, new ParameterBinding() {
+//                @Override
+//                public void bindParameters(ParameterSets parameterSets) throws MintLeafException {
+//                    parameterSets.setInt(1, 13);
+//                }
+//            });
+//
+//            proc.setStatementListener(statement -> {
+//                CallableStatement stmt = (CallableStatement) statement;
+//                assertEquals(13, stmt.getInt(1));
+//
+//            });
+//            proc.execute();
+//
+//
+//        }
+//    }
 
 }

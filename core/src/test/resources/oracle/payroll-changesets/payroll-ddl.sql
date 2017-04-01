@@ -30,3 +30,19 @@ INSERT INTO countries VALUES ( 'SG','Singapore',3);
 INSERT INTO countries VALUES ( 'UK','United Kingdom',1);
 INSERT INTO countries VALUES ( 'FR','France',1);
 INSERT INTO countries VALUES ( 'DE','Germany',1);
+
+
+-- <ChangeSet id="create procs" delimiter="/" />
+
+
+CREATE OR REPLACE PROCEDURE add_country
+  (  p_country_id          COUNTRIES.COUNTRY_ID%type
+   , p_country_name       COUNTRIES.COUNTRY_NAME%type
+   )
+IS
+BEGIN
+  INSERT INTO COUNTRIES (COUNTRY_ID, COUNTRY_NAME)
+    VALUES(p_country_id, p_country_name);
+END add_country;
+
+/
