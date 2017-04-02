@@ -86,7 +86,7 @@ public class OraStoredProcTest extends OracleTestCase {
     @Test
     public void testProcNameCustom() throws MintLeafException {
         StoredProcedure proc = new StoredProcedure(null, "declare begin end;", StoredProcedure.CALLTYPE.CUSTOMCALL, null);
-        assertEquals("DECLARE BEGIN END;", proc.getSql());
+        assertEquals("declare begin end;", proc.getSql());
     }
 
 
