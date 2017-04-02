@@ -48,7 +48,7 @@ public class StoredProcedure implements Executable<int[]> {
     private static final MintLeafLogger logger = MintLeafLogger.getLogger(StoredProcedure.class);
     private ConnectionContext connectionContext;
     private CALLTYPE calltype;
-    private StatementListener statementListener;
+    private StatementResultListener statementResultListener;
     private String procedureCall;
 
     private ParameterBinding parameterBinding;
@@ -56,11 +56,13 @@ public class StoredProcedure implements Executable<int[]> {
     public StoredProcedure(ConnectionContext connectionContext, String procedureCall, CALLTYPE calltype, ParameterBinding parameterBinding) {
         this.connectionContext = connectionContext;
         this.calltype = calltype;
-
+        this.procedureCall = procedureCall;
         this.parameterBinding = parameterBinding;
         if (this.procedureCall == null)
             this.procedureCall = "";//avoid check everywhere crap
-        this.procedureCall = procedureCall.toUpperCase().trim();
+        if (this.calltype != CALLTYPE.CUSTOMCALL) {
+            this.procedureCall = procedureCall.toUpperCase().trim();
+        }
     }
 
 
@@ -81,8 +83,8 @@ public class StoredProcedure implements Executable<int[]> {
             }
 
             int[] result = new int[]{preparedStatement.execute() ? 1 : 0};
-            if (this.statementListener != null) {
-                this.statementListener.onAfterExecuteSql(preparedStatement);
+            if (this.statementResultListener != null) {
+                this.statementResultListener.onAfterExecuteSql(preparedStatement);
             }
             return result;
 
@@ -96,8 +98,8 @@ public class StoredProcedure implements Executable<int[]> {
     }
 
 
-    public void setStatementListener(StatementListener statementListener) {
-        this.statementListener = statementListener;
+    public void setStatementResultListener(StatementResultListener statementResultListener) {
+        this.statementResultListener = statementResultListener;
     }
 
     public enum CALLTYPE {

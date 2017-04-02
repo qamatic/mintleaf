@@ -49,7 +49,7 @@ public class ExecuteQuery implements Executable<int[]> {
 
     private static final MintLeafLogger logger = MintLeafLogger.getLogger(ExecuteQuery.class);
     private ConnectionContext connectionContext;
-    private StatementListener statementListener;
+    private StatementResultListener statementResultListener;
 
     private String sql;
     private ParameterBinding parameterBinding;
@@ -75,8 +75,8 @@ public class ExecuteQuery implements Executable<int[]> {
                     statement.addBatch(sqlItem);
                 }
                 int[] result = statement.executeBatch();
-                if (this.statementListener != null) {
-                    this.statementListener.onAfterExecuteSql(statement);
+                if (this.statementResultListener != null) {
+                    this.statementResultListener.onAfterExecuteSql(statement);
                 }
                 return result;
             } catch (SQLException e) {
@@ -95,8 +95,8 @@ public class ExecuteQuery implements Executable<int[]> {
 
             }
             int[] result = new int[]{preparedStatement.execute() ? 1 : 0};
-            if (this.statementListener != null) {
-                this.statementListener.onAfterExecuteSql(preparedStatement);
+            if (this.statementResultListener != null) {
+                this.statementResultListener.onAfterExecuteSql(preparedStatement);
             }
             return result;
 
@@ -110,7 +110,7 @@ public class ExecuteQuery implements Executable<int[]> {
     }
 
 
-    public void setStatementListener(StatementListener statementListener) {
-        this.statementListener = statementListener;
+    public void setStatementResultListener(StatementResultListener statementResultListener) {
+        this.statementResultListener = statementResultListener;
     }
 }

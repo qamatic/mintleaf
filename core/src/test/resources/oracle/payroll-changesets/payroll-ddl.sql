@@ -46,3 +46,16 @@ BEGIN
 END add_country;
 
 /
+
+create or replace function sum_numbers  (n1 in number,n2 in number)
+return number
+  is
+
+  t number(8);
+
+begin
+  t :=n1+n2;
+  return t;
+end;
+
+/

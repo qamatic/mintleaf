@@ -40,6 +40,6 @@ import java.sql.Statement;
 /**
  * Created by QAmatic Team on 3/24/17.
  */
-public interface StatementListener {
+public interface StatementResultListener {
     void onAfterExecuteSql(Statement statement);
 }

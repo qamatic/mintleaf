@@ -48,7 +48,7 @@ public class FluentJdbc {
         private String sql;
         private ParameterBinding parameterBinding;
         private ConnectionContext connectionContext;
-        private StatementListener statementListener;
+        private StatementResultListener statementResultListener;
 
         public Builder(ConnectionContext connectionContext) {
             this.connectionContext = connectionContext;
@@ -75,8 +75,8 @@ public class FluentJdbc {
         }
 
 
-        public Builder withListener(StatementListener statementListener) throws MintLeafException {
-            this.statementListener = statementListener;
+        public Builder withListener(StatementResultListener statementResultListener) throws MintLeafException {
+            this.statementResultListener = statementResultListener;
             return this;
         }
 
@@ -84,7 +84,7 @@ public class FluentJdbc {
         public Executable<int[]> buildExecute() {
             try {
                 ExecuteQuery query = new ExecuteQuery(this.connectionContext, this.sql, this.parameterBinding);
-                query.setStatementListener(this.statementListener);
+                query.setStatementResultListener(this.statementResultListener);
                 return query;
             } catch (Exception e) {
                 MintLeafException.throwException(e.getMessage());

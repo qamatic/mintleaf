@@ -37,13 +37,18 @@ package org.qamatic.mintleaf.oracle;
 
 import org.junit.BeforeClass;
 import org.junit.Test;
-import org.qamatic.mintleaf.*;
+import org.qamatic.mintleaf.ConnectionContext;
+import org.qamatic.mintleaf.Database;
+import org.qamatic.mintleaf.MintLeafException;
+import org.qamatic.mintleaf.ParameterBinding;
+import org.qamatic.mintleaf.core.CallableParameterSets;
 import org.qamatic.mintleaf.core.ChangeSets;
 import org.qamatic.mintleaf.core.ParameterSets;
 import org.qamatic.mintleaf.core.StoredProcedure;
 
 import java.sql.CallableStatement;
-import java.sql.Statement;
+import java.sql.SQLException;
+import java.sql.Types;
 
 import static org.junit.Assert.assertEquals;
 
@@ -101,27 +106,32 @@ public class OraStoredProcTest extends OracleTestCase {
             assertEquals(13, ctx.getDbQueries().getCount("PAYROLL1.COUNTRIES"));
         }
     }
-//
-//    @Test
-//    public void testGetCountryNameSP() throws MintLeafException {
-//        try (ConnectionContext ctx = payrollDb.getNewConnection()) {
-//
-//            StoredProcedure proc = new StoredProcedure(ctx, "get_country(?)", StoredProcedure.CALLTYPE.FUNCTION, new ParameterBinding() {
-//                @Override
-//                public void bindParameters(ParameterSets parameterSets) throws MintLeafException {
-//                    parameterSets.setInt(1, 13);
-//                }
-//            });
-//
-//            proc.setStatementListener(statement -> {
-//                CallableStatement stmt = (CallableStatement) statement;
-//                assertEquals(13, stmt.getInt(1));
-//
-//            });
-//            proc.execute();
-//
-//
-//        }
-//    }
+
+    @Test
+    public void testAddNumbersFunction() throws MintLeafException {
+        try (ConnectionContext ctx = payrollDb.getNewConnection()) {
+
+            StoredProcedure proc = new StoredProcedure(ctx, "{?= call sum_numbers(?,?)}", StoredProcedure.CALLTYPE.CUSTOMCALL, parameterSets -> {
+                CallableParameterSets parameterSets1 = (CallableParameterSets) parameterSets;
+                parameterSets1.setInt(2, 10);
+                parameterSets1.setInt(3, 43);
+                parameterSets1.registerOutParameter(1, Types.INTEGER);
+            });
+
+            proc.setStatementResultListener(statement -> {
+                CallableStatement stmt = (CallableStatement) statement;
+                try {
+                    assertEquals(53, stmt.getInt(1));
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+
+            });
+
+            proc.execute();
+
+
+        }
+    }
 
 }
