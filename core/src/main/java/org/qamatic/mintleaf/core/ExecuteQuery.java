@@ -49,7 +49,7 @@ public class ExecuteQuery implements Executable<int[]> {
 
     private static final MintLeafLogger logger = MintLeafLogger.getLogger(ExecuteQuery.class);
     private ConnectionContext connectionContext;
-    private StatementResultListener statementResultListener;
+    private ExecutionResultListener executionResultListener;
 
     private String sql;
     private ParameterBinding parameterBinding;
@@ -71,12 +71,13 @@ public class ExecuteQuery implements Executable<int[]> {
 
         if (batchSqls != null) {
             try (Statement statement = connectionContext.getConnection().createStatement()) {
+                BindingParameterSets parameterSets = new BindingParameterSets(statement);
                 for (String sqlItem : batchSqls) {
                     statement.addBatch(sqlItem);
                 }
                 int[] result = statement.executeBatch();
-                if (this.statementResultListener != null) {
-                    this.statementResultListener.onAfterExecuteSql(statement);
+                if (this.executionResultListener != null) {
+                    this.executionResultListener.onAfterExecuteSql(parameterSets);
                 }
                 return result;
             } catch (SQLException e) {
@@ -86,7 +87,7 @@ public class ExecuteQuery implements Executable<int[]> {
         }
 
         try (PreparedStatement preparedStatement = connectionContext.getConnection().prepareStatement(this.sql)) {
-            ParameterSets parameterSets = new ParameterSets(preparedStatement);
+            BindingParameterSets parameterSets = new BindingParameterSets(preparedStatement);
             if (parameterBinding != null) {
                 parameterBinding.bindParameters(parameterSets);
             }
@@ -95,8 +96,8 @@ public class ExecuteQuery implements Executable<int[]> {
 
             }
             int[] result = new int[]{preparedStatement.execute() ? 1 : 0};
-            if (this.statementResultListener != null) {
-                this.statementResultListener.onAfterExecuteSql(preparedStatement);
+            if (this.executionResultListener != null) {
+                this.executionResultListener.onAfterExecuteSql(parameterSets);
             }
             return result;
 
@@ -110,7 +111,7 @@ public class ExecuteQuery implements Executable<int[]> {
     }
 
 
-    public void setStatementResultListener(StatementResultListener statementResultListener) {
-        this.statementResultListener = statementResultListener;
+    public void setExecutionResultListener(ExecutionResultListener executionResultListener) {
+        this.executionResultListener = executionResultListener;
     }
 }

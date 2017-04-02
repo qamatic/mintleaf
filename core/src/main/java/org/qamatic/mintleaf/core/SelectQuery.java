@@ -65,7 +65,7 @@ public class SelectQuery implements Executable<SqlResultSet> {
                 this.preparedStatement = connectionContext.getConnection().prepareStatement(this.sql);
                 if (this.resultSet == null) {
                     if (parameterBinding != null) {
-                        parameterBinding.bindParameters(new ParameterSets(this.preparedStatement));
+                        parameterBinding.bindParameters(new BindingParameterSets(this.preparedStatement));
                     }
                     logger.info("executing select query: " + this.sql);
                     this.resultSet = this.preparedStatement.executeQuery();

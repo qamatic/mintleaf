@@ -48,12 +48,12 @@ public class StoredProcedure implements Executable<int[]> {
     private static final MintLeafLogger logger = MintLeafLogger.getLogger(StoredProcedure.class);
     private ConnectionContext connectionContext;
     private CALLTYPE calltype;
-    private StatementResultListener statementResultListener;
+    private ExecutionResultListener.Callable executionResultListener;
     private String procedureCall;
 
-    private ParameterBinding parameterBinding;
+    private ParameterBinding.Callable parameterBinding;
 
-    public StoredProcedure(ConnectionContext connectionContext, String procedureCall, CALLTYPE calltype, ParameterBinding parameterBinding) {
+    public StoredProcedure(ConnectionContext connectionContext, String procedureCall, CALLTYPE calltype, ParameterBinding.Callable parameterBinding) {
         this.connectionContext = connectionContext;
         this.calltype = calltype;
         this.procedureCall = procedureCall;
@@ -77,14 +77,14 @@ public class StoredProcedure implements Executable<int[]> {
     public int[] execute() throws MintLeafException {
         logger.info(getSql());
         try (CallableStatement preparedStatement = connectionContext.getConnection().prepareCall(this.getSql())) {
-            CallableParameterSets parameterSets = new CallableParameterSets(preparedStatement);
+            CallableBindingParameterSets parameterSets = new CallableBindingParameterSets(preparedStatement);
             if (parameterBinding != null) {
                 parameterBinding.bindParameters(parameterSets);
             }
 
             int[] result = new int[]{preparedStatement.execute() ? 1 : 0};
-            if (this.statementResultListener != null) {
-                this.statementResultListener.onAfterExecuteSql(preparedStatement);
+            if (this.executionResultListener != null) {
+                this.executionResultListener.onAfterExecuteSql(parameterSets);
             }
             return result;
 
@@ -98,8 +98,8 @@ public class StoredProcedure implements Executable<int[]> {
     }
 
 
-    public void setStatementResultListener(StatementResultListener statementResultListener) {
-        this.statementResultListener = statementResultListener;
+    public void setExecutionResultListener(ExecutionResultListener.Callable statementResultListener) {
+        this.executionResultListener = statementResultListener;
     }
 
     public enum CALLTYPE {

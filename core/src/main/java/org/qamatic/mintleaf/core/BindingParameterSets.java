@@ -37,6 +37,8 @@ package org.qamatic.mintleaf.core;
 
 import org.qamatic.mintleaf.MintLeafException;
 import org.qamatic.mintleaf.MintLeafLogger;
+import org.qamatic.mintleaf.ParameterGets;
+import org.qamatic.mintleaf.ParameterSets;
 
 import java.io.InputStream;
 import java.io.Reader;
@@ -48,16 +50,20 @@ import java.util.Calendar;
 /**
  * Created by qamatic on 2/20/16.
  */
-public class ParameterSets {
+public class BindingParameterSets implements ParameterSets, ParameterGets {
 
-    private static final MintLeafLogger logger = MintLeafLogger.getLogger(ParameterSets.class);
-    private PreparedStatement preparedStatement;
+    private static final MintLeafLogger logger = MintLeafLogger.getLogger(BindingParameterSets.class);
+    private Statement statement;
     private boolean batch = false;
 
-    public ParameterSets(PreparedStatement preparedStatement) {
-        this.preparedStatement = preparedStatement;
+    public BindingParameterSets(Statement preparedStatement) {
+        this.statement = preparedStatement;
     }
 
+    private PreparedStatement getPreparedStatement(){
+        return (PreparedStatement) this.statement;
+    }
+    
     /**
      * Sets the designated parameter to a <code>InputStream</code> object.  The inputstream must contain  the number
      * of characters specified by length otherwise a <code>MintLeafException</code> will be
@@ -82,10 +88,11 @@ public class ParameterSets {
      * @throws MintLeafException if the JDBC driver does not support this method
      * @since 1.6
      */
+    @Override
     public void setBlob(int parameterIndex, InputStream inputStream, long length) throws MintLeafException {
         try {
 
-            preparedStatement.setBlob(parameterIndex, inputStream, length);
+             getPreparedStatement().setBlob(parameterIndex, inputStream, length);
 
         } catch (SQLException e) {
             throw new MintLeafException(e);
@@ -105,9 +112,10 @@ public class ParameterSets {
      * @throws MintLeafException if the JDBC driver does not support this method
      * @since 1.2
      */
+    @Override
     public void setBlob(int parameterIndex, Blob x) throws MintLeafException {
         try {
-            preparedStatement.setBlob(parameterIndex, x);
+            getPreparedStatement().setBlob(parameterIndex, x);
         } catch (SQLException e) {
             throw new MintLeafException(e);
         }
@@ -135,9 +143,10 @@ public class ParameterSets {
      * @throws MintLeafException if a database access error occurs or
      *                           this method is called on a closed <code>Statement</code>
      */
+    @Override
     public void setEscapeProcessing(boolean enable) throws MintLeafException {
         try {
-            preparedStatement.setEscapeProcessing(enable);
+            getPreparedStatement().setEscapeProcessing(enable);
         } catch (SQLException e) {
             throw new MintLeafException(e);
         }
@@ -156,9 +165,10 @@ public class ParameterSets {
      * @throws MintLeafException if the JDBC driver does not support this method
      * @since 1.4
      */
+    @Override
     public void setURL(int parameterIndex, URL x) throws MintLeafException {
         try {
-            preparedStatement.setURL(parameterIndex, x);
+            getPreparedStatement().setURL(parameterIndex, x);
         } catch (SQLException e) {
             throw new MintLeafException(e);
         }
@@ -188,9 +198,10 @@ public class ParameterSets {
      * @throws MintLeafException if the JDBC driver does not support this method
      * @since 1.6
      */
+    @Override
     public void setNCharacterStream(int parameterIndex, Reader value) throws MintLeafException {
         try {
-            preparedStatement.setNCharacterStream(parameterIndex, value);
+            getPreparedStatement().setNCharacterStream(parameterIndex, value);
         } catch (SQLException e) {
             throw new MintLeafException(e);
         }
@@ -208,9 +219,10 @@ public class ParameterSets {
      *                           marker in the SQL statement; if a database access error occurs or
      *                           this method is called on a closed <code>PreparedStatement</code>
      */
+    @Override
     public void setBytes(int parameterIndex, byte[] x) throws MintLeafException {
         try {
-            preparedStatement.setBytes(parameterIndex, x);
+            getPreparedStatement().setBytes(parameterIndex, x);
         } catch (SQLException e) {
             throw new MintLeafException(e);
         }
@@ -244,10 +256,11 @@ public class ParameterSets {
      *                           this method
      * @deprecated Use {@code setCharacterStream } catch (SQLException e) {             throw new MintLeafException(e);         }}
      */
+    @Override
     @Deprecated
     public void setUnicodeStream(int parameterIndex, InputStream x, int length) throws MintLeafException {
         try {
-            preparedStatement.setUnicodeStream(parameterIndex, x, length);
+            getPreparedStatement().setUnicodeStream(parameterIndex, x, length);
         } catch (SQLException e) {
             throw new MintLeafException(e);
         }
@@ -264,9 +277,10 @@ public class ParameterSets {
      * @throws MintLeafException if a database access error occurs or
      *                           this method is called on a closed <code>PreparedStatement</code>
      */
+    @Override
     public void clearParameters() throws MintLeafException {
         try {
-            preparedStatement.clearParameters();
+            getPreparedStatement().clearParameters();
         } catch (SQLException e) {
             throw new MintLeafException(e);
         }
@@ -284,9 +298,10 @@ public class ParameterSets {
      * @see ParameterMetaData
      * @since 1.4
      */
+    @Override
     public ParameterMetaData getParameterMetaData() throws MintLeafException {
         try {
-            return preparedStatement.getParameterMetaData();
+            return getPreparedStatement().getParameterMetaData();
         } catch (SQLException e) {
             throw new MintLeafException(e);
         }
@@ -303,9 +318,10 @@ public class ParameterSets {
      *                           marker in the SQL statement; if a database access error occurs or
      *                           this method is called on a closed <code>PreparedStatement</code>
      */
+    @Override
     public void setByte(int parameterIndex, byte x) throws MintLeafException {
         try {
-            preparedStatement.setByte(parameterIndex, x);
+            getPreparedStatement().setByte(parameterIndex, x);
         } catch (SQLException e) {
             throw new MintLeafException(e);
         }
@@ -333,9 +349,10 @@ public class ParameterSets {
      *                           this method is called on a closed <code>PreparedStatement</code>
      * @since 1.6
      */
+    @Override
     public void setCharacterStream(int parameterIndex, Reader reader, long length) throws MintLeafException {
         try {
-            preparedStatement.setCharacterStream(parameterIndex, reader, length);
+            getPreparedStatement().setCharacterStream(parameterIndex, reader, length);
         } catch (SQLException e) {
             throw new MintLeafException(e);
         }
@@ -362,9 +379,10 @@ public class ParameterSets {
      * @throws MintLeafException if the JDBC driver does not support this method
      * @since 1.6
      */
+    @Override
     public void setClob(int parameterIndex, Reader reader) throws MintLeafException {
         try {
-            preparedStatement.setClob(parameterIndex, reader);
+            getPreparedStatement().setClob(parameterIndex, reader);
         } catch (SQLException e) {
             throw new MintLeafException(e);
         }
@@ -384,9 +402,10 @@ public class ParameterSets {
      * @throws MintLeafException if the JDBC driver does not support this method
      * @since 1.6
      */
+    @Override
     public void setNClob(int parameterIndex, NClob value) throws MintLeafException {
         try {
-            preparedStatement.setNClob(parameterIndex, value);
+            getPreparedStatement().setNClob(parameterIndex, value);
         } catch (SQLException e) {
             throw new MintLeafException(e);
         }
@@ -405,9 +424,10 @@ public class ParameterSets {
      * @throws MintLeafException if the JDBC driver does not support this method
      * @since 1.6
      */
+    @Override
     public void setRowId(int parameterIndex, RowId x) throws MintLeafException {
         try {
-            preparedStatement.setRowId(parameterIndex, x);
+            getPreparedStatement().setRowId(parameterIndex, x);
         } catch (SQLException e) {
             throw new MintLeafException(e);
         }
@@ -424,9 +444,10 @@ public class ParameterSets {
      *                           marker in the SQL statement; if a database access error occurs or
      *                           this method is called on a closed <code>PreparedStatement</code>
      */
+    @Override
     public void setLong(int parameterIndex, long x) throws MintLeafException {
         try {
-            preparedStatement.setLong(parameterIndex, x);
+            getPreparedStatement().setLong(parameterIndex, x);
         } catch (SQLException e) {
             throw new MintLeafException(e);
         }
@@ -446,9 +467,10 @@ public class ParameterSets {
      * @throws MintLeafException if the JDBC driver does not support this method
      * @since 1.2
      */
+    @Override
     public void setRef(int parameterIndex, Ref x) throws MintLeafException {
         try {
-            preparedStatement.setRef(parameterIndex, x);
+            getPreparedStatement().setRef(parameterIndex, x);
         } catch (SQLException e) {
             throw new MintLeafException(e);
         }
@@ -466,9 +488,10 @@ public class ParameterSets {
      *                           marker in the SQL statement; if a database access error occurs or
      *                           this method is called on a closed <code>PreparedStatement</code>
      */
+    @Override
     public void setTimestamp(int parameterIndex, Timestamp x) throws MintLeafException {
         try {
-            preparedStatement.setTimestamp(parameterIndex, x);
+            getPreparedStatement().setTimestamp(parameterIndex, x);
         } catch (SQLException e) {
             throw new MintLeafException(e);
         }
@@ -495,9 +518,10 @@ public class ParameterSets {
      *                           this method is called on a closed <code>PreparedStatement</code>
      * @since 1.6
      */
+    @Override
     public void setAsciiStream(int parameterIndex, InputStream x, long length) throws MintLeafException {
         try {
-            preparedStatement.setAsciiStream(parameterIndex, x, length);
+            getPreparedStatement().setAsciiStream(parameterIndex, x, length);
         } catch (SQLException e) {
             throw new MintLeafException(e);
         }
@@ -522,9 +546,10 @@ public class ParameterSets {
      *                           marker in the SQL statement; if a database access error occurs or
      *                           this method is called on a closed <code>PreparedStatement</code>
      */
+    @Override
     public void setBinaryStream(int parameterIndex, InputStream x, int length) throws MintLeafException {
         try {
-            preparedStatement.setBinaryStream(parameterIndex, x, length);
+            getPreparedStatement().setBinaryStream(parameterIndex, x, length);
         } catch (SQLException e) {
             throw new MintLeafException(e);
         }
@@ -546,38 +571,10 @@ public class ParameterSets {
      * @throws MintLeafException if the JDBC driver does not support this method
      * @since 1.6
      */
+    @Override
     public void setSQLXML(int parameterIndex, SQLXML xmlObject) throws MintLeafException {
         try {
-            preparedStatement.setSQLXML(parameterIndex, xmlObject);
-        } catch (SQLException e) {
-            throw new MintLeafException(e);
-        }
-    }
-
-
-    /**
-     * Requests that a <code>Statement</code> be pooled or not pooled.  The value
-     * specified is a hint to the statement pool implementation indicating
-     * whether the application wants the statement to be pooled.  It is up to
-     * the statement pool manager as to whether the hint is used.
-     * <p>
-     * The poolable value of a statement is applicable to both internal
-     * statement caches implemented by the driver and external statement caches
-     * implemented by application servers and other applications.
-     * <p>
-     * By default, a <code>Statement</code> is not poolable when created, and
-     * a <code>PreparedStatement</code> and <code>CallableStatement</code>
-     * are poolable when created.
-     *
-     * @param poolable requests that the statement be pooled if true and
-     *                 that the statement not be pooled if false
-     * @throws MintLeafException if this method is called on a closed
-     *                           <code>Statement</code>
-     * @since 1.6
-     */
-    public void setPoolable(boolean poolable) throws MintLeafException {
-        try {
-            preparedStatement.setPoolable(poolable);
+            getPreparedStatement().setSQLXML(parameterIndex, xmlObject);
         } catch (SQLException e) {
             throw new MintLeafException(e);
         }
@@ -594,9 +591,10 @@ public class ParameterSets {
      *                           marker in the SQL statement; if a database access error occurs or
      *                           this method is called on a closed <code>PreparedStatement</code>
      */
+    @Override
     public void setInt(int parameterIndex, int x) throws MintLeafException {
         try {
-            preparedStatement.setInt(parameterIndex, x);
+            getPreparedStatement().setInt(parameterIndex, x);
         } catch (SQLException e) {
             throw new MintLeafException(e);
         }
@@ -614,9 +612,10 @@ public class ParameterSets {
      *                           if a database access error occurs or
      *                           this method is called on a closed <code>PreparedStatement</code>
      */
+    @Override
     public void setBoolean(int parameterIndex, boolean x) throws MintLeafException {
         try {
-            preparedStatement.setBoolean(parameterIndex, x);
+            getPreparedStatement().setBoolean(parameterIndex, x);
         } catch (SQLException e) {
             throw new MintLeafException(e);
         }
@@ -636,14 +635,14 @@ public class ParameterSets {
      *                           marker in the SQL statement; if a database access error occurs or
      *                           this method is called on a closed <code>PreparedStatement</code>
      */
+    @Override
     public void setString(int parameterIndex, String x) throws MintLeafException {
         try {
-            preparedStatement.setString(parameterIndex, x);
+            getPreparedStatement().setString(parameterIndex, x);
         } catch (SQLException e) {
             throw new MintLeafException(e);
         }
     }
-
 
     /**
      * Sets the designated parameter to the given input stream.
@@ -667,9 +666,10 @@ public class ParameterSets {
      * @throws MintLeafException if the JDBC driver does not support this method
      * @since 1.6
      */
+    @Override
     public void setBinaryStream(int parameterIndex, InputStream x) throws MintLeafException {
         try {
-            preparedStatement.setBinaryStream(parameterIndex, x);
+            getPreparedStatement().setBinaryStream(parameterIndex, x);
         } catch (SQLException e) {
             throw new MintLeafException(e);
         }
@@ -693,9 +693,10 @@ public class ParameterSets {
      *                           or  <code>STRUCT</code> data type and the JDBC driver does not support
      *                           this data type
      */
+    @Override
     public void setNull(int parameterIndex, int sqlType) throws MintLeafException {
         try {
-            preparedStatement.setNull(parameterIndex, sqlType);
+            getPreparedStatement().setNull(parameterIndex, sqlType);
         } catch (SQLException e) {
             throw new MintLeafException(e);
         }
@@ -712,9 +713,10 @@ public class ParameterSets {
      *                           marker in the SQL statement; if a database access error occurs or
      *                           this method is called on a closed <code>PreparedStatement</code>
      */
+    @Override
     public void setDouble(int parameterIndex, double x) throws MintLeafException {
         try {
-            preparedStatement.setDouble(parameterIndex, x);
+            getPreparedStatement().setDouble(parameterIndex, x);
         } catch (SQLException e) {
             throw new MintLeafException(e);
         }
@@ -733,9 +735,10 @@ public class ParameterSets {
      * @throws MintLeafException if the JDBC driver does not support this method
      * @since 1.2
      */
+    @Override
     public void setArray(int parameterIndex, Array x) throws MintLeafException {
         try {
-            preparedStatement.setArray(parameterIndex, x);
+            getPreparedStatement().setArray(parameterIndex, x);
         } catch (SQLException e) {
             throw new MintLeafException(e);
         }
@@ -760,9 +763,10 @@ public class ParameterSets {
      *                           this method is called on a closed <code>PreparedStatement</code>
      * @since 1.2
      */
+    @Override
     public void setDate(int parameterIndex, Date x, Calendar cal) throws MintLeafException {
         try {
-            preparedStatement.setDate(parameterIndex, x, cal);
+            getPreparedStatement().setDate(parameterIndex, x, cal);
         } catch (SQLException e) {
             throw new MintLeafException(e);
         }
@@ -804,9 +808,10 @@ public class ParameterSets {
      *                           this data type or if the JDBC driver does not support this method
      * @since 1.2
      */
+    @Override
     public void setNull(int parameterIndex, int sqlType, String typeName) throws MintLeafException {
         try {
-            preparedStatement.setNull(parameterIndex, sqlType, typeName);
+            getPreparedStatement().setNull(parameterIndex, sqlType, typeName);
         } catch (SQLException e) {
             throw new MintLeafException(e);
         }
@@ -833,9 +838,10 @@ public class ParameterSets {
      * @see SQLType
      * @since 1.8
      */
+    @Override
     public void setObject(int parameterIndex, Object x, SQLType targetSqlType) throws MintLeafException {
         try {
-            preparedStatement.setObject(parameterIndex, x, targetSqlType);
+            getPreparedStatement().setObject(parameterIndex, x, targetSqlType);
         } catch (SQLException e) {
             throw new MintLeafException(e);
         }
@@ -861,14 +867,14 @@ public class ParameterSets {
      *                           marker in the SQL statement; if a database access error occurs or
      *                           this method is called on a closed <code>PreparedStatement</code>
      */
+    @Override
     public void setAsciiStream(int parameterIndex, InputStream x, int length) throws MintLeafException {
         try {
-            preparedStatement.setAsciiStream(parameterIndex, x, length);
+            getPreparedStatement().setAsciiStream(parameterIndex, x, length);
         } catch (SQLException e) {
             throw new MintLeafException(e);
         }
     }
-
 
     /**
      * Sets the designated parameter to the given Java <code>short</code> value.
@@ -881,14 +887,14 @@ public class ParameterSets {
      *                           marker in the SQL statement; if a database access error occurs or
      *                           this method is called on a closed <code>PreparedStatement</code>
      */
+    @Override
     public void setShort(int parameterIndex, short x) throws MintLeafException {
         try {
-            preparedStatement.setShort(parameterIndex, x);
+            getPreparedStatement().setShort(parameterIndex, x);
         } catch (SQLException e) {
             throw new MintLeafException(e);
         }
     }
-
 
     /**
      * Sets the designated parameter to a <code>Reader</code> object.
@@ -912,14 +918,14 @@ public class ParameterSets {
      * @throws MintLeafException if the JDBC driver does not support this method
      * @since 1.6
      */
+    @Override
     public void setNClob(int parameterIndex, Reader reader) throws MintLeafException {
         try {
-            preparedStatement.setNClob(parameterIndex, reader);
+            getPreparedStatement().setNClob(parameterIndex, reader);
         } catch (SQLException e) {
             throw new MintLeafException(e);
         }
     }
-
 
     /**
      * Sets the designated parameter to the given <code>java.sql.Time</code> value,
@@ -940,9 +946,10 @@ public class ParameterSets {
      *                           this method is called on a closed <code>PreparedStatement</code>
      * @since 1.2
      */
+    @Override
     public void setTime(int parameterIndex, Time x, Calendar cal) throws MintLeafException {
         try {
-            preparedStatement.setTime(parameterIndex, x, cal);
+            getPreparedStatement().setTime(parameterIndex, x, cal);
         } catch (SQLException e) {
             throw new MintLeafException(e);
         }
@@ -970,9 +977,10 @@ public class ParameterSets {
      *                           this method is called on a closed <code>PreparedStatement</code>
      * @since 1.2
      */
+    @Override
     public void setCharacterStream(int parameterIndex, Reader reader, int length) throws MintLeafException {
         try {
-            preparedStatement.setCharacterStream(parameterIndex, reader, length);
+            getPreparedStatement().setCharacterStream(parameterIndex, reader, length);
         } catch (SQLException e) {
             throw new MintLeafException(e);
         }
@@ -1029,9 +1037,10 @@ public class ParameterSets {
      * @see SQLType
      * @since 1.8
      */
+    @Override
     public void setObject(int parameterIndex, Object x, SQLType targetSqlType, int scaleOrLength) throws MintLeafException {
         try {
-            preparedStatement.setObject(parameterIndex, x, targetSqlType, scaleOrLength);
+            getPreparedStatement().setObject(parameterIndex, x, targetSqlType, scaleOrLength);
         } catch (SQLException e) {
             throw new MintLeafException(e);
         }
@@ -1055,9 +1064,10 @@ public class ParameterSets {
      * @throws MintLeafException if the JDBC driver does not support this method
      * @since 1.6
      */
+    @Override
     public void setNString(int parameterIndex, String value) throws MintLeafException {
         try {
-            preparedStatement.setNString(parameterIndex, value);
+            getPreparedStatement().setNString(parameterIndex, value);
         } catch (SQLException e) {
             throw new MintLeafException(e);
         }
@@ -1087,9 +1097,10 @@ public class ParameterSets {
      * @throws MintLeafException if the JDBC driver does not support this method
      * @since 1.6
      */
+    @Override
     public void setBlob(int parameterIndex, InputStream inputStream) throws MintLeafException {
         try {
-            preparedStatement.setBlob(parameterIndex, inputStream);
+            getPreparedStatement().setBlob(parameterIndex, inputStream);
         } catch (SQLException e) {
             throw new MintLeafException(e);
         }
@@ -1108,9 +1119,10 @@ public class ParameterSets {
      * @throws MintLeafException if the JDBC driver does not support this method
      * @since 1.2
      */
+    @Override
     public void setClob(int parameterIndex, Clob x) throws MintLeafException {
         try {
-            preparedStatement.setClob(parameterIndex, x);
+            getPreparedStatement().setClob(parameterIndex, x);
         } catch (SQLException e) {
             throw new MintLeafException(e);
         }
@@ -1127,9 +1139,10 @@ public class ParameterSets {
      *                           marker in the SQL statement; if a database access error occurs or
      *                           this method is called on a closed <code>PreparedStatement</code>
      */
+    @Override
     public void setBigDecimal(int parameterIndex, BigDecimal x) throws MintLeafException {
         try {
-            preparedStatement.setBigDecimal(parameterIndex, x);
+            getPreparedStatement().setBigDecimal(parameterIndex, x);
         } catch (SQLException e) {
             throw new MintLeafException(e);
         }
@@ -1157,9 +1170,10 @@ public class ParameterSets {
      * @throws MintLeafException if the JDBC driver does not support this method
      * @since 1.6
      */
+    @Override
     public void setNClob(int parameterIndex, Reader reader, long length) throws MintLeafException {
         try {
-            preparedStatement.setNClob(parameterIndex, reader, length);
+            getPreparedStatement().setNClob(parameterIndex, reader, length);
         } catch (SQLException e) {
             throw new MintLeafException(e);
         }
@@ -1188,9 +1202,10 @@ public class ParameterSets {
      * @throws MintLeafException if the JDBC driver does not support this method
      * @since 1.6
      */
+    @Override
     public void setAsciiStream(int parameterIndex, InputStream x) throws MintLeafException {
         try {
-            preparedStatement.setAsciiStream(parameterIndex, x);
+            getPreparedStatement().setAsciiStream(parameterIndex, x);
         } catch (SQLException e) {
             throw new MintLeafException(e);
         }
@@ -1207,9 +1222,10 @@ public class ParameterSets {
      *                           marker in the SQL statement; if a database access error occurs or
      *                           this method is called on a closed <code>PreparedStatement</code>
      */
+    @Override
     public void setTime(int parameterIndex, Time x) throws MintLeafException {
         try {
-            preparedStatement.setTime(parameterIndex, x);
+            getPreparedStatement().setTime(parameterIndex, x);
         } catch (SQLException e) {
             throw new MintLeafException(e);
         }
@@ -1232,9 +1248,10 @@ public class ParameterSets {
      * @throws MintLeafException if the JDBC driver does not support this method
      * @since 1.6
      */
+    @Override
     public void setNCharacterStream(int parameterIndex, Reader value, long length) throws MintLeafException {
         try {
-            preparedStatement.setNCharacterStream(parameterIndex, value, length);
+            getPreparedStatement().setNCharacterStream(parameterIndex, value, length);
         } catch (SQLException e) {
             throw new MintLeafException(e);
         }
@@ -1251,9 +1268,10 @@ public class ParameterSets {
      *                           marker in the SQL statement; if a database access error occurs or
      *                           this method is called on a closed <code>PreparedStatement</code>
      */
+    @Override
     public void setFloat(int parameterIndex, float x) throws MintLeafException {
         try {
-            preparedStatement.setFloat(parameterIndex, x);
+            getPreparedStatement().setFloat(parameterIndex, x);
         } catch (SQLException e) {
             throw new MintLeafException(e);
         }
@@ -1278,9 +1296,10 @@ public class ParameterSets {
      * @throws MintLeafException if the JDBC driver does not support this method
      * @since 1.6
      */
+    @Override
     public void setClob(int parameterIndex, Reader reader, long length) throws MintLeafException {
         try {
-            preparedStatement.setClob(parameterIndex, reader, length);
+            getPreparedStatement().setClob(parameterIndex, reader, length);
         } catch (SQLException e) {
             throw new MintLeafException(e);
         }
@@ -1323,9 +1342,10 @@ public class ParameterSets {
      *                           this method is called on a closed <code>PreparedStatement</code>
      *                           or the type of the given object is ambiguous
      */
+    @Override
     public void setObject(int parameterIndex, Object x) throws MintLeafException {
         try {
-            preparedStatement.setObject(parameterIndex, x);
+            getPreparedStatement().setObject(parameterIndex, x);
         } catch (SQLException e) {
             throw new MintLeafException(e);
         }
@@ -1350,9 +1370,10 @@ public class ParameterSets {
      *                           this method is called on a closed <code>PreparedStatement</code>
      * @since 1.2
      */
+    @Override
     public void setTimestamp(int parameterIndex, Timestamp x, Calendar cal) throws MintLeafException {
         try {
-            preparedStatement.setTimestamp(parameterIndex, x, cal);
+            getPreparedStatement().setTimestamp(parameterIndex, x, cal);
         } catch (SQLException e) {
             throw new MintLeafException(e);
         }
@@ -1383,9 +1404,10 @@ public class ParameterSets {
      * @throws MintLeafException if the JDBC driver does not support this method
      * @since 1.6
      */
+    @Override
     public void setCharacterStream(int parameterIndex, Reader reader) throws MintLeafException {
         try {
-            preparedStatement.setCharacterStream(parameterIndex, reader);
+            getPreparedStatement().setCharacterStream(parameterIndex, reader);
         } catch (SQLException e) {
             throw new MintLeafException(e);
         }
@@ -1409,9 +1431,10 @@ public class ParameterSets {
      *                           the JDBC driver does not support the specified targetSqlType
      * @see Types
      */
+    @Override
     public void setObject(int parameterIndex, Object x, int targetSqlType) throws MintLeafException {
         try {
-            preparedStatement.setObject(parameterIndex, x, targetSqlType);
+            getPreparedStatement().setObject(parameterIndex, x, targetSqlType);
         } catch (SQLException e) {
             throw new MintLeafException(e);
         }
@@ -1463,14 +1486,14 @@ public class ParameterSets {
      *                           the JDBC driver does not support the specified targetSqlType
      * @see Types
      */
+    @Override
     public void setObject(int parameterIndex, Object x, int targetSqlType, int scaleOrLength) throws MintLeafException {
         try {
-            preparedStatement.setObject(parameterIndex, x, targetSqlType, scaleOrLength);
+            getPreparedStatement().setObject(parameterIndex, x, targetSqlType, scaleOrLength);
         } catch (SQLException e) {
             throw new MintLeafException(e);
         }
     }
-
 
     /**
      * Sets the designated parameter to the given <code>java.sql.Date</code> value
@@ -1485,14 +1508,14 @@ public class ParameterSets {
      *                           marker in the SQL statement; if a database access error occurs or
      *                           this method is called on a closed <code>PreparedStatement</code>
      */
+    @Override
     public void setDate(int parameterIndex, Date x) throws MintLeafException {
         try {
-            preparedStatement.setDate(parameterIndex, x);
+            getPreparedStatement().setDate(parameterIndex, x);
         } catch (SQLException e) {
             throw new MintLeafException(e);
         }
     }
-
 
     /**
      * Sets the designated parameter to the given input stream, which will have
@@ -1514,23 +1537,17 @@ public class ParameterSets {
      *                           this method is called on a closed <code>PreparedStatement</code>
      * @since 1.6
      */
+    @Override
     public void setBinaryStream(int parameterIndex, InputStream x, long length) throws MintLeafException {
         try {
-            preparedStatement.setBinaryStream(parameterIndex, x, length);
+            getPreparedStatement().setBinaryStream(parameterIndex, x, length);
         } catch (SQLException e) {
             throw new MintLeafException(e);
         }
     }
 
-    public void addBatch() throws MintLeafException {
-        batch = true;
-        try {
-            this.preparedStatement.addBatch();
-        } catch (SQLException e) {
-            throw new MintLeafException(e);
-        }
-    }
 
+    @Override
     public boolean isBatch() {
         return this.batch;
     }
@@ -1546,13 +1563,13 @@ public class ParameterSets {
      * @return the default fetch direction for result sets generated
      * from this <code>Statement</code> object
      * @throws MintLeafException if a database access error occurs or
-     *                      this method is called on a closed <code>Statement</code>
-     * @see #setFetchDirection
+     *                           this method is called on a closed <code>Statement</code>
      * @since 1.2
      */
+    @Override
     public int getFetchDirection() throws MintLeafException {
         try {
-            return preparedStatement.getFetchDirection();
+            return statement.getFetchDirection();
         } catch (SQLException e) {
             throw new MintLeafException(e);
         }
@@ -1569,13 +1586,14 @@ public class ParameterSets {
      * @return the default fetch size for result sets generated
      * from this <code>Statement</code> object
      * @throws MintLeafException if a database access error occurs or
-     *                      this method is called on a closed <code>Statement</code>
-     * @see #setFetchSize
+     *                           this method is called on a closed <code>Statement</code>
+
      * @since 1.2
      */
+    @Override
     public int getFetchSize() throws MintLeafException {
         try {
-            return preparedStatement.getFetchSize();
+            return statement.getFetchSize();
         } catch (SQLException e) {
             throw new MintLeafException(e);
         }
@@ -1592,14 +1610,15 @@ public class ParameterSets {
      *
      * @return a <code>ResultSet</code> object containing the auto-generated key(s)
      * generated by the execution of this <code>Statement</code> object
-     * @throws MintLeafException                    if a database access error occurs or
+     * @throws MintLeafException               if a database access error occurs or
      *                                         this method is called on a closed <code>Statement</code>
      * @throws SQLFeatureNotSupportedException if the JDBC driver does not support this method
      * @since 1.4
      */
+    @Override
     public ResultSet getGeneratedKeys() throws MintLeafException {
         try {
-            return preparedStatement.getGeneratedKeys();
+            return statement.getGeneratedKeys();
         } catch (SQLException e) {
             throw new MintLeafException(e);
         }
@@ -1620,13 +1639,13 @@ public class ParameterSets {
      * object produced by this <code>Statement</code> object;
      * zero means there is no limit
      * @throws MintLeafException if a database access error occurs or
-     *                      this method is called on a closed <code>Statement</code>
-     * @see #setMaxRows
+     *                           this method is called on a closed <code>Statement</code>
      * @since 1.8
      */
+    @Override
     public long getLargeMaxRows() throws MintLeafException {
         try {
-            return preparedStatement.getLargeMaxRows();
+            return statement.getLargeMaxRows();
         } catch (SQLException e) {
             throw new MintLeafException(e);
         }
@@ -1645,13 +1664,13 @@ public class ParameterSets {
      * @return the current result as an update count; -1 if the current result
      * is a <code>ResultSet</code> object or there are no more results
      * @throws MintLeafException if a database access error occurs or
-     *                      this method is called on a closed <code>Statement</code>
-     * @see #execute
+     *                           this method is called on a closed <code>Statement</code>
      * @since 1.8
      */
+    @Override
     public long getLargeUpdateCount() throws MintLeafException {
         try {
-            return preparedStatement.getLargeUpdateCount();
+            return statement.getLargeUpdateCount();
         } catch (SQLException e) {
             throw new MintLeafException(e);
         }
@@ -1670,12 +1689,12 @@ public class ParameterSets {
      * @return the current column size limit for columns storing character and
      * binary values; zero means there is no limit
      * @throws MintLeafException if a database access error occurs or
-     *                      this method is called on a closed <code>Statement</code>
-     * @see #setMaxFieldSize
+     *                           this method is called on a closed <code>Statement</code>
      */
+    @Override
     public int getMaxFieldSize() throws MintLeafException {
         try {
-            return preparedStatement.getMaxFieldSize();
+            return statement.getMaxFieldSize();
         } catch (SQLException e) {
             throw new MintLeafException(e);
         }
@@ -1691,12 +1710,12 @@ public class ParameterSets {
      * object produced by this <code>Statement</code> object;
      * zero means there is no limit
      * @throws MintLeafException if a database access error occurs or
-     *                      this method is called on a closed <code>Statement</code>
-     * @see #setMaxRows
+     *                           this method is called on a closed <code>Statement</code>
      */
+    @Override
     public int getMaxRows() throws MintLeafException {
         try {
-            return preparedStatement.getMaxRows();
+            return statement.getMaxRows();
         } catch (SQLException e) {
             throw new MintLeafException(e);
         }
@@ -1718,12 +1737,13 @@ public class ParameterSets {
      * object; <code>false</code> if it is an update count or there are
      * no more results
      * @throws MintLeafException if a database access error occurs or
-     *                      this method is called on a closed <code>Statement</code>
-     * @see #execute
+     *                           this method is called on a closed <code>Statement</code>
+
      */
+    @Override
     public boolean getMoreResults() throws MintLeafException {
         try {
-            return preparedStatement.getMoreResults();
+            return statement.getMoreResults();
         } catch (SQLException e) {
             throw new MintLeafException(e);
         }
@@ -1751,7 +1771,7 @@ public class ParameterSets {
      * @return <code>true</code> if the next result is a <code>ResultSet</code>
      * object; <code>false</code> if it is an update count or there are no
      * more results
-     * @throws MintLeafException                    if a database access error occurs,
+     * @throws MintLeafException               if a database access error occurs,
      *                                         this method is called on a closed <code>Statement</code> or the argument
      *                                         supplied is not one of the following:
      *                                         <code>Statement.CLOSE_CURRENT_RESULT</code>,
@@ -1763,12 +1783,13 @@ public class ParameterSets {
      *                                         <code>Statement.KEEP_CURRENT_RESULT</code> or
      *                                         <code>Statement.CLOSE_ALL_RESULTS</code> are supplied as
      *                                         the argument.
-     * @see #execute
+
      * @since 1.4
      */
+    @Override
     public boolean getMoreResults(int current) throws MintLeafException {
         try {
-            return preparedStatement.getMoreResults(current);
+            return statement.getMoreResults(current);
         } catch (SQLException e) {
             throw new MintLeafException(e);
         }
@@ -1783,12 +1804,12 @@ public class ParameterSets {
      * @return the current query timeout limit in seconds; zero means there is
      * no limit
      * @throws MintLeafException if a database access error occurs or
-     *                      this method is called on a closed <code>Statement</code>
-     * @see #setQueryTimeout
+     *                           this method is called on a closed <code>Statement</code>
      */
+    @Override
     public int getQueryTimeout() throws MintLeafException {
         try {
-            return preparedStatement.getQueryTimeout();
+            return statement.getQueryTimeout();
         } catch (SQLException e) {
             throw new MintLeafException(e);
         }
@@ -1801,12 +1822,12 @@ public class ParameterSets {
      * @return the current result as a <code>ResultSet</code> object or
      * <code>null</code> if the result is an update count or there are no more results
      * @throws MintLeafException if a database access error occurs or
-     *                      this method is called on a closed <code>Statement</code>
-     * @see #execute
+     *                           this method is called on a closed <code>Statement</code>
      */
+    @Override
     public ResultSet getResultSet() throws MintLeafException {
         try {
-            return preparedStatement.getResultSet();
+            return statement.getResultSet();
         } catch (SQLException e) {
             throw new MintLeafException(e);
         }
@@ -1819,12 +1840,13 @@ public class ParameterSets {
      * @return either <code>ResultSet.CONCUR_READ_ONLY</code> or
      * <code>ResultSet.CONCUR_UPDATABLE</code>
      * @throws MintLeafException if a database access error occurs or
-     *                      this method is called on a closed <code>Statement</code>
+     *                           this method is called on a closed <code>Statement</code>
      * @since 1.2
      */
+    @Override
     public int getResultSetConcurrency() throws MintLeafException {
         try {
-            return preparedStatement.getResultSetConcurrency();
+            return statement.getResultSetConcurrency();
         } catch (SQLException e) {
             throw new MintLeafException(e);
         }
@@ -1837,12 +1859,13 @@ public class ParameterSets {
      * @return either <code>ResultSet.HOLD_CURSORS_OVER_COMMIT</code> or
      * <code>ResultSet.CLOSE_CURSORS_AT_COMMIT</code>
      * @throws MintLeafException if a database access error occurs or
-     *                      this method is called on a closed <code>Statement</code>
+     *                           this method is called on a closed <code>Statement</code>
      * @since 1.4
      */
+    @Override
     public int getResultSetHoldability() throws MintLeafException {
         try {
-            return preparedStatement.getResultSetHoldability();
+            return statement.getResultSetHoldability();
         } catch (SQLException e) {
             throw new MintLeafException(e);
         }
@@ -1856,12 +1879,13 @@ public class ParameterSets {
      * <code>ResultSet.TYPE_SCROLL_INSENSITIVE</code>, or
      * <code>ResultSet.TYPE_SCROLL_SENSITIVE</code>
      * @throws MintLeafException if a database access error occurs or
-     *                      this method is called on a closed <code>Statement</code>
+     *                           this method is called on a closed <code>Statement</code>
      * @since 1.2
      */
+    @Override
     public int getResultSetType() throws MintLeafException {
         try {
-            return preparedStatement.getResultSetType();
+            return statement.getResultSetType();
         } catch (SQLException e) {
             throw new MintLeafException(e);
         }
@@ -1875,12 +1899,12 @@ public class ParameterSets {
      * @return the current result as an update count; -1 if the current result is a
      * <code>ResultSet</code> object or there are no more results
      * @throws MintLeafException if a database access error occurs or
-     *                      this method is called on a closed <code>Statement</code>
-     * @see #execute
+     *                           this method is called on a closed <code>Statement</code>
      */
+    @Override
     public int getUpdateCount() throws MintLeafException {
         try {
-            return preparedStatement.getUpdateCount();
+            return statement.getUpdateCount();
         } catch (SQLException e) {
             throw new MintLeafException(e);
         }
@@ -1904,11 +1928,12 @@ public class ParameterSets {
      * @return the first <code>SQLWarning</code> object or <code>null</code>
      * if there are no warnings
      * @throws MintLeafException if a database access error occurs or
-     *                      this method is called on a closed <code>Statement</code>
+     *                           this method is called on a closed <code>Statement</code>
      */
+    @Override
     public SQLWarning getWarnings() throws MintLeafException {
         try {
-            return preparedStatement.getWarnings();
+            return statement.getWarnings();
         } catch (SQLException e) {
             throw new MintLeafException(e);
         }
@@ -1922,9 +1947,10 @@ public class ParameterSets {
      * @throws MintLeafException if a database access error occurs
      * @since 1.6
      */
+    @Override
     public boolean isClosed() throws MintLeafException {
         try {
-            return preparedStatement.isClosed();
+            return statement.isClosed();
         } catch (SQLException e) {
             throw new MintLeafException(e);
         }
@@ -1937,12 +1963,13 @@ public class ParameterSets {
      * @return {@code true} if the {@code Statement} will be closed when all
      * of its dependent result sets are closed; {@code false} otherwise
      * @throws MintLeafException if this method is called on a closed
-     *                      {@code Statement}
+     *                           {@code Statement}
      * @since 1.7
      */
+    @Override
     public boolean isCloseOnCompletion() throws MintLeafException {
         try {
-            return preparedStatement.isCloseOnCompletion();
+            return statement.isCloseOnCompletion();
         } catch (SQLException e) {
             throw new MintLeafException(e);
         }
@@ -1957,15 +1984,45 @@ public class ParameterSets {
      * is poolable; <code>false</code> otherwise
      * <p>
      * @throws MintLeafException if this method is called on a closed
-     *                      <code>Statement</code>
-     *                      <p>
+     *                           <code>Statement</code>
+     *                           <p>
      * @see Statement#setPoolable(boolean) setPoolable(boolean)
      * @since 1.6
      * <p>
      */
+    @Override
     public boolean isPoolable() throws MintLeafException {
         try {
-            return preparedStatement.isPoolable();
+            return statement.isPoolable();
+        } catch (SQLException e) {
+            throw new MintLeafException(e);
+        }
+    }
+
+    /**
+     * Requests that a <code>Statement</code> be pooled or not pooled.  The value
+     * specified is a hint to the statement pool implementation indicating
+     * whether the application wants the statement to be pooled.  It is up to
+     * the statement pool manager as to whether the hint is used.
+     * <p>
+     * The poolable value of a statement is applicable to both internal
+     * statement caches implemented by the driver and external statement caches
+     * implemented by application servers and other applications.
+     * <p>
+     * By default, a <code>Statement</code> is not poolable when created, and
+     * a <code>PreparedStatement</code> and <code>CallableStatement</code>
+     * are poolable when created.
+     *
+     * @param poolable requests that the statement be pooled if true and
+     *                 that the statement not be pooled if false
+     * @throws MintLeafException if this method is called on a closed
+     *                           <code>Statement</code>
+     * @since 1.6
+     */
+    @Override
+    public void setPoolable(boolean poolable) throws MintLeafException {
+        try {
+            getPreparedStatement().setPoolable(poolable);
         } catch (SQLException e) {
             throw new MintLeafException(e);
         }

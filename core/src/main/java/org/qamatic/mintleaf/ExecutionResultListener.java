@@ -35,11 +35,13 @@
 
 package org.qamatic.mintleaf;
 
-import java.sql.Statement;
-
 /**
  * Created by QAmatic Team on 3/24/17.
  */
-public interface StatementResultListener {
-    void onAfterExecuteSql(Statement statement);
+public interface ExecutionResultListener {
+    void onAfterExecuteSql(ParameterGets result) throws MintLeafException;
+
+    public interface Callable {
+        void onAfterExecuteSql(CallableParameterGets result) throws MintLeafException;
+    }
 }

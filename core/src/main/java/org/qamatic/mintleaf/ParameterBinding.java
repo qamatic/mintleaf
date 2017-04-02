@@ -35,12 +35,16 @@
 
 package org.qamatic.mintleaf;
 
-import org.qamatic.mintleaf.core.ParameterSets;
-
 /**
  * Created by QAmatic Team on 3/18/17.
  */
 public interface ParameterBinding {
 
     void bindParameters(ParameterSets parameterSets) throws MintLeafException;
+
+    public interface Callable {
+
+        void bindParameters(CallableParameterSets parameterSets) throws MintLeafException;
+    }
+
 }

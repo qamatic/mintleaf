@@ -35,8 +35,10 @@
 
 package org.qamatic.mintleaf.core;
 
+import org.qamatic.mintleaf.CallableParameterGets;
 import org.qamatic.mintleaf.MintLeafException;
 import org.qamatic.mintleaf.MintLeafLogger;
+import org.qamatic.mintleaf.CallableParameterSets;
 
 import java.io.Reader;
 import java.math.BigDecimal;
@@ -48,12 +50,12 @@ import java.util.Map;
 /**
  * Created by qamatic on 2/20/16.
  */
-public class CallableParameterSets extends ParameterSets {
+public class CallableBindingParameterSets extends BindingParameterSets implements CallableParameterGets, CallableParameterSets {
 
-    private static final MintLeafLogger logger = MintLeafLogger.getLogger(CallableParameterSets.class);
+    private static final MintLeafLogger logger = MintLeafLogger.getLogger(CallableBindingParameterSets.class);
     private CallableStatement callableStatement;
 
-    public CallableParameterSets(CallableStatement preparedStatement) {
+    public CallableBindingParameterSets(CallableStatement preparedStatement) {
         super(preparedStatement);
         this.callableStatement = preparedStatement;
 
@@ -85,6 +87,7 @@ public class CallableParameterSets extends ParameterSets {
      *                                         this method
      * @since 1.2
      */
+    @Override
     public ResultSetMetaData getMetaData() throws MintLeafException {
         try {
             return callableStatement.getMetaData();
@@ -130,6 +133,7 @@ public class CallableParameterSets extends ParameterSets {
      *                                         this method
      * @since 1.2
      */
+    @Override
     public Array getArray(int parameterIndex) throws MintLeafException {
         try {
             return callableStatement.getArray(parameterIndex);
@@ -153,6 +157,7 @@ public class CallableParameterSets extends ParameterSets {
      *                                         this method
      * @since 1.4
      */
+    @Override
     public Array getArray(String parameterName) throws MintLeafException {
         try {
             return callableStatement.getArray(parameterName);
@@ -176,6 +181,7 @@ public class CallableParameterSets extends ParameterSets {
      * @see #setBigDecimal
      * @since 1.2
      */
+    @Override
     public BigDecimal getBigDecimal(int parameterIndex) throws MintLeafException {
         try {
             return callableStatement.getBigDecimal(parameterIndex);
@@ -203,6 +209,7 @@ public class CallableParameterSets extends ParameterSets {
      * @deprecated use <code>getBigDecimal(int parameterIndex)</code>
      * or <code>getBigDecimal(String parameterName)</code>
      */
+    @Override
     @Deprecated
     public BigDecimal getBigDecimal(int parameterIndex, int scale) throws MintLeafException {
         try {
@@ -228,6 +235,7 @@ public class CallableParameterSets extends ParameterSets {
      * @see #setBigDecimal
      * @since 1.4
      */
+    @Override
     public BigDecimal getBigDecimal(String parameterName) throws MintLeafException {
         try {
             return callableStatement.getBigDecimal(parameterName);
@@ -251,6 +259,7 @@ public class CallableParameterSets extends ParameterSets {
      *                                         this method
      * @since 1.2
      */
+    @Override
     public Blob getBlob(int parameterIndex) throws MintLeafException {
         try {
             return callableStatement.getBlob(parameterIndex);
@@ -274,6 +283,7 @@ public class CallableParameterSets extends ParameterSets {
      *                                         this method
      * @since 1.4
      */
+    @Override
     public Blob getBlob(String parameterName) throws MintLeafException {
         try {
             return callableStatement.getBlob(parameterName);
@@ -296,6 +306,7 @@ public class CallableParameterSets extends ParameterSets {
      *                      this method is called on a closed <code>CallableStatement</code>
      * @see #setBoolean
      */
+    @Override
     public boolean getBoolean(int parameterIndex) throws MintLeafException {
         try {
             return callableStatement.getBoolean(parameterIndex);
@@ -320,6 +331,7 @@ public class CallableParameterSets extends ParameterSets {
      * @see #setBoolean
      * @since 1.4
      */
+    @Override
     public boolean getBoolean(String parameterName) throws MintLeafException {
         try {
             return callableStatement.getBoolean(parameterName);
@@ -341,6 +353,7 @@ public class CallableParameterSets extends ParameterSets {
      *                      this method is called on a closed <code>CallableStatement</code>
      * @see #setByte
      */
+    @Override
     public byte getByte(int parameterIndex) throws MintLeafException {
         try {
             return callableStatement.getByte(parameterIndex);
@@ -364,6 +377,7 @@ public class CallableParameterSets extends ParameterSets {
      * @see #setByte
      * @since 1.4
      */
+    @Override
     public byte getByte(String parameterName) throws MintLeafException {
         try {
             return callableStatement.getByte(parameterName);
@@ -386,6 +400,7 @@ public class CallableParameterSets extends ParameterSets {
      *                      this method is called on a closed <code>CallableStatement</code>
      * @see #setBytes
      */
+    @Override
     public byte[] getBytes(int parameterIndex) throws MintLeafException {
         try {
             return callableStatement.getBytes(parameterIndex);
@@ -410,6 +425,7 @@ public class CallableParameterSets extends ParameterSets {
      * @see #setBytes
      * @since 1.4
      */
+    @Override
     public byte[] getBytes(String parameterName) throws MintLeafException {
         try {
             return callableStatement.getBytes(parameterName);
@@ -430,6 +446,7 @@ public class CallableParameterSets extends ParameterSets {
      *                      this method is called on a closed <code>CallableStatement</code>
      * @since 1.6
      */
+    @Override
     public Reader getCharacterStream(int parameterIndex) throws MintLeafException {
         try {
             return callableStatement.getCharacterStream(parameterIndex);
@@ -453,6 +470,7 @@ public class CallableParameterSets extends ParameterSets {
      *                                         this method
      * @since 1.6
      */
+    @Override
     public Reader getCharacterStream(String parameterName) throws MintLeafException {
         try {
             return callableStatement.getCharacterStream(parameterName);
@@ -477,6 +495,7 @@ public class CallableParameterSets extends ParameterSets {
      *                                         this method
      * @since 1.2
      */
+    @Override
     public Clob getClob(int parameterIndex) throws MintLeafException {
         try {
             return callableStatement.getClob(parameterIndex);
@@ -500,6 +519,7 @@ public class CallableParameterSets extends ParameterSets {
      *                                         this method
      * @since 1.4
      */
+    @Override
     public Clob getClob(String parameterName) throws MintLeafException {
         try {
             return callableStatement.getClob(parameterName);
@@ -521,6 +541,7 @@ public class CallableParameterSets extends ParameterSets {
      *                      this method is called on a closed <code>CallableStatement</code>
      * @see #setDate
      */
+    @Override
     public Date getDate(int parameterIndex) throws MintLeafException {
         try {
             return callableStatement.getDate(parameterIndex);
@@ -551,6 +572,7 @@ public class CallableParameterSets extends ParameterSets {
      * @see #setDate
      * @since 1.2
      */
+    @Override
     public Date getDate(int parameterIndex, Calendar cal) throws MintLeafException {
         try {
             return callableStatement.getDate(parameterIndex, cal);
@@ -574,6 +596,7 @@ public class CallableParameterSets extends ParameterSets {
      * @see #setDate
      * @since 1.4
      */
+    @Override
     public Date getDate(String parameterName) throws MintLeafException {
         try {
             return callableStatement.getDate(parameterName);
@@ -605,6 +628,7 @@ public class CallableParameterSets extends ParameterSets {
      * @see #setDate
      * @since 1.4
      */
+    @Override
     public Date getDate(String parameterName, Calendar cal) throws MintLeafException {
         try {
             return callableStatement.getDate(parameterName, cal);
@@ -626,6 +650,7 @@ public class CallableParameterSets extends ParameterSets {
      *                      this method is called on a closed <code>CallableStatement</code>
      * @see #setDouble
      */
+    @Override
     public double getDouble(int parameterIndex) throws MintLeafException {
         try {
             return callableStatement.getDouble(parameterIndex);
@@ -649,6 +674,7 @@ public class CallableParameterSets extends ParameterSets {
      * @see #setDouble
      * @since 1.4
      */
+    @Override
     public double getDouble(String parameterName) throws MintLeafException {
         try {
             return callableStatement.getDouble(parameterName);
@@ -670,6 +696,7 @@ public class CallableParameterSets extends ParameterSets {
      *                      this method is called on a closed <code>CallableStatement</code>
      * @see #setFloat
      */
+    @Override
     public float getFloat(int parameterIndex) throws MintLeafException {
         try {
             return callableStatement.getFloat(parameterIndex);
@@ -693,6 +720,7 @@ public class CallableParameterSets extends ParameterSets {
      * @see #setFloat
      * @since 1.4
      */
+    @Override
     public float getFloat(String parameterName) throws MintLeafException {
         try {
             return callableStatement.getFloat(parameterName);
@@ -714,6 +742,7 @@ public class CallableParameterSets extends ParameterSets {
      *                      this method is called on a closed <code>CallableStatement</code>
      * @see #setInt
      */
+    @Override
     public int getInt(int parameterIndex) throws MintLeafException {
         try {
             return callableStatement.getInt(parameterIndex);
@@ -737,6 +766,7 @@ public class CallableParameterSets extends ParameterSets {
      * @see #setInt
      * @since 1.4
      */
+    @Override
     public int getInt(String parameterName) throws MintLeafException {
         try {
             return callableStatement.getInt(parameterName);
@@ -758,6 +788,7 @@ public class CallableParameterSets extends ParameterSets {
      *                      this method is called on a closed <code>CallableStatement</code>
      * @see #setLong
      */
+    @Override
     public long getLong(int parameterIndex) throws MintLeafException {
         try {
             return callableStatement.getLong(parameterIndex);
@@ -781,6 +812,7 @@ public class CallableParameterSets extends ParameterSets {
      * @see #setLong
      * @since 1.4
      */
+    @Override
     public long getLong(String parameterName) throws MintLeafException {
         try {
             return callableStatement.getLong(parameterName);
@@ -807,6 +839,7 @@ public class CallableParameterSets extends ParameterSets {
      *                                         this method
      * @since 1.6
      */
+    @Override
     public Reader getNCharacterStream(int parameterIndex) throws MintLeafException {
         try {
             return callableStatement.getNCharacterStream(parameterIndex);
@@ -833,6 +866,7 @@ public class CallableParameterSets extends ParameterSets {
      *                                         this method
      * @since 1.6
      */
+    @Override
     public Reader getNCharacterStream(String parameterName) throws MintLeafException {
         try {
             return callableStatement.getNCharacterStream(parameterName);
@@ -859,6 +893,7 @@ public class CallableParameterSets extends ParameterSets {
      *                                         this method
      * @since 1.6
      */
+    @Override
     public NClob getNClob(int parameterIndex) throws MintLeafException {
         try {
             return callableStatement.getNClob(parameterIndex);
@@ -884,6 +919,7 @@ public class CallableParameterSets extends ParameterSets {
      *                                         this method
      * @since 1.6
      */
+    @Override
     public NClob getNClob(String parameterName) throws MintLeafException {
         try {
             return callableStatement.getNClob(parameterName);
@@ -915,6 +951,7 @@ public class CallableParameterSets extends ParameterSets {
      * @see #setNString
      * @since 1.6
      */
+    @Override
     public String getNString(int parameterIndex) throws MintLeafException {
         try {
             return callableStatement.getNString(parameterIndex);
@@ -947,6 +984,7 @@ public class CallableParameterSets extends ParameterSets {
      * @see #setNString
      * @since 1.6
      */
+    @Override
     public String getNString(String parameterName) throws MintLeafException {
         try {
             return callableStatement.getNString(parameterName);
@@ -975,6 +1013,7 @@ public class CallableParameterSets extends ParameterSets {
      * @see Types
      * @see #setObject
      */
+    @Override
     public Object getObject(int parameterIndex) throws MintLeafException {
         try {
             return callableStatement.getObject(parameterIndex);
@@ -1005,6 +1044,7 @@ public class CallableParameterSets extends ParameterSets {
      * @see #setObject
      * @since 1.2
      */
+    @Override
     public Object getObject(int parameterIndex, Map<String, Class<?>> map) throws MintLeafException {
         try {
             return callableStatement.getObject(parameterIndex, map);
@@ -1038,6 +1078,7 @@ public class CallableParameterSets extends ParameterSets {
      *                                         this method
      * @since 1.7
      */
+    @Override
     public <T> T getObject(int parameterIndex, Class<T> type) throws MintLeafException {
         try {
             return callableStatement.getObject(parameterIndex, type);
@@ -1068,6 +1109,7 @@ public class CallableParameterSets extends ParameterSets {
      * @see #setObject
      * @since 1.4
      */
+    @Override
     public Object getObject(String parameterName) throws MintLeafException {
         try {
             return callableStatement.getObject(parameterName);
@@ -1098,6 +1140,7 @@ public class CallableParameterSets extends ParameterSets {
      * @see #setObject
      * @since 1.4
      */
+    @Override
     public Object getObject(String parameterName, Map<String, Class<?>> map) throws MintLeafException {
         try {
             return callableStatement.getObject(parameterName, map);
@@ -1132,6 +1175,7 @@ public class CallableParameterSets extends ParameterSets {
      *                                         this method
      * @since 1.7
      */
+    @Override
     public <T> T getObject(String parameterName, Class<T> type) throws MintLeafException {
         try {
             return callableStatement.getObject(parameterName, type);
@@ -1156,6 +1200,7 @@ public class CallableParameterSets extends ParameterSets {
      *                                         this method
      * @since 1.2
      */
+    @Override
     public Ref getRef(int parameterIndex) throws MintLeafException {
         try {
             return callableStatement.getRef(parameterIndex);
@@ -1179,6 +1224,7 @@ public class CallableParameterSets extends ParameterSets {
      *                                         this method
      * @since 1.4
      */
+    @Override
     public Ref getRef(String parameterName) throws MintLeafException {
         try {
             return callableStatement.getRef(parameterName);
@@ -1202,6 +1248,7 @@ public class CallableParameterSets extends ParameterSets {
      *                                         this method
      * @since 1.6
      */
+    @Override
     public RowId getRowId(int parameterIndex) throws MintLeafException {
         try {
             return callableStatement.getRowId(parameterIndex);
@@ -1225,6 +1272,7 @@ public class CallableParameterSets extends ParameterSets {
      *                                         this method
      * @since 1.6
      */
+    @Override
     public RowId getRowId(String parameterName) throws MintLeafException {
         try {
             return callableStatement.getRowId(parameterName);
@@ -1246,6 +1294,7 @@ public class CallableParameterSets extends ParameterSets {
      *                      this method is called on a closed <code>CallableStatement</code>
      * @see #setShort
      */
+    @Override
     public short getShort(int parameterIndex) throws MintLeafException {
         try {
             return callableStatement.getShort(parameterIndex);
@@ -1269,6 +1318,7 @@ public class CallableParameterSets extends ParameterSets {
      * @see #setShort
      * @since 1.4
      */
+    @Override
     public short getShort(String parameterName) throws MintLeafException {
         try {
             return callableStatement.getShort(parameterName);
@@ -1290,6 +1340,7 @@ public class CallableParameterSets extends ParameterSets {
      *                                         this method
      * @since 1.6
      */
+    @Override
     public SQLXML getSQLXML(int parameterIndex) throws MintLeafException {
         try {
             return callableStatement.getSQLXML(parameterIndex);
@@ -1311,6 +1362,7 @@ public class CallableParameterSets extends ParameterSets {
      *                                         this method
      * @since 1.6
      */
+    @Override
     public SQLXML getSQLXML(String parameterName) throws MintLeafException {
         try {
             return callableStatement.getSQLXML(parameterName);
@@ -1340,6 +1392,7 @@ public class CallableParameterSets extends ParameterSets {
      *                      this method is called on a closed <code>CallableStatement</code>
      * @see #setString
      */
+    @Override
     public String getString(int parameterIndex) throws MintLeafException {
         try {
             return callableStatement.getString(parameterIndex);
@@ -1370,6 +1423,7 @@ public class CallableParameterSets extends ParameterSets {
      * @see #setString
      * @since 1.4
      */
+    @Override
     public String getString(String parameterName) throws MintLeafException {
         try {
             return callableStatement.getString(parameterName);
@@ -1391,6 +1445,7 @@ public class CallableParameterSets extends ParameterSets {
      *                      this method is called on a closed <code>CallableStatement</code>
      * @see #setTime
      */
+    @Override
     public Time getTime(int parameterIndex) throws MintLeafException {
         try {
             return callableStatement.getTime(parameterIndex);
@@ -1421,6 +1476,7 @@ public class CallableParameterSets extends ParameterSets {
      * @see #setTime
      * @since 1.2
      */
+    @Override
     public Time getTime(int parameterIndex, Calendar cal) throws MintLeafException {
         try {
             return callableStatement.getTime(parameterIndex, cal);
@@ -1444,6 +1500,7 @@ public class CallableParameterSets extends ParameterSets {
      * @see #setTime
      * @since 1.4
      */
+    @Override
     public Time getTime(String parameterName) throws MintLeafException {
         try {
             return callableStatement.getTime(parameterName);
@@ -1475,6 +1532,7 @@ public class CallableParameterSets extends ParameterSets {
      * @see #setTime
      * @since 1.4
      */
+    @Override
     public Time getTime(String parameterName, Calendar cal) throws MintLeafException {
         try {
             return callableStatement.getTime(parameterName, cal);
@@ -1496,6 +1554,7 @@ public class CallableParameterSets extends ParameterSets {
      *                      this method is called on a closed <code>CallableStatement</code>
      * @see #setTimestamp
      */
+    @Override
     public Timestamp getTimestamp(int parameterIndex) throws MintLeafException {
         try {
             return callableStatement.getTimestamp(parameterIndex);
@@ -1526,6 +1585,7 @@ public class CallableParameterSets extends ParameterSets {
      * @see #setTimestamp
      * @since 1.2
      */
+    @Override
     public Timestamp getTimestamp(int parameterIndex, Calendar cal) throws MintLeafException {
         try {
             return callableStatement.getTimestamp(parameterIndex, cal);
@@ -1549,6 +1609,7 @@ public class CallableParameterSets extends ParameterSets {
      * @see #setTimestamp
      * @since 1.4
      */
+    @Override
     public Timestamp getTimestamp(String parameterName) throws MintLeafException {
         try {
             return callableStatement.getTimestamp(parameterName);
@@ -1580,6 +1641,7 @@ public class CallableParameterSets extends ParameterSets {
      * @see #setTimestamp
      * @since 1.4
      */
+    @Override
     public Timestamp getTimestamp(String parameterName, Calendar cal) throws MintLeafException {
         try {
             return callableStatement.getTimestamp(parameterName, cal);
@@ -1606,6 +1668,7 @@ public class CallableParameterSets extends ParameterSets {
      * @see #setURL
      * @since 1.4
      */
+    @Override
     public URL getURL(int parameterIndex) throws MintLeafException {
         try {
             return callableStatement.getURL(parameterIndex);
@@ -1631,6 +1694,7 @@ public class CallableParameterSets extends ParameterSets {
      * @see #setURL
      * @since 1.4
      */
+    @Override
     public URL getURL(String parameterName) throws MintLeafException {
         try {
             return callableStatement.getURL(parameterName);
@@ -1673,6 +1737,7 @@ public class CallableParameterSets extends ParameterSets {
      *                                         this data type
      * @see Types
      */
+    @Override
     public void registerOutParameter(int parameterIndex, int sqlType) throws MintLeafException {
         try {
             callableStatement.registerOutParameter(parameterIndex, sqlType);
@@ -1712,6 +1777,7 @@ public class CallableParameterSets extends ParameterSets {
      *                                         this data type
      * @see Types
      */
+    @Override
     public void registerOutParameter(int parameterIndex, int sqlType, int scale) throws MintLeafException {
         try {
             callableStatement.registerOutParameter(parameterIndex, sqlType, scale);
@@ -1763,6 +1829,7 @@ public class CallableParameterSets extends ParameterSets {
      * @see Types
      * @since 1.2
      */
+    @Override
     public void registerOutParameter(int parameterIndex, int sqlType, String typeName) throws MintLeafException {
         try {
             callableStatement.registerOutParameter(parameterIndex, sqlType, typeName);
@@ -1806,6 +1873,7 @@ public class CallableParameterSets extends ParameterSets {
      * @see SQLType
      * @since 1.8
      */
+    @Override
     public void registerOutParameter(int parameterIndex, SQLType sqlType) throws MintLeafException {
         try {
             callableStatement.registerOutParameter(parameterIndex, sqlType);
@@ -1845,6 +1913,7 @@ public class CallableParameterSets extends ParameterSets {
      * @see SQLType
      * @since 1.8
      */
+    @Override
     public void registerOutParameter(int parameterIndex, SQLType sqlType, int scale) throws MintLeafException {
         try {
             callableStatement.registerOutParameter(parameterIndex, sqlType, scale);
@@ -1896,6 +1965,7 @@ public class CallableParameterSets extends ParameterSets {
      * @see SQLType
      * @since 1.8
      */
+    @Override
     public void registerOutParameter(int parameterIndex, SQLType sqlType, String typeName) throws MintLeafException {
         try {
             callableStatement.registerOutParameter(parameterIndex, sqlType, typeName);
@@ -1939,6 +2009,7 @@ public class CallableParameterSets extends ParameterSets {
      * @see Types
      * @since 1.4
      */
+    @Override
     public void registerOutParameter(String parameterName, int sqlType) throws MintLeafException {
         try {
             callableStatement.registerOutParameter(parameterName, sqlType);
@@ -1979,6 +2050,7 @@ public class CallableParameterSets extends ParameterSets {
      * @see Types
      * @since 1.4
      */
+    @Override
     public void registerOutParameter(String parameterName, int sqlType, int scale) throws MintLeafException {
         try {
             callableStatement.registerOutParameter(parameterName, sqlType, scale);
@@ -2031,6 +2103,7 @@ public class CallableParameterSets extends ParameterSets {
      * @see Types
      * @since 1.4
      */
+    @Override
     public void registerOutParameter(String parameterName, int sqlType, String typeName) throws MintLeafException {
         try {
             callableStatement.registerOutParameter(parameterName, sqlType, typeName);
@@ -2075,6 +2148,7 @@ public class CallableParameterSets extends ParameterSets {
      * @see SQLType
      * @since 1.8
      */
+    @Override
     public void registerOutParameter(String parameterName, SQLType sqlType) throws MintLeafException {
         try {
             callableStatement.registerOutParameter(parameterName, sqlType);
@@ -2115,6 +2189,7 @@ public class CallableParameterSets extends ParameterSets {
      * @see SQLType
      * @since 1.8
      */
+    @Override
     public void registerOutParameter(String parameterName, SQLType sqlType, int scale) throws MintLeafException {
         try {
             callableStatement.registerOutParameter(parameterName, sqlType, scale);
@@ -2166,6 +2241,7 @@ public class CallableParameterSets extends ParameterSets {
      * @see SQLType
      * @since 1.8
      */
+    @Override
     public void registerOutParameter(String parameterName, SQLType sqlType, String typeName) throws MintLeafException {
         try {
             callableStatement.registerOutParameter(parameterName, sqlType, typeName);
