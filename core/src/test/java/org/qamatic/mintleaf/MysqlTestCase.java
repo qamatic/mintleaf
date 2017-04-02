@@ -48,8 +48,8 @@ public class MysqlTestCase {
     }
 
     protected static void initDb() {
-        Database sysDb = createOracleDbContext(System.getenv("MYSQL_DB_SYS_USERNAME"),
-                System.getenv("MYSQL_DB_SYS_PASSWORD"));
+        Database sysDb = createOracleDbContext(System.getenv("MYSQL_DB_ADMIN_USERNAME"),
+                System.getenv("MYSQL_DB_ADMIN_PASSWORD"));
         try {
             ChangeSets.migrate(sysDb.getNewConnection(), "res:/mysql/mysql-db-setup.sql", "create database and users");
         } catch (MintLeafException e) {

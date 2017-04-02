@@ -48,8 +48,8 @@ public class OracleTestCase {
 
 
     static {
-        Database oraSysDb = createOracleDbContext(System.getenv("TEST_DB_MASTER_USERNAME"),
-                System.getenv("TEST_DB_MASTER_PASSWORD"));
+        Database oraSysDb = createOracleDbContext(System.getenv("ORA_DB_ADMIN_USERNAME"),
+                System.getenv("ORA_DB_ADMIN_PASSWORD"));
         try {
             ChangeSets.migrate(oraSysDb.getNewConnection(), "res:/oracle/hrdb-changesets/hrdb-schema-setup.sql", "create users");
         } catch (MintLeafException e) {
@@ -60,7 +60,7 @@ public class OracleTestCase {
     public static Database createOracleDbContext(String userName, String password) {
         Database db = new Mintleaf.DatabaseBuilder().
                 withDriverSource(ApacheBasicDataSource.class).
-                withUrl(System.getenv("TEST_DB_URL")).
+                withUrl(System.getenv("ORA_DB_URL")).
                 withUsername(userName).
                 withPassword(password).
                 build();
