@@ -42,9 +42,6 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import static org.qamatic.mintleaf.Mintleaf.executeBatchSqls;
-import static org.qamatic.mintleaf.Mintleaf.selectQuery;
-
 /**
  * Created by qamatic on 3/6/16.
  */
@@ -60,7 +57,7 @@ public abstract class ImpExpBase {
         final Matcher columns = columnPattern.matcher(sqlTemplate);
         logger.info("importing using template:" + sqlTemplate);
         List<String> batchSqls = new ArrayList<>();
-        final Executable<int[]> batchCall = executeBatchSqls(getConnectionContext(), batchSqls);
+        final Executable<int[]> batchCall = getConnectionContext().executeBatchSqls(batchSqls);
         dataImport.doImport((rowNum, row) -> {
 
             StringBuffer buffer = new StringBuffer(sqlTemplate);
@@ -84,7 +81,7 @@ public abstract class ImpExpBase {
     }
 
     protected void exportDataTo(final ExportFlavour dataExport, String sql, ParameterBinding parameterBinding) throws MintLeafException {
-        try (SqlResultSet sqlResultSet = selectQuery(this.getConnectionContext()).withSql(sql).withParamValues(parameterBinding).buildSelect()) {
+        try (SqlResultSet sqlResultSet = getConnectionContext().queryBuilder().withSql(sql).withParamValues(parameterBinding).buildSelect()) {
             dataExport.export(sqlResultSet.getResultSet());
         }
     }

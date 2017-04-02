@@ -52,28 +52,8 @@ public final class Mintleaf {
 
     private static final MintLeafLogger logger = MintLeafLogger.getLogger(Mintleaf.class);
 
-    public static FluentJdbc.Builder selectQuery(ConnectionContext connectionContext) {
+    public static FluentJdbc.Builder queryBuilder(ConnectionContext connectionContext) {
         return new FluentJdbc.Builder(connectionContext);
-    }
-
-    public static SqlResultSet selectQuery(ConnectionContext connectionContext, String sql) {
-        return selectQuery(connectionContext).withSql(sql).buildSelect();
-    }
-
-    public static FluentJdbc.Builder executeSql(ConnectionContext connectionContext) {
-        return new FluentJdbc.Builder(connectionContext);
-    }
-
-    public static Executable<int[]> executeBatchSqls(ConnectionContext connectionContext, List<String> batchSqls) {
-        return new ExecuteQuery(connectionContext, batchSqls);
-    }
-
-    public static Executable<int[]> executeSql(ConnectionContext connectionContext, String sql) {
-        return executeSql(connectionContext).withSql(sql).buildExecute();
-    }
-
-    public static Executable<int[]> executeSql(ConnectionContext connectionContext, String sql, Object[] parameterValues) {
-        return executeSql(connectionContext).withSql(sql).withParamValues(parameterValues).buildExecute();
     }
 
     public static Database database(String url, String username, String password) {

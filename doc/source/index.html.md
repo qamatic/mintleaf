@@ -203,16 +203,16 @@ Use getNewConnection() method to create a connection context that is required fo
 
 ```java
   import static org.qamatic.mintleaf.Mintleaf.database;
-  import static org.qamatic.mintleaf.Mintleaf.executeSql;
+  
 
 //example for user handles connection close()
   ConnectionContext connectionContext = h2Database.getNewConnection();
-  executeSql(connectionContext, "INSERT INTO USERS VALUES (1, 'EXAMPLE-USER')");
+  connectionContext.executeSql("INSERT INTO USERS VALUES (1, 'EXAMPLE-USER')");
   connectionContext.close()  // you must call close here
 
 //example for auto closable
   try (ConnectionContext connectionContext = db.getNewConnection()){
-    executeSql(connectionContext, "INSERT INTO USERS VALUES (1, 'EXAMPLE-USER')");
+    connectionContext.executeSql("INSERT INTO USERS VALUES (1, 'EXAMPLE-USER')");
   }
 ```
 
@@ -226,7 +226,7 @@ Use beginTransaction() to start a transaction and finally call either commitTran
 
 ```java
   try (ConnectionContext connectionContext = db.getNewConnection().beginTransaction()){    
-    executeSql(connectionContext, "INSERT INTO USERS VALUES (1, 'EXAMPLE-USER')");    
+    connectionContext.executeSql("INSERT INTO USERS VALUES (1, 'EXAMPLE-USER')");    
   }
 ```
 
@@ -234,7 +234,7 @@ in the above example *db.getNewConnection().beginTransaction()* in try-resource 
 
 ```java
   try (ConnectionContext connectionContext = db.getNewConnection().beginTransaction()){    
-    executeSql(connectionContext, "INSERT INTO USERS VALUES (1, 'EXAMPLE-USER')");    
+    connectionContext.executeSql("INSERT INTO USERS VALUES (1, 'EXAMPLE-USER')");    
   }
   catch (MintLeafException e){
      connectionContext.rollbackTransaction();
@@ -247,7 +247,7 @@ in the above example *db.getNewConnection().beginTransaction()* in try-resource 
   ConnectionContext connectionContext = h2Database.getNewConnection();
   connectionContext.beginTransaction();
   try {
-    executeSql(connectionContext, "INSERT INTO USERS VALUES (1, 'EXAMPLE-USER')");
+    connectionContext.executeSql("INSERT INTO USERS VALUES (1, 'EXAMPLE-USER')");
     connectionContext.commitTransaction();
   }
   catch (MintLeafException e){
@@ -263,11 +263,9 @@ in the above example *db.getNewConnection().beginTransaction()* in try-resource 
 
 ```java
 
-  import static org.qamatic.mintleaf.Mintleaf.selectQuery
-
   try (ConnectionContext connectionContext = db.getNewConnection()){
 
-     SqlResultSet SqlResultSet = selectQuery(connectionContext).
+     SqlResultSet SqlResultSet = connectionContext.queryBuilder().
                                    withSql("SELECT * FROM USERS").
                                    buildSelect();
 
@@ -284,8 +282,7 @@ Once you get a connection context then you should be able to use getDbQueries() 
 
 ```java
 
-  import static org.qamatic.mintleaf.Mintleaf.selectQuery
-
+   
   try (ConnectionContext connectionContext = db.getNewConnection()){
 
     connectionContext.getDbQueries().<Standard query functions listed below>

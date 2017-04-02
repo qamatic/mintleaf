@@ -35,7 +35,10 @@
 
 package org.qamatic.mintleaf;
 
+import org.qamatic.mintleaf.core.FluentJdbc;
+
 import java.sql.Connection;
+import java.util.List;
 
 /**
  * Created by QAmatic Team on 3/19/17.
@@ -57,4 +60,13 @@ public interface ConnectionContext<T extends DbQueries> extends AutoCloseable {
     T getDbQueries();
 
 
+    FluentJdbc.Builder queryBuilder();
+
+    SqlResultSet selectQuery(String sql);
+
+    Executable<int[]> executeBatchSqls(List<String> batchSqls);
+
+    Executable<int[]> executeSql(String sql);
+
+    Executable<int[]> executeSql(String sql, Object[] parameterValues);
 }

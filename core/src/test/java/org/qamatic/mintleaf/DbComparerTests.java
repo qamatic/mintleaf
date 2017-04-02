@@ -46,7 +46,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
-import static org.qamatic.mintleaf.Mintleaf.selectQuery;
 
 
 /**
@@ -84,12 +83,12 @@ public class DbComparerTests extends H2TestCase {
             }
         };
 
-        try (ConnectionContext connectionContext = testDb.getNewConnection()) {
+        try (ConnectionContext ctx = testDb.getNewConnection()) {
 
-            SqlResultSet sourceTable = selectQuery(connectionContext, "SELECT * FROM HRDB.USERS");
+            SqlResultSet sourceTable = ctx.selectQuery("SELECT * FROM HRDB.USERS");
 
 
-            SqlResultSet targetTable = selectQuery(connectionContext, "SELECT * FROM HRDB.USERS_IMPORT_TABLE");
+            SqlResultSet targetTable = ctx.selectQuery("SELECT * FROM HRDB.USERS_IMPORT_TABLE");
 
             List<String> actuals = assertCompareTable(sourceTable.asRowListWrapper(), targetTable.asRowListWrapper());
 

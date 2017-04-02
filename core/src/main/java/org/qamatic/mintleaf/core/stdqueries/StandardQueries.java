@@ -36,6 +36,8 @@
 package org.qamatic.mintleaf.core.stdqueries;
 
 import org.qamatic.mintleaf.*;
+import org.qamatic.mintleaf.core.ExecuteQuery;
+import org.qamatic.mintleaf.core.FluentJdbc;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -44,7 +46,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.regex.Pattern;
 
-import static org.qamatic.mintleaf.Mintleaf.selectQuery;
 
 public class StandardQueries implements DbQueries {
 
@@ -86,7 +87,7 @@ public class StandardQueries implements DbQueries {
 
         final List<T> rows = new ArrayList<T>();
 
-        try (SqlResultSet sqlResultSet = selectQuery(connectionContext).withSql(sql).withParamValues(parameterBinding).buildSelect()) {
+        try (SqlResultSet sqlResultSet = this.connectionContext.queryBuilder().withSql(sql).withParamValues(parameterBinding).buildSelect()) {
 
             sqlResultSet.iterate((row, dr) -> {
                 try {
@@ -102,7 +103,7 @@ public class StandardQueries implements DbQueries {
 
     @Override
     public int queryInt(String sql, ParameterBinding parameterBinding) throws MintLeafException {
-        try (SqlResultSet sqlResultSet = selectQuery(connectionContext).withSql(sql).withParamValues(parameterBinding).buildSelect()) {
+        try (SqlResultSet sqlResultSet = this.connectionContext.queryBuilder().withSql(sql).withParamValues(parameterBinding).buildSelect()) {
 
             try {
                 return sqlResultSet.first().getInt(1);

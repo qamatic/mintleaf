@@ -37,8 +37,6 @@ package org.qamatic.mintleaf.tools;
 
 import org.qamatic.mintleaf.*;
 
-import static org.qamatic.mintleaf.Mintleaf.selectQuery;
-
 /**
  * Created by qamatic on 3/6/16.
  */
@@ -62,7 +60,7 @@ public class DbImporter extends ImpExpBase implements Executable<Boolean> {
 
     @Override
     public Boolean execute() throws MintLeafException {
-        try (SqlResultSet sourceSqlResultSet = selectQuery(this.getConnectionContext()).withSql(sourceSql).withParamValues(sourceSqlParamValueBindings).buildSelect()) {
+        try (SqlResultSet sourceSqlResultSet = this.getConnectionContext().queryBuilder().withSql(sourceSql).withParamValues(sourceSqlParamValueBindings).buildSelect()) {
             importDataFrom(createFlavour(sourceSqlResultSet), this.targetSqlTemplate);
             return true;
         }

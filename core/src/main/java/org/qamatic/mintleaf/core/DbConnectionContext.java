@@ -42,6 +42,7 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.List;
 
 /**
  * Created by QAmatic Team on 3/19/17.
@@ -162,6 +163,31 @@ public class DbConnectionContext<T extends DbQueries> implements ConnectionConte
     @Override
     public String toString() {
         return String.format("Driver: %s, InTransaction:%s, AutoCloseConnection:%s ", this.driverSource, this.inTransaction, isCloseable());
+    }
+
+    @Override
+    public FluentJdbc.Builder queryBuilder() {
+        return new FluentJdbc.Builder(this);
+    }
+
+    @Override
+    public SqlResultSet selectQuery(String sql) {
+        return queryBuilder().withSql(sql).buildSelect();
+    }
+
+    @Override
+    public Executable<int[]> executeBatchSqls(List<String> batchSqls) {
+        return new ExecuteQuery(this, batchSqls);
+    }
+
+    @Override
+    public Executable<int[]> executeSql(String sql) {
+        return queryBuilder().withSql(sql).buildExecute();
+    }
+
+    @Override
+    public Executable<int[]> executeSql(String sql, Object[] parameterValues) {
+        return queryBuilder().withSql(sql).withParamValues(parameterValues).buildExecute();
     }
 
 }
