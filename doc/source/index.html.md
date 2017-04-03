@@ -173,7 +173,7 @@ Version profile is a configuration file which contains list of changesets to be 
 ![Mintleaf](/images/mintleaf.png)  
 
 
-# Connection & Queries
+# Connection Context and Queries
 
 ## Connecting to database
 
@@ -203,7 +203,7 @@ Use getNewConnection() method to create a connection context that is required fo
 
 ```java
   import static org.qamatic.mintleaf.Mintleaf.database;
-  
+
 
 //example for user handles connection close()
   ConnectionContext connectionContext = h2Database.getNewConnection();
@@ -282,7 +282,7 @@ Once you get a connection context then you should be able to use getDbQueries() 
 
 ```java
 
-   
+
   try (ConnectionContext connectionContext = db.getNewConnection()){
 
     connectionContext.getDbQueries().<Standard query functions listed below>
