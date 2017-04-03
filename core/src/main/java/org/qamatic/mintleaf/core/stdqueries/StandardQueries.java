@@ -36,18 +36,15 @@
 package org.qamatic.mintleaf.core.stdqueries;
 
 import org.qamatic.mintleaf.*;
-import org.qamatic.mintleaf.core.ExecuteQuery;
-import org.qamatic.mintleaf.core.FluentJdbc;
 
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.regex.Pattern;
 
 
-public class StandardQueries implements DbQueries {
+public class StandardQueries implements DbQueryExtension {
 
     private static final MintLeafLogger logger = MintLeafLogger.getLogger(StandardQueries.class);
     private static final Map<String, Class<? extends StandardQueries>> registeredQueries = new HashMap<>();

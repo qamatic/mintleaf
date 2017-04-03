@@ -38,6 +38,6 @@ package org.qamatic.mintleaf;
 /**
  * Created by QAmatic Team on 3/25/17.
  */
-public interface H2ExampleAssert extends DbQueries {
+public interface H2ExampleAssert extends DbQueryExtension {
     String returnSomeValue();
 }

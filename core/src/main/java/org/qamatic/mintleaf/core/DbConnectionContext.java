@@ -48,7 +48,7 @@ import java.util.List;
 /**
  * Created by QAmatic Team on 3/19/17.
  */
-public class DbConnectionContext<T extends DbQueries> implements ConnectionContext<T> {
+public class DbConnectionContext<T extends DbQueryExtension> implements ConnectionContext<T> {
 
     private static final MintLeafLogger logger = MintLeafLogger.getLogger(DbConnectionContext.class);
 
@@ -62,13 +62,13 @@ public class DbConnectionContext<T extends DbQueries> implements ConnectionConte
         this.autoCloseable = autoCloseable;
     }
 
-    private static DbQueries createDbQueryInstance(String url, ConnectionContext connectionContext) {
+    private static DbQueryExtension createDbQueryInstance(String url, ConnectionContext connectionContext) {
         Class<? extends StandardQueries> queryImplClaz = StandardQueries.getQueryImplementation(url);
-        DbQueries dbQueries = null;
+        DbQueryExtension dbQueries = null;
         try {
             Constructor constructor =
                     queryImplClaz.getConstructor(new Class[]{ConnectionContext.class});
-            dbQueries = (DbQueries) constructor.newInstance(connectionContext);
+            dbQueries = (DbQueryExtension) constructor.newInstance(connectionContext);
         } catch (InstantiationException e) {
             logger.error(e);
             MintLeafException.throwException(e);

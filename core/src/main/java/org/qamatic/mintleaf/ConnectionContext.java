@@ -44,7 +44,7 @@ import java.util.List;
 /**
  * Created by QAmatic Team on 3/19/17.
  */
-public interface ConnectionContext<T extends DbQueries> extends AutoCloseable {
+public interface ConnectionContext<T extends DbQueryExtension> extends AutoCloseable {
 
     Connection getConnection() throws MintLeafException;
 

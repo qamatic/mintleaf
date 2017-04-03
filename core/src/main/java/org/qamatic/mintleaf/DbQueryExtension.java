@@ -39,7 +39,7 @@ import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import java.util.List;
 
-public interface DbQueries extends AutoCloseable {
+public interface DbQueryExtension extends AutoCloseable {
 
 
     default boolean isSqlObjectExists(String objectName, String objectType, boolean ignoreValidity) throws MintLeafException {

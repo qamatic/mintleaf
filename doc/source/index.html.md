@@ -315,7 +315,7 @@ For example, you want to execute a query and the result set needs to collected a
        }
     }
 
-    List<User> users = connectionContext.getDbQueries().query(
+    List<User> users = connectionContext.query(
                      "SELECT USERNAME FROM HRDB.USERS",                               √
 
                       (rowNum, resultSet) -> {
@@ -326,7 +326,7 @@ For example, you want to execute a query and the result set needs to collected a
                     );
 
 // OR something like getting an array list of user names                      
-    List<String> userNames = connectionContext.getDbQueries().query(
+    List<String> userNames = connectionContext.query(
 
                          "SELECT USERNAME FROM HRDB.USERS",         // sql
 
@@ -353,7 +353,7 @@ For example, you want to execute a query with binding parameter values and the r
 
 ```java
 
-    List<String> userNames = connectionContext.getDbQueries().query(
+    List<String> userNames = connectionContext.query(
                          "SELECT USERNAME FROM HRDB.USERS WHERE USERID > ? AND USERID < ?",  //sql
 
                           (parameterSets) -> {                               // parameter values binding

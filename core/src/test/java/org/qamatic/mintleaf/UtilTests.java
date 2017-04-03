@@ -62,7 +62,7 @@ public class UtilTests {
 
     @Test
     public void testQueryImpl() {
-        assertTrue("registerd dbqueries is not of type DbQueries interface", DbQueries.class.isAssignableFrom(StandardQueries.getQueryImplementation("jdbc:H2:/")));
+        assertTrue("registerd dbqueries is not of type DbQueries interface", DbQueryExtension.class.isAssignableFrom(StandardQueries.getQueryImplementation("jdbc:H2:/")));
         assertEquals(MySqlQueries.class, StandardQueries.getQueryImplementation("jdbc:MySql:/"));
         assertEquals(MSSqlQueries.class, StandardQueries.getQueryImplementation("jdbc:SqlServer:/"));
         assertEquals(OracleQueries.class, StandardQueries.getQueryImplementation("jdbc:Oracle:/"));

@@ -43,7 +43,7 @@ import org.qamatic.mintleaf.core.JdbcDriverSource;
  */
 public class H2TestCase {
     protected static Database testDb;
-    protected static DbQueries testDbQueries;
+    protected static DbQueryExtension testDbQueries;
 
     @BeforeClass
     public static void setupDb() {
