@@ -501,7 +501,7 @@ It&rsquo;s very easy to add changeset definition on your exising sql files if yo
        <span class="o">}</span>
     <span class="o">}</span>
 
-    <span class="n">List</span><span class="o">&lt;</span><span class="n">User</span><span class="o">&gt;</span> <span class="n">users</span> <span class="o">=</span> <span class="n">connectionContext</span><span class="o">.</span><span class="na">getDbQueries</span><span class="o">().</span><span class="na">query</span><span class="o">(</span>
+    <span class="n">List</span><span class="o">&lt;</span><span class="n">User</span><span class="o">&gt;</span> <span class="n">users</span> <span class="o">=</span> <span class="n">connectionContext</span><span class="o">.</span><span class="na">query</span><span class="o">(</span>
                      <span class="s">"SELECT USERNAME FROM HRDB.USERS"</span><span class="o">,</span>                               <span class="err">√</span>
 
                       <span class="o">(</span><span class="n">rowNum</span><span class="o">,</span> <span class="n">resultSet</span><span class="o">)</span> <span class="o">-&gt;</span> <span class="o">{</span>
@@ -512,7 +512,7 @@ It&rsquo;s very easy to add changeset definition on your exising sql files if yo
                     <span class="o">);</span>
 
 <span class="c1">// OR something like getting an array list of user names                      </span>
-    <span class="n">List</span><span class="o">&lt;</span><span class="n">String</span><span class="o">&gt;</span> <span class="n">userNames</span> <span class="o">=</span> <span class="n">connectionContext</span><span class="o">.</span><span class="na">getDbQueries</span><span class="o">().</span><span class="na">query</span><span class="o">(</span>
+    <span class="n">List</span><span class="o">&lt;</span><span class="n">String</span><span class="o">&gt;</span> <span class="n">userNames</span> <span class="o">=</span> <span class="n">connectionContext</span><span class="o">.</span><span class="na">query</span><span class="o">(</span>
 
                          <span class="s">"SELECT USERNAME FROM HRDB.USERS"</span><span class="o">,</span>         <span class="c1">// sql</span>
 
@@ -547,7 +547,7 @@ It&rsquo;s very easy to add changeset definition on your exising sql files if yo
 
 <p>For example, you want to execute a query with binding parameter values and the result set needs to collected as list of objects / beans</p>
 <pre class="highlight java tab-java"><code>
-    <span class="n">List</span><span class="o">&lt;</span><span class="n">String</span><span class="o">&gt;</span> <span class="n">userNames</span> <span class="o">=</span> <span class="n">connectionContext</span><span class="o">.</span><span class="na">getDbQueries</span><span class="o">().</span><span class="na">query</span><span class="o">(</span>
+    <span class="n">List</span><span class="o">&lt;</span><span class="n">String</span><span class="o">&gt;</span> <span class="n">userNames</span> <span class="o">=</span> <span class="n">connectionContext</span><span class="o">.</span><span class="na">query</span><span class="o">(</span>
                          <span class="s">"SELECT USERNAME FROM HRDB.USERS WHERE USERID &gt; ? AND USERID &lt; ?"</span><span class="o">,</span>  <span class="c1">//sql</span>
 
                           <span class="o">(</span><span class="n">parameterSets</span><span class="o">)</span> <span class="o">-&gt;</span> <span class="o">{</span>                               <span class="c1">// parameter values binding</span>
