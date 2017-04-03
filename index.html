@@ -348,25 +348,27 @@ It&rsquo;s very easy to add changeset definition on your exising sql files if yo
 
 <h2 id="configuration-file">Configuration file</h2>
 
-<p>Version profile is a configuration file which contains list of changesets to be applied for a particular version of a database migration.  Typically you will have all versions from the beginning to the latest.   So the Mintleaf looks for a default version profile at the folder where it is being execution location.</p>
+<p>Version profile is a configuration file which contains list of changesets to be applied for a particular version of a database migration.  Typically you will have all versions from the beginning to the latest.   So the Mintleaf looks for a default version profile at the folder where it is being executed.</p>
 
 <p><strong>dbconfig.xml</strong></p>
-<pre class="highlight xml tab-xml"><code><span class="cp">&lt;?xml version="1.0" encoding="UTF-8" standalone="yes"?&gt;</span>
+<pre class="highlight xml tab-xml"><code>
+<span class="cp">&lt;?xml version="1.0" encoding="UTF-8" standalone="yes"?&gt;</span>
 <span class="nt">&lt;mintleaf</span> <span class="na">version=</span><span class="s">"1.0"</span><span class="nt">&gt;</span>
     <span class="nt">&lt;description&gt;</span>Database connections and Schema version configuration file<span class="nt">&lt;/description&gt;</span>
     <span class="nt">&lt;databases&gt;</span>
         <span class="nt">&lt;id&gt;</span>abcdb<span class="nt">&lt;/id&gt;</span>
-        <span class="nt">&lt;type&gt;</span>H2<span class="nt">&lt;/type&gt;</span>
-        <span class="nt">&lt;url&gt;</span>jdbc:h2:file:./target/H2Db;mv_store=false;<span class="nt">&lt;/url&gt;</span>
-        <span class="nt">&lt;connectionProperties&gt;</span>poolSize=100<span class="nt">&lt;/connectionProperties&gt;</span>
+        <span class="nt">&lt;type&gt;</span>ORACLE<span class="nt">&lt;/type&gt;</span>
+        <span class="nt">&lt;url&gt;</span>jdbc:oracle:thin:your-db-connection-url-here<span class="nt">&lt;/url&gt;</span>
+        <span class="nt">&lt;username&gt;</span>your-user-name<span class="nt">&lt;/username&gt;</span>
+        <span class="nt">&lt;password&gt;</span>your-password<span class="nt">&lt;/password&gt;</span>
+        <span class="nt">&lt;connectionProperties&gt;</span>
+            <span class="nt">&lt;add</span> <span class="na">key=</span><span class="s">"poolsize"</span> <span class="na">value=</span><span class="s">"100"</span><span class="nt">/&gt;</span>            
+        <span class="nt">&lt;/connectionProperties&gt;</span>
     <span class="nt">&lt;/databases&gt;</span>
     <span class="nt">&lt;schemaVersions&gt;</span>
         <span class="nt">&lt;version&gt;</span>
             <span class="nt">&lt;id&gt;</span>1.0<span class="nt">&lt;/id&gt;</span>
-            <span class="nt">&lt;changeSets&gt;</span>
-                create schema,
-                load seed data
-            <span class="nt">&lt;/changeSets&gt;</span>
+            <span class="nt">&lt;changeSets&gt;</span>create schema, load seed data<span class="nt">&lt;/changeSets&gt;</span>
             <span class="nt">&lt;scriptLocation&gt;</span>./path/*.sql<span class="nt">&lt;/scriptLocation&gt;</span>
         <span class="nt">&lt;/version&gt;</span>
     <span class="nt">&lt;/schemaVersions&gt;</span>
@@ -377,7 +379,7 @@ It&rsquo;s very easy to add changeset definition on your exising sql files if yo
 
 <p><img src="images/mintleaf.png" alt="Mintleaf" />  </p>
 
-<h1 id="connection-queries">Connection &amp; Queries</h1>
+<h1 id="connection-context-and-queries">Connection Context and Queries</h1>
 
 <h2 id="connecting-to-database">Connecting to database</h2>
 
@@ -401,16 +403,16 @@ It&rsquo;s very easy to add changeset definition on your exising sql files if yo
 
 <p>Use getNewConnection() method to create a connection context that is required for any database operations either in transactional mode or non-transactional mode.</p>
 <pre class="highlight java tab-java"><code>  <span class="kn">import</span> <span class="nn">static</span> <span class="n">org</span><span class="o">.</span><span class="na">qamatic</span><span class="o">.</span><span class="na">mintleaf</span><span class="o">.</span><span class="na">Mintleaf</span><span class="o">.</span><span class="na">database</span><span class="o">;</span>
-  <span class="kn">import</span> <span class="nn">static</span> <span class="n">org</span><span class="o">.</span><span class="na">qamatic</span><span class="o">.</span><span class="na">mintleaf</span><span class="o">.</span><span class="na">Mintleaf</span><span class="o">.</span><span class="na">executeSql</span><span class="o">;</span>
+
 
 <span class="c1">//example for user handles connection close()</span>
   <span class="n">ConnectionContext</span> <span class="n">connectionContext</span> <span class="o">=</span> <span class="n">h2Database</span><span class="o">.</span><span class="na">getNewConnection</span><span class="o">();</span>
-  <span class="n">executeSql</span><span class="o">(</span><span class="n">connectionContext</span><span class="o">,</span> <span class="s">"INSERT INTO USERS VALUES (1, 'EXAMPLE-USER')"</span><span class="o">);</span>
+  <span class="n">connectionContext</span><span class="o">.</span><span class="na">executeSql</span><span class="o">(</span><span class="s">"INSERT INTO USERS VALUES (1, 'EXAMPLE-USER')"</span><span class="o">);</span>
   <span class="n">connectionContext</span><span class="o">.</span><span class="na">close</span><span class="o">()</span>  <span class="c1">// you must call close here</span>
 
 <span class="c1">//example for auto closable</span>
   <span class="k">try</span> <span class="o">(</span><span class="n">ConnectionContext</span> <span class="n">connectionContext</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="na">getNewConnection</span><span class="o">()){</span>
-    <span class="n">executeSql</span><span class="o">(</span><span class="n">connectionContext</span><span class="o">,</span> <span class="s">"INSERT INTO USERS VALUES (1, 'EXAMPLE-USER')"</span><span class="o">);</span>
+    <span class="n">connectionContext</span><span class="o">.</span><span class="na">executeSql</span><span class="o">(</span><span class="s">"INSERT INTO USERS VALUES (1, 'EXAMPLE-USER')"</span><span class="o">);</span>
   <span class="o">}</span>
 </code></pre>
 <p>This method has an optional parameter for auto close connection.  By default, it is set to auto closable but bear in mind that try-resource must be used in order to auto close your connection at the end of the operations otherwise you should call close() method in order to close the connection and release any resources as explained in above example.</p>
@@ -419,12 +421,12 @@ It&rsquo;s very easy to add changeset definition on your exising sql files if yo
 
 <p>Use beginTransaction() to start a transaction and finally call either commitTransaction() or rollbackTransaction accordingly.</p>
 <pre class="highlight java tab-java"><code>  <span class="k">try</span> <span class="o">(</span><span class="n">ConnectionContext</span> <span class="n">connectionContext</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="na">getNewConnection</span><span class="o">().</span><span class="na">beginTransaction</span><span class="o">()){</span>    
-    <span class="n">executeSql</span><span class="o">(</span><span class="n">connectionContext</span><span class="o">,</span> <span class="s">"INSERT INTO USERS VALUES (1, 'EXAMPLE-USER')"</span><span class="o">);</span>    
+    <span class="n">connectionContext</span><span class="o">.</span><span class="na">executeSql</span><span class="o">(</span><span class="s">"INSERT INTO USERS VALUES (1, 'EXAMPLE-USER')"</span><span class="o">);</span>    
   <span class="o">}</span>
 </code></pre>
 <p>in the above example <em>db.getNewConnection().beginTransaction()</em> in try-resource block will automatically call commitTransaction() otherwise you will have to call it explicitly.    </p>
 <pre class="highlight java tab-java"><code>  <span class="k">try</span> <span class="o">(</span><span class="n">ConnectionContext</span> <span class="n">connectionContext</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="na">getNewConnection</span><span class="o">().</span><span class="na">beginTransaction</span><span class="o">()){</span>    
-    <span class="n">executeSql</span><span class="o">(</span><span class="n">connectionContext</span><span class="o">,</span> <span class="s">"INSERT INTO USERS VALUES (1, 'EXAMPLE-USER')"</span><span class="o">);</span>    
+    <span class="n">connectionContext</span><span class="o">.</span><span class="na">executeSql</span><span class="o">(</span><span class="s">"INSERT INTO USERS VALUES (1, 'EXAMPLE-USER')"</span><span class="o">);</span>    
   <span class="o">}</span>
   <span class="k">catch</span> <span class="o">(</span><span class="n">MintLeafException</span> <span class="n">e</span><span class="o">){</span>
      <span class="n">connectionContext</span><span class="o">.</span><span class="na">rollbackTransaction</span><span class="o">();</span>
@@ -434,7 +436,7 @@ It&rsquo;s very easy to add changeset definition on your exising sql files if yo
 <pre class="highlight java tab-java"><code>  <span class="n">ConnectionContext</span> <span class="n">connectionContext</span> <span class="o">=</span> <span class="n">h2Database</span><span class="o">.</span><span class="na">getNewConnection</span><span class="o">();</span>
   <span class="n">connectionContext</span><span class="o">.</span><span class="na">beginTransaction</span><span class="o">();</span>
   <span class="k">try</span> <span class="o">{</span>
-    <span class="n">executeSql</span><span class="o">(</span><span class="n">connectionContext</span><span class="o">,</span> <span class="s">"INSERT INTO USERS VALUES (1, 'EXAMPLE-USER')"</span><span class="o">);</span>
+    <span class="n">connectionContext</span><span class="o">.</span><span class="na">executeSql</span><span class="o">(</span><span class="s">"INSERT INTO USERS VALUES (1, 'EXAMPLE-USER')"</span><span class="o">);</span>
     <span class="n">connectionContext</span><span class="o">.</span><span class="na">commitTransaction</span><span class="o">();</span>
   <span class="o">}</span>
   <span class="k">catch</span> <span class="o">(</span><span class="n">MintLeafException</span> <span class="n">e</span><span class="o">){</span>
@@ -446,11 +448,9 @@ It&rsquo;s very easy to add changeset definition on your exising sql files if yo
 </code></pre>
 <h2 id="database-select-queries">Database Select Queries</h2>
 <pre class="highlight java tab-java"><code>
-  <span class="kn">import</span> <span class="nn">static</span> <span class="n">org</span><span class="o">.</span><span class="na">qamatic</span><span class="o">.</span><span class="na">mintleaf</span><span class="o">.</span><span class="na">Mintleaf</span><span class="o">.</span><span class="na">selectQuery</span>
+  <span class="k">try</span> <span class="o">(</span><span class="n">ConnectionContext</span> <span class="n">connectionContext</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="na">getNewConnection</span><span class="o">()){</span>
 
-  <span class="nf">try</span> <span class="o">(</span><span class="n">ConnectionContext</span> <span class="n">connectionContext</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="na">getNewConnection</span><span class="o">()){</span>
-
-     <span class="n">SqlResultSet</span> <span class="n">SqlResultSet</span> <span class="o">=</span> <span class="n">selectQuery</span><span class="o">(</span><span class="n">connectionContext</span><span class="o">).</span>
+     <span class="n">SqlResultSet</span> <span class="n">SqlResultSet</span> <span class="o">=</span> <span class="n">connectionContext</span><span class="o">.</span><span class="na">queryBuilder</span><span class="o">().</span>
                                    <span class="n">withSql</span><span class="o">(</span><span class="s">"SELECT * FROM USERS"</span><span class="o">).</span>
                                    <span class="n">buildSelect</span><span class="o">();</span>
 
@@ -463,9 +463,8 @@ It&rsquo;s very easy to add changeset definition on your exising sql files if yo
 
 <p>Once you get a connection context then you should be able to use getDbQueries() method to access all standard functions.  </p>
 <pre class="highlight java tab-java"><code>
-  <span class="kn">import</span> <span class="nn">static</span> <span class="n">org</span><span class="o">.</span><span class="na">qamatic</span><span class="o">.</span><span class="na">mintleaf</span><span class="o">.</span><span class="na">Mintleaf</span><span class="o">.</span><span class="na">selectQuery</span>
 
-  <span class="nf">try</span> <span class="o">(</span><span class="n">ConnectionContext</span> <span class="n">connectionContext</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="na">getNewConnection</span><span class="o">()){</span>
+  <span class="k">try</span> <span class="o">(</span><span class="n">ConnectionContext</span> <span class="n">connectionContext</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="na">getNewConnection</span><span class="o">()){</span>
 
     <span class="n">connectionContext</span><span class="o">.</span><span class="na">getDbQueries</span><span class="o">().&lt;</span><span class="n">Standard</span> <span class="n">query</span> <span class="n">functions</span> <span class="n">listed</span> <span class="n">below</span><span class="o">&gt;</span>
 

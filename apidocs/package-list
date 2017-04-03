@@ -1,5 +1,6 @@
 org.qamatic.mintleaf
 org.qamatic.mintleaf.configuration
 org.qamatic.mintleaf.core
+org.qamatic.mintleaf.core.stdqueries
 org.qamatic.mintleaf.data
 org.qamatic.mintleaf.tools
