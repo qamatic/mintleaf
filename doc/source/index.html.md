@@ -268,6 +268,50 @@ callType | PROC, FUNCTION, CUSTOMCALL
 parameterBinding | binding Parameter values
 executionResultListener | after execution call back for results
 
+For example,
+
+```java
+try (ConnectionContext ctx = payrollDb.getNewConnection()) {
+
+    StoredProcedure proc = new StoredProcedure(ctx, "add_country(?, ?)", StoredProcedure.CallType.PROC, new ParameterBinding.Callable() {
+        @Override
+        public void bindParameters(CallableParameterSets parameterSets) throws MintLeafException {
+            parameterSets.setInt(1, 13);
+            parameterSets.setString(2, "Lost Country");
+        }
+    });
+
+    proc.execute();    
+}
+```
+
+For a stored procedure that returns values
+
+```java
+try (ConnectionContext ctx = payrollDb.getNewConnection()) {
+
+    Executable proc = ctx.executeStoredProc("{?= call sum_numbers(?,?)}", StoredProcedure.CallType.CUSTOMCALL,
+            parameterSets -> {
+                parameterSets.registerOutParameter(1, Types.INTEGER);
+                parameterSets.setInt(2, 10);
+                parameterSets.setInt(3, 43);
+            },
+            result -> {
+
+                System.out.println(result.getInt(1)); //result should 53
+
+            });
+
+    proc.execute();
+
+
+}
+```
+
+
+
+
+
 ###  query() binding
 
 ```code
