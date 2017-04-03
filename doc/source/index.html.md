@@ -258,7 +258,8 @@ batchSqls | one or more fully formed sqls (without binding parameters)
 ### executeStoredProc()
 
 ```code
-Executable<int[]>	executeStoredProc(String procedureCall, StoredProcedure.CallType callType, ParameterBinding.Callable parameterBinding, ExecutionResultListener.Callable executionResultListener)
+Executable<int[]>	executeStoredProc(String procedureCall, StoredProcedure.CallType callType,
+  ParameterBinding.Callable parameterBinding, ExecutionResultListener.Callable executionResultListener)
 ```
 
 Parameter | Description
