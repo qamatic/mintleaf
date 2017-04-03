@@ -36,6 +36,7 @@
 package org.qamatic.mintleaf;
 
 import org.qamatic.mintleaf.core.FluentJdbc;
+import org.qamatic.mintleaf.core.StoredProcedure;
 
 import java.sql.Connection;
 import java.util.List;
@@ -72,5 +73,7 @@ public interface ConnectionContext<T extends DbQueries> extends AutoCloseable {
 
     <T> List<T> query(String sql, ParameterBinding parameterBinding, final DataRowListener<T> listener) throws MintLeafException;
 
+    Executable<int[]> executeStoredProc(String procedureCall, StoredProcedure.CallType callType, ParameterBinding.Callable parameterBinding);
 
+    Executable<int[]> executeStoredProc(String procedureCall, StoredProcedure.CallType callType, ParameterBinding.Callable parameterBinding, ExecutionResultListener.Callable executionResultListener);
 }

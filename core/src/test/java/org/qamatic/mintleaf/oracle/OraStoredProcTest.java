@@ -38,7 +38,8 @@ package org.qamatic.mintleaf.oracle;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.qamatic.mintleaf.*;
-import org.qamatic.mintleaf.core.*;
+import org.qamatic.mintleaf.core.ChangeSets;
+import org.qamatic.mintleaf.core.StoredProcedure;
 
 import java.sql.Types;
 
@@ -103,16 +104,16 @@ public class OraStoredProcTest extends OracleTestCase {
     public void testAddNumbersFunction() throws MintLeafException {
         try (ConnectionContext ctx = payrollDb.getNewConnection()) {
 
-            StoredProcedure proc = new StoredProcedure(ctx, "{?= call sum_numbers(?,?)}", StoredProcedure.CallType.CUSTOMCALL, parameterSets -> {
-                parameterSets.setInt(2, 10);
-                parameterSets.setInt(3, 43);
-                parameterSets.registerOutParameter(1, Types.INTEGER);
-            });
+            Executable proc = ctx.executeStoredProc("{?= call sum_numbers(?,?)}", StoredProcedure.CallType.CUSTOMCALL,
+                    parameterSets -> {
+                        parameterSets.registerOutParameter(1, Types.INTEGER);
+                        parameterSets.setInt(2, 10);
+                        parameterSets.setInt(3, 43);
+                    },
+                    result -> {
+                        assertEquals(53, result.getInt(1));
 
-            proc.setExecutionResultListener(result -> {
-                assertEquals(53, result.getInt(1));
-
-            });
+                    });
 
             proc.execute();
 

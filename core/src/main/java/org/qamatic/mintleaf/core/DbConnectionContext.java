@@ -209,5 +209,15 @@ public class DbConnectionContext<T extends DbQueries> implements ConnectionConte
         return rows;
     }
 
+    @Override
+    public Executable<int[]> executeStoredProc(String procedureCall, StoredProcedure.CallType callType, ParameterBinding.Callable parameterBinding){
+        return executeStoredProc(procedureCall, callType, parameterBinding, null);
+    }
 
+    @Override
+    public Executable<int[]> executeStoredProc(String procedureCall, StoredProcedure.CallType callType, ParameterBinding.Callable parameterBinding, ExecutionResultListener.Callable executionResultListener){
+        StoredProcedure proc = new StoredProcedure(this, procedureCall, callType, parameterBinding);
+        proc.setExecutionResultListener(executionResultListener);
+        return proc;
+    }
 }
