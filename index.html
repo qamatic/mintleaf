@@ -496,6 +496,40 @@ It&rsquo;s very easy to add changeset definition on your exising sql files if yo
 </tr>
 </tbody></table>
 
+<p>For example,</p>
+<pre class="highlight java tab-java"><code><span class="k">try</span> <span class="o">(</span><span class="n">ConnectionContext</span> <span class="n">ctx</span> <span class="o">=</span> <span class="n">payrollDb</span><span class="o">.</span><span class="na">getNewConnection</span><span class="o">())</span> <span class="o">{</span>
+
+    <span class="n">StoredProcedure</span> <span class="n">proc</span> <span class="o">=</span> <span class="k">new</span> <span class="n">StoredProcedure</span><span class="o">(</span><span class="n">ctx</span><span class="o">,</span> <span class="s">"add_country(?, ?)"</span><span class="o">,</span> <span class="n">StoredProcedure</span><span class="o">.</span><span class="na">CallType</span><span class="o">.</span><span class="na">PROC</span><span class="o">,</span> <span class="k">new</span> <span class="n">ParameterBinding</span><span class="o">.</span><span class="na">Callable</span><span class="o">()</span> <span class="o">{</span>
+        <span class="nd">@Override</span>
+        <span class="kd">public</span> <span class="kt">void</span> <span class="nf">bindParameters</span><span class="o">(</span><span class="n">CallableParameterSets</span> <span class="n">parameterSets</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">MintLeafException</span> <span class="o">{</span>
+            <span class="n">parameterSets</span><span class="o">.</span><span class="na">setInt</span><span class="o">(</span><span class="mi">1</span><span class="o">,</span> <span class="mi">13</span><span class="o">);</span>
+            <span class="n">parameterSets</span><span class="o">.</span><span class="na">setString</span><span class="o">(</span><span class="mi">2</span><span class="o">,</span> <span class="s">"Lost Country"</span><span class="o">);</span>
+        <span class="o">}</span>
+    <span class="o">});</span>
+
+    <span class="n">proc</span><span class="o">.</span><span class="na">execute</span><span class="o">();</span>    
+<span class="o">}</span>
+</code></pre>
+<p>For a stored procedure that returns values</p>
+<pre class="highlight java tab-java"><code><span class="k">try</span> <span class="o">(</span><span class="n">ConnectionContext</span> <span class="n">ctx</span> <span class="o">=</span> <span class="n">payrollDb</span><span class="o">.</span><span class="na">getNewConnection</span><span class="o">())</span> <span class="o">{</span>
+
+    <span class="n">Executable</span> <span class="n">proc</span> <span class="o">=</span> <span class="n">ctx</span><span class="o">.</span><span class="na">executeStoredProc</span><span class="o">(</span><span class="s">"{?= call sum_numbers(?,?)}"</span><span class="o">,</span> <span class="n">StoredProcedure</span><span class="o">.</span><span class="na">CallType</span><span class="o">.</span><span class="na">CUSTOMCALL</span><span class="o">,</span>
+            <span class="n">parameterSets</span> <span class="o">-&gt;</span> <span class="o">{</span>
+                <span class="n">parameterSets</span><span class="o">.</span><span class="na">registerOutParameter</span><span class="o">(</span><span class="mi">1</span><span class="o">,</span> <span class="n">Types</span><span class="o">.</span><span class="na">INTEGER</span><span class="o">);</span>
+                <span class="n">parameterSets</span><span class="o">.</span><span class="na">setInt</span><span class="o">(</span><span class="mi">2</span><span class="o">,</span> <span class="mi">10</span><span class="o">);</span>
+                <span class="n">parameterSets</span><span class="o">.</span><span class="na">setInt</span><span class="o">(</span><span class="mi">3</span><span class="o">,</span> <span class="mi">43</span><span class="o">);</span>
+            <span class="o">},</span>
+            <span class="n">result</span> <span class="o">-&gt;</span> <span class="o">{</span>
+
+                <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">result</span><span class="o">.</span><span class="na">getInt</span><span class="o">(</span><span class="mi">1</span><span class="o">));</span> <span class="c1">//result should 53</span>
+
+            <span class="o">});</span>
+
+    <span class="n">proc</span><span class="o">.</span><span class="na">execute</span><span class="o">();</span>
+
+
+<span class="o">}</span>
+</code></pre>
 <h3 id="query-binding">query() binding</h3>
 <pre class="highlight plaintext"><code>  &lt;T&gt; List&lt;T&gt;   query(String sql, ParameterBinding parameterBinding, DataRowListener&lt;T&gt; listener)   
 </code></pre>
