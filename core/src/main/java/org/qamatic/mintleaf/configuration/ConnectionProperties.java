@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by senips on 3/28/17.
+ * Created by QAmatic Team on 3/28/17.
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 public class ConnectionProperties {

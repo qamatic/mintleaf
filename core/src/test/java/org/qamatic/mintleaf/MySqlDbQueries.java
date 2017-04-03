@@ -10,7 +10,7 @@ import java.sql.SQLException;
 import static junit.framework.TestCase.assertEquals;
 
 /**
- * Created by senips on 4/1/17.
+ * Created by QAmatic Team on 4/1/17.
  */
 public class MySqlDbQueries extends MysqlTestCase{
 

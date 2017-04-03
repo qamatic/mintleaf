@@ -3,7 +3,7 @@ package org.qamatic.mintleaf.configuration;
 import javax.xml.bind.annotation.XmlAttribute;
 
 /**
- * Created by senips on 3/28/17.
+ * Created by QAmatic Team on 3/28/17.
  */
 public class Property {
 

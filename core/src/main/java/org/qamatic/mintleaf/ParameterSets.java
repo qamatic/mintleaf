@@ -10,7 +10,7 @@ import java.sql.*;
 import java.util.Calendar;
 
 /**
- * Created by senips on 4/2/17.
+ * Created by QAmatic Team on 4/2/17.
  */
 public interface ParameterSets {
     void setBlob(int parameterIndex, InputStream inputStream, long length) throws MintLeafException;

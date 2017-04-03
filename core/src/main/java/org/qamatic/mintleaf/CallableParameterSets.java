@@ -5,7 +5,7 @@ import org.qamatic.mintleaf.MintLeafException;
 import java.sql.SQLType;
 
 /**
- * Created by senips on 4/2/17.
+ * Created by QAmatic Team on 4/2/17.
  */
 public interface CallableParameterSets extends ParameterSets {
     void registerOutParameter(int parameterIndex, int sqlType) throws MintLeafException;

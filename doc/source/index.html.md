@@ -173,13 +173,11 @@ Version profile is a configuration file which contains list of changesets to be 
 ![Mintleaf](/images/mintleaf.png)  
 
 
-# Connection Context and Queries
+# Connection Context & Queries
 
-## Connecting to database
+## Connecting to a database
 
-In order to connect to a database, you would need jdbc url, username and a password.
-
-### Usage
+In order to connect to a database, you would need minimum three things - JDBC url, username and a password.
 
 ```java
      import static org.qamatic.mintleaf.Mintleaf.database;
@@ -191,7 +189,7 @@ In order to connect to a database, you would need jdbc url, username and a passw
                     build();
 ```
 
-### Connection Context
+## Connection Context
 
 Every database connection establishes an exclusive context in which it deals with queries and transactions inside.  It is one of the well managed construct in Mintleaf that offers you handle transactions nicely.
 
@@ -216,9 +214,110 @@ Use getNewConnection() method to create a connection context that is required fo
   }
 ```
 
-
-
 This method has an optional parameter for auto close connection.  By default, it is set to auto closable but bear in mind that try-resource must be used in order to auto close your connection at the end of the operations otherwise you should call close() method in order to close the connection and release any resources as explained in above example.
+
+
+### executeSql()
+
+```code
+  Executable<int[]>	executeSql(String sql)   
+```
+
+Parameter | Description
+--------- | -----------
+sql | select query to be executed
+
+
+```code
+  Executable<int[]>	executeSql(String sql, Object[] parameterValues)  
+```
+
+Parameter | Description
+--------- | -----------
+sql | select query to be executed
+parameterValues | binding Parameter values
+
+for example,
+
+```java
+  try (ConnectionContext connectionContext = db.getNewConnection().beginTransaction()){    
+    connectionContext.executeSql("INSERT INTO USERS VALUES (?, ?)", new Object[]{1, "EXAMPLE-USER"});    
+  }
+```
+
+```code
+  Executable<int[]>	executeBatchSqls(List<String> batchSqls)  
+```
+
+Parameter | Description
+--------- | -----------
+sql | select query to be executed
+batchSqls | one or more fully formed sqls (without binding parameters)
+
+
+### executeStoredProc()
+
+```code
+Executable<int[]>	executeStoredProc(String procedureCall, StoredProcedure.CallType callType, ParameterBinding.Callable parameterBinding, ExecutionResultListener.Callable executionResultListener)
+```
+
+Parameter | Description
+--------- | -----------
+procedureCall | name of the stored procedure
+callType | PROC, FUNCTION, CUSTOMCALL
+parameterBinding | binding Parameter values
+executionResultListener | after execution call back for results
+
+###  query() binding
+
+```code
+  <T> List<T>	query(String sql, ParameterBinding parameterBinding, DataRowListener<T> listener)   
+```
+
+Parameter | Description
+--------- | -----------
+sql | select query to be executed
+parameterBinding | binding parameters
+listener | an iterator listener that does call back for every row of a result set
+
+For example, you want to execute a query with binding parameter values and the result set needs to collected as list of objects / beans
+
+```java
+
+    List<String> userNames = connectionContext.query(
+                         "SELECT USERNAME FROM HRDB.USERS WHERE USERID > ? AND USERID < ?",  //sql
+
+                          (parameterSets) -> {                               // parameter values binding
+                                     parameterSets.setInt(1, 77);  
+                                     parameterSets.setInt(2, 100);                                  
+                          },                                                          
+
+                         (rowNum, resultSet) -> {                           // iterator listener                                                         
+                            return resultSet.asString("USERNAME");
+                          }
+                        );
+```
+### queryBuilder()
+
+```code
+  FluentJdbc.Builder	queryBuilder()  
+```
+
+for example:
+
+```java
+  Executable<int[]> query = new FluentJdbc.Builder(connectionContext).
+                              withSql(sql).
+                              buildExecute();
+  query.execute();  
+
+  Executable<int[]> query = new FluentJdbc.Builder(connectionContext).
+                              withSql(sql).
+                              buildSelect();
+  SqlResultSet resultSet = query.execute();
+
+```
+
 
 ## Transactional operations
 

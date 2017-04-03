@@ -8,7 +8,7 @@ import java.util.Calendar;
 import java.util.Map;
 
 /**
- * Created by senips on 4/2/17.
+ * Created by QAmatic Team on 4/2/17.
  */
 public interface CallableParameterGets extends ParameterGets {
     ResultSetMetaData getMetaData() throws MintLeafException;
