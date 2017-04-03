@@ -39,6 +39,7 @@ import org.qamatic.mintleaf.*;
 
 import java.sql.CallableStatement;
 import java.sql.SQLException;
+import java.sql.Types;
 
 /**
  * Created by qamatic on 2/20/16.
@@ -47,28 +48,28 @@ public class StoredProcedure implements Executable<int[]> {
 
     private static final MintLeafLogger logger = MintLeafLogger.getLogger(StoredProcedure.class);
     private ConnectionContext connectionContext;
-    private CALLTYPE calltype;
+    private CallType callType;
     private ExecutionResultListener.Callable executionResultListener;
     private String procedureCall;
 
     private ParameterBinding.Callable parameterBinding;
 
-    public StoredProcedure(ConnectionContext connectionContext, String procedureCall, CALLTYPE calltype, ParameterBinding.Callable parameterBinding) {
+    public StoredProcedure(ConnectionContext connectionContext, String procedureCall, CallType callType, ParameterBinding.Callable parameterBinding) {
         this.connectionContext = connectionContext;
-        this.calltype = calltype;
+        this.callType = callType;
         this.procedureCall = procedureCall;
         this.parameterBinding = parameterBinding;
         if (this.procedureCall == null)
             this.procedureCall = "";//avoid check everywhere crap
-        if (this.calltype != CALLTYPE.CUSTOMCALL) {
+        if (this.callType != CallType.CUSTOMCALL) {
             this.procedureCall = procedureCall.toUpperCase().trim();
         }
     }
 
 
     public String getSql() {
-        if ((this.calltype != CALLTYPE.CUSTOMCALL) && (!this.procedureCall.startsWith("CALL "))) {
-            this.procedureCall = String.format("{ %sCALL %s }", this.calltype == CALLTYPE.FUNCTION ? "? = " : "", this.procedureCall);
+        if ((this.callType != CallType.CUSTOMCALL) && (!this.procedureCall.startsWith("CALL "))) {
+            this.procedureCall = String.format("{ %sCALL %s }", this.callType == CallType.FUNCTION ? "? = " : "", this.procedureCall);
         }
         return this.procedureCall;
     }
@@ -102,7 +103,22 @@ public class StoredProcedure implements Executable<int[]> {
         this.executionResultListener = statementResultListener;
     }
 
-    public enum CALLTYPE {
-        PROC, FUNCTION, CUSTOMCALL
+    public enum CallType {
+        PROC(-1), FUNCTION(Types.INTEGER), CUSTOMCALL(-1);
+
+        private int dataType;
+
+        private CallType(int dataType){
+            this.dataType = dataType;
+        }
+
+        public int getReturnType(){
+            return this.dataType;
+        }
+
+        public CallType returnsType(int type){
+            dataType = type;
+            return this;
+        }
     }
 }

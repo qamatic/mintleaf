@@ -84,21 +84,7 @@ public class StandardQueries implements DbQueries {
     }
 
     public <T> List<T> query(String sql, ParameterBinding parameterBinding, final DataRowListener<T> listener) throws MintLeafException {
-
-        final List<T> rows = new ArrayList<T>();
-
-        try (SqlResultSet sqlResultSet = this.connectionContext.queryBuilder().withSql(sql).withParamValues(parameterBinding).buildSelect()) {
-
-            sqlResultSet.iterate((row, dr) -> {
-                try {
-                    rows.add(listener.eachRow(row, dr));
-                } catch (MintLeafException e) {
-                    logger.error("error iterating resultset", e);
-                }
-                return null;
-            });
-        }
-        return rows;
+        return this.connectionContext.query(sql, parameterBinding, listener);
     }
 
     @Override

@@ -42,6 +42,7 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -189,5 +190,24 @@ public class DbConnectionContext<T extends DbQueries> implements ConnectionConte
     public Executable<int[]> executeSql(String sql, Object[] parameterValues) {
         return queryBuilder().withSql(sql).withParamValues(parameterValues).buildExecute();
     }
+
+    public <T> List<T> query(String sql, ParameterBinding parameterBinding, final DataRowListener<T> listener) throws MintLeafException {
+
+        final List<T> rows = new ArrayList<T>();
+
+        try (SqlResultSet sqlResultSet = queryBuilder().withSql(sql).withParamValues(parameterBinding).buildSelect()) {
+
+            sqlResultSet.iterate((row, dr) -> {
+                try {
+                    rows.add(listener.eachRow(row, dr));
+                } catch (MintLeafException e) {
+                    logger.error("error iterating resultset", e);
+                }
+                return null;
+            });
+        }
+        return rows;
+    }
+
 
 }

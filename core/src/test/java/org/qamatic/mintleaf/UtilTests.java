@@ -37,10 +37,13 @@ package org.qamatic.mintleaf;
 
 import org.junit.Test;
 import org.qamatic.mintleaf.core.BasicDatabase;
+import org.qamatic.mintleaf.core.StoredProcedure;
 import org.qamatic.mintleaf.core.stdqueries.MSSqlQueries;
 import org.qamatic.mintleaf.core.stdqueries.MySqlQueries;
 import org.qamatic.mintleaf.core.stdqueries.OracleQueries;
 import org.qamatic.mintleaf.core.stdqueries.StandardQueries;
+
+import java.sql.Types;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -63,6 +66,21 @@ public class UtilTests {
         assertEquals(MySqlQueries.class, StandardQueries.getQueryImplementation("jdbc:MySql:/"));
         assertEquals(MSSqlQueries.class, StandardQueries.getQueryImplementation("jdbc:SqlServer:/"));
         assertEquals(OracleQueries.class, StandardQueries.getQueryImplementation("jdbc:Oracle:/"));
+    }
+
+    @Test
+    public void testStoredProcReturnType(){
+        assertEquals(-1, StoredProcedure.CallType.PROC.getReturnType());
+    }
+
+    @Test
+    public void testStoredFunctionReturnType(){
+        assertEquals(Types.INTEGER, StoredProcedure.CallType.FUNCTION.getReturnType());
+    }
+
+    @Test
+    public void testStoredCustomCallReturnType(){
+        assertEquals(-1, StoredProcedure.CallType.CUSTOMCALL.getReturnType());
     }
 
 }

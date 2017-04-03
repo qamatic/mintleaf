@@ -69,4 +69,8 @@ public interface ConnectionContext<T extends DbQueries> extends AutoCloseable {
     Executable<int[]> executeSql(String sql);
 
     Executable<int[]> executeSql(String sql, Object[] parameterValues);
+
+    <T> List<T> query(String sql, ParameterBinding parameterBinding, final DataRowListener<T> listener) throws MintLeafException;
+
+
 }

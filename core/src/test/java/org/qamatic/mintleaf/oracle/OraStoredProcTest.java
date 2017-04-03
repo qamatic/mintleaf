@@ -59,25 +59,25 @@ public class OraStoredProcTest extends OracleTestCase {
 
     @Test
     public void testProcName() throws MintLeafException {
-        StoredProcedure proc = new StoredProcedure(null, "add_country(?, ?)", StoredProcedure.CALLTYPE.PROC, null);
+        StoredProcedure proc = new StoredProcedure(null, "add_country(?, ?)", StoredProcedure.CallType.PROC, null);
         assertEquals("{ CALL ADD_COUNTRY(?, ?) }", proc.getSql());
     }
 
     @Test
     public void testProcNameWithCall() throws MintLeafException {
-        StoredProcedure proc = new StoredProcedure(null, "call add_country(?, ?)", StoredProcedure.CALLTYPE.PROC, null);
+        StoredProcedure proc = new StoredProcedure(null, "call add_country(?, ?)", StoredProcedure.CallType.PROC, null);
         assertEquals("CALL ADD_COUNTRY(?, ?)", proc.getSql());
     }
 
     @Test
     public void testProcNameFunction() throws MintLeafException {
-        StoredProcedure proc = new StoredProcedure(null, "add_country(?, ?)", StoredProcedure.CALLTYPE.FUNCTION, null);
+        StoredProcedure proc = new StoredProcedure(null, "add_country(?, ?)", StoredProcedure.CallType.FUNCTION, null);
         assertEquals("{ ? = CALL ADD_COUNTRY(?, ?) }", proc.getSql());
     }
 
     @Test
     public void testProcNameCustom() throws MintLeafException {
-        StoredProcedure proc = new StoredProcedure(null, "declare begin end;", StoredProcedure.CALLTYPE.CUSTOMCALL, null);
+        StoredProcedure proc = new StoredProcedure(null, "declare begin end;", StoredProcedure.CallType.CUSTOMCALL, null);
         assertEquals("declare begin end;", proc.getSql());
     }
 
@@ -86,7 +86,7 @@ public class OraStoredProcTest extends OracleTestCase {
     public void testInsertCountrySP() throws MintLeafException {
         try (ConnectionContext ctx = payrollDb.getNewConnection()) {
 
-            StoredProcedure proc = new StoredProcedure(ctx, "add_country(?, ?)", StoredProcedure.CALLTYPE.PROC, new ParameterBinding.Callable() {
+            StoredProcedure proc = new StoredProcedure(ctx, "add_country(?, ?)", StoredProcedure.CallType.PROC, new ParameterBinding.Callable() {
                 @Override
                 public void bindParameters(CallableParameterSets parameterSets) throws MintLeafException {
                     parameterSets.setInt(1, 13);
@@ -103,7 +103,7 @@ public class OraStoredProcTest extends OracleTestCase {
     public void testAddNumbersFunction() throws MintLeafException {
         try (ConnectionContext ctx = payrollDb.getNewConnection()) {
 
-            StoredProcedure proc = new StoredProcedure(ctx, "{?= call sum_numbers(?,?)}", StoredProcedure.CALLTYPE.CUSTOMCALL, parameterSets -> {
+            StoredProcedure proc = new StoredProcedure(ctx, "{?= call sum_numbers(?,?)}", StoredProcedure.CallType.CUSTOMCALL, parameterSets -> {
                 parameterSets.setInt(2, 10);
                 parameterSets.setInt(3, 43);
                 parameterSets.registerOutParameter(1, Types.INTEGER);
