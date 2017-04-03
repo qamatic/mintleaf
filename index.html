@@ -379,13 +379,11 @@ It&rsquo;s very easy to add changeset definition on your exising sql files if yo
 
 <p><img src="images/mintleaf.png" alt="Mintleaf" />  </p>
 
-<h1 id="connection-context-and-queries">Connection Context and Queries</h1>
+<h1 id="connection-context-queries">Connection Context &amp; Queries</h1>
 
-<h2 id="connecting-to-database">Connecting to database</h2>
+<h2 id="connecting-to-a-database">Connecting to a database</h2>
 
-<p>In order to connect to a database, you would need jdbc url, username and a password.</p>
-
-<h3 id="usage">Usage</h3>
+<p>In order to connect to a database, you would need minimum three things - JDBC url, username and a password.</p>
 <pre class="highlight java tab-java"><code>     <span class="kn">import</span> <span class="nn">static</span> <span class="n">org</span><span class="o">.</span><span class="na">qamatic</span><span class="o">.</span><span class="na">mintleaf</span><span class="o">.</span><span class="na">Mintleaf</span><span class="o">.</span><span class="na">database</span><span class="o">;</span>
 
      <span class="n">Database</span> <span class="n">db</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Mintleaf</span><span class="o">.</span><span class="na">DatabaseBuilder</span><span class="o">().</span>          
@@ -394,7 +392,7 @@ It&rsquo;s very easy to add changeset definition on your exising sql files if yo
                     <span class="n">withPassword</span><span class="o">(</span><span class="s">"password"</span><span class="o">).</span>
                     <span class="n">build</span><span class="o">();</span>
 </code></pre>
-<h3 id="connection-context">Connection Context</h3>
+<h2 id="connection-context">Connection Context</h2>
 
 <p>Every database connection establishes an exclusive context in which it deals with queries and transactions inside.  It is one of the well managed construct in Mintleaf that offers you handle transactions nicely.</p>
 
@@ -417,6 +415,140 @@ It&rsquo;s very easy to add changeset definition on your exising sql files if yo
 </code></pre>
 <p>This method has an optional parameter for auto close connection.  By default, it is set to auto closable but bear in mind that try-resource must be used in order to auto close your connection at the end of the operations otherwise you should call close() method in order to close the connection and release any resources as explained in above example.</p>
 
+<h3 id="executesql">executeSql()</h3>
+<pre class="highlight plaintext"><code>  Executable&lt;int[]&gt; executeSql(String sql)   
+</code></pre>
+<table><thead>
+<tr>
+<th>Parameter</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>sql</td>
+<td>select query to be executed</td>
+</tr>
+</tbody></table>
+<pre class="highlight plaintext"><code>  Executable&lt;int[]&gt; executeSql(String sql, Object[] parameterValues)  
+</code></pre>
+<table><thead>
+<tr>
+<th>Parameter</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>sql</td>
+<td>select query to be executed</td>
+</tr>
+<tr>
+<td>parameterValues</td>
+<td>binding Parameter values</td>
+</tr>
+</tbody></table>
+
+<p>for example,</p>
+<pre class="highlight java tab-java"><code>  <span class="k">try</span> <span class="o">(</span><span class="n">ConnectionContext</span> <span class="n">connectionContext</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="na">getNewConnection</span><span class="o">().</span><span class="na">beginTransaction</span><span class="o">()){</span>    
+    <span class="n">connectionContext</span><span class="o">.</span><span class="na">executeSql</span><span class="o">(</span><span class="s">"INSERT INTO USERS VALUES (?, ?)"</span><span class="o">,</span> <span class="k">new</span> <span class="n">Object</span><span class="o">[]{</span><span class="mi">1</span><span class="o">,</span> <span class="s">"EXAMPLE-USER"</span><span class="o">});</span>    
+  <span class="o">}</span>
+</code></pre><pre class="highlight plaintext"><code>  Executable&lt;int[]&gt; executeBatchSqls(List&lt;String&gt; batchSqls)  
+</code></pre>
+<table><thead>
+<tr>
+<th>Parameter</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>sql</td>
+<td>select query to be executed</td>
+</tr>
+<tr>
+<td>batchSqls</td>
+<td>one or more fully formed sqls (without binding parameters)</td>
+</tr>
+</tbody></table>
+
+<h3 id="executestoredproc">executeStoredProc()</h3>
+<pre class="highlight plaintext"><code>Executable&lt;int[]&gt;   executeStoredProc(String procedureCall, StoredProcedure.CallType callType, ParameterBinding.Callable parameterBinding, ExecutionResultListener.Callable executionResultListener)
+</code></pre>
+<table><thead>
+<tr>
+<th>Parameter</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>procedureCall</td>
+<td>name of the stored procedure</td>
+</tr>
+<tr>
+<td>callType</td>
+<td>PROC, FUNCTION, CUSTOMCALL</td>
+</tr>
+<tr>
+<td>parameterBinding</td>
+<td>binding Parameter values</td>
+</tr>
+<tr>
+<td>executionResultListener</td>
+<td>after execution call back for results</td>
+</tr>
+</tbody></table>
+
+<h3 id="query-binding">query() binding</h3>
+<pre class="highlight plaintext"><code>  &lt;T&gt; List&lt;T&gt;   query(String sql, ParameterBinding parameterBinding, DataRowListener&lt;T&gt; listener)   
+</code></pre>
+<table><thead>
+<tr>
+<th>Parameter</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>sql</td>
+<td>select query to be executed</td>
+</tr>
+<tr>
+<td>parameterBinding</td>
+<td>binding parameters</td>
+</tr>
+<tr>
+<td>listener</td>
+<td>an iterator listener that does call back for every row of a result set</td>
+</tr>
+</tbody></table>
+
+<p>For example, you want to execute a query with binding parameter values and the result set needs to collected as list of objects / beans</p>
+<pre class="highlight java tab-java"><code>
+    <span class="n">List</span><span class="o">&lt;</span><span class="n">String</span><span class="o">&gt;</span> <span class="n">userNames</span> <span class="o">=</span> <span class="n">connectionContext</span><span class="o">.</span><span class="na">query</span><span class="o">(</span>
+                         <span class="s">"SELECT USERNAME FROM HRDB.USERS WHERE USERID &gt; ? AND USERID &lt; ?"</span><span class="o">,</span>  <span class="c1">//sql</span>
+
+                          <span class="o">(</span><span class="n">parameterSets</span><span class="o">)</span> <span class="o">-&gt;</span> <span class="o">{</span>                               <span class="c1">// parameter values binding</span>
+                                     <span class="n">parameterSets</span><span class="o">.</span><span class="na">setInt</span><span class="o">(</span><span class="mi">1</span><span class="o">,</span> <span class="mi">77</span><span class="o">);</span>  
+                                     <span class="n">parameterSets</span><span class="o">.</span><span class="na">setInt</span><span class="o">(</span><span class="mi">2</span><span class="o">,</span> <span class="mi">100</span><span class="o">);</span>                                  
+                          <span class="o">},</span>                                                          
+
+                         <span class="o">(</span><span class="n">rowNum</span><span class="o">,</span> <span class="n">resultSet</span><span class="o">)</span> <span class="o">-&gt;</span> <span class="o">{</span>                           <span class="c1">// iterator listener                                                         </span>
+                            <span class="k">return</span> <span class="n">resultSet</span><span class="o">.</span><span class="na">asString</span><span class="o">(</span><span class="s">"USERNAME"</span><span class="o">);</span>
+                          <span class="o">}</span>
+                        <span class="o">);</span>
+</code></pre>
+<h3 id="querybuilder">queryBuilder()</h3>
+<pre class="highlight plaintext"><code>  FluentJdbc.Builder    queryBuilder()  
+</code></pre>
+<p>for example:</p>
+<pre class="highlight java tab-java"><code>  <span class="n">Executable</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">[]&gt;</span> <span class="n">query</span> <span class="o">=</span> <span class="k">new</span> <span class="n">FluentJdbc</span><span class="o">.</span><span class="na">Builder</span><span class="o">(</span><span class="n">connectionContext</span><span class="o">).</span>
+                              <span class="n">withSql</span><span class="o">(</span><span class="n">sql</span><span class="o">).</span>
+                              <span class="n">buildExecute</span><span class="o">();</span>
+  <span class="n">query</span><span class="o">.</span><span class="na">execute</span><span class="o">();</span>  
+
+  <span class="n">Executable</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">[]&gt;</span> <span class="n">query</span> <span class="o">=</span> <span class="k">new</span> <span class="n">FluentJdbc</span><span class="o">.</span><span class="na">Builder</span><span class="o">(</span><span class="n">connectionContext</span><span class="o">).</span>
+                              <span class="n">withSql</span><span class="o">(</span><span class="n">sql</span><span class="o">).</span>
+                              <span class="n">buildSelect</span><span class="o">();</span>
+  <span class="n">SqlResultSet</span> <span class="n">resultSet</span> <span class="o">=</span> <span class="n">query</span><span class="o">.</span><span class="na">execute</span><span class="o">();</span>
+
+</code></pre>
 <h2 id="transactional-operations">Transactional operations</h2>
 
 <p>Use beginTransaction() to start a transaction and finally call either commitTransaction() or rollbackTransaction accordingly.</p>
