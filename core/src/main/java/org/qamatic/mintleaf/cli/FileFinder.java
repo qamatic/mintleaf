@@ -1,4 +1,6 @@
-package org.qamatic.mintleaf;
+package org.qamatic.mintleaf.cli;
+
+import org.qamatic.mintleaf.MintleafLogger;
 
 import java.io.IOException;
 import java.nio.file.*;

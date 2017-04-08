@@ -41,6 +41,7 @@ import org.qamatic.mintleaf.configuration.DbConnectionInfo;
 import org.qamatic.mintleaf.configuration.MintleafConfigurationRoot;
 import org.qamatic.mintleaf.configuration.SchemaVersionInfo;
 import org.qamatic.mintleaf.core.JdbcDriverSource;
+import org.qamatic.mintleaf.cli.FileFinder;
 
 import java.io.File;
 import java.io.IOException;
