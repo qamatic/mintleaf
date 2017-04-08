@@ -38,7 +38,7 @@ package org.qamatic.mintleaf.core;
 
 import org.qamatic.mintleaf.ConnectionContext;
 import org.qamatic.mintleaf.MintLeafException;
-import org.qamatic.mintleaf.SqlReader;
+import org.qamatic.mintleaf.MintLeafReader;
 import org.qamatic.mintleaf.SqlScript;
 
 public final class ChangeSets {
@@ -47,8 +47,8 @@ public final class ChangeSets {
     public static void applySource(final ConnectionContext connectionContext, final String script, final String delimiter) throws MintLeafException {
         SqlScript sqlScript = new BaseSqlScript(connectionContext) {
             @Override
-            public SqlReader getReader() {
-                SqlReader reader = new SqlStringReader(script);
+            public MintLeafReader getReader() {
+                MintLeafReader reader = new SqlStringReader(script);
                 reader.setDelimiter(delimiter);
                 return reader;
             }

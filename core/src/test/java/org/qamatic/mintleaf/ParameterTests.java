@@ -4,7 +4,9 @@ import org.junit.Test;
 import org.qamatic.mintleaf.configuration.ArgPatternHandler;
 import org.qamatic.mintleaf.configuration.ConfigurationRoot;
 import org.qamatic.mintleaf.configuration.DbConnectionInfo;
+import org.qamatic.mintleaf.core.ContentStreamReader;
 
+import java.awt.*;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -44,22 +46,37 @@ public class ParameterTests {
         assertEquals("select VMArgMytable", argPatternHandler.getText());
     }
 
+
     @Test
-    public void dbconfigVarTest() {
-        ConfigurationRoot dbConfiguration = new ConfigurationRoot();
-        dbConfiguration.getDatabases().add(new DbConnectionInfo("abcdb", DbType.ORACLE,
-                "jdbc:oracle:thin:${url}", "${user-name}", "${password}"));
-        String xml = dbConfiguration.toString();
-        assertTrue(xml.contains("${url}"));
-        Map<String, String> userVars = new HashMap<>();
-        userVars.put("url", "10.2.1.1:1044");
-        userVars.put("user-name", "testuser");
-        userVars.put("password", "testpassword");
-        ConfigurationRoot newConfig = ConfigurationRoot.deSerialize(xml, userVars);
+    public void dbconfigLoadFromXmlString() throws MintLeafException {
+        MintLeafReader reader = new ContentStreamReader(""){
+            @Override
+            public void read() throws MintLeafException {
+                ConfigurationRoot dbConfiguration = new ConfigurationRoot();
+                dbConfiguration.getDatabases().add(new DbConnectionInfo("abcdb", DbType.ORACLE,
+                        "jdbc:oracle:thin:${url}", "${user-name}", "${password}"));
+                content.append(dbConfiguration.toString());
+            }
+        };
+        reader.read();
+
+        reader.getUserVariableMapping().put("url", "10.2.1.1:1044");
+        reader.getUserVariableMapping().put("user-name", "testuser");
+        reader.getUserVariableMapping().put("password", "testpassword");
         assertEquals("<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?><mintleaf version=\"1.0\"><description>Database connections and Schema version configuration file</description>" +
                 "<databases><id>abcdb</id><type>ORACLE</type><url>jdbc:oracle:thin:10.2.1.1:1044</url>" +
                 "<username>testuser</username><password>testpassword</password><connectionProperties/></databases>" +
-                "<schemaVersions/></mintleaf>", newConfig.toString());
+                "<schemaVersions/></mintleaf>", reader.toString());
+
     }
+
+    @Test
+    public void dbconfigLoadFromXml() throws MintLeafException {
+
+        ConfigurationRoot newConfig = ConfigurationRoot.deSerialize("res:/test-config.xml");
+        assertEquals("abcdb", newConfig.getDatabases().get(0).getId()); //just sanity check on deserialization.
+
+    }
+
 }
 

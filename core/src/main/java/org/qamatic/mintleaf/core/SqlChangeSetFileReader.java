@@ -41,10 +41,7 @@ import org.qamatic.mintleaf.MintLeafException;
 import org.qamatic.mintleaf.MintLeafLogger;
 import org.qamatic.mintleaf.configuration.ArgPatternHandler;
 
-import java.io.BufferedReader;
-import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.util.HashMap;
 
 public class SqlChangeSetFileReader extends SqlStreamReader implements ChangeSetReader {
@@ -77,7 +74,7 @@ public class SqlChangeSetFileReader extends SqlStreamReader implements ChangeSet
 
         super.read();
 
-        String sql = childContents.toString().trim();
+        String sql = content.toString().trim();
         if ((currentChangeSet != null) && (currentChangeSet.getId() != null) && (currentChangeSet.getId().length() != 0) && (sql.length() != 0)) {
             if (changeSetListener != null) {
                 changeSetListener.onChangeSetRead(new StringBuilder(sql), null);
@@ -88,13 +85,13 @@ public class SqlChangeSetFileReader extends SqlStreamReader implements ChangeSet
     }
 
     @Override
-    protected SqlLineProcessor getLineProcessor() {
+    protected Readerline readLine() {
         return line -> {
             if ((line.trim().contains("<ChangeSet")) && ChangeSet.xmlToChangeSet(line) != null) {
                 if (currentChangeSet == null) {
                     currentChangeSet = ChangeSet.xmlToChangeSet(line);
                 }
-                String sql = new ArgPatternHandler(childContents.toString().trim()).
+                String sql = new ArgPatternHandler(content.toString().trim()).
                         withUserProperties(this.getUserVariableMapping()).
                         getText();
                 if (sql.length() != 0) {
@@ -105,11 +102,11 @@ public class SqlChangeSetFileReader extends SqlStreamReader implements ChangeSet
                     getChangeSets().put(currentChangeSet.getId(), currentChangeSet);
                     currentChangeSet = ChangeSet.xmlToChangeSet(line);
                 }
-                childContents.setLength(0);
+                content.setLength(0);
                 return false;
             }
-            childContents.append(line);
-            childContents.append("\n");
+            content.append(line);
+            content.append("\n");
             return true;
         };
     }

@@ -33,18 +33,52 @@
  * /
  */
 
-package org.qamatic.mintleaf;
+package org.qamatic.mintleaf.core;
 
-/**
- * Created by qamatic on 7/16/16.
- */
-public interface SqlScript extends AutoCloseable {
+import org.qamatic.mintleaf.MintLeafException;
+import org.qamatic.mintleaf.MintLeafLogger;
+import org.qamatic.mintleaf.configuration.ArgPatternHandler;
 
-    void apply() throws MintLeafException;
+import java.io.InputStream;
+import java.util.Map;
 
-    default void close() throws MintLeafException {
+public class ContentStreamReader extends SqlStreamReader {
 
+    private final static MintLeafLogger logger = MintLeafLogger.getLogger(ContentStreamReader.class);
+
+    public ContentStreamReader(String resource) {
+        super(resource);
     }
 
-    MintLeafReader getReader();
+    public ContentStreamReader(InputStream stream) {
+        super(stream);
+    }
+
+    @Override
+    protected boolean skipLineFeeds() {
+        return false;
+    }
+
+    @Override
+    public void read() throws MintLeafException {
+        super.read();
+        if (changeSetListener != null && content.length() != 0) {
+            changeSetListener.onChangeSetRead(content, null);
+        }
+    }
+
+    protected Readerline readLine() {
+        return line -> {
+            content.append(line);
+            return true;
+        };
+    }
+
+    @Override
+    public String toString() {
+        ArgPatternHandler argPatternHandler = new ArgPatternHandler(content.toString());
+        argPatternHandler.withUserProperties(getUserVariableMapping());
+        return argPatternHandler.getText();
+    }
+
 }

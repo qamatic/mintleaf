@@ -78,5 +78,6 @@ public class MigrationConfigTest {
     @Test
     public void testConfigurationLoad() throws IOException {
         InputStream inputStream = BaseSqlReader.getInputStreamFromFile("res:/test-config.yml");
+
     }
 }

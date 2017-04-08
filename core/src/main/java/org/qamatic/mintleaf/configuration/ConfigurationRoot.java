@@ -35,6 +35,11 @@
 
 package org.qamatic.mintleaf.configuration;
 
+import org.qamatic.mintleaf.Database;
+import org.qamatic.mintleaf.MintLeafException;
+import org.qamatic.mintleaf.MintLeafReader;
+import org.qamatic.mintleaf.core.ContentStreamReader;
+
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
@@ -63,23 +68,19 @@ public class ConfigurationRoot {
     private List<DbConnectionInfo> databases = new Databases();
     private SchemaVersions schemaVersions = new SchemaVersions();
 
-    public static ConfigurationRoot deSerialize(String configXml, final Map<String, String> userArgs) {
+    public static ConfigurationRoot deSerialize(String configFileName) throws MintLeafException {
+        MintLeafReader reader = new ContentStreamReader(configFileName);
+        reader.read();
         try {
             JAXBContext jc = JAXBContext.newInstance(ConfigurationRoot.class);
             Unmarshaller marshaller = jc.createUnmarshaller();
-            if (userArgs != null) {
-                ArgPatternHandler argPatternHandler = new ArgPatternHandler(configXml);
-                argPatternHandler.withUserProperties(userArgs);
-                configXml = argPatternHandler.getText();
-            }
-            StringReader sr = new StringReader(configXml);
+            StringReader sr = new StringReader(reader.toString());
             ConfigurationRoot configurationRoot = (ConfigurationRoot) marshaller.unmarshal(sr);
             return configurationRoot;
 
         } catch (JAXBException e) {
-            e.printStackTrace();
+            throw new MintLeafException(e);
         }
-        return null;
     }
 
     public List<DbConnectionInfo> getDatabases() {
@@ -129,6 +130,15 @@ public class ConfigurationRoot {
 
         } catch (JAXBException e) {
             e.printStackTrace();
+        }
+        return null;
+    }
+
+    public Database getDatabase(String databaseId) {
+        for (DbConnectionInfo dbConnectionInfo : getDatabases()) {
+            if (dbConnectionInfo.getId().equalsIgnoreCase(databaseId)) {
+                return dbConnectionInfo.getNewDatabaseInstance();
+            }
         }
         return null;
     }

@@ -37,7 +37,7 @@ package org.qamatic.mintleaf;
 
 import java.util.Map;
 
-public interface SqlReader {
+public interface MintLeafReader {
     String getDelimiter();
 
     void setDelimiter(String delimStr);

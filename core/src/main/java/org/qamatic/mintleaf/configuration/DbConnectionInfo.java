@@ -35,7 +35,10 @@
 
 package org.qamatic.mintleaf.configuration;
 
+import org.qamatic.mintleaf.Database;
 import org.qamatic.mintleaf.DbType;
+import org.qamatic.mintleaf.Mintleaf;
+import org.qamatic.mintleaf.core.JdbcDriverSource;
 
 import javax.xml.bind.annotation.XmlType;
 
@@ -118,5 +121,14 @@ public class DbConnectionInfo {
 
     public void setConnectionProperties(ConnectionProperties connectionProperties) {
         this.connectionProperties = connectionProperties;
+    }
+
+    public Database getNewDatabaseInstance() {
+        return new Mintleaf.DatabaseBuilder().
+                withDriverSource(JdbcDriverSource.class).
+                withUrl(this.url).
+                withUsername(this.username).
+                withPassword(this.password).
+                build();
     }
 }

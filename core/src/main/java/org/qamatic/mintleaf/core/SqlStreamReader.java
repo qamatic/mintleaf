@@ -49,7 +49,7 @@ public class SqlStreamReader extends BaseSqlReader {
     private final static MintLeafLogger logger = MintLeafLogger.getLogger(SqlStreamReader.class);
     protected InputStream inputStream;
     protected String resource;
-    protected final StringBuilder childContents = new StringBuilder();
+    protected final StringBuilder content = new StringBuilder();
 
     public SqlStreamReader(InputStream stream) {
         this.inputStream = stream;
@@ -70,9 +70,13 @@ public class SqlStreamReader extends BaseSqlReader {
         return this.inputStream;
     }
 
+    protected boolean skipLineFeeds() {
+        return true;
+    }
+
     @Override
     public void read() throws MintLeafException {
-        this.childContents.setLength(0);
+        this.content.setLength(0);
         BufferedReader input = null;
 
         try {
@@ -80,12 +84,14 @@ public class SqlStreamReader extends BaseSqlReader {
                 input = new BufferedReader(new InputStreamReader(getInputStream(), "UTF-8"));
                 String line = null;
                 while ((line = input.readLine()) != null) {
-                    line = line.trim();
-                    if (line.length() == 0) {
-                        continue;
+                    if (skipLineFeeds()) {
+                        line = line.trim();
+                        if (line.length() == 0) {
+                            continue;
+                        }
                     }
 
-                    if (!getLineProcessor().processInternal(line)){
+                    if (!readLine().processInternal(line)) {
                         continue;
                     }
 
@@ -101,38 +107,34 @@ public class SqlStreamReader extends BaseSqlReader {
         }
     }
 
-    protected SqlLineProcessor getLineProcessor() {
+    protected Readerline readLine() {
         return line -> {
-                if (line.startsWith("show err") || line.startsWith("--") && !line.contains("--@")) {
-                    return false;
+            if (line.startsWith("show err") || line.startsWith("--") && !line.contains("--@")) {
+                return false;
+            }
+
+            if (isDelimiter(line)) {
+
+                String[] splits = line.split(getDelimiter());
+                if (splits.length >= 1) {
+                    content.append(splits[0]);
                 }
 
-                if (isDelimiter(line)) {
+                String sql = new ArgPatternHandler(content.toString().trim()).
+                        withUserProperties(this.getUserVariableMapping()).
+                        getText();
 
-                    String[] splits = line.split(getDelimiter());
-                    if (splits.length >= 1) {
-                        childContents.append(splits[0]);
-                    }
-
-                    String sql = new ArgPatternHandler(childContents.toString().trim()).
-                            withUserProperties(this.getUserVariableMapping()).
-                            getText();
-
-                    if (changeSetListener != null && sql.length() != 0) {
-                        changeSetListener.onChangeSetRead(new StringBuilder(sql), null);
-                    }
-                    childContents.setLength(0);
-
-                } else {
-                    childContents.append(line);
-                    childContents.append("\n");
+                if (changeSetListener != null && sql.length() != 0) {
+                    changeSetListener.onChangeSetRead(new StringBuilder(sql), null);
                 }
-                return true;
-            };
-    }
+                content.setLength(0);
 
-    protected interface SqlLineProcessor {
-        boolean processInternal(String line) throws MintLeafException;
+            } else {
+                content.append(line);
+                content.append("\n");
+            }
+            return true;
+        };
     }
 
 }

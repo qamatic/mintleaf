@@ -50,7 +50,7 @@ public abstract class BaseSqlScript implements SqlScript {
 
     @Override
     public void apply() throws MintLeafException {
-        SqlReader reader = getReader();
+        MintLeafReader reader = getReader();
         execute(reader);
         close();
     }
@@ -64,7 +64,7 @@ public abstract class BaseSqlScript implements SqlScript {
         return changeSetListener;
     }
 
-    protected void execute(SqlReader reader) throws MintLeafException {
+    protected void execute(MintLeafReader reader) throws MintLeafException {
         reader.setChangeSetListener(getReadListener());
         reader.read();
     }
