@@ -50,6 +50,7 @@ public class SqlStreamReader extends BaseSqlReader {
     protected InputStream inputStream;
     protected String resource;
     protected final StringBuilder content = new StringBuilder();
+    protected boolean skipLineFeeds;
 
     public SqlStreamReader(InputStream stream) {
         this.inputStream = stream;
@@ -70,10 +71,6 @@ public class SqlStreamReader extends BaseSqlReader {
         return this.inputStream;
     }
 
-    protected boolean skipLineFeeds() {
-        return true;
-    }
-
     @Override
     public void read() throws MintLeafException {
         this.content.setLength(0);
@@ -84,7 +81,7 @@ public class SqlStreamReader extends BaseSqlReader {
                 input = new BufferedReader(new InputStreamReader(getInputStream(), "UTF-8"));
                 String line = null;
                 while ((line = input.readLine()) != null) {
-                    if (skipLineFeeds()) {
+                    if (!skipLineFeeds) {
                         line = line.trim();
                         if (line.length() == 0) {
                             continue;

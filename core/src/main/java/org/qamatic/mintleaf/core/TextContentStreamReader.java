@@ -40,27 +40,23 @@ import org.qamatic.mintleaf.MintLeafLogger;
 import org.qamatic.mintleaf.configuration.ArgPatternHandler;
 
 import java.io.InputStream;
-import java.util.Map;
 
-public class ContentStreamReader extends SqlStreamReader {
+public class TextContentStreamReader extends SqlStreamReader {
 
-    private final static MintLeafLogger logger = MintLeafLogger.getLogger(ContentStreamReader.class);
+    private final static MintLeafLogger logger = MintLeafLogger.getLogger(TextContentStreamReader.class);
 
-    public ContentStreamReader(String resource) {
+    public TextContentStreamReader(String resource) {
         super(resource);
     }
 
-    public ContentStreamReader(InputStream stream) {
+    public TextContentStreamReader(InputStream stream) {
         super(stream);
     }
 
-    @Override
-    protected boolean skipLineFeeds() {
-        return false;
-    }
 
     @Override
     public void read() throws MintLeafException {
+        skipLineFeeds=true;
         super.read();
         if (changeSetListener != null && content.length() != 0) {
             changeSetListener.onChangeSetRead(content, null);
@@ -74,11 +70,15 @@ public class ContentStreamReader extends SqlStreamReader {
         };
     }
 
-    @Override
-    public String toString() {
+    public String getContent(){
         ArgPatternHandler argPatternHandler = new ArgPatternHandler(content.toString());
         argPatternHandler.withUserProperties(getUserVariableMapping());
         return argPatternHandler.getText();
+    }
+
+    @Override
+    public String toString() {
+        return getContent();
     }
 
 }

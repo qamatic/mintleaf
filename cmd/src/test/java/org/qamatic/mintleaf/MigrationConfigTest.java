@@ -34,6 +34,7 @@
 
 package org.qamatic.mintleaf;
 
+import junit.framework.TestCase;
 import org.junit.Test;
 import org.qamatic.mintleaf.configuration.ConfigurationRoot;
 import org.qamatic.mintleaf.configuration.Property;
@@ -76,8 +77,9 @@ public class MigrationConfigTest {
     }
 
     @Test
-    public void testConfigurationLoad() throws IOException {
-        InputStream inputStream = BaseSqlReader.getInputStreamFromFile("res:/test-config.yml");
+    public void testConfigurationLoad() throws MintLeafException {
+        ConfigurationRoot newConfig = ConfigurationRoot.deSerialize("res:/test-config.xml");
+        TestCase.assertEquals("abcdb", newConfig.getDatabases().get(0).getId()); //just sanity check on deserialization.
 
     }
 }
