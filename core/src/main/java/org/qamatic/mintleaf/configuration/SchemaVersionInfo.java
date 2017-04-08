@@ -42,7 +42,7 @@ import javax.xml.bind.annotation.XmlType;
  */
 
 @XmlType(propOrder = {"id", "changeSets", "scriptLocation"})
-public class SchemaInfo {
+public class SchemaVersionInfo {
 
 
     private String id;
@@ -50,11 +50,11 @@ public class SchemaInfo {
     private String changeSets;
     private String scriptLocation;
 
-    public SchemaInfo() {
+    public SchemaVersionInfo() {
 
     }
 
-    public SchemaInfo(String id, String changeSets, String scriptLocation) {
+    public SchemaVersionInfo(String id, String changeSets, String scriptLocation) {
         this.id = id;
         this.changeSets = changeSets;
         this.scriptLocation = scriptLocation;

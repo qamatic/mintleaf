@@ -37,19 +37,21 @@ package org.qamatic.mintleaf;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.qamatic.mintleaf.configuration.MintleafConfigurationRoot;
 import org.qamatic.mintleaf.configuration.DbConnectionInfo;
-import org.qamatic.mintleaf.configuration.SchemaInfo;
+import org.qamatic.mintleaf.configuration.MintleafConfigurationRoot;
+import org.qamatic.mintleaf.configuration.SchemaVersionInfo;
 import org.qamatic.mintleaf.core.JdbcDriverSource;
 
 import java.io.File;
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 
-public class MigrateTest   {
+public class MigrationTests {
 
     private Database testDb;
 
@@ -77,13 +79,53 @@ public class MigrateTest   {
                 url, userName, password);
         dbConfiguration.getDatabases().add(dbConnectionSetting);
 
-        SchemaInfo versionSetting = new SchemaInfo();
+        SchemaVersionInfo versionSetting = new SchemaVersionInfo();
         versionSetting.setId("1.0");
         versionSetting.setChangeSets(changeSetsToApply);
 
         versionSetting.setScriptLocation(sqlPaths);
         dbConfiguration.getSchemaVersions().getVersion().add(versionSetting);
         return dbConfiguration;
+    }
+
+    @Test
+    public void fileScanTest() throws MintleafException {
+
+        FileFinder fileFinder = new FileFinder("./target/test-classes/filefinder/*.sql");
+
+        List<String> list = fileFinder.list();
+        for(String file : list){
+            System.out.println(file);
+        }
+        assertEquals(3, list.size());
+
+    }
+
+    @Test
+    public void fileScanTestWithRegex() throws MintleafException {
+
+        FileFinder fileFinder = new FileFinder("./target/regex:^.*\\b(filefinder)\\b.*$");
+
+        List<String> list = fileFinder.list();
+        for(String file : list){
+            System.out.println(file);
+        }
+        assertEquals(3, list.size());
+
+    }
+
+
+    @Test
+    public void fileScanTestWithExactFile() throws MintleafException {
+
+        FileFinder fileFinder = new FileFinder("./target/test-classes/filefinder/f1/file11.sql");
+
+        List<String> list = fileFinder.list();
+        for(String file : list){
+            System.out.println(file);
+        }
+        assertEquals(1, list.size());
+        assertTrue(list.get(0).contains("target/test-classes/filefinder/f1/file11.sql"));
     }
 
     private static void deleteFile(String fileName) {

@@ -43,13 +43,13 @@ import java.util.List;
  */
 
 public class SchemaVersions {
-    private List<SchemaInfo> version = new ArrayList<>();
+    private List<SchemaVersionInfo> version = new ArrayList<>();
 
-    public List<SchemaInfo> getVersion() {
+    public List<SchemaVersionInfo> getVersion() {
         return version;
     }
 
-    public void setVersion(List<SchemaInfo> version) {
+    public void setVersion(List<SchemaVersionInfo> version) {
         this.version = version;
     }
 }

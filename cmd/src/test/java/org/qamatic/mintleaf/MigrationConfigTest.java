@@ -39,7 +39,7 @@ import org.junit.Test;
 import org.qamatic.mintleaf.configuration.DbConnectionInfo;
 import org.qamatic.mintleaf.configuration.MintleafConfigurationRoot;
 import org.qamatic.mintleaf.configuration.Property;
-import org.qamatic.mintleaf.configuration.SchemaInfo;
+import org.qamatic.mintleaf.configuration.SchemaVersionInfo;
 
 import java.io.IOException;
 
@@ -62,7 +62,7 @@ public class MigrationConfigTest {
         dbConnectionSetting.getConnectionProperties().getItems().add(new Property("internal_logon", "sysdba"));
 
 
-        SchemaInfo versionSetting = new SchemaInfo();
+        SchemaVersionInfo versionSetting = new SchemaVersionInfo();
         versionSetting.setId("1.0");
         versionSetting.setChangeSets("create schema, load seed data");
 
