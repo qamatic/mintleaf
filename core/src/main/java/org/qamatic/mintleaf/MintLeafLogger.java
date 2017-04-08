@@ -43,12 +43,10 @@ public abstract class MintleafLogger {
     private static MintleafLogger mintLeafLogger;
 
     public synchronized static MintleafLogger getLogger(Class<?> clazz) {
-
         if (mintLeafLogger == null) {
             mintLeafLogger = new ConsoleLogger(clazz);
         }
         return mintLeafLogger;
-
     }
 
     public abstract void error(Throwable e);

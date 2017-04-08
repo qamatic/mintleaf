@@ -39,8 +39,6 @@ package org.qamatic.mintleaf;
  * Created by qamatic on 2/16/16.
  */
 public class MintleafException extends Exception {
-    public MintleafException() {
-    }
 
     public MintleafException(String message) {
         super(message);
