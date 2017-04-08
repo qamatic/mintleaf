@@ -37,7 +37,7 @@ package org.qamatic.mintleaf.dbexample.compare;
 
 import org.qamatic.mintleaf.Row;
 import org.qamatic.mintleaf.MetaDataCollection;
-import org.qamatic.mintleaf.MintLeafException;
+import org.qamatic.mintleaf.MintleafException;
 
 /**
  * Created by QAmatic Team on 3/11/17.
@@ -67,7 +67,7 @@ public class User implements Row {
     }
 
     @Override
-    public Object getValue(int columnIndex) throws MintLeafException {
+    public Object getValue(int columnIndex) throws MintleafException {
         switch (columnIndex) {
             case 0:
                 return userName;
@@ -78,7 +78,7 @@ public class User implements Row {
     }
 
     @Override
-    public MetaDataCollection getMetaData() throws MintLeafException {
+    public MetaDataCollection getMetaData() throws MintleafException {
         return this.metaDataCollection;
     }
 

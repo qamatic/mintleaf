@@ -42,7 +42,7 @@ import org.qamatic.mintleaf.*;
  */
 public class FluentJdbc {
 
-    private static final MintLeafLogger logger = MintLeafLogger.getLogger(FluentJdbc.class);
+    private static final MintleafLogger logger = MintleafLogger.getLogger(FluentJdbc.class);
 
     public static final class Builder {
         private String sql;
@@ -75,7 +75,7 @@ public class FluentJdbc {
         }
 
 
-        public Builder withListener(ExecutionResultListener executionResultListener) throws MintLeafException {
+        public Builder withListener(ExecutionResultListener executionResultListener) throws MintleafException {
             this.executionResultListener = executionResultListener;
             return this;
         }
@@ -87,7 +87,7 @@ public class FluentJdbc {
                 query.setExecutionResultListener(this.executionResultListener);
                 return query;
             } catch (Exception e) {
-                MintLeafException.throwException(e.getMessage());
+                MintleafException.throwException(e.getMessage());
             }
             return null;
         }
@@ -97,7 +97,7 @@ public class FluentJdbc {
             try {
                 return new SelectQuery(this.connectionContext, this.sql, this.parameterBinding).execute();
             } catch (Exception e) {
-                MintLeafException.throwException(e.getMessage());
+                MintleafException.throwException(e.getMessage());
             }
             return null;
         }

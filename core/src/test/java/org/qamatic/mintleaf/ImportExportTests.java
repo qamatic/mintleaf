@@ -55,13 +55,13 @@ public class ImportExportTests extends H2TestCase {
 
 
     @Before
-    public void applyChangeSet() throws IOException, SQLException, MintLeafException {
+    public void applyChangeSet() throws IOException, SQLException, MintleafException {
         ChangeSets.migrate(testDb.getNewConnection(), "res:/example-changesets.sql", "create schema,load seed data");
     }
 
 
     @Test
-    public void writeCSVTest() throws SQLException, IOException, MintLeafException {
+    public void writeCSVTest() throws SQLException, IOException, MintleafException {
         File f = new File("users.csv");
         if (f.exists())
             f.delete();
@@ -81,7 +81,7 @@ public class ImportExportTests extends H2TestCase {
 
 
     @Test
-    public void importCSVTest() throws SQLException, IOException, MintLeafException {
+    public void importCSVTest() throws SQLException, IOException, MintleafException {
         writeCSVTest();//dependent..
 
         Executable action = new Mintleaf.CsvToDbDataTransferBuilder().
@@ -108,7 +108,7 @@ public class ImportExportTests extends H2TestCase {
 
 
     @Test
-    public void DbToDbImport() throws SQLException, IOException, MintLeafException {
+    public void DbToDbImport() throws SQLException, IOException, MintleafException {
         ChangeSets.migrate(testDb.getNewConnection(), "res:/example-changesets.sql", "DROP_CREATE_USERS_IMPORT_TABLE");
 
         Executable action = new Mintleaf.DbToDbDataTransferBuilder().
@@ -125,7 +125,7 @@ public class ImportExportTests extends H2TestCase {
 
 
     @Test
-    public void DbToDbImportNullIssue() throws SQLException, IOException, MintLeafException {
+    public void DbToDbImportNullIssue() throws SQLException, IOException, MintleafException {
         ChangeSets.migrate(testDb.getNewConnection(), "res:/example-changesets.sql", "DROP_CREATE_USERS_IMPORT_TABLE");
 
         Executable action = new DbImporter(testDb.getNewConnection(),

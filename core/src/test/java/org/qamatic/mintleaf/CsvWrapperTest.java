@@ -51,7 +51,7 @@ import static org.junit.Assert.*;
 public class CsvWrapperTest {
 
     @Test
-    public void testReader() throws MintLeafException {
+    public void testReader() throws MintleafException {
         InputStream csvStream = BaseSqlReader.getInputStreamFromFile("res:/users.csv");
         CsvRowListWrapper csvRowListWrapper = new CsvRowListWrapper(new InputStreamReader(csvStream));
         assertTrue(csvRowListWrapper.moveNext());
@@ -67,7 +67,7 @@ public class CsvWrapperTest {
     }
 
     @Test
-    public void testCSVMetaData() throws MintLeafException, SQLException {
+    public void testCSVMetaData() throws MintleafException, SQLException {
         InputStream csvStream = BaseSqlReader.getInputStreamFromFile("res:/users.csv");
         CsvRowListWrapper csvRowListWrapper = new CsvRowListWrapper(new InputStreamReader(csvStream));
         assertTrue(csvRowListWrapper.moveNext());

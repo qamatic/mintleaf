@@ -1,6 +1,6 @@
 package org.qamatic.mintleaf.configuration;
 
-import org.qamatic.mintleaf.MintLeafLogger;
+import org.qamatic.mintleaf.MintleafLogger;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -12,7 +12,7 @@ import java.util.regex.Pattern;
  */
 public class ArgPatternHandler {
 
-    private static final MintLeafLogger logger = MintLeafLogger.getLogger(ArgPatternHandler.class);
+    private static final MintleafLogger logger = MintleafLogger.getLogger(ArgPatternHandler.class);
 
     private final static Pattern p = Pattern.compile("\\$\\{(.+?)\\}", Pattern.CASE_INSENSITIVE | Pattern.MULTILINE);
     private String text;

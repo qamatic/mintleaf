@@ -38,23 +38,23 @@ package org.qamatic.mintleaf;
 /**
  * Created by qamatic on 2/16/16.
  */
-public class MintLeafException extends Exception {
-    public MintLeafException() {
+public class MintleafException extends Exception {
+    public MintleafException() {
     }
 
-    public MintLeafException(String message) {
+    public MintleafException(String message) {
         super(message);
     }
 
-    public MintLeafException(String message, Throwable cause) {
+    public MintleafException(String message, Throwable cause) {
         super(message, cause);
     }
 
-    public MintLeafException(Throwable cause) {
+    public MintleafException(Throwable cause) {
         super(cause);
     }
 
-    public MintLeafException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
+    public MintleafException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
         super(message, cause, enableSuppression, writableStackTrace);
     }
 
@@ -64,10 +64,10 @@ public class MintLeafException extends Exception {
     }
 
     public static void throwException(Throwable exception) {
-        MintLeafException.<RuntimeException>throwException(exception, null);
+        MintleafException.<RuntimeException>throwException(exception, null);
     }
 
     public static void throwException(String message) {
-        MintLeafException.<RuntimeException>throwException(new MintLeafException(message), null);
+        MintleafException.<RuntimeException>throwException(new MintleafException(message), null);
     }
 }

@@ -41,7 +41,7 @@ import org.qamatic.mintleaf.*;
  * Created by qamatic on 3/6/16.
  */
 public class DbImporter extends ImpExpBase implements Executable<Boolean> {
-    private static final MintLeafLogger logger = MintLeafLogger.getLogger(DbImporter.class);
+    private static final MintleafLogger logger = MintleafLogger.getLogger(DbImporter.class);
 
     private ConnectionContext targetDb;
     private String targetSqlTemplate;
@@ -59,7 +59,7 @@ public class DbImporter extends ImpExpBase implements Executable<Boolean> {
     }
 
     @Override
-    public Boolean execute() throws MintLeafException {
+    public Boolean execute() throws MintleafException {
         try (SqlResultSet sourceSqlResultSet = this.getConnectionContext().queryBuilder().withSql(sourceSql).withParamValues(sourceSqlParamValueBindings).buildSelect()) {
             importDataFrom(createFlavour(sourceSqlResultSet), this.targetSqlTemplate);
             return true;

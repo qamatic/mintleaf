@@ -37,7 +37,7 @@ package org.qamatic.mintleaf;
 
 import java.util.Map;
 
-public interface MintLeafReader {
+public interface MintleafReader {
     String getDelimiter();
 
     void setDelimiter(String delimStr);
@@ -46,7 +46,7 @@ public interface MintLeafReader {
 
     void setChangeSetListener(ChangeSetListener mvreaderListener);
 
-    void read() throws MintLeafException;
+    void read() throws MintleafException;
 
     Map<String, String> getUserVariableMapping();
 

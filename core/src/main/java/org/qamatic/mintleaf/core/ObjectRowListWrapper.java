@@ -36,7 +36,7 @@
 package org.qamatic.mintleaf.core;
 
 import org.qamatic.mintleaf.MetaDataCollection;
-import org.qamatic.mintleaf.MintLeafException;
+import org.qamatic.mintleaf.MintleafException;
 import org.qamatic.mintleaf.Row;
 import org.qamatic.mintleaf.RowListWrapper;
 
@@ -58,12 +58,12 @@ public class ObjectRowListWrapper implements RowListWrapper {
     }
 
     @Override
-    public void resetAll() throws MintLeafException {
+    public void resetAll() throws MintleafException {
         current = -1;
     }
 
     @Override
-    public boolean moveNext() throws MintLeafException {
+    public boolean moveNext() throws MintleafException {
         current++;
         if (this.current >= this.list.size()) {
             return false;
@@ -73,7 +73,7 @@ public class ObjectRowListWrapper implements RowListWrapper {
     }
 
     @Override
-    public Row row() throws MintLeafException {
+    public Row row() throws MintleafException {
         if (this.current >= this.list.size()) {
             return null;
         }
@@ -83,7 +83,7 @@ public class ObjectRowListWrapper implements RowListWrapper {
     }
 
     @Override
-    public MetaDataCollection getMetaData() throws MintLeafException {
+    public MetaDataCollection getMetaData() throws MintleafException {
         return this.metaDataCollection;
     }
 

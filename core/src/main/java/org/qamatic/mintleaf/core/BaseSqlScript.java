@@ -40,7 +40,7 @@ import org.qamatic.mintleaf.*;
 
 public abstract class BaseSqlScript implements SqlScript {
 
-    private final static MintLeafLogger logger = MintLeafLogger.getLogger(BaseSqlScript.class);
+    private final static MintleafLogger logger = MintleafLogger.getLogger(BaseSqlScript.class);
     protected ConnectionContext connectionContext;
     protected ChangeSetListener changeSetListener;
 
@@ -49,8 +49,8 @@ public abstract class BaseSqlScript implements SqlScript {
     }
 
     @Override
-    public void apply() throws MintLeafException {
-        MintLeafReader reader = getReader();
+    public void apply() throws MintleafException {
+        MintleafReader reader = getReader();
         execute(reader);
         close();
     }
@@ -64,7 +64,7 @@ public abstract class BaseSqlScript implements SqlScript {
         return changeSetListener;
     }
 
-    protected void execute(MintLeafReader reader) throws MintLeafException {
+    protected void execute(MintleafReader reader) throws MintleafException {
         reader.setChangeSetListener(getReadListener());
         reader.read();
     }

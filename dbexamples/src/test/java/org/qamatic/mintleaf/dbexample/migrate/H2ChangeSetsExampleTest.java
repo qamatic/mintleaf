@@ -39,7 +39,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.qamatic.mintleaf.Database;
-import org.qamatic.mintleaf.MintLeafException;
+import org.qamatic.mintleaf.MintleafException;
 import org.qamatic.mintleaf.core.ChangeSets;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -62,7 +62,7 @@ public class H2ChangeSetsExampleTest {
 
 
     @Before
-    public void createDb() throws IOException, SQLException, MintLeafException {
+    public void createDb() throws IOException, SQLException, MintleafException {
         if (hrDatabase.getNewConnection().getDbQueries().isTableExists("HRDB.USERS"))
             return;
 
@@ -71,7 +71,7 @@ public class H2ChangeSetsExampleTest {
     }
 
     @Test
-    public void testCount() throws MintLeafException {
+    public void testCount() throws MintleafException {
         assertEquals(7, hrDatabase.getNewConnection().getDbQueries().getCount("HRDB.USERS"));
     }
 

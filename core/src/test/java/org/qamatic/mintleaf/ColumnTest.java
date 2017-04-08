@@ -105,7 +105,7 @@ public class ColumnTest {
         assertEquals("HRDB.COUNTRIES", columnMetaDataCollection.getObjectName());
     }
 
-    @Test(expected = MintLeafException.class)
+    @Test(expected = MintleafException.class)
     public void testMetaDataCollectionDupeColumn() {
         ColumnMetaDataCollection columnMetaDataCollection = new ColumnMetaDataCollection("HRDB.COUNTRIES");
         columnMetaDataCollection.add(new Column("X", Types.NCHAR));
@@ -115,7 +115,7 @@ public class ColumnTest {
     }
 
 
-    @Test(expected = MintLeafException.class)
+    @Test(expected = MintleafException.class)
     public void testMetaDataCollectionDupeColumn2() {
         ColumnMetaDataCollection columnMetaDataCollection = new ColumnMetaDataCollection("HRDB.COUNTRIES");
         columnMetaDataCollection.add(new Column("X", Types.NCHAR));

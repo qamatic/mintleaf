@@ -35,7 +35,7 @@
 
 package org.qamatic.mintleaf.core;
 
-import org.qamatic.mintleaf.MintLeafException;
+import org.qamatic.mintleaf.MintleafException;
 import org.qamatic.mintleaf.configuration.ArgPatternHandler;
 
 public class SqlStringReader extends BaseSqlReader {
@@ -47,7 +47,7 @@ public class SqlStringReader extends BaseSqlReader {
     }
 
     @Override
-    public void read() throws MintLeafException {
+    public void read() throws MintleafException {
 
         StringBuilder childContents = new StringBuilder();
 

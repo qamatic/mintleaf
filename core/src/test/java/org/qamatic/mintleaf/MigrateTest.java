@@ -37,16 +37,13 @@ package org.qamatic.mintleaf;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.qamatic.mintleaf.configuration.ConfigurationRoot;
+import org.qamatic.mintleaf.configuration.MintleafConfigurationRoot;
 import org.qamatic.mintleaf.configuration.DbConnectionInfo;
-import org.qamatic.mintleaf.configuration.Property;
 import org.qamatic.mintleaf.configuration.SchemaInfo;
-import org.qamatic.mintleaf.core.ChangeSets;
 import org.qamatic.mintleaf.core.JdbcDriverSource;
 
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.Files;
 import java.sql.SQLException;
 
 import static org.junit.Assert.assertEquals;
@@ -57,7 +54,7 @@ public class MigrateTest   {
     private Database testDb;
 
     @Before
-    public void cleanDb() throws MintLeafException {
+    public void cleanDb() throws MintleafException {
         deleteFile("./target/h2testdb.h2.db");
         deleteFile("./target/h2testdb.trace.db");
 
@@ -68,14 +65,14 @@ public class MigrateTest   {
     }
 
     @Test
-    public void testDbById() throws SQLException, IOException, MintLeafException {
-        ConfigurationRoot conf = getTestConfig("myh2", "jdbc:h2:file:./target/h2testdb;mv_store=false;", "", "", "clean db, create schema", "");
+    public void testDbById() throws SQLException, IOException, MintleafException {
+        MintleafConfigurationRoot conf = getTestConfig("myh2", "jdbc:h2:file:./target/h2testdb;mv_store=false;", "", "", "clean db, create schema", "");
         assertNull(conf.getDatabase("dfsdf"));
         assertEquals(DbType.H2, conf.getDatabase("myh2").getSupportedDbType());
     }
 
-    private ConfigurationRoot getTestConfig(String id, String url, String userName, String password, String changeSetsToApply, String sqlPaths) {
-        ConfigurationRoot dbConfiguration = new ConfigurationRoot();
+    private MintleafConfigurationRoot getTestConfig(String id, String url, String userName, String password, String changeSetsToApply, String sqlPaths) {
+        MintleafConfigurationRoot dbConfiguration = new MintleafConfigurationRoot();
         DbConnectionInfo dbConnectionSetting = new DbConnectionInfo(id, DbType.getDbType(url),
                 url, userName, password);
         dbConfiguration.getDatabases().add(dbConnectionSetting);

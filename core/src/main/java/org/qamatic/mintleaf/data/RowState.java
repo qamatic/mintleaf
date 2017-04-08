@@ -36,7 +36,7 @@
 package org.qamatic.mintleaf.data;
 
 import org.qamatic.mintleaf.MetaDataCollection;
-import org.qamatic.mintleaf.MintLeafException;
+import org.qamatic.mintleaf.MintleafException;
 
 /**
  * Created by qamatic on 3/5/16.
@@ -53,11 +53,11 @@ public class RowState {
         return String.format("RowNo:%d, ColumnNo:%d, Surplus:%d", RowNumber, ColumnNumber, IsSurplusRow);
     }
 
-    public Object getValue() throws MintLeafException {
+    public Object getValue() throws MintleafException {
         return Row.getValue(ColumnNumber);
     }
 
-    public String asString() throws MintLeafException {
+    public String asString() throws MintleafException {
         return getValue().toString();
     }
 

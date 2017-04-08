@@ -35,7 +35,7 @@
 
 package org.qamatic.mintleaf.data;
 
-import org.qamatic.mintleaf.MintLeafException;
+import org.qamatic.mintleaf.MintleafException;
 import org.qamatic.mintleaf.RowListWrapper;
 
 /**
@@ -43,28 +43,28 @@ import org.qamatic.mintleaf.RowListWrapper;
  */
 public interface ComparerListener {
 
-    default void OnBeginCompare(RowListWrapper sourceTable, RowListWrapper targetTable) throws MintLeafException {
+    default void OnBeginCompare(RowListWrapper sourceTable, RowListWrapper targetTable) throws MintleafException {
 
     }
 
-    default void OnEndCompare(final RowState sourceRow, final RowState targetRow) throws MintLeafException {
+    default void OnEndCompare(final RowState sourceRow, final RowState targetRow) throws MintleafException {
 
     }
 
-    default void onBeforeRowCompare(final RowState sourceRow, final RowState targetRow) throws MintLeafException {
+    default void onBeforeRowCompare(final RowState sourceRow, final RowState targetRow) throws MintleafException {
 
     }
 
-    default void onAfterRowCompare(final RowState sourceRow, final RowState targetRow) throws MintLeafException {
+    default void onAfterRowCompare(final RowState sourceRow, final RowState targetRow) throws MintleafException {
 
     }
 
-    default void OnRowCompare(final RowState sourceRow, final RowState targetRow) throws MintLeafException {
+    default void OnRowCompare(final RowState sourceRow, final RowState targetRow) throws MintleafException {
 
     }
 
 
-    void OnColumnCompare(final ColumnState sourceColumn, final ColumnState targetColumn) throws MintLeafException;
+    void OnColumnCompare(final ColumnState sourceColumn, final ColumnState targetColumn) throws MintleafException;
 
 
 }

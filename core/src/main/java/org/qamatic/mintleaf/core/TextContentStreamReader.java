@@ -35,15 +35,15 @@
 
 package org.qamatic.mintleaf.core;
 
-import org.qamatic.mintleaf.MintLeafException;
-import org.qamatic.mintleaf.MintLeafLogger;
+import org.qamatic.mintleaf.MintleafException;
+import org.qamatic.mintleaf.MintleafLogger;
 import org.qamatic.mintleaf.configuration.ArgPatternHandler;
 
 import java.io.InputStream;
 
 public class TextContentStreamReader extends SqlStreamReader {
 
-    private final static MintLeafLogger logger = MintLeafLogger.getLogger(TextContentStreamReader.class);
+    private final static MintleafLogger logger = MintleafLogger.getLogger(TextContentStreamReader.class);
 
     public TextContentStreamReader(String resource) {
         super(resource);
@@ -55,7 +55,7 @@ public class TextContentStreamReader extends SqlStreamReader {
 
 
     @Override
-    public void read() throws MintLeafException {
+    public void read() throws MintleafException {
         skipLineFeeds=true;
         super.read();
         if (changeSetListener != null && content.length() != 0) {

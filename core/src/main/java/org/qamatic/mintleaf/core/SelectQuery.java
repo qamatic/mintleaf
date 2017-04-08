@@ -46,7 +46,7 @@ import java.sql.SQLException;
  */
 public class SelectQuery implements Executable<SqlResultSet> {
 
-    private static final MintLeafLogger logger = MintLeafLogger.getLogger(SelectQuery.class);
+    private static final MintleafLogger logger = MintleafLogger.getLogger(SelectQuery.class);
     private ConnectionContext connectionContext;
     private PreparedStatement preparedStatement;
     private ResultSet resultSet;
@@ -59,7 +59,7 @@ public class SelectQuery implements Executable<SqlResultSet> {
         this.sql = sql;
     }
 
-    private ResultSet getResultSet() throws MintLeafException {
+    private ResultSet getResultSet() throws MintleafException {
         if (this.resultSet == null) {
             try {
                 this.preparedStatement = connectionContext.getConnection().prepareStatement(this.sql);
@@ -70,12 +70,12 @@ public class SelectQuery implements Executable<SqlResultSet> {
                     logger.info("executing select query: " + this.sql);
                     this.resultSet = this.preparedStatement.executeQuery();
                 }
-            } catch (MintLeafException e) {
+            } catch (MintleafException e) {
                 logger.error("error fetching data", e);
-                throw new MintLeafException(e);
+                throw new MintleafException(e);
             } catch (SQLException e) {
                 logger.error(e);
-                throw new MintLeafException(e);
+                throw new MintleafException(e);
             }
         }
 
@@ -84,7 +84,7 @@ public class SelectQuery implements Executable<SqlResultSet> {
 
 
     @Override
-    public void close() throws MintLeafException {
+    public void close() throws MintleafException {
         try {
             if (this.resultSet != null) {
                 this.resultSet.close();
@@ -96,7 +96,7 @@ public class SelectQuery implements Executable<SqlResultSet> {
             this.preparedStatement = null;
         } catch (SQLException e) {
             logger.error("FluentJdbc close()", e);
-            throw new MintLeafException(e);
+            throw new MintleafException(e);
         }
     }
 
@@ -105,10 +105,10 @@ public class SelectQuery implements Executable<SqlResultSet> {
      * Computes a result, or throws an exception if unable to do so.
      *
      * @return computed result
-     * @throws MintLeafException if unable to compute a result
+     * @throws MintleafException if unable to compute a result
      */
     @Override
-    public SqlResultSet execute() throws MintLeafException {
+    public SqlResultSet execute() throws MintleafException {
         return new SelectQueryWrapper(this);
     }
 
@@ -120,29 +120,29 @@ public class SelectQuery implements Executable<SqlResultSet> {
         }
 
         @Override
-        public ResultSet getResultSet() throws MintLeafException {
+        public ResultSet getResultSet() throws MintleafException {
             return this.selectQuery.getResultSet();
         }
 
         @Override
-        public void close() throws MintLeafException {
+        public void close() throws MintleafException {
             this.selectQuery.close();
         }
 
         @Override
-        public ResultSet first() throws MintLeafException {
+        public ResultSet first() throws MintleafException {
             try {
                 getResultSet().next();
                 return getResultSet();
             } catch (SQLException e) {
 
                 logger.error(e);
-                throw new MintLeafException(e);
+                throw new MintleafException(e);
             }
         }
 
         @Override
-        public <T> void iterate(DataRowListener<T> listener) throws MintLeafException, MintLeafException {
+        public <T> void iterate(DataRowListener<T> listener) throws MintleafException, MintleafException {
             try {
                 int i = 0;
                 while (getResultSet().next()) {
@@ -151,12 +151,12 @@ public class SelectQuery implements Executable<SqlResultSet> {
             } catch (SQLException e) {
 
                 logger.error(e);
-                throw new MintLeafException(e);
+                throw new MintleafException(e);
             }
         }
 
         @Override
-        public RowListWrapper asRowListWrapper() throws MintLeafException {
+        public RowListWrapper asRowListWrapper() throws MintleafException {
             ResultSetRowListWrapper rowListWrapper = new ResultSetRowListWrapper();
             rowListWrapper.setResultSet(this.getResultSet());
             return rowListWrapper;

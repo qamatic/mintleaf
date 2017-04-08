@@ -48,9 +48,9 @@ import static org.junit.Assert.assertEquals;
  * Created by QAmatic Team on 3/12/17.
  */
 public class SelectedMatchTests {
-    private static final MintLeafLogger logger = MintLeafLogger.getLogger(SelectedMatchTests.class);
+    private static final MintleafLogger logger = MintleafLogger.getLogger(SelectedMatchTests.class);
 
-    private static List<String> assertCompareTable(List<User> sourceList, List<User> targetListList, String selectedColumnMaps) throws MintLeafException {
+    private static List<String> assertCompareTable(List<User> sourceList, List<User> targetListList, String selectedColumnMaps) throws MintleafException {
         final ColumnMetaDataCollection sourceColumnDefs = new ColumnMetaDataCollection("LIST.USERS") {
             {
                 add(new Column("FIRSTNAME", Types.VARCHAR));
@@ -97,20 +97,20 @@ public class SelectedMatchTests {
 
     }
 
-    @Test(expected = MintLeafException.class)
+    @Test(expected = MintleafException.class)
     public void testIncorrectMaps() {
         SelectedColumnMatcher matcher = new SelectedColumnMatcher("susernametusername");
         assertEquals("susername", matcher.getSourceColumns().get(0));
     }
 
-    @Test(expected = MintLeafException.class)
+    @Test(expected = MintleafException.class)
     public void testIncorrectMaps2() {
         SelectedColumnMatcher matcher = new SelectedColumnMatcher("");
         assertEquals("susername", matcher.getSourceColumns().get(0));
     }
 
     @Test
-    public void testCompareSelected() throws MintLeafException {
+    public void testCompareSelected() throws MintleafException {
 
         final List<String> expected = new ArrayList<String>() {
             {

@@ -51,21 +51,21 @@ public class ResultSetRowListWrapper implements RowListWrapper {
     private int current = -1;
 
     @Override
-    public void resetAll() throws MintLeafException {
+    public void resetAll() throws MintleafException {
 
     }
 
     @Override
-    public boolean moveNext() throws MintLeafException {
+    public boolean moveNext() throws MintleafException {
         try {
             return resultSet.next();
         } catch (SQLException e) {
-            throw new MintLeafException(e);
+            throw new MintleafException(e);
         }
     }
 
     @Override
-    public Row row() throws MintLeafException {
+    public Row row() throws MintleafException {
         return new ResultSetRowWrapper(resultSet);
     }
 
@@ -74,12 +74,12 @@ public class ResultSetRowListWrapper implements RowListWrapper {
     }
 
     @Override
-    public MetaDataCollection getMetaData() throws MintLeafException {
+    public MetaDataCollection getMetaData() throws MintleafException {
         if (this.resultSetMetaData == null) {
             try {
                 this.resultSetMetaData = new ResultSetMetaDataCollection(this.resultSet.getMetaData());
             } catch (SQLException e) {
-                throw new MintLeafException(e);
+                throw new MintleafException(e);
             }
         }
         return this.resultSetMetaData;

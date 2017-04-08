@@ -36,7 +36,7 @@ package org.qamatic.mintleaf.data;
 
 import org.qamatic.mintleaf.ColumnMatcher;
 import org.qamatic.mintleaf.DataComparer;
-import org.qamatic.mintleaf.MintLeafException;
+import org.qamatic.mintleaf.MintleafException;
 import org.qamatic.mintleaf.RowListWrapper;
 
 /**
@@ -62,7 +62,7 @@ public class OrderedListComparator implements DataComparer {
     }
 
     @Override
-    public Boolean execute() throws MintLeafException {
+    public Boolean execute() throws MintleafException {
         assertBefore();
         if (this.comparerListener != null) {
             this.comparerListener.OnBeginCompare(this.sourceTable, this.targetTable);
@@ -121,28 +121,28 @@ public class OrderedListComparator implements DataComparer {
         return true;
     }
 
-    private void assertBefore() throws MintLeafException {
+    private void assertBefore() throws MintleafException {
         if (columnMatcher == null)
-            throw new MintLeafException("RowMatcher must be set");
+            throw new MintleafException("RowMatcher must be set");
         if (sourceTable == null)
-            throw new MintLeafException("SourceTable is missing");
+            throw new MintleafException("SourceTable is missing");
         if (targetTable == null)
-            throw new MintLeafException("TargetTable is missing");
+            throw new MintleafException("TargetTable is missing");
     }
 
-    private void onRowCompare(final RowState sourceRowState, final RowState targetRowState) throws MintLeafException {
+    private void onRowCompare(final RowState sourceRowState, final RowState targetRowState) throws MintleafException {
         if (this.comparerListener != null) {
             this.comparerListener.OnRowCompare(sourceRowState, targetRowState);
         }
     }
 
-    private void beforeRowCompare(final RowState sourceRowState, final RowState targetRowState) throws MintLeafException {
+    private void beforeRowCompare(final RowState sourceRowState, final RowState targetRowState) throws MintleafException {
         if (this.comparerListener != null) {
             this.comparerListener.onBeforeRowCompare(sourceRowState, targetRowState);
         }
     }
 
-    private void afterRowCompare(final RowState sourceRowState, final RowState targetRowState) throws MintLeafException {
+    private void afterRowCompare(final RowState sourceRowState, final RowState targetRowState) throws MintleafException {
         if (this.comparerListener != null) {
             this.comparerListener.onAfterRowCompare(sourceRowState, targetRowState);
         }

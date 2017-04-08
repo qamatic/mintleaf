@@ -40,11 +40,11 @@ package org.qamatic.mintleaf;
  */
 public interface SqlScript extends AutoCloseable {
 
-    void apply() throws MintLeafException;
+    void apply() throws MintleafException;
 
-    default void close() throws MintLeafException {
+    default void close() throws MintleafException {
 
     }
 
-    MintLeafReader getReader();
+    MintleafReader getReader();
 }

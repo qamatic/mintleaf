@@ -36,8 +36,8 @@
 package org.qamatic.mintleaf.configuration;
 
 import org.qamatic.mintleaf.Database;
-import org.qamatic.mintleaf.MintLeafException;
-import org.qamatic.mintleaf.MintLeafReader;
+import org.qamatic.mintleaf.MintleafException;
+import org.qamatic.mintleaf.MintleafReader;
 import org.qamatic.mintleaf.core.TextContentStreamReader;
 
 import javax.xml.bind.JAXBContext;
@@ -57,7 +57,7 @@ import java.util.List;
 @XmlRootElement(name = "mintleaf")
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(propOrder = {"description", "databases", "schemaVersions"})
-public class ConfigurationRoot {
+public class MintleafConfigurationRoot {
 
     @XmlAttribute
     private String version = "1.0";
@@ -67,18 +67,18 @@ public class ConfigurationRoot {
     private List<DbConnectionInfo> databases = new Databases();
     private SchemaVersions schemaVersions = new SchemaVersions();
 
-    public static ConfigurationRoot deSerialize(String configFileName) throws MintLeafException {
-        MintLeafReader reader = new TextContentStreamReader(configFileName);
+    public static MintleafConfigurationRoot deSerialize(String configFileName) throws MintleafException {
+        MintleafReader reader = new TextContentStreamReader(configFileName);
         reader.read();
         try {
-            JAXBContext jc = JAXBContext.newInstance(ConfigurationRoot.class);
+            JAXBContext jc = JAXBContext.newInstance(MintleafConfigurationRoot.class);
             Unmarshaller marshaller = jc.createUnmarshaller();
             StringReader sr = new StringReader(reader.toString());
-            ConfigurationRoot configurationRoot = (ConfigurationRoot) marshaller.unmarshal(sr);
+            MintleafConfigurationRoot configurationRoot = (MintleafConfigurationRoot) marshaller.unmarshal(sr);
             return configurationRoot;
 
         } catch (JAXBException e) {
-            throw new MintLeafException(e);
+            throw new MintleafException(e);
         }
     }
 
@@ -121,7 +121,7 @@ public class ConfigurationRoot {
 
     private String serialize() {
         try {
-            JAXBContext jc = JAXBContext.newInstance(ConfigurationRoot.class);
+            JAXBContext jc = JAXBContext.newInstance(MintleafConfigurationRoot.class);
             Marshaller marshaller = jc.createMarshaller();
             StringWriter sw = new StringWriter();
             marshaller.marshal(this, sw);

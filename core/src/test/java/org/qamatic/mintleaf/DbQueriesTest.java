@@ -55,12 +55,12 @@ import static org.mockito.Mockito.*;
 public class DbQueriesTest extends H2TestCase {
 
     @Before
-    public void cleanDb() throws MintLeafException {
+    public void cleanDb() throws MintleafException {
         ChangeSets.migrate(testDb.getNewConnection(), "res:/example-changesets.sql", "create schema, DataForDbCompareTest, DROP_CREATE_USERS_IMPORT_TABLE");
     }
 
     @Test
-    public void contextCloseCall() throws SQLException, IOException, MintLeafException {
+    public void contextCloseCall() throws SQLException, IOException, MintleafException {
 
         ConnectionContext ctx = mock(DbConnectionContext.class);
 
@@ -73,7 +73,7 @@ public class DbQueriesTest extends H2TestCase {
     }
 
     @Test
-    public void executeQueryCloseCall() throws SQLException, IOException, MintLeafException {
+    public void executeQueryCloseCall() throws SQLException, IOException, MintleafException {
 
         ExecuteQuery query = mock(ExecuteQuery.class);
 
@@ -85,7 +85,7 @@ public class DbQueriesTest extends H2TestCase {
     }
 
     @Test
-    public void statementCallTest() throws SQLException, IOException, MintLeafException {
+    public void statementCallTest() throws SQLException, IOException, MintleafException {
 
         try (ConnectionContext ctx = testDb.getNewConnection()) {
 
@@ -100,7 +100,7 @@ public class DbQueriesTest extends H2TestCase {
     }
 
     @Test
-    public void statementListenTest() throws SQLException, IOException, MintLeafException {
+    public void statementListenTest() throws SQLException, IOException, MintleafException {
 
         try (ConnectionContext ctx = testDb.getNewConnection()) {
             final int[] pkey = {-1};
@@ -121,7 +121,7 @@ public class DbQueriesTest extends H2TestCase {
     }
 
     @Test
-    public void insertUsingBindingTest() throws SQLException, IOException, MintLeafException {
+    public void insertUsingBindingTest() throws SQLException, IOException, MintleafException {
 
         try (ConnectionContext ctx = testDb.getNewConnection()) {
 
@@ -137,7 +137,7 @@ public class DbQueriesTest extends H2TestCase {
 
 
     @Test
-    public void rollBackTest() throws SQLException, IOException, MintLeafException {
+    public void rollBackTest() throws SQLException, IOException, MintleafException {
 
         try (ConnectionContext ctx = testDb.getNewConnection().beginTransaction()) {
             try (Executable<int[]> executable = ctx.executeSql("INSERT INTO HRDB.USERS (USERID, USERNAME) VALUES (?, ?)", new Object[]{11, "HI"})) {
@@ -152,7 +152,7 @@ public class DbQueriesTest extends H2TestCase {
     }
 
     @Test
-    public void commitTest() throws SQLException, IOException, MintLeafException {
+    public void commitTest() throws SQLException, IOException, MintleafException {
 
         try (ConnectionContext ctx = testDb.getNewConnection().beginTransaction()) {
             ctx.beginTransaction();
@@ -167,7 +167,7 @@ public class DbQueriesTest extends H2TestCase {
     }
 
     @Test
-    public void reRegisterDbQueryTest() throws SQLException, IOException, MintLeafException {
+    public void reRegisterDbQueryTest() throws SQLException, IOException, MintleafException {
         StandardQueries.registerQueryImplementation(DbType.H2.getJdbcUrlPrefix(), MyH2Queries.class);
 
         try (ConnectionContext<MyH2Queries> ctx = testDb.getNewConnection()) {
@@ -176,7 +176,7 @@ public class DbQueriesTest extends H2TestCase {
     }
 
     @Test
-    public void resultSetFirstTest() throws SQLException, IOException, MintLeafException {
+    public void resultSetFirstTest() throws SQLException, IOException, MintleafException {
         try (ConnectionContext ctx = testDb.getNewConnection()) {
             SqlResultSet resultSet = ctx.queryBuilder().withSql("Select count(*) from HRDB.USERS").buildSelect();
             assertEquals(2, resultSet.first().getInt(1));

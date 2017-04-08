@@ -36,7 +36,7 @@
 package org.qamatic.mintleaf.core;
 
 import org.qamatic.mintleaf.DriverSource;
-import org.qamatic.mintleaf.MintLeafLogger;
+import org.qamatic.mintleaf.MintleafLogger;
 
 import java.sql.Connection;
 import java.sql.Driver;
@@ -49,7 +49,7 @@ import java.util.Properties;
  */
 public class JdbcDriverSource implements DriverSource {
 
-    private static final MintLeafLogger logger = MintLeafLogger.getLogger(JdbcDriverSource.class);
+    private static final MintleafLogger logger = MintleafLogger.getLogger(JdbcDriverSource.class);
 
     static {
         DriverManager.getDrivers();

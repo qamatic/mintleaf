@@ -46,12 +46,12 @@ import java.sql.SQLException;
 public class ChangeSetsTest extends H2TestCase {
 
     @Before
-    public void cleanDb() throws MintLeafException {
+    public void cleanDb() throws MintleafException {
         ChangeSets.migrate(testDb.getNewConnection(), "res:/Testddl.sql", "clean db, create schema");
     }
 
     @Test
-    public void testLoadFromFile() throws SQLException, IOException, MintLeafException {
+    public void testLoadFromFile() throws SQLException, IOException, MintleafException {
         ChangeSets.migrate(testDb.getNewConnection(), "res:/Testddl.sql", "create tables");
         Assert.assertTrue(testDbQueries.isTableExists("mintleaf.TABLE1"));
         Assert.assertTrue(testDbQueries.isTableExists("mintleaf.TABLE2"));
@@ -63,7 +63,7 @@ public class ChangeSetsTest extends H2TestCase {
     }
 
     @Test
-    public void testLoadSqlScript() throws SQLException, IOException, MintLeafException {
+    public void testLoadSqlScript() throws SQLException, IOException, MintleafException {
         StringBuilder builder = new StringBuilder();
 
         builder.append("CREATE TABLE mintleaf.TABLE1 ");
@@ -97,7 +97,7 @@ public class ChangeSetsTest extends H2TestCase {
     }
 
     @Test
-    public void testChangeSetScenario2() throws SQLException, IOException, MintLeafException {
+    public void testChangeSetScenario2() throws SQLException, IOException, MintleafException {
         ChangeSets.migrate(testDb.getNewConnection(), "res:/Testddl.sql", new String[]{"create tables"});
         Assert.assertTrue(testDbQueries.isTableExists("mintleaf.TABLE1"));
         Assert.assertTrue(testDbQueries.isTableExists("mintleaf.TABLE2"));

@@ -43,21 +43,21 @@ import java.sql.SQLException;
  */
 public interface Row {
 
-    Object getValue(int columnIndex) throws MintLeafException;
+    Object getValue(int columnIndex) throws MintleafException;
 
-    default Object getValue(String columnName) throws MintLeafException {
+    default Object getValue(String columnName) throws MintleafException {
         return getValue(getIndex(columnName));
     }
 
-    default String asString(String columnName) throws MintLeafException {
+    default String asString(String columnName) throws MintleafException {
         return getValue(columnName).toString();
     }
 
-    default int asInt(String columnName) throws MintLeafException {
+    default int asInt(String columnName) throws MintleafException {
         return -1;
     }
 
-    default int getIndex(String columnName) throws MintLeafException {
+    default int getIndex(String columnName) throws MintleafException {
         columnName = columnName.toUpperCase();
         int j = 0;
         try {
@@ -67,12 +67,12 @@ public interface Row {
                 }
             }
         } catch (SQLException e) {
-            throw new MintLeafException(e);
+            throw new MintleafException(e);
         }
         return -1;
     }
 
-    ResultSetMetaData getMetaData() throws MintLeafException;
+    ResultSetMetaData getMetaData() throws MintleafException;
 
     void setMetaData(MetaDataCollection metaDataCollection);
 }

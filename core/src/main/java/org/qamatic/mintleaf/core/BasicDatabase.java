@@ -37,15 +37,15 @@ package org.qamatic.mintleaf.core;
 
 import org.qamatic.mintleaf.Database;
 import org.qamatic.mintleaf.DriverSource;
-import org.qamatic.mintleaf.MintLeafException;
-import org.qamatic.mintleaf.MintLeafLogger;
+import org.qamatic.mintleaf.MintleafException;
+import org.qamatic.mintleaf.MintleafLogger;
 
 /**
  * Created by qamatic on 3/6/16.
  */
 public class BasicDatabase implements Database {
 
-    private static final MintLeafLogger logger = MintLeafLogger.getLogger(BasicDatabase.class);
+    private static final MintleafLogger logger = MintleafLogger.getLogger(BasicDatabase.class);
 
 
     private Class<? extends DriverSource> driverSourceClazz;
@@ -82,10 +82,10 @@ public class BasicDatabase implements Database {
             driverSource = driverSourceClazz.newInstance();
         } catch (InstantiationException e) {
             logger.error(e);
-            MintLeafException.throwException(e);
+            MintleafException.throwException(e);
         } catch (IllegalAccessException e) {
             logger.error(e);
-            MintLeafException.throwException(e);
+            MintleafException.throwException(e);
         }
         return driverSource;
     }

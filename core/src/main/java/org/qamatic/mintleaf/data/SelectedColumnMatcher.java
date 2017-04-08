@@ -37,7 +37,7 @@ package org.qamatic.mintleaf.data;
 
 import org.qamatic.mintleaf.ColumnMatcher;
 import org.qamatic.mintleaf.MetaDataCollection;
-import org.qamatic.mintleaf.MintLeafException;
+import org.qamatic.mintleaf.MintleafException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -79,7 +79,7 @@ public class SelectedColumnMatcher implements ColumnMatcher {
 
 
     @Override
-    public void match(RowState leftRowState, RowState rightRowState, ComparerListener listener) throws MintLeafException {
+    public void match(RowState leftRowState, RowState rightRowState, ComparerListener listener) throws MintleafException {
         if (listener == null) {
             return;
         }
@@ -152,12 +152,12 @@ public class SelectedColumnMatcher implements ColumnMatcher {
 
         String[] commaSplits = selectedColumnMaps.split(Pattern.quote(","));
         if (commaSplits.length <= 0) {
-            MintLeafException.throwException("selected column maps is empty, unable to proceed");
+            MintleafException.throwException("selected column maps is empty, unable to proceed");
         }
         for (String sp : commaSplits) {
             String[] maps = sp.split(Pattern.quote("="));
             if (maps.length != 2) {
-                MintLeafException.throwException("selected column maps is not defined right. format sourcecolumn=targetcolumn");
+                MintleafException.throwException("selected column maps is not defined right. format sourcecolumn=targetcolumn");
             }
             sourceColumns.add(maps[0].trim());
             targetColumns.add(maps[1].trim());

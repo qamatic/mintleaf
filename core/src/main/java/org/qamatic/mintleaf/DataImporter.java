@@ -39,5 +39,5 @@ package org.qamatic.mintleaf;
  * Created by qamatic on 3/6/16.
  */
 public interface DataImporter {
-    void importNow() throws MintLeafException;
+    void importNow() throws MintleafException;
 }

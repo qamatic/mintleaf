@@ -55,9 +55,9 @@ import static org.junit.Assert.assertEquals;
  */
 public class ListOfObjectsComparerTests {
 
-    private static final MintLeafLogger logger = MintLeafLogger.getLogger(ListOfObjectsComparerTests.class);
+    private static final MintleafLogger logger = MintleafLogger.getLogger(ListOfObjectsComparerTests.class);
 
-    private static ColumnMetaDataCollection getMetaData() throws MintLeafException {
+    private static ColumnMetaDataCollection getMetaData() throws MintleafException {
 
         ColumnMetaDataCollection metaDataCollection = new ColumnMetaDataCollection("USERS");
         metaDataCollection.add(new Column("UserName"));
@@ -67,7 +67,7 @@ public class ListOfObjectsComparerTests {
     }
 
     @Test
-    public void compareList() throws SQLException, IOException, MintLeafException {
+    public void compareList() throws SQLException, IOException, MintleafException {
         List<User> sourceUserList = getUsers();
         List<User> targetUserList = getUsers();
         doCompare(sourceUserList, targetUserList, (sourceColumn, targetColumn) -> {
@@ -79,7 +79,7 @@ public class ListOfObjectsComparerTests {
     }
 
     @Test
-    public void compareDataGenerateReport() throws SQLException, IOException, MintLeafException {
+    public void compareDataGenerateReport() throws SQLException, IOException, MintleafException {
         List<User> sourceUserList = getUsers();
         List<User> targetUserList = getUsers();
         ((User) targetUserList.get(0)).setUserName("SM1");
@@ -87,7 +87,7 @@ public class ListOfObjectsComparerTests {
         doCompare(sourceUserList, targetUserList, reportListener);
     }
 
-    private void doCompare(List<User> sourceUserList, List<User> targetUserList, ComparerListener listener) throws MintLeafException {
+    private void doCompare(List<User> sourceUserList, List<User> targetUserList, ComparerListener listener) throws MintleafException {
 
         DataComparer dataComparer = new Mintleaf.DataComparerBuilder().
                 withSourceTable(sourceUserList, getMetaData()).

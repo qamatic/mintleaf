@@ -41,13 +41,13 @@ import java.sql.ResultSet;
  * Created by QAmatic Team on 3/16/17.
  */
 public interface SqlResultSet extends AutoCloseable {
-    ResultSet getResultSet() throws MintLeafException;
+    ResultSet getResultSet() throws MintleafException;
 
-    void close() throws MintLeafException;
+    void close() throws MintleafException;
 
-    ResultSet first() throws MintLeafException;
+    ResultSet first() throws MintleafException;
 
-    <T> void iterate(DataRowListener<T> listener) throws MintLeafException, MintLeafException;
+    <T> void iterate(DataRowListener<T> listener) throws MintleafException, MintleafException;
 
-    RowListWrapper asRowListWrapper() throws MintLeafException;
+    RowListWrapper asRowListWrapper() throws MintleafException;
 }

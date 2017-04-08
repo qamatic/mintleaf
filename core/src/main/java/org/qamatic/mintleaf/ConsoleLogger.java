@@ -38,7 +38,7 @@ package org.qamatic.mintleaf;
 /**
  * Created by qamatic on 2/16/16.
  */
-public class ConsoleLogger extends MintLeafLogger {
+public class ConsoleLogger extends MintleafLogger {
 
     private Class<?> clazz;
 

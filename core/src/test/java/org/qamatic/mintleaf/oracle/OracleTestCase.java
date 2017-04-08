@@ -37,7 +37,7 @@ package org.qamatic.mintleaf.oracle;
 
 import org.qamatic.mintleaf.ApacheBasicDataSource;
 import org.qamatic.mintleaf.Database;
-import org.qamatic.mintleaf.MintLeafException;
+import org.qamatic.mintleaf.MintleafException;
 import org.qamatic.mintleaf.Mintleaf;
 import org.qamatic.mintleaf.core.ChangeSets;
 
@@ -52,8 +52,8 @@ public class OracleTestCase {
                 System.getenv("ORA_DB_ADMIN_PASSWORD"));
         try {
             ChangeSets.migrate(oraSysDb.getNewConnection(), "res:/oracle/hrdb-changesets/hrdb-schema-setup.sql", "create users");
-        } catch (MintLeafException e) {
-            MintLeafException.throwException(e.getMessage());
+        } catch (MintleafException e) {
+            MintleafException.throwException(e.getMessage());
         }
     }
 

@@ -68,7 +68,7 @@ public class SqlStringReaderTest {
 
 
     @Test
-    public void testSqlReaderListnerTest2() throws MintLeafException {
+    public void testSqlReaderListnerTest2() throws MintleafException {
 
         SqlStringReader reader = new SqlStringReader(getSamplePackageData());
 

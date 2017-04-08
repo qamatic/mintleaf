@@ -39,7 +39,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.qamatic.mintleaf.ConnectionContext;
 import org.qamatic.mintleaf.Database;
-import org.qamatic.mintleaf.MintLeafException;
+import org.qamatic.mintleaf.MintleafException;
 import org.qamatic.mintleaf.core.ChangeSets;
 
 import static org.junit.Assert.assertEquals;
@@ -53,12 +53,12 @@ public class OraTransactionTest extends OracleTestCase {
     private static Database hrdb1 = createOracleDbContext("HRDB1", "HRDB1");
 
     @BeforeClass
-    public static void migrate() throws MintLeafException {
+    public static void migrate() throws MintleafException {
         ChangeSets.migrate(hrdb1.getNewConnection(), "res:/oracle/hrdb-changesets/hrdb-ddl.sql", "create countries");
     }
 
     @Test
-    public void testCountriesCount() throws MintLeafException {
+    public void testCountriesCount() throws MintleafException {
         ChangeSets.migrate(hrdb1.getNewConnection(), "res:/oracle/hrdb-changesets/hrdb-sampledata.sql", "seed data for countries");
         try (ConnectionContext ctx = hrdb1.getNewConnection()) {
             assertEquals(12, ctx.getDbQueries().getCount("HRDB1.COUNTRIES"));

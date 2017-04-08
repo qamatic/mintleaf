@@ -40,7 +40,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.qamatic.mintleaf.ColumnMetaDataCollection;
 import org.qamatic.mintleaf.Database;
-import org.qamatic.mintleaf.MintLeafException;
+import org.qamatic.mintleaf.MintleafException;
 import org.qamatic.mintleaf.core.ChangeSets;
 import org.qamatic.mintleaf.core.stdqueries.StandardQueries;
 
@@ -56,49 +56,49 @@ public class OraUtilityTest extends OracleTestCase {
     private static Database hrdb2 = createOracleDbContext("HRDB2", "HRDB2");
 
     @BeforeClass
-    public static void migrate() throws MintLeafException {
+    public static void migrate() throws MintleafException {
 
         //do some DDL
         ChangeSets.migrate(hrdb2.getNewConnection(), "res:/oracle/hrdb-changesets/hrdb-ddl.sql", "create countries");
     }
 
     @Test
-    public void testCountriesCount() throws MintLeafException {
+    public void testCountriesCount() throws MintleafException {
         ChangeSets.migrate(hrdb2.getNewConnection(), "res:/oracle/hrdb-changesets/hrdb-sampledata.sql", "seed data for countries");
         assertEquals(12, hrdb2.getNewConnection().getDbQueries().getCount("HRDB2.COUNTRIES"));
 
     }
 
     @Test
-    public void testPackageExists() throws MintLeafException {
+    public void testPackageExists() throws MintleafException {
         ChangeSets.migrate(hrdb2.getNewConnection(), "res:/oracle/hrdb-changesets/hrdb-proc-packages.sql", "create some test packages");
         assertTrue("Package by name SOMEPACKAGE does not exists", hrdb2.getNewConnection().getDbQueries().isSqlObjectExists("HRDB2.SOMEPACKAGE", "PACKAGE", false));
         assertTrue("Package by name SOMEPACKAGE body does not exists", hrdb2.getNewConnection().getDbQueries().isSqlObjectExists("HRDB2.SOMEPACKAGE", "PACKAGE BODY", false));
     }
 
     @Test
-    public void testCountryMetaData() throws MintLeafException {
+    public void testCountryMetaData() throws MintleafException {
         ColumnMetaDataCollection metaData = hrdb2.getNewConnection().getDbQueries().getMetaData("HRDB2.COUNTRIES");
         assertEquals(3, metaData.size());
     }
 
     @Test
-    public void testIsColumnExists() throws MintLeafException {
+    public void testIsColumnExists() throws MintleafException {
         Assert.assertTrue(hrdb2.getNewConnection().getDbQueries().isColumnExists("HRDB2.COUNTRIES", "COUNTRY_NAME"));
     }
 
     @Test
-    public void testgetSqlObjectsFound() throws MintLeafException {
+    public void testgetSqlObjectsFound() throws MintleafException {
         Assert.assertTrue(hrdb2.getNewConnection().getDbQueries().getSqlObjects("TABLE").contains("COUNTRIES"));
     }
 
-    @Test(expected = MintLeafException.class)
-    public void testInvalidObjectName() throws MintLeafException {
+    @Test(expected = MintleafException.class)
+    public void testInvalidObjectName() throws MintleafException {
         StandardQueries.utilsSplitDottedObjectNames("employee_typ");
     }
 
     @Test
-    public void testEmployeeObjectMetaData() throws MintLeafException {
+    public void testEmployeeObjectMetaData() throws MintleafException {
         if (!hrdb2.getNewConnection().getDbQueries().isSqlObjectExists("HRDB2.employee_typ", "TYPE", true)) {
             ChangeSets.migrate(hrdb2.getNewConnection(), "res:/oracle/hrdb-changesets/hrdb-ddl-typeobjects.sql", "create employee object type");
         }

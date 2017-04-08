@@ -45,7 +45,7 @@ import org.qamatic.mintleaf.data.RowState;
 public interface ColumnMatcher {
 
 
-    void match(RowState leftRowState, RowState rightRowState, final ComparerListener listener) throws MintLeafException;
+    void match(RowState leftRowState, RowState rightRowState, final ComparerListener listener) throws MintleafException;
 
 
 }

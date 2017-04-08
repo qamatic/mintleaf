@@ -51,7 +51,7 @@ public class SqlMultiPartlFileReaderTest {
     private String actual_part3;
 
     @Test
-    public void testSqlChangeSetReaderCount() throws IOException, SQLException, MintLeafException {
+    public void testSqlChangeSetReaderCount() throws IOException, SQLException, MintleafException {
         InputStream iStream = this.getClass().getResourceAsStream("/multipart2.sql");
         ChangeSetReader reader = new SqlChangeSetFileReader(iStream);
         reader.read();
@@ -59,7 +59,7 @@ public class SqlMultiPartlFileReaderTest {
     }
 
     @Test
-    public void testSqlChangeSetReaderSections() throws IOException, SQLException, MintLeafException {
+    public void testSqlChangeSetReaderSections() throws IOException, SQLException, MintleafException {
         ChangeSetReader reader = new SqlChangeSetFileReader("res:/multipart2.sql");
         reader.read();
 
@@ -133,7 +133,7 @@ public class SqlMultiPartlFileReaderTest {
     }
 
     @Test
-    public void testSqlChangeSetReaderListnerTest() throws IOException, SQLException, MintLeafException {
+    public void testSqlChangeSetReaderListnerTest() throws IOException, SQLException, MintleafException {
 
         ChangeSetListener listner = new ChangeSetFileReadListner();
         InputStream iStream = this.getClass().getResourceAsStream("/multipart.sql");
@@ -156,7 +156,7 @@ public class SqlMultiPartlFileReaderTest {
     private class ChangeSetFileReadListner implements ChangeSetListener {
 
         @Override
-        public void onChangeSetRead(StringBuilder sql, ChangeSet changeSet) throws MintLeafException {
+        public void onChangeSetRead(StringBuilder sql, ChangeSet changeSet) throws MintleafException {
             if (actual_part1 == null) {
                 actual_part1 = sql.toString();
             } else if (actual_part2 == null) {

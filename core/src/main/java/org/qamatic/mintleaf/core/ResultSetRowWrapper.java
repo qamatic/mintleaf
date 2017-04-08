@@ -36,8 +36,8 @@
 package org.qamatic.mintleaf.core;
 
 import org.qamatic.mintleaf.MetaDataCollection;
-import org.qamatic.mintleaf.MintLeafException;
-import org.qamatic.mintleaf.MintLeafLogger;
+import org.qamatic.mintleaf.MintleafException;
+import org.qamatic.mintleaf.MintleafLogger;
 import org.qamatic.mintleaf.Row;
 
 import java.sql.ResultSet;
@@ -49,7 +49,7 @@ import java.sql.SQLException;
  */
 public class ResultSetRowWrapper<T> implements Row {
 
-    private static final MintLeafLogger logger = MintLeafLogger.getLogger(ResultSetRowWrapper.class);
+    private static final MintleafLogger logger = MintleafLogger.getLogger(ResultSetRowWrapper.class);
     private ResultSet resultSet;
     private ResultSetMetaData resultSetMetaData;
 
@@ -64,35 +64,35 @@ public class ResultSetRowWrapper<T> implements Row {
     }
 
     @Override
-    public String getValue(int columnIndex) throws MintLeafException {
+    public String getValue(int columnIndex) throws MintleafException {
         try {
             if (resultSet.getObject(columnIndex) == null)
                 return "NULL";
             return resultSet.getObject(columnIndex).toString();
         } catch (SQLException e) {
-            throw new MintLeafException(e);
+            throw new MintleafException(e);
         }
 
     }
 
     @Override
-    public String getValue(String columnName) throws MintLeafException {
+    public String getValue(String columnName) throws MintleafException {
         try {
             if (resultSet.getObject(columnName) == null)
                 return "NULL";
             return resultSet.getObject(columnName).toString();
         } catch (SQLException e) {
-            throw new MintLeafException(e);
+            throw new MintleafException(e);
         }
 
     }
 
     @Override
-    public int asInt(String columnName) throws MintLeafException {
+    public int asInt(String columnName) throws MintleafException {
         try {
             return resultSet.getInt(columnName);
         } catch (SQLException e) {
-            throw new MintLeafException(e);
+            throw new MintleafException(e);
         }
     }
 
@@ -101,12 +101,12 @@ public class ResultSetRowWrapper<T> implements Row {
     }
 
     @Override
-    public ResultSetMetaData getMetaData() throws MintLeafException {
+    public ResultSetMetaData getMetaData() throws MintleafException {
         if (this.resultSetMetaData == null) {
             try {
                 this.resultSetMetaData = this.resultSet.getMetaData();
             } catch (SQLException e) {
-                throw new MintLeafException(e);
+                throw new MintleafException(e);
             }
         }
         return this.resultSetMetaData;

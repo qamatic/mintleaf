@@ -37,18 +37,18 @@ package org.qamatic.mintleaf.core;
 
 
 import org.qamatic.mintleaf.ConnectionContext;
-import org.qamatic.mintleaf.MintLeafException;
-import org.qamatic.mintleaf.MintLeafReader;
+import org.qamatic.mintleaf.MintleafException;
+import org.qamatic.mintleaf.MintleafReader;
 import org.qamatic.mintleaf.SqlScript;
 
 public final class ChangeSets {
 
 
-    public static void applySource(final ConnectionContext connectionContext, final String script, final String delimiter) throws MintLeafException {
+    public static void applySource(final ConnectionContext connectionContext, final String script, final String delimiter) throws MintleafException {
         SqlScript sqlScript = new BaseSqlScript(connectionContext) {
             @Override
-            public MintLeafReader getReader() {
-                MintLeafReader reader = new SqlStringReader(script);
+            public MintleafReader getReader() {
+                MintleafReader reader = new SqlStringReader(script);
                 reader.setDelimiter(delimiter);
                 return reader;
             }
@@ -58,12 +58,12 @@ public final class ChangeSets {
     }
 
 
-    public static void migrate(final ConnectionContext connectionContext, String fileName, String changeSetsToLoadSeparatedByComma) throws MintLeafException {
+    public static void migrate(final ConnectionContext connectionContext, String fileName, String changeSetsToLoadSeparatedByComma) throws MintleafException {
         migrate(connectionContext, fileName, changeSetsToLoadSeparatedByComma.split(","));
     }
 
 
-    public static void migrate(final ConnectionContext connectionContext, String fileName, String[] changeSetsToLoad) throws MintLeafException {
+    public static void migrate(final ConnectionContext connectionContext, String fileName, String[] changeSetsToLoad) throws MintleafException {
         SqlChangeSets changeSets = new SqlChangeSets(connectionContext, new SqlChangeSetFileReader(fileName), changeSetsToLoad);
         changeSets.apply();
     }

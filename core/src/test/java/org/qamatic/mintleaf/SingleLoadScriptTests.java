@@ -50,19 +50,19 @@ public class SingleLoadScriptTests extends H2TestCase {
 
 
     @BeforeClass
-    public static void setup() throws MintLeafException {
+    public static void setup() throws MintleafException {
         SqlScript script = new SqlScriptFile(testDb.getNewConnection(), "res:/h2singlescript.sql", ";");
         script.apply();
     }
 
     @Test
-    public void simpleScriptLoad() throws SQLException, IOException, MintLeafException {
+    public void simpleScriptLoad() throws SQLException, IOException, MintleafException {
 
         Assert.assertTrue(testDbQueries.isTableExists("HRDB.USERS"));
     }
 
     @Test
-    public void simpleScriptLoadWithVar() throws  MintLeafException {
+    public void simpleScriptLoadWithVar() throws MintleafException {
 
         SqlScript script = new SqlScriptFile(testDb.getNewConnection(), "res:/variable-changesets.sql", ";");
         script.getReader().getUserVariableMapping().put("user_id", "1");

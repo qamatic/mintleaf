@@ -46,17 +46,17 @@ import java.util.List;
  */
 public interface ConnectionContext<T extends DbQueryExtension> extends AutoCloseable {
 
-    Connection getConnection() throws MintLeafException;
+    Connection getConnection() throws MintleafException;
 
     boolean isCloseable();
 
-    void close() throws MintLeafException;
+    void close() throws MintleafException;
 
-    ConnectionContext beginTransaction() throws MintLeafException;
+    ConnectionContext beginTransaction() throws MintleafException;
 
-    void commitTransaction() throws MintLeafException;
+    void commitTransaction() throws MintleafException;
 
-    void rollbackTransaction() throws MintLeafException;
+    void rollbackTransaction() throws MintleafException;
 
     T getDbQueries();
 
@@ -71,7 +71,7 @@ public interface ConnectionContext<T extends DbQueryExtension> extends AutoClose
 
     Executable<int[]> executeSql(String sql, Object[] parameterValues);
 
-    <T> List<T> query(String sql, ParameterBinding parameterBinding, final DataRowListener<T> listener) throws MintLeafException;
+    <T> List<T> query(String sql, ParameterBinding parameterBinding, final DataRowListener<T> listener) throws MintleafException;
 
     Executable<int[]> executeStoredProc(String procedureCall, StoredProcedure.CallType callType, ParameterBinding.Callable parameterBinding);
 

@@ -37,7 +37,6 @@ package org.qamatic.mintleaf;
 
 import org.junit.Test;
 import org.qamatic.mintleaf.core.SqlStreamReader;
-import org.qamatic.mintleaf.core.SqlStringReader;
 
 import java.io.InputStream;
 
@@ -75,7 +74,7 @@ public class SqlStreamReaderTest {
     }
 
     @Test
-    public void testSqlReaderReadTest() throws MintLeafException {
+    public void testSqlReaderReadTest() throws MintleafException {
 
         InputStream iStream = this.getClass().getResourceAsStream("/EmptyPackage.sql");
         SqlStreamReader reader = new SqlStreamReader(iStream);
@@ -84,7 +83,7 @@ public class SqlStreamReaderTest {
         final StringBuilder actual = new StringBuilder();
         ChangeSetListener listner = new EmptyPackageReadListner() {
             @Override
-            public void onChangeSetRead(StringBuilder sql, ChangeSet changeSet) throws MintLeafException {
+            public void onChangeSetRead(StringBuilder sql, ChangeSet changeSet) throws MintleafException {
                 actual.append(sql.toString());
             }
         };
@@ -105,7 +104,7 @@ public class SqlStreamReaderTest {
     }
 
     @Test
-    public void testSqlReaderListnerTest2() throws MintLeafException {
+    public void testSqlReaderListnerTest2() throws MintleafException {
 
         ChangeSetListener listner = new EmptyPackageReadListner();
         InputStream iStream = this.getClass().getResourceAsStream("/EmptyPackage.sql");
@@ -137,7 +136,7 @@ public class SqlStreamReaderTest {
     private class EmptyPackageReadListner implements ChangeSetListener {
 
         @Override
-        public void onChangeSetRead(StringBuilder sql, ChangeSet changeSet) throws MintLeafException {
+        public void onChangeSetRead(StringBuilder sql, ChangeSet changeSet) throws MintleafException {
             if (actual_emptypackage_block1 == null) {
                 actual_emptypackage_block1 = sql.toString();
             } else if (actual_emptypackage_block2 == null) {

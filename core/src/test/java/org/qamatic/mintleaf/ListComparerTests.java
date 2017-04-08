@@ -51,7 +51,7 @@ import static org.junit.Assert.assertEquals;
  */
 public class ListComparerTests {
 
-    private static final MintLeafLogger logger = MintLeafLogger.getLogger(ListComparerTests.class);
+    private static final MintleafLogger logger = MintleafLogger.getLogger(ListComparerTests.class);
     private static ColumnMetaDataCollection columnDefs = new ColumnMetaDataCollection("LIST.USERS") {
         {
             add(new Column("USERNAME", Types.VARCHAR));
@@ -59,7 +59,7 @@ public class ListComparerTests {
         }
     };
 
-    private static List<String> assertCompareTable(List<User> sourceList, List<User> targetListList) throws MintLeafException {
+    private static List<String> assertCompareTable(List<User> sourceList, List<User> targetListList) throws MintleafException {
         final List<String> actuals = new ArrayList<>();
         final ConsoleLogger logger = new ConsoleLogger(ListComparerTests.class);
         DataComparer dataComparer = new Mintleaf.DataComparerBuilder().
@@ -78,7 +78,7 @@ public class ListComparerTests {
     }
 
     @Test
-    public void compareListWithEqualSize() throws SQLException, IOException, MintLeafException {
+    public void compareListWithEqualSize() throws SQLException, IOException, MintleafException {
         final List<String> expected = new ArrayList<String>() {
             {
                 add("[Source:RowNo:0, ColumnNo:0, Surplus:0, Value:Vallr] [Target:RowNo:0, ColumnNo:0, Surplus:0, Value:Vallr]");
@@ -92,7 +92,7 @@ public class ListComparerTests {
     }
 
     @Test
-    public void compareListSourceSurplus() throws SQLException, IOException, MintLeafException {
+    public void compareListSourceSurplus() throws SQLException, IOException, MintleafException {
         final List<String> expected = new ArrayList<String>() {
             {
                 add("[Source:RowNo:0, ColumnNo:0, Surplus:0, Value:Vallr] [Target:RowNo:0, ColumnNo:0, Surplus:0, Value:Vallr]");
@@ -111,7 +111,7 @@ public class ListComparerTests {
     }
 
     @Test
-    public void compareListSourceDeficit() throws SQLException, IOException, MintLeafException {
+    public void compareListSourceDeficit() throws SQLException, IOException, MintleafException {
         final List<String> expected = new ArrayList<String>() {
             {
                 add("[Source:RowNo:0, ColumnNo:0, Surplus:0, Value:Vallr] [Target:RowNo:0, ColumnNo:0, Surplus:0, Value:Vallr]");
@@ -130,7 +130,7 @@ public class ListComparerTests {
     }
 
     @Test
-    public void compareList() throws SQLException, IOException, MintLeafException {
+    public void compareList() throws SQLException, IOException, MintleafException {
         List<User> sourceUserList = getSampleData2();
         List<User> targetUserList = getSampleData2();
 

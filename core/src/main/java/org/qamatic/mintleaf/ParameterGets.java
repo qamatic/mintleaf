@@ -1,7 +1,5 @@
 package org.qamatic.mintleaf;
 
-import org.qamatic.mintleaf.MintLeafException;
-
 import java.sql.ParameterMetaData;
 import java.sql.ResultSet;
 import java.sql.SQLWarning;
@@ -10,45 +8,45 @@ import java.sql.SQLWarning;
  * Created by QAmatic Team on 4/2/17.
  */
 public interface ParameterGets {
-    ParameterMetaData getParameterMetaData() throws MintLeafException;
+    ParameterMetaData getParameterMetaData() throws MintleafException;
 
     boolean isBatch();
 
-    int getFetchDirection() throws MintLeafException;
+    int getFetchDirection() throws MintleafException;
 
-    int getFetchSize() throws MintLeafException;
+    int getFetchSize() throws MintleafException;
 
-    ResultSet getGeneratedKeys() throws MintLeafException;
+    ResultSet getGeneratedKeys() throws MintleafException;
 
-    long getLargeMaxRows() throws MintLeafException;
+    long getLargeMaxRows() throws MintleafException;
 
-    long getLargeUpdateCount() throws MintLeafException;
+    long getLargeUpdateCount() throws MintleafException;
 
-    int getMaxFieldSize() throws MintLeafException;
+    int getMaxFieldSize() throws MintleafException;
 
-    int getMaxRows() throws MintLeafException;
+    int getMaxRows() throws MintleafException;
 
-    boolean getMoreResults() throws MintLeafException;
+    boolean getMoreResults() throws MintleafException;
 
-    boolean getMoreResults(int current) throws MintLeafException;
+    boolean getMoreResults(int current) throws MintleafException;
 
-    int getQueryTimeout() throws MintLeafException;
+    int getQueryTimeout() throws MintleafException;
 
-    ResultSet getResultSet() throws MintLeafException;
+    ResultSet getResultSet() throws MintleafException;
 
-    int getResultSetConcurrency() throws MintLeafException;
+    int getResultSetConcurrency() throws MintleafException;
 
-    int getResultSetHoldability() throws MintLeafException;
+    int getResultSetHoldability() throws MintleafException;
 
-    int getResultSetType() throws MintLeafException;
+    int getResultSetType() throws MintleafException;
 
-    int getUpdateCount() throws MintLeafException;
+    int getUpdateCount() throws MintleafException;
 
-    SQLWarning getWarnings() throws MintLeafException;
+    SQLWarning getWarnings() throws MintleafException;
 
-    boolean isClosed() throws MintLeafException;
+    boolean isClosed() throws MintleafException;
 
-    boolean isCloseOnCompletion() throws MintLeafException;
+    boolean isCloseOnCompletion() throws MintleafException;
 
-    boolean isPoolable() throws MintLeafException;
+    boolean isPoolable() throws MintleafException;
 }

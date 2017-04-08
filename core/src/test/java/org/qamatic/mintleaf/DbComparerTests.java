@@ -53,10 +53,10 @@ import static org.junit.Assert.assertEquals;
  */
 public class DbComparerTests extends H2TestCase {
 
-    private static final MintLeafLogger logger = MintLeafLogger.getLogger(DbComparerTests.class);
+    private static final MintleafLogger logger = MintleafLogger.getLogger(DbComparerTests.class);
 
     @Before
-    public void applyChangeSet() throws IOException, SQLException, MintLeafException {
+    public void applyChangeSet() throws IOException, SQLException, MintleafException {
 
         ChangeSets.migrate(testDb.getNewConnection(), "res:/example-changesets.sql", "create schema, DataForDbCompareTest, DROP_CREATE_USERS_IMPORT_TABLE");
         Executable action = new DbImporter(testDb.getNewConnection(),
@@ -71,7 +71,7 @@ public class DbComparerTests extends H2TestCase {
 
 
     @Test
-    public void compareListWithEqualSize() throws SQLException, IOException, MintLeafException {
+    public void compareListWithEqualSize() throws SQLException, IOException, MintleafException {
         final List<String> expected = new ArrayList<String>() {
             {
                 add("[Source:RowNo:0, ColumnNo:1, Surplus:0, Value:1] [Target:RowNo:0, ColumnNo:1, Surplus:0, Value:1]");
@@ -97,7 +97,7 @@ public class DbComparerTests extends H2TestCase {
     }
 
 
-    private List<String> assertCompareTable(RowListWrapper sourceList, RowListWrapper targetListList) throws MintLeafException {
+    private List<String> assertCompareTable(RowListWrapper sourceList, RowListWrapper targetListList) throws MintleafException {
         final List<String> actuals = new ArrayList<>();
 
         DataComparer dataComparer = new Mintleaf.DataComparerBuilder().

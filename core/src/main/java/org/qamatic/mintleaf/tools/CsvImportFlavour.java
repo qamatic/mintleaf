@@ -39,7 +39,7 @@ import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVParser;
 import org.apache.commons.csv.CSVRecord;
 import org.qamatic.mintleaf.DataRowListener;
-import org.qamatic.mintleaf.MintLeafException;
+import org.qamatic.mintleaf.MintleafException;
 
 import java.io.IOException;
 import java.io.Reader;
@@ -59,7 +59,7 @@ public class CsvImportFlavour implements ImportFlavour {
         return new CSVParser(afileReader, CSVFormat.EXCEL.withHeader().withIgnoreEmptyLines());
     }
 
-    public void doImport(DataRowListener listener) throws MintLeafException {
+    public void doImport(DataRowListener listener) throws MintleafException {
 
         final CSVParser parser;
         try {
@@ -74,7 +74,7 @@ public class CsvImportFlavour implements ImportFlavour {
             }
 
         } catch (IOException e) {
-            throw new MintLeafException(e);
+            throw new MintleafException(e);
         }
     }
 

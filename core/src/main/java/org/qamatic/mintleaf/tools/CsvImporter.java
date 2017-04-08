@@ -37,8 +37,8 @@ package org.qamatic.mintleaf.tools;
 
 import org.qamatic.mintleaf.ConnectionContext;
 import org.qamatic.mintleaf.Executable;
-import org.qamatic.mintleaf.MintLeafException;
-import org.qamatic.mintleaf.MintLeafLogger;
+import org.qamatic.mintleaf.MintleafException;
+import org.qamatic.mintleaf.MintleafLogger;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -50,7 +50,7 @@ import java.io.IOException;
  */
 public class CsvImporter extends ImpExpBase implements Executable<Boolean> {
 
-    private static final MintLeafLogger logger = MintLeafLogger.getLogger(CsvImporter.class);
+    private static final MintleafLogger logger = MintleafLogger.getLogger(CsvImporter.class);
     private String sourceCsvFile;
     private ConnectionContext targetDb;
     private String targetSqlTemplate;
@@ -64,19 +64,19 @@ public class CsvImporter extends ImpExpBase implements Executable<Boolean> {
     }
 
     @Override
-    public Boolean execute() throws MintLeafException {
+    public Boolean execute() throws MintleafException {
 
         try {
             File f = new File(this.sourceCsvFile);
             if (!f.exists()) {
                 logger.error("file not found " + sourceCsvFile);
-                throw new MintLeafException("file not found " + sourceCsvFile);
+                throw new MintleafException("file not found " + sourceCsvFile);
             }
             importDataFrom(createFlavour(f), this.targetSqlTemplate);
             return true;
 
         } catch (IOException e) {
-            throw new MintLeafException(e);
+            throw new MintleafException(e);
         }
     }
 

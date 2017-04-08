@@ -42,7 +42,7 @@ import org.qamatic.mintleaf.*;
  */
 public class SqlChangeSets extends BaseSqlScript {
 
-    private final static MintLeafLogger logger = MintLeafLogger.getLogger(SqlScriptFile.class);
+    private final static MintleafLogger logger = MintleafLogger.getLogger(SqlScriptFile.class);
     private ChangeSetReader changeSetReader;
     private String[] changeSetsToApply;
 
@@ -54,21 +54,21 @@ public class SqlChangeSets extends BaseSqlScript {
     }
 
     @Override
-    public void apply() throws MintLeafException {
+    public void apply() throws MintleafException {
         this.changeSetReader.read();
         for (String changeSetName : changeSetsToApply) {
             if (changeSetReader.getChangeSets().containsKey(changeSetName.trim())) {
                 final ChangeSet section = changeSetReader.getChangeSet(changeSetName.trim());
                 SqlScript script = new BaseSqlScript(connectionContext) {
                     @Override
-                    public MintLeafReader getReader() {
-                        MintLeafReader reader = new SqlStringReader(section.getChangeSetSource());
+                    public MintleafReader getReader() {
+                        MintleafReader reader = new SqlStringReader(section.getChangeSetSource());
                         reader.setDelimiter(section.getDelimiter());
                         return reader;
                     }
 
                     @Override
-                    public void close() throws MintLeafException {
+                    public void close() throws MintleafException {
 
                     }
 
@@ -82,12 +82,12 @@ public class SqlChangeSets extends BaseSqlScript {
     }
 
     @Override
-    public void close() throws MintLeafException {
+    public void close() throws MintleafException {
         connectionContext.close();
     }
 
     @Override
-    public MintLeafReader getReader() {
+    public MintleafReader getReader() {
         return this.changeSetReader;
     }
 }

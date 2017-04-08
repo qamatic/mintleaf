@@ -36,9 +36,9 @@
 package org.qamatic.mintleaf.core;
 
 import org.qamatic.mintleaf.ChangeSetListener;
-import org.qamatic.mintleaf.MintLeafException;
-import org.qamatic.mintleaf.MintLeafLogger;
-import org.qamatic.mintleaf.MintLeafReader;
+import org.qamatic.mintleaf.MintleafException;
+import org.qamatic.mintleaf.MintleafLogger;
+import org.qamatic.mintleaf.MintleafReader;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -46,9 +46,9 @@ import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
 
-public abstract class BaseSqlReader implements MintLeafReader {
+public abstract class BaseSqlReader implements MintleafReader {
 
-    private final static MintLeafLogger logger = MintLeafLogger.getLogger(BaseSqlReader.class);
+    private final static MintleafLogger logger = MintleafLogger.getLogger(BaseSqlReader.class);
     protected ChangeSetListener changeSetListener;
     private String delimiter = "/";
     private Map<String, String> userVariableMapping;
@@ -93,7 +93,7 @@ public abstract class BaseSqlReader implements MintLeafReader {
     }
 
     @Override
-    public abstract void read() throws MintLeafException;
+    public abstract void read() throws MintleafException;
 
     public ChangeSetListener getChangeSetListener() {
         return changeSetListener;

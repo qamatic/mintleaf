@@ -38,11 +38,11 @@ package org.qamatic.mintleaf;
 /**
  * Created by qamatic on 2/16/16.
  */
-public abstract class MintLeafLogger {
+public abstract class MintleafLogger {
 
-    private static MintLeafLogger mintLeafLogger;
+    private static MintleafLogger mintLeafLogger;
 
-    public synchronized static MintLeafLogger getLogger(Class<?> clazz) {
+    public synchronized static MintleafLogger getLogger(Class<?> clazz) {
 
         if (mintLeafLogger == null) {
             mintLeafLogger = new ConsoleLogger(clazz);

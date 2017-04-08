@@ -58,9 +58,9 @@ import static org.junit.Assert.assertEquals;
  */
 public class CsvVsListComparerTests {
 
-    private static final MintLeafLogger logger = MintLeafLogger.getLogger(CsvVsListComparerTests.class);
+    private static final MintleafLogger logger = MintleafLogger.getLogger(CsvVsListComparerTests.class);
 
-    private static ColumnMetaDataCollection getMetaData() throws MintLeafException {
+    private static ColumnMetaDataCollection getMetaData() throws MintleafException {
 
         ColumnMetaDataCollection metaDataCollection = new ColumnMetaDataCollection("USERS");
         metaDataCollection.add(new Column("UserName"));
@@ -70,7 +70,7 @@ public class CsvVsListComparerTests {
     }
 
     @Test
-    public void compareList() throws SQLException, IOException, MintLeafException {
+    public void compareList() throws SQLException, IOException, MintleafException {
 
         InputStream csvStream = BaseSqlReader.getInputStreamFromFile("res:/users.csv");
         CsvRowListWrapper csvRowListWrapper = new CsvRowListWrapper(new InputStreamReader(csvStream));
@@ -94,13 +94,13 @@ public class CsvVsListComparerTests {
                 withMatchingResult(new ComparerListener() {
 
                     @Override
-                    public void OnRowCompare(RowState sourceRow, RowState targetRow) throws MintLeafException {
+                    public void OnRowCompare(RowState sourceRow, RowState targetRow) throws MintleafException {
                         logger.info(String.format("[Source:%s] [Target:%s]", sourceRow, targetRow));
                         assertEquals(sourceRow.Row.getValue(1), targetRow.Row.getValue(0));
                     }
 
                     @Override
-                    public void OnColumnCompare(ColumnState sourceColumn, ColumnState targetColumn) throws MintLeafException {
+                    public void OnColumnCompare(ColumnState sourceColumn, ColumnState targetColumn) throws MintleafException {
 
                     }
 

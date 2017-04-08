@@ -39,9 +39,9 @@ package org.qamatic.mintleaf;
  * Created by QAmatic Team on 3/24/17.
  */
 public interface ExecutionResultListener {
-    void onAfterExecuteSql(ParameterGets result) throws MintLeafException;
+    void onAfterExecuteSql(ParameterGets result) throws MintleafException;
 
     public interface Callable {
-        void onAfterExecuteSql(CallableParameterGets result) throws MintLeafException;
+        void onAfterExecuteSql(CallableParameterGets result) throws MintleafException;
     }
 }

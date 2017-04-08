@@ -40,11 +40,11 @@ package org.qamatic.mintleaf;
  */
 public interface RowListWrapper {
 
-    void resetAll() throws MintLeafException;
+    void resetAll() throws MintleafException;
 
-    boolean moveNext() throws MintLeafException;
+    boolean moveNext() throws MintleafException;
 
-    Row row() throws MintLeafException;
+    Row row() throws MintleafException;
 
-    MetaDataCollection getMetaData() throws MintLeafException;
+    MetaDataCollection getMetaData() throws MintleafException;
 }

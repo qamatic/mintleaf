@@ -36,7 +36,7 @@
 package org.qamatic.mintleaf.data;
 
 import org.qamatic.mintleaf.ColumnMatcher;
-import org.qamatic.mintleaf.MintLeafException;
+import org.qamatic.mintleaf.MintleafException;
 
 import java.sql.SQLException;
 
@@ -47,7 +47,7 @@ public class OrderedColumnMatcher implements ColumnMatcher {
 
 
     @Override
-    public void match(RowState leftRowState, RowState rightRowState, ComparerListener listener) throws MintLeafException {
+    public void match(RowState leftRowState, RowState rightRowState, ComparerListener listener) throws MintleafException {
         if (listener == null) {
             return;
         }
@@ -113,7 +113,7 @@ public class OrderedColumnMatcher implements ColumnMatcher {
                 }
             }
         } catch (SQLException e) {
-            throw new MintLeafException(e);
+            throw new MintleafException(e);
         }
     }
 

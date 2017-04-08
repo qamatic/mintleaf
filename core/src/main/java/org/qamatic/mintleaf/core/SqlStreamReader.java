@@ -35,8 +35,8 @@
 
 package org.qamatic.mintleaf.core;
 
-import org.qamatic.mintleaf.MintLeafException;
-import org.qamatic.mintleaf.MintLeafLogger;
+import org.qamatic.mintleaf.MintleafException;
+import org.qamatic.mintleaf.MintleafLogger;
 import org.qamatic.mintleaf.configuration.ArgPatternHandler;
 
 import java.io.BufferedReader;
@@ -46,7 +46,7 @@ import java.io.InputStreamReader;
 
 public class SqlStreamReader extends BaseSqlReader {
 
-    private final static MintLeafLogger logger = MintLeafLogger.getLogger(SqlStreamReader.class);
+    private final static MintleafLogger logger = MintleafLogger.getLogger(SqlStreamReader.class);
     protected InputStream inputStream;
     protected String resource;
     protected final StringBuilder content = new StringBuilder();
@@ -72,7 +72,7 @@ public class SqlStreamReader extends BaseSqlReader {
     }
 
     @Override
-    public void read() throws MintLeafException {
+    public void read() throws MintleafException {
         this.content.setLength(0);
         BufferedReader input = null;
 
@@ -100,7 +100,7 @@ public class SqlStreamReader extends BaseSqlReader {
             }
         } catch (IOException e) {
             logger.error(e);
-            throw new MintLeafException(e);
+            throw new MintleafException(e);
         }
     }
 

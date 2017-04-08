@@ -72,7 +72,7 @@ public class User implements Row {
     }
 
     @Override
-    public Object getValue(int columnIndex) throws MintLeafException {
+    public Object getValue(int columnIndex) throws MintleafException {
         switch (columnIndex) {
             case 0:
                 return firstName;
@@ -87,7 +87,7 @@ public class User implements Row {
     }
 
     @Override
-    public MetaDataCollection getMetaData() throws MintLeafException {
+    public MetaDataCollection getMetaData() throws MintleafException {
         return this.metaDataCollection;
     }
 

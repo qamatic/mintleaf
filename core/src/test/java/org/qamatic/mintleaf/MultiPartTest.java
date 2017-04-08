@@ -39,9 +39,6 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.qamatic.mintleaf.core.SqlStringReader;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import static org.junit.Assert.assertEquals;
 
 public class MultiPartTest {
@@ -68,7 +65,7 @@ public class MultiPartTest {
 
 
     @Test
-    public void testSqlReaderWithVariablesTest() throws MintLeafException {
+    public void testSqlReaderWithVariablesTest() throws MintleafException {
         SqlStringReader reader = new SqlStringReader("INSERT INTO ${table_name} (USERID, USERNAME) VALUES (9, 'TN');");
         reader.getUserVariableMapping().put("table_name", "HRDB.USERS");
         reader.setDelimiter(";");

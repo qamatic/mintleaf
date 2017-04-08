@@ -35,7 +35,7 @@
 
 package org.qamatic.mintleaf.tools;
 
-import org.qamatic.mintleaf.MintLeafException;
+import org.qamatic.mintleaf.MintleafException;
 
 import java.sql.ResultSet;
 
@@ -44,5 +44,5 @@ import java.sql.ResultSet;
  */
 public interface ExportFlavour {
 
-    void export(ResultSet resultSet) throws MintLeafException;
+    void export(ResultSet resultSet) throws MintleafException;
 }

@@ -38,7 +38,7 @@ package org.qamatic.mintleaf.core.stdqueries;
 import org.qamatic.mintleaf.Column;
 import org.qamatic.mintleaf.ColumnMetaDataCollection;
 import org.qamatic.mintleaf.ConnectionContext;
-import org.qamatic.mintleaf.MintLeafException;
+import org.qamatic.mintleaf.MintleafException;
 
 import java.util.regex.Pattern;
 
@@ -53,7 +53,7 @@ public class H2Queries extends StandardQueries {
 
 
     @Override
-    public ColumnMetaDataCollection getMetaData(String objectName) throws MintLeafException {
+    public ColumnMetaDataCollection getMetaData(String objectName) throws MintleafException {
         final ColumnMetaDataCollection metaData = new ColumnMetaDataCollection(objectName);
         if (objectName != null) {
             objectName = objectName.toUpperCase();
@@ -86,7 +86,7 @@ public class H2Queries extends StandardQueries {
     }
 
     @Override
-    public boolean isTableExists(String tableName) throws MintLeafException {
+    public boolean isTableExists(String tableName) throws MintleafException {
         return getMetaData(tableName).size() != 0;
     }
 

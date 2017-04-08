@@ -38,7 +38,7 @@ package org.qamatic.mintleaf.core;
 import org.qamatic.mintleaf.*;
 
 public class CommandExecutor implements ChangeSetListener {
-    private static final MintLeafLogger logger = MintLeafLogger.getLogger(CommandExecutor.class);
+    private static final MintleafLogger logger = MintleafLogger.getLogger(CommandExecutor.class);
     protected final ConnectionContext connectionContext;
 
     public CommandExecutor(ConnectionContext connectionContext) {
@@ -46,7 +46,7 @@ public class CommandExecutor implements ChangeSetListener {
     }
 
     @Override
-    public void onChangeSetRead(StringBuilder sql, ChangeSet changeSetInfo) throws MintLeafException {
+    public void onChangeSetRead(StringBuilder sql, ChangeSet changeSetInfo) throws MintleafException {
         ExecuteQuery query = new ExecuteQuery(connectionContext, sql.toString(), null);
         try {
             logger.info(String.format("Executing Query: %s \n--\n", sql.toString()));
@@ -55,7 +55,7 @@ public class CommandExecutor implements ChangeSetListener {
 
             final String message = "error executing query: \n" + this.connectionContext.toString();
             logger.error(message, e);
-            throw new MintLeafException("error executing query: ", e);
+            throw new MintleafException("error executing query: ", e);
         } finally {
             query.close();
         }

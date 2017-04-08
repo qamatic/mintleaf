@@ -53,7 +53,7 @@ public class ResultSetMetaDataCollection extends ArrayList<Column> implements Me
                 add(new Column(this.resultSetMetaData.getColumnName(i), this.resultSetMetaData.getColumnType(i)));
             }
         } catch (SQLException e) {
-            MintLeafException.throwException(e);
+            MintleafException.throwException(e);
         }
     }
 
@@ -62,7 +62,7 @@ public class ResultSetMetaDataCollection extends ArrayList<Column> implements Me
     public boolean add(Column column) {
         Column col = this.findColumn(column.getColumnName());
         if (col != null) {
-            MintLeafException.throwException("column already exists " + column.getColumnName());
+            MintleafException.throwException("column already exists " + column.getColumnName());
         }
         return super.add(column);
     }
@@ -70,7 +70,7 @@ public class ResultSetMetaDataCollection extends ArrayList<Column> implements Me
     public void add(int idx, Column column) {
         Column col = this.findColumn(column.getColumnName());
         if (col != null) {
-            MintLeafException.throwException("column already exists " + column.getColumnName());
+            MintleafException.throwException("column already exists " + column.getColumnName());
         }
         add(idx, column);
     }

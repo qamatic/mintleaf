@@ -35,7 +35,7 @@
 
 package org.qamatic.mintleaf.data;
 
-import org.qamatic.mintleaf.MintLeafException;
+import org.qamatic.mintleaf.MintleafException;
 
 /**
  * Created by qamatic on 3/5/16.
@@ -52,15 +52,15 @@ public class ColumnState {
         reset();
     }
 
-    public String asString() throws MintLeafException {
+    public String asString() throws MintleafException {
         return getColumnValue().toString();
     }
 
-    public int asInt() throws MintLeafException {
+    public int asInt() throws MintleafException {
         return (int) getColumnValue();
     }
 
-    public double asDouble() throws MintLeafException {
+    public double asDouble() throws MintleafException {
         return (double) getColumnValue();
     }
 

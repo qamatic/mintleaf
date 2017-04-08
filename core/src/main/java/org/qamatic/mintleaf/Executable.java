@@ -40,10 +40,10 @@ package org.qamatic.mintleaf;
  */
 public interface Executable<V> extends AutoCloseable {
 
-    default void close() throws MintLeafException {
+    default void close() throws MintleafException {
 
     }
 
-    V execute() throws MintLeafException;
+    V execute() throws MintleafException;
 
 }

@@ -37,8 +37,8 @@ package org.qamatic.mintleaf.core;
 
 import org.qamatic.mintleaf.ChangeSet;
 import org.qamatic.mintleaf.ChangeSetReader;
-import org.qamatic.mintleaf.MintLeafException;
-import org.qamatic.mintleaf.MintLeafLogger;
+import org.qamatic.mintleaf.MintleafException;
+import org.qamatic.mintleaf.MintleafLogger;
 import org.qamatic.mintleaf.configuration.ArgPatternHandler;
 
 import java.io.InputStream;
@@ -46,7 +46,7 @@ import java.util.HashMap;
 
 public class SqlChangeSetFileReader extends SqlStreamReader implements ChangeSetReader {
 
-    private static final MintLeafLogger logger = MintLeafLogger.getLogger(SqlChangeSetFileReader.class);
+    private static final MintleafLogger logger = MintleafLogger.getLogger(SqlChangeSetFileReader.class);
     private final HashMap<String, ChangeSet> changeSets = new HashMap<>();
     private ChangeSet currentChangeSet;
 
@@ -69,7 +69,7 @@ public class SqlChangeSetFileReader extends SqlStreamReader implements ChangeSet
     }
 
     @Override
-    public void read() throws MintLeafException {
+    public void read() throws MintleafException {
         this.changeSets.clear();
 
         super.read();

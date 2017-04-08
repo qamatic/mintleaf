@@ -37,7 +37,7 @@ package org.qamatic.mintleaf.tools;
 
 import org.apache.commons.csv.CSVRecord;
 import org.qamatic.mintleaf.MetaDataCollection;
-import org.qamatic.mintleaf.MintLeafException;
+import org.qamatic.mintleaf.MintleafException;
 import org.qamatic.mintleaf.Row;
 
 /**
@@ -67,7 +67,7 @@ public class CsvRowWrapper implements Row {
     }
 
     @Override
-    public MetaDataCollection getMetaData() throws MintLeafException {
+    public MetaDataCollection getMetaData() throws MintleafException {
         return this.metaDataCollection;
     }
 

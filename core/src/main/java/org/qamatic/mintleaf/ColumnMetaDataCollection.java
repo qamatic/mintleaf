@@ -61,7 +61,7 @@ public class ColumnMetaDataCollection extends ArrayList<Column> implements MetaD
     public boolean add(Column column) {
         Column col = this.findColumn(column.getColumnName());
         if (col != null) {
-            MintLeafException.throwException("column already exists " + column.getColumnName());
+            MintleafException.throwException("column already exists " + column.getColumnName());
         }
         return super.add(column);
     }
@@ -69,7 +69,7 @@ public class ColumnMetaDataCollection extends ArrayList<Column> implements MetaD
     public void add(int idx, Column column) {
         Column col = this.findColumn(column.getColumnName());
         if (col != null) {
-            MintLeafException.throwException("column already exists " + column.getColumnName());
+            MintleafException.throwException("column already exists " + column.getColumnName());
         }
         add(idx, column);
     }

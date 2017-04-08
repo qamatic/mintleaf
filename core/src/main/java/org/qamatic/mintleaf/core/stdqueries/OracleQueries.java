@@ -47,14 +47,14 @@ import java.util.List;
  */
 public class OracleQueries extends StandardQueries {
 
-    private static final MintLeafLogger logger = MintLeafLogger.getLogger(OracleQueries.class);
+    private static final MintleafLogger logger = MintleafLogger.getLogger(OracleQueries.class);
 
     public OracleQueries(ConnectionContext connectionContext) {
         super(connectionContext);
     }
 
     @Override
-    public boolean isSqlObjectExists(String objectName, String objectType, boolean ignoreValidity) throws MintLeafException {
+    public boolean isSqlObjectExists(String objectName, String objectType, boolean ignoreValidity) throws MintleafException {
         final String[] objectNames = utilsSplitDottedObjectNames(objectName.toUpperCase());
         String validSql = ignoreValidity ? "" : "status='VALID' AND ";
         int cnt = queryInt("SELECT COUNT(*) FROM ALL_OBJECTS WHERE " + validSql + "OWNER = ? AND object_name = ? AND Object_Type = ?", parameterSets -> {
@@ -66,7 +66,7 @@ public class OracleQueries extends StandardQueries {
     }
 
 
-    public boolean isColumnExists(String tableName, String columnName) throws MintLeafException {
+    public boolean isColumnExists(String tableName, String columnName) throws MintleafException {
         final String[] objectNames = utilsSplitDottedObjectNames(tableName.toUpperCase());
         int cnt = queryInt("SELECT COUNT(*) FROM ALL_TAB_COLUMNS WHERE OWNER = ? AND table_name = ? AND column_name = ?", parameterSets -> {
             parameterSets.setString(1, objectNames[0]);
@@ -77,12 +77,12 @@ public class OracleQueries extends StandardQueries {
     }
 
     @Override
-    public boolean isTableExists(String tableName) throws MintLeafException {
+    public boolean isTableExists(String tableName) throws MintleafException {
         return isSqlObjectExists(tableName, "TABLE", false);
     }
 
     @Override
-    public boolean isDbOptionExists(String optionName) throws MintLeafException {
+    public boolean isDbOptionExists(String optionName) throws MintleafException {
 
         int cnt = queryInt("SELECT COUNT(*) FROM dba_server_registry WHERE comp_id=? and status=?", parameterSets -> {
             parameterSets.setString(1, optionName.toUpperCase());
@@ -92,7 +92,7 @@ public class OracleQueries extends StandardQueries {
     }
 
     @Override
-    public void truncateTable(String tableName) throws MintLeafException {
+    public void truncateTable(String tableName) throws MintleafException {
         final String[] objectNames = utilsSplitDottedObjectNames(tableName.toUpperCase());
         String sql = String.format("truncate  table %s.%s", objectNames[0], objectNames[1]);
         try (Executable<int[]> executable = new FluentJdbc.Builder(connectionContext).withSql(sql).buildExecute()) {
@@ -101,20 +101,20 @@ public class OracleQueries extends StandardQueries {
     }
 
     @Override
-    public boolean isUserExists(String userName) throws MintLeafException {
+    public boolean isUserExists(String userName) throws MintleafException {
         return queryInt("SELECT COUNT(*) FROM ALL_USERS WHERE username = upper(?)", parameterSets -> {
             parameterSets.setString(1, userName);
         }) != 0;
     }
 
     @Override
-    public List<String> getSqlObjects(String objectType) throws MintLeafException {
+    public List<String> getSqlObjects(String objectType) throws MintleafException {
 
         return queryString(String.format("select object_name from user_objects where object_type='%s'", objectType), null, "object_name");
     }
 
     @Override
-    public List<String> getPrimaryKeys(String ownerName, String tableName) throws MintLeafException {
+    public List<String> getPrimaryKeys(String ownerName, String tableName) throws MintleafException {
 
         String owner = "";
         if (ownerName != null) {
@@ -127,7 +127,7 @@ public class OracleQueries extends StandardQueries {
     }
 
     @Override
-    public boolean isPrivilegeExists(String granteeName, String privilegeName, String objectName) throws MintLeafException {
+    public boolean isPrivilegeExists(String granteeName, String privilegeName, String objectName) throws MintleafException {
         int cnt = queryInt("SELECT COUNT(*) FROM ALL_TAB_PRIVS WHERE grantee = ? AND table_name = ? AND privilege=?", parameterSets -> {
             parameterSets.setString(1, granteeName.toUpperCase());
             parameterSets.setString(2, objectName.toUpperCase());
@@ -137,7 +137,7 @@ public class OracleQueries extends StandardQueries {
     }
 
 
-    private String getSqlObjectMetaSql(String objectName) throws SQLException, MintLeafException {
+    private String getSqlObjectMetaSql(String objectName) throws SQLException, MintleafException {
 
         final String[] objectNames = utilsSplitDottedObjectNames(objectName);
 
@@ -167,7 +167,7 @@ public class OracleQueries extends StandardQueries {
 
     @Override
     @SuppressWarnings({"unchecked", "rawtypes"})
-    public ColumnMetaDataCollection getMetaData(String objectName) throws MintLeafException {
+    public ColumnMetaDataCollection getMetaData(String objectName) throws MintleafException {
         final ColumnMetaDataCollection metaData = new ColumnMetaDataCollection(objectName);
         if (objectName != null) {
             objectName = objectName.toUpperCase();
@@ -206,7 +206,7 @@ public class OracleQueries extends StandardQueries {
 
         } catch (SQLException e) {
             logger.error("error getting meta data", e);
-            throw new MintLeafException(e);
+            throw new MintleafException(e);
         }
         return metaData;
 

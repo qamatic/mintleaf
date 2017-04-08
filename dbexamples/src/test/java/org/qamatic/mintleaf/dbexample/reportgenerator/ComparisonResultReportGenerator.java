@@ -35,9 +35,8 @@
 
 package org.qamatic.mintleaf.dbexample.reportgenerator;
 
-import org.qamatic.mintleaf.ConsoleLogger;
-import org.qamatic.mintleaf.MintLeafException;
-import org.qamatic.mintleaf.MintLeafLogger;
+import org.qamatic.mintleaf.MintleafException;
+import org.qamatic.mintleaf.MintleafLogger;
 import org.qamatic.mintleaf.RowListWrapper;
 import org.qamatic.mintleaf.data.ColumnState;
 import org.qamatic.mintleaf.data.ComparerListener;
@@ -52,7 +51,7 @@ import java.sql.SQLException;
  */
 public class ComparisonResultReportGenerator implements ComparerListener {
 
-    private static final MintLeafLogger logger = MintLeafLogger.getLogger(ComparisonResultReportGenerator.class);
+    private static final MintleafLogger logger = MintleafLogger.getLogger(ComparisonResultReportGenerator.class);
 
     private FileWriter fileWriter;
 
@@ -61,7 +60,7 @@ public class ComparisonResultReportGenerator implements ComparerListener {
     }
 
     @Override
-    public void OnBeginCompare(RowListWrapper sourceTable, RowListWrapper targetTable) throws MintLeafException {
+    public void OnBeginCompare(RowListWrapper sourceTable, RowListWrapper targetTable) throws MintleafException {
         try {
             this.fileWriter.write("<html><head><style> tr,td,table{border:1px silver solid} .pass{ background-color:green;color:white} .fail {background-color:red;color:white} </style></head><body><table>");
             fileWriter.write("<tr>");
@@ -70,32 +69,32 @@ public class ComparisonResultReportGenerator implements ComparerListener {
             }
             fileWriter.write("</tr>");
         } catch (SQLException e) {
-            throw new MintLeafException(e);
+            throw new MintleafException(e);
 
         } catch (IOException e) {
-            throw new MintLeafException(e);
+            throw new MintleafException(e);
         }
     }
 
     @Override
-    public void onBeforeRowCompare(RowState sourceRow, RowState targetRow) throws MintLeafException {
+    public void onBeforeRowCompare(RowState sourceRow, RowState targetRow) throws MintleafException {
 
     }
 
     @Override
-    public void onAfterRowCompare(RowState sourceRow, RowState targetRow) throws MintLeafException {
+    public void onAfterRowCompare(RowState sourceRow, RowState targetRow) throws MintleafException {
 
     }
 
     @Override
-    public void OnRowCompare(RowState sourceRow, RowState targetRow) throws MintLeafException {
+    public void OnRowCompare(RowState sourceRow, RowState targetRow) throws MintleafException {
         if (sourceRow.RowNumber == 0) {
 
         }
     }
 
     @Override
-    public void OnColumnCompare(final ColumnState sourceColumn, final ColumnState targetColumn) throws MintLeafException {
+    public void OnColumnCompare(final ColumnState sourceColumn, final ColumnState targetColumn) throws MintleafException {
         try {
             if (sourceColumn.equals(targetColumn)) {
                 fileWriter.write(String.format("<td class='%s'>%s</td>", "pass", sourceColumn));
@@ -104,26 +103,26 @@ public class ComparisonResultReportGenerator implements ComparerListener {
             }
 
         } catch (IOException e) {
-            throw new MintLeafException(e);
+            throw new MintleafException(e);
         }
     }
 
     @Override
-    public void OnEndCompare(RowState sourceRow, RowState targetRow) throws MintLeafException {
+    public void OnEndCompare(RowState sourceRow, RowState targetRow) throws MintleafException {
         try {
             this.fileWriter.write("</table></body></html>");
             fileWriter.close();
         } catch (IOException e) {
-            throw new MintLeafException(e);
+            throw new MintleafException(e);
         }
     }
 
-    private void writeRow(String[] colValue, String[] className) throws MintLeafException {
+    private void writeRow(String[] colValue, String[] className) throws MintleafException {
         try {
             for (int i = 0; i < colValue.length; i++)
                 fileWriter.write(String.format("<td class='%s'>%s</td>", className[i], colValue[i]));
         } catch (IOException e) {
-            throw new MintLeafException(e);
+            throw new MintleafException(e);
         }
     }
 

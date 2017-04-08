@@ -52,8 +52,8 @@ public class MysqlTestCase {
                 System.getenv("MYSQL_DB_ADMIN_PASSWORD"));
         try {
             ChangeSets.migrate(sysDb.getNewConnection(), "res:/mysql/mysql-db-setup.sql", "create database and users");
-        } catch (MintLeafException e) {
-            MintLeafException.throwException(e.getMessage());
+        } catch (MintleafException e) {
+            MintleafException.throwException(e.getMessage());
         }
     }
 

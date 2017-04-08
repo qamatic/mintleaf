@@ -2,7 +2,7 @@ package org.qamatic.mintleaf;
 
 import org.junit.Test;
 import org.qamatic.mintleaf.configuration.ArgPatternHandler;
-import org.qamatic.mintleaf.configuration.ConfigurationRoot;
+import org.qamatic.mintleaf.configuration.MintleafConfigurationRoot;
 import org.qamatic.mintleaf.configuration.DbConnectionInfo;
 import org.qamatic.mintleaf.core.TextContentStreamReader;
 
@@ -44,11 +44,11 @@ public class ParameterTests {
 
 
     @Test
-    public void dbconfigLoadFromXmlString() throws MintLeafException {
-        MintLeafReader reader = new TextContentStreamReader(""){
+    public void dbconfigLoadFromXmlString() throws MintleafException {
+        MintleafReader reader = new TextContentStreamReader(""){
             @Override
-            public void read() throws MintLeafException {
-                ConfigurationRoot dbConfiguration = new ConfigurationRoot();
+            public void read() throws MintleafException {
+                MintleafConfigurationRoot dbConfiguration = new MintleafConfigurationRoot();
                 dbConfiguration.getDatabases().add(new DbConnectionInfo("abcdb", DbType.ORACLE,
                         "jdbc:oracle:thin:${url}", "${user-name}", "${password}"));
                 content.append(dbConfiguration.toString());
@@ -67,9 +67,9 @@ public class ParameterTests {
     }
 
     @Test
-    public void dbconfigLoadFromXml() throws MintLeafException {
+    public void dbconfigLoadFromXml() throws MintleafException {
 
-        ConfigurationRoot newConfig = ConfigurationRoot.deSerialize("res:/test-config.xml");
+        MintleafConfigurationRoot newConfig = MintleafConfigurationRoot.deSerialize("res:/test-config.xml");
         assertEquals("abcdb", newConfig.getDatabases().get(0).getId()); //just sanity check on deserialization.
 
     }

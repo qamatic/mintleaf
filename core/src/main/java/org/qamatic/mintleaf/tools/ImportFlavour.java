@@ -37,7 +37,7 @@ package org.qamatic.mintleaf.tools;
 
 
 import org.qamatic.mintleaf.DataRowListener;
-import org.qamatic.mintleaf.MintLeafException;
+import org.qamatic.mintleaf.MintleafException;
 
 /**
  * Created by qamatic on 2/18/6/16.
@@ -45,9 +45,9 @@ import org.qamatic.mintleaf.MintLeafException;
 public interface ImportFlavour {
 
 
-    void doImport(DataRowListener listener) throws MintLeafException;
+    void doImport(DataRowListener listener) throws MintleafException;
 
-    default void close() throws MintLeafException {
+    default void close() throws MintleafException {
 
     }
 

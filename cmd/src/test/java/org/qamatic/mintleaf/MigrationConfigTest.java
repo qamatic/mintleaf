@@ -36,17 +36,14 @@ package org.qamatic.mintleaf;
 
 import junit.framework.TestCase;
 import org.junit.Test;
-import org.qamatic.mintleaf.configuration.ConfigurationRoot;
-import org.qamatic.mintleaf.configuration.Property;
 import org.qamatic.mintleaf.configuration.DbConnectionInfo;
+import org.qamatic.mintleaf.configuration.MintleafConfigurationRoot;
+import org.qamatic.mintleaf.configuration.Property;
 import org.qamatic.mintleaf.configuration.SchemaInfo;
-import org.qamatic.mintleaf.core.BaseSqlReader;
 
 import java.io.IOException;
-import java.io.InputStream;
 
 import static junit.framework.TestCase.assertTrue;
-import static org.junit.Assert.assertEquals;
 
 /**
  * Created by qamatic on 5/6/16.
@@ -57,12 +54,12 @@ public class MigrationConfigTest {
     public void testConfigurationDump() throws IOException {
 
 
-        ConfigurationRoot dbConfiguration = new ConfigurationRoot();
+        MintleafConfigurationRoot dbConfiguration = new MintleafConfigurationRoot();
         DbConnectionInfo dbConnectionSetting = new DbConnectionInfo("abcdb", DbType.ORACLE,
-                    "jdbc:oracle:thin:your-db-connection-url-here", "your-user-name", "your-password");
+                "jdbc:oracle:thin:your-db-connection-url-here", "your-user-name", "your-password");
         dbConfiguration.getDatabases().add(dbConnectionSetting);
-        dbConnectionSetting.getConnectionProperties().getItems().add(new Property("poolsize","100"));
-        dbConnectionSetting.getConnectionProperties().getItems().add(new Property("internal_logon","sysdba"));
+        dbConnectionSetting.getConnectionProperties().getItems().add(new Property("poolsize", "100"));
+        dbConnectionSetting.getConnectionProperties().getItems().add(new Property("internal_logon", "sysdba"));
 
 
         SchemaInfo versionSetting = new SchemaInfo();
@@ -77,8 +74,8 @@ public class MigrationConfigTest {
     }
 
     @Test
-    public void testConfigurationLoad() throws MintLeafException {
-        ConfigurationRoot newConfig = ConfigurationRoot.deSerialize("res:/test-config.xml");
+    public void testConfigurationLoad() throws MintleafException {
+        MintleafConfigurationRoot newConfig = MintleafConfigurationRoot.deSerialize("res:/test-config.xml");
         TestCase.assertEquals("abcdb", newConfig.getDatabases().get(0).getId()); //just sanity check on deserialization.
 
     }

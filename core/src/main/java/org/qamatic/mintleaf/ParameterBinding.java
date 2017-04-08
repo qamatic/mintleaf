@@ -40,11 +40,11 @@ package org.qamatic.mintleaf;
  */
 public interface ParameterBinding {
 
-    void bindParameters(ParameterSets parameterSets) throws MintLeafException;
+    void bindParameters(ParameterSets parameterSets) throws MintleafException;
 
     public interface Callable {
 
-        void bindParameters(CallableParameterSets parameterSets) throws MintLeafException;
+        void bindParameters(CallableParameterSets parameterSets) throws MintleafException;
     }
 
 }

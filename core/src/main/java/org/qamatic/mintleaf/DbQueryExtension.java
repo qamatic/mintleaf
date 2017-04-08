@@ -42,66 +42,66 @@ import java.util.List;
 public interface DbQueryExtension extends AutoCloseable {
 
 
-    default boolean isSqlObjectExists(String objectName, String objectType, boolean ignoreValidity) throws MintLeafException {
+    default boolean isSqlObjectExists(String objectName, String objectType, boolean ignoreValidity) throws MintleafException {
         throw new NotImplementedException();
     }
 
-    default int getCount(String tableName) throws MintLeafException {
+    default int getCount(String tableName) throws MintleafException {
         return queryInt(String.format("select count(*) from %s", tableName), null);
     }
 
-    default boolean isTableExists(String tableName) throws MintLeafException {
+    default boolean isTableExists(String tableName) throws MintleafException {
         throw new NotImplementedException();
     }
 
-    default void close() throws MintLeafException {
+    default void close() throws MintleafException {
 
     }
 
     ;
 
-    default boolean isDbOptionExists(String optionName) throws MintLeafException {
+    default boolean isDbOptionExists(String optionName) throws MintleafException {
         throw new NotImplementedException();
     }
 
-    <T> List<T> query(String sql, ParameterBinding parameterBinding, final DataRowListener<T> listener) throws MintLeafException;
+    <T> List<T> query(String sql, ParameterBinding parameterBinding, final DataRowListener<T> listener) throws MintleafException;
 
-    default <T> List<T> query(String sql, final DataRowListener<T> listener) throws MintLeafException {
+    default <T> List<T> query(String sql, final DataRowListener<T> listener) throws MintleafException {
         return query(sql, null, listener);
     }
 
-    default List<String> queryString(String sql, ParameterBinding parameterBinding, String columnName) throws MintLeafException {
+    default List<String> queryString(String sql, ParameterBinding parameterBinding, String columnName) throws MintleafException {
         return query(sql, parameterBinding, (row, resultSet) -> resultSet.asString(columnName));
     }
 
 
-    int queryInt(String sql, ParameterBinding parameterBinding) throws MintLeafException;
+    int queryInt(String sql, ParameterBinding parameterBinding) throws MintleafException;
 
-    default void truncateTable(String tableName) throws MintLeafException {
+    default void truncateTable(String tableName) throws MintleafException {
         throw new NotImplementedException();
     }
 
-    default boolean isUserExists(String userName) throws MintLeafException {
+    default boolean isUserExists(String userName) throws MintleafException {
         throw new NotImplementedException();
     }
 
-    default List<String> getSqlObjects(String objectType) throws MintLeafException {
+    default List<String> getSqlObjects(String objectType) throws MintleafException {
         throw new NotImplementedException();
     }
 
-    default List<String> getPrimaryKeys(String ownerName, String tableName) throws MintLeafException {
+    default List<String> getPrimaryKeys(String ownerName, String tableName) throws MintleafException {
         throw new NotImplementedException();
     }
 
-    default ColumnMetaDataCollection getMetaData(String objectName) throws MintLeafException {
+    default ColumnMetaDataCollection getMetaData(String objectName) throws MintleafException {
         throw new NotImplementedException();
     }
 
-    default boolean isPrivilegeExists(String granteeName, String privilegeName, String objectName) throws MintLeafException {
+    default boolean isPrivilegeExists(String granteeName, String privilegeName, String objectName) throws MintleafException {
         throw new NotImplementedException();
     }
 
-    default boolean isColumnExists(String tableName, String columnName) throws MintLeafException {
+    default boolean isColumnExists(String tableName, String columnName) throws MintleafException {
         throw new NotImplementedException();
     }
 

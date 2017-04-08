@@ -57,11 +57,11 @@ public interface MetaDataCollection extends ResultSetMetaData {
     Column findColumn(String columnName);
 
 
-    default String getColumnNameByIndex(int column) throws MintLeafException {
+    default String getColumnNameByIndex(int column) throws MintleafException {
         try {
             return getColumnName(column);
         } catch (SQLException e) {
-            throw new MintLeafException(e);
+            throw new MintleafException(e);
         }
     }
 }

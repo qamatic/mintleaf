@@ -46,7 +46,7 @@ import java.sql.Types;
  */
 public class StoredProcedure implements Executable<int[]> {
 
-    private static final MintLeafLogger logger = MintLeafLogger.getLogger(StoredProcedure.class);
+    private static final MintleafLogger logger = MintleafLogger.getLogger(StoredProcedure.class);
     private ConnectionContext connectionContext;
     private CallType callType;
     private ExecutionResultListener.Callable executionResultListener;
@@ -75,7 +75,7 @@ public class StoredProcedure implements Executable<int[]> {
     }
 
     @Override
-    public int[] execute() throws MintLeafException {
+    public int[] execute() throws MintleafException {
         logger.info(getSql());
         try (CallableStatement preparedStatement = connectionContext.getConnection().prepareCall(this.getSql())) {
             CallableBindingParameterSets parameterSets = new CallableBindingParameterSets(preparedStatement);
@@ -89,12 +89,12 @@ public class StoredProcedure implements Executable<int[]> {
             }
             return result;
 
-        } catch (MintLeafException e) {
+        } catch (MintleafException e) {
             logger.error("error fetching data", e);
-            throw new MintLeafException(e);
+            throw new MintleafException(e);
         } catch (SQLException e) {
             logger.error(e);
-            throw new MintLeafException(e);
+            throw new MintleafException(e);
         }
     }
 

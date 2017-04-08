@@ -50,7 +50,7 @@ import java.util.List;
  */
 public final class Mintleaf {
 
-    private static final MintLeafLogger logger = MintLeafLogger.getLogger(Mintleaf.class);
+    private static final MintleafLogger logger = MintleafLogger.getLogger(Mintleaf.class);
 
     public static FluentJdbc.Builder queryBuilder(ConnectionContext connectionContext) {
         return new FluentJdbc.Builder(connectionContext);
@@ -178,7 +178,7 @@ public final class Mintleaf {
     }
 
     public static final class DataComparerBuilder {
-        private static final MintLeafLogger logger = MintLeafLogger.getLogger(DataComparerBuilder.class);
+        private static final MintleafLogger logger = MintleafLogger.getLogger(DataComparerBuilder.class);
         private RowListWrapper sourceTable;
         private RowListWrapper targetTable;
         private ComparerListener comparerListener;//= new ConsoleComparerListener();
@@ -247,16 +247,16 @@ public final class Mintleaf {
 
             } catch (InstantiationException e) {
                 logger.error(e);
-                MintLeafException.throwException(e);
+                MintleafException.throwException(e);
             } catch (IllegalAccessException e) {
                 logger.error(e);
-                MintLeafException.throwException(e);
+                MintleafException.throwException(e);
             } catch (NoSuchMethodException e) {
                 logger.error(e);
-                MintLeafException.throwException(e);
+                MintleafException.throwException(e);
             } catch (InvocationTargetException e) {
                 logger.error(e);
-                MintLeafException.throwException(e);
+                MintleafException.throwException(e);
             }
 
 

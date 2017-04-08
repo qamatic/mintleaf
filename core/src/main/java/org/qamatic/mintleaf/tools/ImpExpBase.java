@@ -46,13 +46,13 @@ import java.util.regex.Pattern;
  * Created by qamatic on 3/6/16.
  */
 public abstract class ImpExpBase {
-    private static final MintLeafLogger logger = MintLeafLogger.getLogger(ImpExpBase.class);
+    private static final MintleafLogger logger = MintleafLogger.getLogger(ImpExpBase.class);
 
     protected abstract ConnectionContext getConnectionContext();
 
 
     //this is meant for testing purpose of loading data but for production side you should consider using param binds..
-    protected void importDataFrom(final ImportFlavour dataImport, final String sqlTemplate) throws MintLeafException {
+    protected void importDataFrom(final ImportFlavour dataImport, final String sqlTemplate) throws MintleafException {
         final Pattern columnPattern = Pattern.compile("\\$(\\w+)\\$", Pattern.DOTALL | Pattern.MULTILINE | Pattern.CASE_INSENSITIVE);
         final Matcher columns = columnPattern.matcher(sqlTemplate);
         logger.info("importing using template:" + sqlTemplate);
@@ -75,12 +75,12 @@ public abstract class ImpExpBase {
         try {
             batchCall.execute();
         } catch (Exception e) {
-            throw new MintLeafException(e);
+            throw new MintleafException(e);
         }
 
     }
 
-    protected void exportDataTo(final ExportFlavour dataExport, String sql, ParameterBinding parameterBinding) throws MintLeafException {
+    protected void exportDataTo(final ExportFlavour dataExport, String sql, ParameterBinding parameterBinding) throws MintleafException {
         try (SqlResultSet sqlResultSet = getConnectionContext().queryBuilder().withSql(sql).withParamValues(parameterBinding).buildSelect()) {
             dataExport.export(sqlResultSet.getResultSet());
         }

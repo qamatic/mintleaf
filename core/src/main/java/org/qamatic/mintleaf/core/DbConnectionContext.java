@@ -50,7 +50,7 @@ import java.util.List;
  */
 public class DbConnectionContext<T extends DbQueryExtension> implements ConnectionContext<T> {
 
-    private static final MintLeafLogger logger = MintLeafLogger.getLogger(DbConnectionContext.class);
+    private static final MintleafLogger logger = MintleafLogger.getLogger(DbConnectionContext.class);
 
     private Connection connection;
     private DriverSource driverSource;
@@ -71,28 +71,28 @@ public class DbConnectionContext<T extends DbQueryExtension> implements Connecti
             dbQueries = (DbQueryExtension) constructor.newInstance(connectionContext);
         } catch (InstantiationException e) {
             logger.error(e);
-            MintLeafException.throwException(e);
+            MintleafException.throwException(e);
         } catch (IllegalAccessException e) {
             logger.error(e);
-            MintLeafException.throwException(e);
+            MintleafException.throwException(e);
         } catch (NoSuchMethodException e) {
             logger.error(e);
-            MintLeafException.throwException(e);
+            MintleafException.throwException(e);
         } catch (InvocationTargetException e) {
             logger.error(e);
-            MintLeafException.throwException(e);
+            MintleafException.throwException(e);
         }
 
         return dbQueries;
     }
 
     @Override
-    public Connection getConnection() throws MintLeafException {
+    public Connection getConnection() throws MintleafException {
         if (this.connection == null) {
             try {
                 this.connection = driverSource.getConnection();
             } catch (SQLException e) {
-                throw new MintLeafException(e);
+                throw new MintleafException(e);
             }
         }
         return this.connection;
@@ -103,20 +103,20 @@ public class DbConnectionContext<T extends DbQueryExtension> implements Connecti
         return this.autoCloseable;
     }
 
-    public void close() throws MintLeafException {
+    public void close() throws MintleafException {
         if (isCloseable() && (this.connection != null)) {
             try {
                 commitTransaction();
                 this.connection.close();
                 this.connection = null;
             } catch (SQLException e) {
-                throw new MintLeafException(e);
+                throw new MintleafException(e);
             }
         }
     }
 
     @Override
-    public ConnectionContext beginTransaction() throws MintLeafException {
+    public ConnectionContext beginTransaction() throws MintleafException {
         try {
             if (!inTransaction) {
                 inTransaction = true;
@@ -124,12 +124,12 @@ public class DbConnectionContext<T extends DbQueryExtension> implements Connecti
             }
             return this;
         } catch (SQLException e) {
-            throw new MintLeafException(e);
+            throw new MintleafException(e);
         }
     }
 
     @Override
-    public void commitTransaction() throws MintLeafException {
+    public void commitTransaction() throws MintleafException {
         if (!inTransaction) {
             return;
         }
@@ -138,12 +138,12 @@ public class DbConnectionContext<T extends DbQueryExtension> implements Connecti
             getConnection().commit();
             inTransaction = false;
         } catch (SQLException e) {
-            throw new MintLeafException(e);
+            throw new MintleafException(e);
         }
     }
 
     @Override
-    public void rollbackTransaction() throws MintLeafException {
+    public void rollbackTransaction() throws MintleafException {
         if (!inTransaction) {
             return;
         }
@@ -151,7 +151,7 @@ public class DbConnectionContext<T extends DbQueryExtension> implements Connecti
             getConnection().rollback();
             inTransaction = false;
         } catch (SQLException e) {
-            throw new MintLeafException(e);
+            throw new MintleafException(e);
         }
     }
 
@@ -191,7 +191,7 @@ public class DbConnectionContext<T extends DbQueryExtension> implements Connecti
         return queryBuilder().withSql(sql).withParamValues(parameterValues).buildExecute();
     }
 
-    public <T> List<T> query(String sql, ParameterBinding parameterBinding, final DataRowListener<T> listener) throws MintLeafException {
+    public <T> List<T> query(String sql, ParameterBinding parameterBinding, final DataRowListener<T> listener) throws MintleafException {
 
         final List<T> rows = new ArrayList<T>();
 
@@ -200,7 +200,7 @@ public class DbConnectionContext<T extends DbQueryExtension> implements Connecti
             sqlResultSet.iterate((row, dr) -> {
                 try {
                     rows.add(listener.eachRow(row, dr));
-                } catch (MintLeafException e) {
+                } catch (MintleafException e) {
                     logger.error("error iterating resultset", e);
                 }
                 return null;

@@ -47,7 +47,7 @@ import java.util.List;
  */
 public class ExecuteQuery implements Executable<int[]> {
 
-    private static final MintLeafLogger logger = MintLeafLogger.getLogger(ExecuteQuery.class);
+    private static final MintleafLogger logger = MintleafLogger.getLogger(ExecuteQuery.class);
     private ConnectionContext connectionContext;
     private ExecutionResultListener executionResultListener;
 
@@ -67,7 +67,7 @@ public class ExecuteQuery implements Executable<int[]> {
     }
 
     @Override
-    public int[] execute() throws MintLeafException {
+    public int[] execute() throws MintleafException {
 
         if (batchSqls != null) {
             try (Statement statement = connectionContext.getConnection().createStatement()) {
@@ -82,7 +82,7 @@ public class ExecuteQuery implements Executable<int[]> {
                 return result;
             } catch (SQLException e) {
                 logger.error(e);
-                throw new MintLeafException(e);
+                throw new MintleafException(e);
             }
         }
 
@@ -101,12 +101,12 @@ public class ExecuteQuery implements Executable<int[]> {
             }
             return result;
 
-        } catch (MintLeafException e) {
+        } catch (MintleafException e) {
             logger.error("error fetching data", e);
-            throw new MintLeafException(e);
+            throw new MintleafException(e);
         } catch (SQLException e) {
             logger.error(e);
-            throw new MintLeafException(e);
+            throw new MintleafException(e);
         }
     }
 

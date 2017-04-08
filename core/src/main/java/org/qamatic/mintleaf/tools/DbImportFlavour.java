@@ -36,8 +36,8 @@
 package org.qamatic.mintleaf.tools;
 
 import org.qamatic.mintleaf.DataRowListener;
-import org.qamatic.mintleaf.MintLeafException;
-import org.qamatic.mintleaf.MintLeafLogger;
+import org.qamatic.mintleaf.MintleafException;
+import org.qamatic.mintleaf.MintleafLogger;
 import org.qamatic.mintleaf.SqlResultSet;
 import org.qamatic.mintleaf.core.ResultSetRowWrapper;
 
@@ -48,7 +48,7 @@ import java.sql.SQLException;
  */
 public class DbImportFlavour implements ImportFlavour {
 
-    private static final MintLeafLogger logger = MintLeafLogger.getLogger(DbImportFlavour.class);
+    private static final MintleafLogger logger = MintleafLogger.getLogger(DbImportFlavour.class);
     private SqlResultSet resultSet;
 
     public DbImportFlavour(SqlResultSet resultSet) {
@@ -57,7 +57,7 @@ public class DbImportFlavour implements ImportFlavour {
     }
 
     @Override
-    public void doImport(DataRowListener listener) throws MintLeafException {
+    public void doImport(DataRowListener listener) throws MintleafException {
         final ResultSetRowWrapper dbRowWrapper = new ResultSetRowWrapper();
         int i = 0;
         try {
@@ -66,12 +66,12 @@ public class DbImportFlavour implements ImportFlavour {
                 listener.eachRow(i++, dbRowWrapper);
             }
         } catch (SQLException e) {
-            throw new MintLeafException(e);
+            throw new MintleafException(e);
         }
     }
 
     @Override
-    public void close() throws MintLeafException {
+    public void close() throws MintleafException {
         resultSet.close();
     }
 

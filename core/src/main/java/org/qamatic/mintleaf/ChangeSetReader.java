@@ -37,7 +37,7 @@ package org.qamatic.mintleaf;
 
 import java.util.HashMap;
 
-public interface ChangeSetReader extends MintLeafReader {
+public interface ChangeSetReader extends MintleafReader {
     ChangeSet getChangeSet(String sectionName);
 
     HashMap<String, ChangeSet> getChangeSets();

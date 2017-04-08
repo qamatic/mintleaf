@@ -66,16 +66,16 @@ public class CsvRowListWrapper implements RowListWrapper {
     }
 
     @Override
-    public ColumnMetaDataCollection getMetaData() throws MintLeafException {
+    public ColumnMetaDataCollection getMetaData() throws MintleafException {
         return this.metaDataCollection;
     }
 
     @Override
-    public void resetAll() throws MintLeafException {
+    public void resetAll() throws MintleafException {
         iterator = null;
     }
 
-    private Iterator<CSVRecord> getIterator() throws IOException, MintLeafException {
+    private Iterator<CSVRecord> getIterator() throws IOException, MintleafException {
         if (iterator == null) {
             for (String columnName : getCSVParser().getHeaderMap().keySet()) {
                 metaDataCollection.add(new Column(columnName));
@@ -86,7 +86,7 @@ public class CsvRowListWrapper implements RowListWrapper {
     }
 
     @Override
-    public boolean moveNext() throws MintLeafException {
+    public boolean moveNext() throws MintleafException {
         try {
             if (getIterator().hasNext()) {
                 csvRowWrapper.setRecord(getIterator().next());
@@ -94,12 +94,12 @@ public class CsvRowListWrapper implements RowListWrapper {
             }
             return false;
         } catch (IOException e) {
-            throw new MintLeafException(e);
+            throw new MintleafException(e);
         }
     }
 
     @Override
-    public Row row() throws MintLeafException {
+    public Row row() throws MintleafException {
         csvRowWrapper.setMetaData(this.metaDataCollection);
         return csvRowWrapper;
     }

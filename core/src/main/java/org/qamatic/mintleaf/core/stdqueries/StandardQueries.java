@@ -46,7 +46,7 @@ import java.util.regex.Pattern;
 
 public class StandardQueries implements DbQueryExtension {
 
-    private static final MintLeafLogger logger = MintLeafLogger.getLogger(StandardQueries.class);
+    private static final MintleafLogger logger = MintleafLogger.getLogger(StandardQueries.class);
     private static final Map<String, Class<? extends StandardQueries>> registeredQueries = new HashMap<>();
 
     static {
@@ -72,26 +72,26 @@ public class StandardQueries implements DbQueryExtension {
         return registeredQueries.get(DbType.getDbType(url).getJdbcUrlPrefix());
     }
 
-    public static String[] utilsSplitDottedObjectNames(String objectName) throws MintLeafException {
+    public static String[] utilsSplitDottedObjectNames(String objectName) throws MintleafException {
         final String[] objectNames = objectName.split(Pattern.quote("."));
         if (objectNames.length != 2) {
-            throw new MintLeafException(String.format("getMetaData expects objectName parameter to be <SCHEMA NAME>.<OBJECT NAME> for example HRDB.COUNTRIES.  Invalid value: %s", objectName));
+            throw new MintleafException(String.format("getMetaData expects objectName parameter to be <SCHEMA NAME>.<OBJECT NAME> for example HRDB.COUNTRIES.  Invalid value: %s", objectName));
         }
         return objectNames;
     }
 
-    public <T> List<T> query(String sql, ParameterBinding parameterBinding, final DataRowListener<T> listener) throws MintLeafException {
+    public <T> List<T> query(String sql, ParameterBinding parameterBinding, final DataRowListener<T> listener) throws MintleafException {
         return this.connectionContext.query(sql, parameterBinding, listener);
     }
 
     @Override
-    public int queryInt(String sql, ParameterBinding parameterBinding) throws MintLeafException {
+    public int queryInt(String sql, ParameterBinding parameterBinding) throws MintleafException {
         try (SqlResultSet sqlResultSet = this.connectionContext.queryBuilder().withSql(sql).withParamValues(parameterBinding).buildSelect()) {
 
             try {
                 return sqlResultSet.first().getInt(1);
             } catch (SQLException e) {
-                throw new MintLeafException(e);
+                throw new MintleafException(e);
             }
         }
     }

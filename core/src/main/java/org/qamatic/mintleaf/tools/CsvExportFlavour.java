@@ -37,7 +37,7 @@ package org.qamatic.mintleaf.tools;
 
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVPrinter;
-import org.qamatic.mintleaf.MintLeafException;
+import org.qamatic.mintleaf.MintleafException;
 
 import java.io.IOException;
 import java.io.Writer;
@@ -57,16 +57,16 @@ public class CsvExportFlavour implements ExportFlavour {
     }
 
     @Override
-    public void export(ResultSet resultSet) throws MintLeafException {
+    public void export(ResultSet resultSet) throws MintleafException {
         CSVPrinter printer = null;
         try {
             printer = new CSVPrinter(writer, CSVFormat.EXCEL.withHeader(resultSet));
             printer.printRecords(resultSet);
             printer.close();
         } catch (SQLException e) {
-            throw new MintLeafException(e);
+            throw new MintleafException(e);
         } catch (IOException e) {
-            throw new MintLeafException(e);
+            throw new MintleafException(e);
 
         }
     }
