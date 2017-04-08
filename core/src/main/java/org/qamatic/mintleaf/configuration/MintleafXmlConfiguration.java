@@ -35,7 +35,7 @@
 
 package org.qamatic.mintleaf.configuration;
 
-import org.qamatic.mintleaf.Database;
+import org.qamatic.mintleaf.MintleafConfiguration;
 import org.qamatic.mintleaf.MintleafException;
 import org.qamatic.mintleaf.MintleafReader;
 import org.qamatic.mintleaf.core.TextContentStreamReader;
@@ -57,7 +57,7 @@ import java.util.List;
 @XmlRootElement(name = "mintleaf")
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(propOrder = {"description", "databases", "schemaVersions"})
-public class MintleafConfigurationRoot {
+public class MintleafXmlConfiguration implements MintleafConfiguration {
 
     @XmlAttribute
     private String version = "1.0";
@@ -67,14 +67,14 @@ public class MintleafConfigurationRoot {
     private List<DbConnectionInfo> databases = new Databases();
     private SchemaVersions schemaVersions = new SchemaVersions();
 
-    public static MintleafConfigurationRoot deSerialize(String configFileName) throws MintleafException {
+    public static MintleafConfiguration deSerialize(String configFileName) throws MintleafException {
         MintleafReader reader = new TextContentStreamReader(configFileName);
         reader.read();
         try {
-            JAXBContext jc = JAXBContext.newInstance(MintleafConfigurationRoot.class);
+            JAXBContext jc = JAXBContext.newInstance(MintleafXmlConfiguration.class);
             Unmarshaller marshaller = jc.createUnmarshaller();
             StringReader sr = new StringReader(reader.toString());
-            MintleafConfigurationRoot configurationRoot = (MintleafConfigurationRoot) marshaller.unmarshal(sr);
+            MintleafXmlConfiguration configurationRoot = (MintleafXmlConfiguration) marshaller.unmarshal(sr);
             return configurationRoot;
 
         } catch (JAXBException e) {
@@ -82,8 +82,14 @@ public class MintleafConfigurationRoot {
         }
     }
 
+
     public List<DbConnectionInfo> getDatabases() {
         return databases;
+    }
+
+    @Override
+    public List<SchemaVersionInfo> getSchemas() {
+        return getSchemaVersions().getVersion();
     }
 
     public void setDatabases(List<DbConnectionInfo> databases) {
@@ -98,6 +104,12 @@ public class MintleafConfigurationRoot {
         this.schemaVersions = schemaVersions;
     }
 
+    @Override
+    public String getConfigVersion() {
+        return getVersion();
+    }
+
+    @Override
     public String getDescription() {
         return description;
     }
@@ -105,6 +117,7 @@ public class MintleafConfigurationRoot {
     public void setDescription(String description) {
         this.description = description;
     }
+
 
     public String getVersion() {
         return version;
@@ -121,7 +134,7 @@ public class MintleafConfigurationRoot {
 
     private String serialize() {
         try {
-            JAXBContext jc = JAXBContext.newInstance(MintleafConfigurationRoot.class);
+            JAXBContext jc = JAXBContext.newInstance(MintleafXmlConfiguration.class);
             Marshaller marshaller = jc.createMarshaller();
             StringWriter sw = new StringWriter();
             marshaller.marshal(this, sw);
@@ -133,10 +146,21 @@ public class MintleafConfigurationRoot {
         return null;
     }
 
-    public Database getDatabase(String databaseId) {
+    @Override
+    public DbConnectionInfo getDbConnectionInfo(String databaseId) {
         for (DbConnectionInfo dbConnectionInfo : getDatabases()) {
             if (dbConnectionInfo.getId().equalsIgnoreCase(databaseId)) {
-                return dbConnectionInfo.getNewDatabaseInstance();
+                return dbConnectionInfo;
+            }
+        }
+        return null;
+    }
+
+    @Override
+    public SchemaVersionInfo getSchemaVersionInfo(String versionId) {
+        for (SchemaVersionInfo schemaVersionInfo : getSchemas()) {
+            if (schemaVersionInfo.getId().equalsIgnoreCase(versionId)) {
+                return schemaVersionInfo;
             }
         }
         return null;

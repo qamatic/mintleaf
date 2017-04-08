@@ -38,10 +38,10 @@ package org.qamatic.mintleaf;
 import org.junit.Before;
 import org.junit.Test;
 import org.qamatic.mintleaf.configuration.DbConnectionInfo;
-import org.qamatic.mintleaf.configuration.MintleafConfigurationRoot;
+import org.qamatic.mintleaf.configuration.MintleafXmlConfiguration;
 import org.qamatic.mintleaf.configuration.SchemaVersionInfo;
 import org.qamatic.mintleaf.core.JdbcDriverSource;
-import org.qamatic.mintleaf.cli.FileFinder;
+import org.qamatic.mintleaf.tools.FileFinder;
 
 import java.io.File;
 import java.io.IOException;
@@ -69,13 +69,13 @@ public class MigrationTest {
 
     @Test
     public void testDbById() throws SQLException, IOException, MintleafException {
-        MintleafConfigurationRoot conf = getTestConfig("myh2", "jdbc:h2:file:./target/h2testdb;mv_store=false;", "", "", "clean db, create schema", "");
-        assertNull(conf.getDatabase("dfsdf"));
-        assertEquals(DbType.H2, conf.getDatabase("myh2").getSupportedDbType());
+        MintleafXmlConfiguration conf = getTestConfig("myh2", "jdbc:h2:file:./target/h2testdb;mv_store=false;", "", "", "clean db, create schema", "");
+        assertNull(conf.getDbConnectionInfo("dfsdf"));
+        assertEquals(DbType.H2, conf.getDbConnectionInfo("myh2").getNewDatabaseInstance().getSupportedDbType());
     }
 
-    private MintleafConfigurationRoot getTestConfig(String id, String url, String userName, String password, String changeSetsToApply, String sqlPaths) {
-        MintleafConfigurationRoot dbConfiguration = new MintleafConfigurationRoot();
+    private MintleafXmlConfiguration getTestConfig(String id, String url, String userName, String password, String changeSetsToApply, String sqlPaths) {
+        MintleafXmlConfiguration dbConfiguration = new MintleafXmlConfiguration();
         DbConnectionInfo dbConnectionSetting = new DbConnectionInfo(id, DbType.getDbType(url),
                 url, userName, password);
         dbConfiguration.getDatabases().add(dbConnectionSetting);

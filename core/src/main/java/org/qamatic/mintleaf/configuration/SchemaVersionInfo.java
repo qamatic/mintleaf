@@ -36,6 +36,7 @@
 package org.qamatic.mintleaf.configuration;
 
 import javax.xml.bind.annotation.XmlType;
+import java.util.regex.Pattern;
 
 /**
  * Created by qamatic on 3/6/16.
@@ -47,7 +48,7 @@ public class SchemaVersionInfo {
 
     private String id;
 
-    private String changeSets;
+    private String[] changeSets;
     private String scriptLocation;
 
     public SchemaVersionInfo() {
@@ -56,10 +57,9 @@ public class SchemaVersionInfo {
 
     public SchemaVersionInfo(String id, String changeSets, String scriptLocation) {
         this.id = id;
-        this.changeSets = changeSets;
+        splitChangeSets(changeSets);
         this.scriptLocation = scriptLocation;
     }
-
 
     public String getId() {
         return id;
@@ -79,10 +79,18 @@ public class SchemaVersionInfo {
     }
 
     public String getChangeSets() {
-        return changeSets;
+
+        return String.join(", ", this.changeSets);
     }
 
     public void setChangeSets(String changeSets) {
-        this.changeSets = changeSets;
+        splitChangeSets(changeSets);
+    }
+
+    private void splitChangeSets(String changeSets) {
+        this.changeSets = changeSets.split(Pattern.quote(","));
+        for (int i = 0; i < this.changeSets.length; i++) {
+            this.changeSets[i] = this.changeSets[i].trim();
+        }
     }
 }

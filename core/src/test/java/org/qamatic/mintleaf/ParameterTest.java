@@ -2,7 +2,7 @@ package org.qamatic.mintleaf;
 
 import org.junit.Test;
 import org.qamatic.mintleaf.configuration.ArgPatternHandler;
-import org.qamatic.mintleaf.configuration.MintleafConfigurationRoot;
+import org.qamatic.mintleaf.configuration.MintleafXmlConfiguration;
 import org.qamatic.mintleaf.configuration.DbConnectionInfo;
 import org.qamatic.mintleaf.core.TextContentStreamReader;
 
@@ -48,7 +48,7 @@ public class ParameterTest {
         MintleafReader reader = new TextContentStreamReader(""){
             @Override
             public void read() throws MintleafException {
-                MintleafConfigurationRoot dbConfiguration = new MintleafConfigurationRoot();
+                MintleafXmlConfiguration dbConfiguration = new MintleafXmlConfiguration();
                 dbConfiguration.getDatabases().add(new DbConnectionInfo("abcdb", DbType.ORACLE,
                         "jdbc:oracle:thin:${url}", "${user-name}", "${password}"));
                 content.append(dbConfiguration.toString());
@@ -69,8 +69,11 @@ public class ParameterTest {
     @Test
     public void dbconfigLoadFromXml() throws MintleafException {
 
-        MintleafConfigurationRoot newConfig = MintleafConfigurationRoot.deSerialize("res:/test-config.xml");
-        assertEquals("abcdb", newConfig.getDatabases().get(0).getId()); //just sanity check on deserialization.
+        MintleafConfiguration newConfig = MintleafXmlConfiguration.deSerialize("res:/test-config.xml");
+        assertEquals("1.0", newConfig.getConfigVersion());
+        assertEquals("Database connections and Schema version configuration file", newConfig.getDescription());
+        assertEquals("abcdb", newConfig.getDbConnectionInfo("abcdb").getId());
+        assertEquals("create schema, load seed data", newConfig.getSchemaVersionInfo("1.0").getChangeSets()); //just sanity check on deserialization.
 
     }
 

@@ -37,7 +37,7 @@ package org.qamatic.mintleaf;
 import junit.framework.TestCase;
 import org.junit.Test;
 import org.qamatic.mintleaf.configuration.DbConnectionInfo;
-import org.qamatic.mintleaf.configuration.MintleafConfigurationRoot;
+import org.qamatic.mintleaf.configuration.MintleafXmlConfiguration;
 import org.qamatic.mintleaf.configuration.Property;
 import org.qamatic.mintleaf.configuration.SchemaVersionInfo;
 
@@ -54,7 +54,7 @@ public class MigrationConfigTest {
     public void testConfigurationDump() throws IOException {
 
 
-        MintleafConfigurationRoot dbConfiguration = new MintleafConfigurationRoot();
+        MintleafXmlConfiguration dbConfiguration = new MintleafXmlConfiguration();
         DbConnectionInfo dbConnectionSetting = new DbConnectionInfo("abcdb", DbType.ORACLE,
                 "jdbc:oracle:thin:your-db-connection-url-here", "your-user-name", "your-password");
         dbConfiguration.getDatabases().add(dbConnectionSetting);
@@ -75,7 +75,7 @@ public class MigrationConfigTest {
 
     @Test
     public void testConfigurationLoad() throws MintleafException {
-        MintleafConfigurationRoot newConfig = MintleafConfigurationRoot.deSerialize("res:/test-config.xml");
+        MintleafConfiguration newConfig = MintleafXmlConfiguration.deSerialize("res:/test-config.xml");
         TestCase.assertEquals("abcdb", newConfig.getDatabases().get(0).getId()); //just sanity check on deserialization.
 
     }
