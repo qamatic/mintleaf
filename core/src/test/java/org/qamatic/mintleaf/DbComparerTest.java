@@ -51,9 +51,9 @@ import static org.junit.Assert.assertEquals;
 /**
  * Created by qamatic on 3/5/16.
  */
-public class DbComparerTests extends H2TestCase {
+public class DbComparerTest extends H2TestCase {
 
-    private static final MintleafLogger logger = MintleafLogger.getLogger(DbComparerTests.class);
+    private static final MintleafLogger logger = MintleafLogger.getLogger(DbComparerTest.class);
 
     @Before
     public void applyChangeSet() throws IOException, SQLException, MintleafException {

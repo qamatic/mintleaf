@@ -55,9 +55,9 @@ import static org.junit.Assert.assertEquals;
 /**
  * Created by qamatic on 3/5/16.
  */
-public class CsvVsListComparerTests {
+public class CsvVsListComparerTest {
 
-    private static final MintleafLogger logger = MintleafLogger.getLogger(CsvVsListComparerTests.class);
+    private static final MintleafLogger logger = MintleafLogger.getLogger(CsvVsListComparerTest.class);
 
     private static ColumnMetaDataCollection getMetaData() throws MintleafException {
 

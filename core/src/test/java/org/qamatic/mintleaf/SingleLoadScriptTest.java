@@ -46,7 +46,7 @@ import java.sql.SQLException;
 /**
  * Created by qamatic on 3/6/16.
  */
-public class SingleLoadScriptTests extends H2TestCase {
+public class SingleLoadScriptTest extends H2TestCase {
 
 
     @BeforeClass

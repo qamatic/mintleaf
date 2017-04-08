@@ -48,7 +48,7 @@ import java.sql.Types;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
-public class UtilTests {
+public class UtilTest {
 
     BasicDatabase builder = new BasicDatabase(null, null, null, null);
 

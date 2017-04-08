@@ -12,7 +12,7 @@ import static junit.framework.TestCase.assertTrue;
 /**
  * Created by QAmatic Team on 3/30/17.
  */
-public class ParameterTests {
+public class ParameterTest {
 
     @Test
     public void substitueAntVar() {

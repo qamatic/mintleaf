@@ -49,9 +49,9 @@ import static org.junit.Assert.assertEquals;
 /**
  * Created by qamatic on 3/5/16.
  */
-public class ListComparerTests {
+public class ListComparerTest {
 
-    private static final MintleafLogger logger = MintleafLogger.getLogger(ListComparerTests.class);
+    private static final MintleafLogger logger = MintleafLogger.getLogger(ListComparerTest.class);
     private static ColumnMetaDataCollection columnDefs = new ColumnMetaDataCollection("LIST.USERS") {
         {
             add(new Column("USERNAME", Types.VARCHAR));
@@ -61,7 +61,7 @@ public class ListComparerTests {
 
     private static List<String> assertCompareTable(List<User> sourceList, List<User> targetListList) throws MintleafException {
         final List<String> actuals = new ArrayList<>();
-        final ConsoleLogger logger = new ConsoleLogger(ListComparerTests.class);
+
         DataComparer dataComparer = new Mintleaf.DataComparerBuilder().
                 withSourceTable(sourceList, columnDefs).
                 withTargetTable(targetListList, columnDefs).

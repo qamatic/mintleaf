@@ -51,7 +51,7 @@ import static org.junit.Assert.*;
 /**
  * Created by qamatic on 3/6/16.
  */
-public class ImportExportTests extends H2TestCase {
+public class ImportExportTest extends H2TestCase {
 
 
     @Before
