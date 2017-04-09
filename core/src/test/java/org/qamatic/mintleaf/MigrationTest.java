@@ -35,12 +35,16 @@
 
 package org.qamatic.mintleaf;
 
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import org.qamatic.mintleaf.cli.MigrationTask;
 import org.qamatic.mintleaf.configuration.DbConnectionInfo;
 import org.qamatic.mintleaf.configuration.MintleafXmlConfiguration;
 import org.qamatic.mintleaf.configuration.SchemaVersionInfo;
+import org.qamatic.mintleaf.core.ChangeSets;
 import org.qamatic.mintleaf.core.JdbcDriverSource;
+import org.qamatic.mintleaf.core.MultiChangeSetFileReader;
 import org.qamatic.mintleaf.tools.FileFinder;
 
 import java.io.File;
@@ -48,9 +52,7 @@ import java.io.IOException;
 import java.sql.SQLException;
 import java.util.List;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 public class MigrationTest {
 
@@ -122,14 +124,45 @@ public class MigrationTest {
         FileFinder fileFinder = new FileFinder("./target/test-classes/filefinder/f1/file11.sql");
 
         List<String> list = fileFinder.list();
-        for(String file : list){
-            System.out.println(file);
-        }
+//        for(String file : list){
+//            System.out.println(file);
+//        }
         assertEquals(1, list.size());
         assertTrue(list.get(0).contains("target/test-classes/filefinder/f1/file11.sql"));
     }
 
-    private static void deleteFile(String fileName) {
+    @Test
+    public void testMultiFileChangeSets() throws MintleafException {
+        ChangeSetReader  changeSetReader = new MultiChangeSetFileReader(new String[]{"./target/test-classes/migrationtests/h2testdb/1.0/*.sql"});
+        changeSetReader.read();
+        assertEquals(2, changeSetReader.getChangeSets().size());
+    }
+
+    @Test
+    public void testMultiFileChangeSetMigrate() throws MintleafException {
+        MintleafConfiguration newConfig = MintleafXmlConfiguration.deSerialize("res:/test-config.xml");
+        Database db = newConfig.getDbConnectionInfo("h2testdb").getNewDatabaseInstance();
+        try (ConnectionContext connectionContext = db.getNewConnection()) {
+            ChangeSets.migrate(connectionContext, new String[]{"./target/test-classes/migrationtests/h2testdb/1.0/*.sql"}, new String[]{"create schema", "load seed data"});
+            Assert.assertTrue(connectionContext.getDbQueries().isTableExists("BILLING.USERS"));
+        }
+    }
+
+    @Test
+    public void testOneStepMigration() throws MintleafException {
+        MintleafConfiguration newConfig = MintleafXmlConfiguration.deSerialize("res:/test-config.xml");
+        Database db = newConfig.getDbConnectionInfo("h2testdb").getNewDatabaseInstance();
+        try (ConnectionContext connectionContext = db.getNewConnection()) {
+            MintleafCliTask task = new MigrationTask(connectionContext, newConfig.getSchemaVersionInfo("1.0"), null );
+            assertEquals(0, task.execute());
+            Assert.assertTrue(connectionContext.getDbQueries().isTableExists("BILLING.USERS"));
+        }
+
+    }
+
+
+
+        private static void deleteFile(String fileName) {
         File file = new File(fileName);
         file.delete();
     }

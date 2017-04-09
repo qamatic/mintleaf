@@ -68,5 +68,8 @@ public final class ChangeSets {
         changeSets.apply();
     }
 
-
+    public static void migrate(final ConnectionContext connectionContext, String[] folderPaths, String[] changeSetsToLoad) throws MintleafException {
+        SqlChangeSets changeSets = new SqlChangeSets(connectionContext, new MultiChangeSetFileReader(folderPaths), changeSetsToLoad);
+        changeSets.apply();
+    }
 }

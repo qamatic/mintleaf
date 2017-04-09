@@ -1,12 +1,10 @@
 package org.qamatic.mintleaf.cli;
 
-import org.qamatic.mintleaf.Database;
-import org.qamatic.mintleaf.MintleafCliTask;
-import org.qamatic.mintleaf.MintleafLogger;
-import org.qamatic.mintleaf.TaskOptions;
+import org.qamatic.mintleaf.*;
 import org.qamatic.mintleaf.configuration.SchemaVersionInfo;
-
-import java.util.List;
+import org.qamatic.mintleaf.core.ChangeSets;
+import org.qamatic.mintleaf.core.MultiChangeSetFileReader;
+import org.qamatic.mintleaf.core.SqlChangeSets;
 
 /**
  * Created by QAmatic team on 4/8/17.
@@ -14,18 +12,25 @@ import java.util.List;
 public class MigrationTask implements MintleafCliTask {
     private static final MintleafLogger logger = MintleafLogger.getLogger(MigrationTask.class);
 
-    private Database database;
+    private ConnectionContext connectionContext;
     private SchemaVersionInfo schemaVersionInfo;
     private TaskOptions options;
 
-    public MigrationTask(Database database, SchemaVersionInfo schemaVersionInfo, TaskOptions options){
-        this.database = database;
+    public MigrationTask(ConnectionContext connectionContext, SchemaVersionInfo schemaVersionInfo, TaskOptions options) {
+        this.connectionContext = connectionContext;
+
         this.schemaVersionInfo = schemaVersionInfo;
         this.options = options;
     }
 
     @Override
-    public int execute() {
+    public int execute() throws MintleafException {
+
+        SqlChangeSets changeSets = new SqlChangeSets(this.connectionContext,
+                    new MultiChangeSetFileReader(this.schemaVersionInfo.getScriptLocationAsList()),
+                    this.schemaVersionInfo.getChangeSetsAsList());
+        changeSets.apply();
+
         return 0;
     }
 

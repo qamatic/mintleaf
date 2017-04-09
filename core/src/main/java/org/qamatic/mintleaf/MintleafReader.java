@@ -44,7 +44,7 @@ public interface MintleafReader {
 
     ChangeSetListener getChangeSetListener();
 
-    void setChangeSetListener(ChangeSetListener mvreaderListener);
+    void setChangeSetListener(ChangeSetListener changeSetListener);
 
     void read() throws MintleafException;
 

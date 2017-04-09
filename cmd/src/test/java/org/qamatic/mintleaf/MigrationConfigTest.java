@@ -70,7 +70,7 @@ public class MigrationConfigTest {
         dbConfiguration.getSchemaVersions().getVersion().add(versionSetting);
 
         //a sanity check whether dump works
-        assertTrue(dbConfiguration.toString().contains("databases"));
+        assertTrue(dbConfiguration.toString().contains("database"));
     }
 
     @Test

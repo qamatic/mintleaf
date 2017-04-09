@@ -70,7 +70,6 @@ public class SqlChangeSetFileReader extends SqlStreamReader implements ChangeSet
 
     @Override
     public void read() throws MintleafException {
-        this.changeSets.clear();
 
         super.read();
 

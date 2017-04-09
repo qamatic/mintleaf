@@ -64,6 +64,7 @@ public class MintleafXmlConfiguration implements MintleafConfiguration {
 
     private String description = "Database connections and Schema version configuration file";
 
+    @XmlElement(name = "database")
     private List<DbConnectionInfo> databases = new Databases();
     private SchemaVersions schemaVersions = new SchemaVersions();
 

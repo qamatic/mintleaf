@@ -60,8 +60,8 @@ public class ParameterTest {
         reader.getUserVariableMapping().put("user-name", "testuser");
         reader.getUserVariableMapping().put("password", "testpassword");
         assertEquals("<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?><mintleaf version=\"1.0\"><description>Database connections and Schema version configuration file</description>" +
-                "<databases><id>abcdb</id><type>ORACLE</type><url>jdbc:oracle:thin:10.2.1.1:1044</url>" +
-                "<username>testuser</username><password>testpassword</password><connectionProperties/></databases>" +
+                "<database><id>abcdb</id><type>ORACLE</type><url>jdbc:oracle:thin:10.2.1.1:1044</url>" +
+                "<username>testuser</username><password>testpassword</password><connectionProperties/></database>" +
                 "<schemaVersions/></mintleaf>", reader.toString());
 
     }

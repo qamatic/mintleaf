@@ -3,12 +3,12 @@
 
 <mintleaf version="1.0">
     <description>Database connections and Schema version configuration file</description>
-    <databases>
+    <database>
         <id>abcdb</id>
         <type>H2</type>
         <url>jdbc:h2:file:./target/H2Db;mv_store=false;</url>
         <connectionProperties>poolSize=100</connectionProperties>
-    </databases>
+    </database>
     <schemaVersions>
         <version>
             <id>1.0</id>

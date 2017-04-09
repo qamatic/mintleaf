@@ -36,7 +36,7 @@
 
 <mintleaf version="1.0">
     <description>Database connections and Schema version configuration file</description>
-    <databases>
+    <database>
         <id>abcdb</id>
         <type>ORACLE</type>
         <url>jdbc:oracle:thin:your-db-connection-url-here</url>
@@ -46,12 +46,20 @@
             <add key="poolsize" value="100"/>
             <add key="internal_logon" value="sysdba"/>
         </connectionProperties>
-    </databases>
+    </database>
+    <database>
+        <id>h2testdb</id>
+        <type>H2</type>
+        <url>jdbc:h2:file:./target/h2testdb1;mv_store=false;</url>
+    </database>
     <schemaVersions>
         <version>
             <id>1.0</id>
-            <changeSets>create schema, load seed data</changeSets>
-            <scriptLocation>./path/*.sql</scriptLocation>
+            <changeSets>
+                create schema,
+                load seed data
+            </changeSets>
+            <scriptLocation>./target/test-classes/migrationtests/h2testdb/1.0/*.sql</scriptLocation>
         </version>
     </schemaVersions>
 </mintleaf>

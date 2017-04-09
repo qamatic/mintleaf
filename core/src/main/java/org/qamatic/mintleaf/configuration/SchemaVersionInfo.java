@@ -49,7 +49,8 @@ public class SchemaVersionInfo {
     private String id;
 
     private String[] changeSets;
-    private String scriptLocation;
+    private String[] paths;
+
 
     public SchemaVersionInfo() {
 
@@ -57,8 +58,9 @@ public class SchemaVersionInfo {
 
     public SchemaVersionInfo(String id, String changeSets, String scriptLocation) {
         this.id = id;
-        splitChangeSets(changeSets);
-        this.scriptLocation = scriptLocation;
+        this.changeSets = splitItems(changeSets);
+        this.paths = splitItems(scriptLocation);
+
     }
 
     public String getId() {
@@ -71,11 +73,11 @@ public class SchemaVersionInfo {
 
 
     public String getScriptLocation() {
-        return scriptLocation;
+        return String.join(", ", this.paths);
     }
 
     public void setScriptLocation(String scriptLocation) {
-        this.scriptLocation = scriptLocation;
+        this.paths = splitItems(scriptLocation);
     }
 
     public String getChangeSets() {
@@ -83,14 +85,24 @@ public class SchemaVersionInfo {
         return String.join(", ", this.changeSets);
     }
 
-    public void setChangeSets(String changeSets) {
-        splitChangeSets(changeSets);
+    public String[] getChangeSetsAsList() {
+        return this.changeSets;
     }
 
-    private void splitChangeSets(String changeSets) {
-        this.changeSets = changeSets.split(Pattern.quote(","));
-        for (int i = 0; i < this.changeSets.length; i++) {
-            this.changeSets[i] = this.changeSets[i].trim();
+    public String[] getScriptLocationAsList() {
+        return this.paths;
+    }
+
+
+    public void setChangeSets(String changeSets) {
+        this.changeSets = splitItems(changeSets);
+    }
+
+    private String[] splitItems(String changeSets) {
+        String[] splits = changeSets.split(Pattern.quote(","));
+        for (int i = 0; i < splits.length; i++) {
+            splits[i] = splits[i].trim();
         }
+        return splits;
     }
 }
