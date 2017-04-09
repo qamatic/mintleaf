@@ -41,6 +41,7 @@ import org.qamatic.mintleaf.Mintleaf;
 import org.qamatic.mintleaf.core.JdbcDriverSource;
 
 import javax.xml.bind.annotation.XmlType;
+import java.util.List;
 
 /**
  * Created by qamatic on 3/6/16.
@@ -121,6 +122,10 @@ public class DbConnectionInfo {
 
     public void setConnectionProperties(ConnectionProperties connectionProperties) {
         this.connectionProperties = connectionProperties;
+    }
+
+    public List<Property> getConnectionPropertiesList() {
+        return getConnectionProperties().getItems();
     }
 
     public Database getNewDatabaseInstance() {
