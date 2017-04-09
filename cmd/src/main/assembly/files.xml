@@ -1,0 +1,35 @@
+<component xmlns="http://maven.apache.org/plugins/maven-assembly-plugin/component/1.1.2"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://maven.apache.org/plugins/maven-assembly-plugin/component/1.1.2 http://maven.apache.org/xsd/component-1.1.2.xsd">
+    <fileSets>
+
+        <fileSet>
+            <directory>src/main/assembly</directory>
+            <outputDirectory></outputDirectory>
+            <includes>
+                <include>mintleaf.sh</include>
+                <include>mintleaf.cmd</include>
+                <include>LICENSE.txt</include>
+            </includes>
+            <fileMode>644</fileMode>
+            <filtered>true</filtered>
+        </fileSet>
+    </fileSets>
+
+    <dependencySets>
+        <dependencySet>
+            <outputDirectory>bin</outputDirectory>
+            <includes>
+                <include>org.qamatic:mintleaf-cmd*</include>
+            </includes>
+        </dependencySet>
+        <dependencySet>
+            <outputDirectory>lib</outputDirectory>
+            <excludes>
+                <exclude>org.qamatic:mintleaf*</exclude>
+                <exclude>com.beust:jcommander*</exclude>
+                <exclude>org.apache.commons:common*</exclude>
+            </excludes>
+        </dependencySet>
+    </dependencySets>
+</component>

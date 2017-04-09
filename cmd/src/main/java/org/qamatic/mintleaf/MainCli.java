@@ -34,32 +34,89 @@
 
 package org.qamatic.mintleaf;
 
-import org.apache.commons.cli.*;
+import com.beust.jcommander.JCommander;
+import com.beust.jcommander.Parameter;
+import com.beust.jcommander.Parameters;
+import com.beust.jcommander.ParametersDelegate;
 
 /**
  * Created by qamatic on 2/18/6/16.
  */
+
 public class MainCli {
 
-    public static void main(String[] args) {
-        CommandLineParser parser = new DefaultParser();
-
-        Options options = new Options();
-        options.addOption("help", "help", false, "usage");
+    @Parameter(names = {"-h", "--help"}, help = true)
+    private String help;
 
 
+    @Parameter(names = {"-v", "--version"}, help = true)
+    private String version;
+
+    private JCommander jc = new JCommander(this);
+    private CommandMigrate cc = new CommandMigrate();
+
+
+    public MainCli parse(String[] args) {
+        jc.setProgramName("Mintleaf");
+        jc.addCommand("migrate", cc);
+        jc.setCaseSensitiveOptions(false);
+        jc.setAllowAbbreviatedOptions(true);
         try {
-            // parse the command line arguments
-            CommandLine line = parser.parse(options, args);
-            if (args.length == 0) {
-                HelpFormatter formatter = new HelpFormatter();
-                formatter.printHelp("mintleaf", options);
-                System.exit(0);
+            if (args.length==0){
+                throw new RuntimeException();
             }
-
-        } catch (ParseException exp) {
-            System.out.println("Unexpected exception:" + exp.getMessage());
-            System.exit(-1);
+            jc.parse(args);
+        } catch (RuntimeException e) {
+            usage();
         }
+        return this;
+    }
+
+    public void usage() {
+        jc.usage();
+    }
+
+    public void run() {
+
+    }
+
+    public static void main(String[] args) {
+        System.out.println("Mintleaf v1.23 command line tool");
+        new MainCli().parse(args).run();
+    }
+
+    @Parameters(separators = "=", commandDescription = "")
+    class CommonOptions {
+        @Parameter(names = "-config", required = true, description = "Database settings and Schema version configuration file")
+        private String configFile;
+    }
+
+    @Parameters(separators = "=", commandDescription = "Migrate schema")
+    private class CommandMigrate {
+
+        @ParametersDelegate
+        private CommonOptions commonOptions = new CommonOptions();
+
     }
 }
+
+//
+//    CommandLineParser parser = new DefaultParser();
+//
+//    Options options = new Options();
+//options.addOption("help", "help", false, "usage");
+//
+//
+//        try {
+//        // parse the command line arguments
+//        CommandLine line = parser.parse(options, args);
+//        if (args.length == 0) {
+//        HelpFormatter formatter = new HelpFormatter();
+//        formatter.printHelp("mintleaf", options);
+//        System.exit(0);
+//        }
+//
+//        } catch (ParseException exp) {
+//        System.out.println("Unexpected exception:" + exp.getMessage());
+//        System.exit(-1);
+//        }
