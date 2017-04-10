@@ -38,6 +38,8 @@ import com.beust.jcommander.JCommander;
 import com.beust.jcommander.Parameter;
 import com.beust.jcommander.Parameters;
 import com.beust.jcommander.ParametersDelegate;
+import org.qamatic.mintleaf.cli.MigrationTask;
+import org.qamatic.mintleaf.configuration.MintleafXmlConfiguration;
 
 /**
  * Created by qamatic on 2/18/6/16.
@@ -48,7 +50,6 @@ public class MainCli {
     @Parameter(names = {"-h", "--help"}, help = true)
     private String help;
 
-
     @Parameter(names = {"-v", "--version"}, help = true)
     private String version;
 
@@ -57,6 +58,7 @@ public class MainCli {
 
 
     public MainCli parse(String[] args) {
+        jc.setColumnSize(160);
         jc.setProgramName("Mintleaf");
         jc.addCommand("migrate", cc);
         jc.setCaseSensitiveOptions(false);
@@ -72,53 +74,60 @@ public class MainCli {
         return this;
     }
 
+    private void println(String msg) {
+        JCommander.getConsole().println(msg);
+    }
+
     public void usage() {
         StringBuilder sb = new StringBuilder();
         jc.usage(sb);
-        JCommander.getConsole().println(sb.toString().replaceAll("\n\n", "\n"));
+        println(sb.toString().replaceAll("\n\n", "\n"));
     }
 
-    public void run() {
+    public void run() throws MintleafException {
 
+        if (jc.getCommands().containsKey("migrate")) {
+           cc.execute();
+        }
     }
 
-    public static void main(String[] args) {
-        System.out.println("Mintleaf v1.23 command line tool");
+    public static void main(String[] args) throws MintleafException {
+        System.out.println("Mintleaf v1.26 command line tool");
         new MainCli().parse(args).run();
     }
 
     @Parameters(separators = "=", commandDescription = "")
     class CommonOptions {
-        @Parameter(names = "-config", required = true, description = "Database settings and Schema version configuration file")
+        @Parameter(names = {"-config", "-configfile"}, required = true, description = "database settings and Schema version configuration file.")
         private String configFile;
     }
 
-    @Parameters(separators = "=", commandDescription = "Migrate schema")
-    private class CommandMigrate {
-
+    @Parameters(separators = "=", commandDescription = "Migrate schema.\n        example: mintleaf migrate -config=db.xml -targetdb=abcDB")
+    private class CommandMigrate implements MintleafCliTask {
         @ParametersDelegate
         private CommonOptions commonOptions = new CommonOptions();
 
+        @Parameter(names = "-targetdb", required = true, description = "database id of the target database")
+        private String targetDb;
+
+        @Parameter(names = "-schemaVer", required = true, description = "schema version to be migrated")
+        private String schemaVer;
+
+
+        @Override
+        public int execute() throws MintleafException {
+            MintleafConfiguration newConfig = MintleafXmlConfiguration.deSerialize(commonOptions.configFile);
+            Database db = newConfig.getDbConnectionInfo(targetDb).getNewDatabaseInstance();
+            try (ConnectionContext connectionContext = db.getNewConnection()) {
+                MintleafCliTask task = new MigrationTask(connectionContext, newConfig.getSchemaVersionInfo("1.0"), null);
+                return task.execute();
+            }
+        }
+
+        @Override
+        public void close() throws Exception {
+
+        }
     }
 }
 
-//
-//    CommandLineParser parser = new DefaultParser();
-//
-//    Options options = new Options();
-//options.addOption("help", "help", false, "usage");
-//
-//
-//        try {
-//        // parse the command line arguments
-//        CommandLine line = parser.parse(options, args);
-//        if (args.length == 0) {
-//        HelpFormatter formatter = new HelpFormatter();
-//        formatter.printHelp("mintleaf", options);
-//        System.exit(0);
-//        }
-//
-//        } catch (ParseException exp) {
-//        System.out.println("Unexpected exception:" + exp.getMessage());
-//        System.exit(-1);
-//        }

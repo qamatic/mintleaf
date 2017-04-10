@@ -15,7 +15,7 @@
                 create schema,
                 load seed data
             </changeSets>
-            <scriptLocation>./target/test-classes/migrationtests/h2testdb/1.0/*.sql</scriptLocation>
+            <scriptLocation>h2testdb/1.0/*.sql</scriptLocation>
         </version>
     </schemaVersions>
 </mintleaf>

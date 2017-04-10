@@ -76,7 +76,7 @@ public class MigrationConfigTest {
     @Test
     public void testConfigurationLoad() throws MintleafException {
         MintleafConfiguration newConfig = MintleafXmlConfiguration.deSerialize("res:/test-config.xml");
-        TestCase.assertEquals("abcdb", newConfig.getDatabases().get(0).getId()); //just sanity check on deserialization.
+        TestCase.assertEquals("h2testdb", newConfig.getDatabases().get(0).getId()); //just sanity check on deserialization.
 
     }
 }

@@ -6,4 +6,5 @@ package org.qamatic.mintleaf;
 public interface MintleafCliTask extends AutoCloseable {
     int execute() throws MintleafException;
 
+
 }
