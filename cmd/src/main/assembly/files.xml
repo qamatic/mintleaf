@@ -7,11 +7,28 @@
             <directory>src/main/assembly</directory>
             <outputDirectory></outputDirectory>
             <includes>
-                <include>mintleaf.sh</include>
-                <include>mintleaf.cmd</include>
                 <include>LICENSE.txt</include>
             </includes>
             <fileMode>644</fileMode>
+            <filtered>true</filtered>
+        </fileSet>
+        <fileSet>
+            <directory>src/main/assembly</directory>
+            <outputDirectory>bin</outputDirectory>
+            <includes>
+                <include>mintleaf.cmd</include>
+            </includes>
+            <fileMode>644</fileMode>
+            <filtered>true</filtered>
+        </fileSet>
+        <fileSet>
+            <directory>src/main/assembly</directory>
+            <outputDirectory>bin</outputDirectory>
+            <includes>
+                <include>mintleaf</include>
+            </includes>
+            <fileMode>744</fileMode>
+            <lineEnding>unix</lineEnding>
             <filtered>true</filtered>
         </fileSet>
     </fileSets>

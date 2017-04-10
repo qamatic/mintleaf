@@ -62,7 +62,7 @@ public class MainCli {
         jc.setCaseSensitiveOptions(false);
         jc.setAllowAbbreviatedOptions(true);
         try {
-            if (args.length==0){
+            if (args.length == 0) {
                 throw new RuntimeException();
             }
             jc.parse(args);
@@ -73,7 +73,9 @@ public class MainCli {
     }
 
     public void usage() {
-        jc.usage();
+        StringBuilder sb = new StringBuilder();
+        jc.usage(sb);
+        JCommander.getConsole().println(sb.toString().replaceAll("\n\n", "\n"));
     }
 
     public void run() {

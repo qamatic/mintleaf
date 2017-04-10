@@ -1,0 +1,3 @@
+#!/usr/bin/env bash
+DIR="$(dirname $([ -L $0 ] && readlink -f $0 || echo $0))"
+java -cp "$DIR/../lib/*:$DIR/*" org.qamatic.mintleaf.MainCli "$@"
