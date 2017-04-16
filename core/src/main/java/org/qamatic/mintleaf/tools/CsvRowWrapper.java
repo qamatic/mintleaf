@@ -43,14 +43,19 @@ import org.qamatic.mintleaf.Row;
 /**
  * Created by QAmatic on 3/10/2017.
  */
-public class CsvRowWrapper implements Row {
+public class CsvRowWrapper<T> implements Row {
+
+
     private CSVRecord record;
     private MetaDataCollection metaDataCollection;
 
-    public CSVRecord getRecord() {
-        return record;
+    public CsvRowWrapper(){
+
     }
 
+    public CsvRowWrapper(CSVRecord record){
+        this.record = record;
+    }
 
     public void setRecord(CSVRecord record) {
         this.record = record;

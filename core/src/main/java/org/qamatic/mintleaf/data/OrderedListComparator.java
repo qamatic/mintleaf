@@ -34,18 +34,17 @@
  */
 package org.qamatic.mintleaf.data;
 
-import org.qamatic.mintleaf.ColumnMatcher;
-import org.qamatic.mintleaf.DataComparer;
-import org.qamatic.mintleaf.MintleafException;
-import org.qamatic.mintleaf.RowListWrapper;
+import org.qamatic.mintleaf.*;
+
+import java.util.Iterator;
 
 /**
  * Created by qamatic on 3/5/16.
  */
 public class OrderedListComparator implements DataComparer {
 
-    private RowListWrapper sourceTable;
-    private RowListWrapper targetTable;
+    private RowListWrapper<? extends Row> sourceTable;
+    private RowListWrapper<? extends Row> targetTable;
     private ComparerListener comparerListener;
     private ColumnMatcher columnMatcher;
 
@@ -73,18 +72,23 @@ public class OrderedListComparator implements DataComparer {
         final RowState targetRowState = getRowStateInstance();
         targetRowState.setMetaData(this.targetTable.getMetaData());
 
-        this.sourceTable.resetAll();
-        this.targetTable.resetAll();
-        while (this.sourceTable.next()) {
+
+        Iterator<? extends Row> sourceIterator = this.sourceTable.iterator();
+        Iterator<? extends Row> targetIterator = this.targetTable.iterator();
+
+        while (sourceIterator.hasNext()) {
             sourceRowState.RowNumber++;
-            if (this.targetTable.next()) {
+            if ( targetIterator.hasNext() ) {
                 beforeRowCompare(sourceRowState, targetRowState);
 
-                sourceRowState.Row = this.sourceTable.row();
+                if (!sourceIterator.hasNext()){
+                    throw new MintleafException("source list does not have anymore elements to iterate thru");
+                }
+                sourceRowState.Row = sourceIterator.next();
                 sourceRowState.IsSurplusRow = 0;
 
                 targetRowState.RowNumber++;
-                targetRowState.Row = this.targetTable.row();
+                targetRowState.Row = targetIterator.next();
                 targetRowState.IsSurplusRow = 0;
 
                 onRowCompare(sourceRowState, targetRowState);
@@ -92,7 +96,10 @@ public class OrderedListComparator implements DataComparer {
                 afterRowCompare(sourceRowState, targetRowState);
             } else {
                 beforeRowCompare(sourceRowState, targetRowState);
-                sourceRowState.Row = this.sourceTable.row();
+                if (!sourceIterator.hasNext()){
+                    throw new MintleafException("source list does not have anymore elements to iterate thru");
+                }
+                sourceRowState.Row = sourceIterator.next();
                 sourceRowState.IsSurplusRow = 1;
 
                 targetRowState.Row = null;
@@ -102,14 +109,14 @@ public class OrderedListComparator implements DataComparer {
                 afterRowCompare(sourceRowState, targetRowState);
             }
         }
-        while (this.targetTable.next()) {
+        while (targetIterator.hasNext()) {
 
             beforeRowCompare(sourceRowState, targetRowState);
             sourceRowState.Row = null;
             sourceRowState.IsSurplusRow = -1;
 
             targetRowState.RowNumber++;
-            targetRowState.Row = this.targetTable.row();
+            targetRowState.Row =targetIterator.next();
             targetRowState.IsSurplusRow = 1;
             onRowCompare(sourceRowState, targetRowState);
             columnMatcher.match(sourceRowState, targetRowState, this.comparerListener);

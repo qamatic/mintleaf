@@ -40,13 +40,16 @@ import java.util.Iterator;
 /**
  * Created by qamatic on 3/4/16.
  */
-public interface RowListWrapper extends Iterable<Row> {
+public interface RowListWrapper<T extends Row> extends Iterable<T> {
 
-    void resetAll() throws MintleafException;
+    T getRow(int index) throws MintleafException;
 
-    boolean next() throws MintleafException;
+    boolean isEmpty();
 
-    Row row() throws MintleafException;
+    void clear();
+
+    int size();
 
     MetaDataCollection getMetaData() throws MintleafException;
+
 }

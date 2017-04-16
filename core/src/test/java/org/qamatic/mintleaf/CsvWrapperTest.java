@@ -53,28 +53,30 @@ public class CsvWrapperTest {
     @Test
     public void testReader() throws MintleafException {
         InputStream csvStream = BaseSqlReader.getInputStreamFromFile("res:/users.csv");
-        CsvRowListWrapper csvRowListWrapper = new CsvRowListWrapper(new InputStreamReader(csvStream));
-        assertTrue(csvRowListWrapper.next());
-        assertEquals("1", csvRowListWrapper.row().asString("USERID"));
-        assertTrue(csvRowListWrapper.next());
-        assertTrue(csvRowListWrapper.next());
-        assertTrue(csvRowListWrapper.next());
-        assertTrue(csvRowListWrapper.next());
-        assertTrue(csvRowListWrapper.next());
-        assertTrue(csvRowListWrapper.next());
-        assertFalse(csvRowListWrapper.next());
-        assertEquals("qamatic", csvRowListWrapper.row().asString("USERNAME"));
+        CsvRowListWrapper<Row> csvRowListWrapper = new CsvRowListWrapper<Row>(new InputStreamReader(csvStream));
+        Row row = csvRowListWrapper.iterator().next();
+        assertNotNull(row);
+        assertEquals("1", row.asString("USERID"));
+        assertNotNull(csvRowListWrapper.iterator().next());
+        assertNotNull(csvRowListWrapper.iterator().next());
+        assertNotNull(csvRowListWrapper.iterator().next());
+        assertNotNull(csvRowListWrapper.iterator().next());
+        assertNotNull(csvRowListWrapper.iterator().next());
+
+        row = csvRowListWrapper.iterator().next();
+        assertEquals("qamatic", row.asString("USERNAME"));
     }
 
     @Test
     public void testCSVMetaData() throws MintleafException, SQLException {
         InputStream csvStream = BaseSqlReader.getInputStreamFromFile("res:/users.csv");
-        CsvRowListWrapper csvRowListWrapper = new CsvRowListWrapper(new InputStreamReader(csvStream));
-        assertTrue(csvRowListWrapper.next());
+        CsvRowListWrapper<Row> csvRowListWrapper = new CsvRowListWrapper<Row>(new InputStreamReader(csvStream));
+        Row row = csvRowListWrapper.iterator().next();
+        assertNotNull(csvRowListWrapper.iterator().next());
 
-        assertEquals(4, csvRowListWrapper.row().getMetaData().getColumnCount());
-        assertEquals("CREATE_TIME", csvRowListWrapper.row().getMetaData().getColumnName(3));
-        ColumnMetaDataCollection metaDataCollection = (ColumnMetaDataCollection) csvRowListWrapper.row().getMetaData();
+        assertEquals(4, row.getMetaData().getColumnCount());
+        assertEquals("CREATE_TIME", row.getMetaData().getColumnName(3));
+        ColumnMetaDataCollection metaDataCollection = (ColumnMetaDataCollection) row.getMetaData();
         assertEquals("USERID", metaDataCollection.findColumn("USERID").getColumnName());
     }
 

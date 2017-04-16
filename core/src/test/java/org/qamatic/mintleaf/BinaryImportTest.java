@@ -44,7 +44,6 @@ public class BinaryImportTest extends H2TestCase {
         };
 
         ObjectRowListWrapper rows = new ObjectRowListWrapper(cities, testMetaData());
-        rows.next();
 
         //assertEquals("", rows.row().toString());
 

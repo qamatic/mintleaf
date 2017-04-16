@@ -44,34 +44,35 @@ import java.util.Iterator;
 /**
  * Created by qamatic on 3/4/16.
  */
-public class ResultSetRowListWrapper implements RowListWrapper {
+public class ResultSetRowListWrapper<T extends Row> implements RowListWrapper<T> {
 
     private ResultSet resultSet;
     private MetaDataCollection resultSetMetaData;
 
-    private int current = -1;
-
-    @Override
-    public void resetAll() throws MintleafException {
-
+    public void setResultSet(ResultSet resultSet) {
+        this.resultSet = resultSet;
     }
 
     @Override
-    public boolean next() throws MintleafException {
-        try {
-            return resultSet.next();
-        } catch (SQLException e) {
-            throw new MintleafException(e);
-        }
+    public T getRow(int index) throws MintleafException {
+        throw new MintleafException("unsupported");
     }
 
     @Override
-    public Row row() throws MintleafException {
-        return new ResultSetRowWrapper(resultSet);
+    public boolean isEmpty() {
+        MintleafException.throwException("unsupported");
+        return false;
     }
 
-    public void setResultSet(ResultSet list) {
-        this.resultSet = list;
+    @Override
+    public void clear() {
+        MintleafException.throwException("unsupported");
+    }
+
+    @Override
+    public int size() {
+        MintleafException.throwException("unsupported");
+        return -1;
     }
 
     @Override
@@ -86,8 +87,45 @@ public class ResultSetRowListWrapper implements RowListWrapper {
         return this.resultSetMetaData;
     }
 
-    public Iterator<Row> iterator() {
-        MintleafException.throwException("un-implemented");
-        return null;
+    public Iterator<T> iterator() {
+        return new Iterator<T>() {
+
+            private ResultSet current;
+
+            private ResultSet getNextRecord() {
+                try {
+                    if (ResultSetRowListWrapper.this.resultSet.next()){
+                        return ResultSetRowListWrapper.this.resultSet;
+                    }
+                } catch (SQLException e) {
+                    MintleafException.throwException(e);
+                }
+
+                return null;
+            }
+
+            @Override
+            public boolean hasNext() {
+                if (this.current == null) {
+                    this.current = this.getNextRecord();
+                }
+
+                return this.current != null;
+            }
+
+            @Override
+            public T next() {
+                ResultSet next = this.current;
+                this.current = null;
+                if(next == null) {
+                    next = this.getNextRecord();
+                    if(next == null) {
+                        MintleafException.throwException("reached end of records, no more elements");
+                    }
+                }
+                T t = (T) new ResultSetRowWrapper<T>(next);
+                return t;
+            }
+        };
     }
 }

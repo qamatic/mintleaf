@@ -43,26 +43,63 @@ import org.qamatic.mintleaf.*;
 import java.io.IOException;
 import java.io.Reader;
 import java.util.Iterator;
+import java.util.NoSuchElementException;
 
 /**
  * Created by QAmatic on 3/10/2017.
  */
-public class CsvRowListWrapper implements RowListWrapper {
+public class CsvRowListWrapper<T extends Row> implements RowListWrapper<T> {
     protected CSVParser parser;
     private Reader afileReader;
     private ColumnMetaDataCollection metaDataCollection = new ColumnMetaDataCollection("CSV");
-    private CsvRowWrapper csvRowWrapper = new CsvRowWrapper();
-    private Iterator<CSVRecord> iterator;
+
 
     public CsvRowListWrapper(Reader afileReader) {
         this.afileReader = afileReader;
     }
 
-    protected CSVParser getCSVParser() throws IOException {
+    protected CSVParser getCSVParser() throws MintleafException {
         if (parser == null) {
-            parser = new CSVParser(afileReader, CSVFormat.EXCEL.withHeader().withIgnoreEmptyLines());
+            try {
+                parser = new CSVParser(afileReader, CSVFormat.EXCEL.withHeader().withIgnoreEmptyLines());
+            } catch (IOException e) {
+                throw new MintleafException(e);
+            }
         }
         return parser;
+    }
+
+    @Override
+    public T getRow(int index) throws MintleafException {
+        try {
+            T t = (T) new CsvRowWrapper<T>(getCSVParser().getRecords().get(index));
+            t.setMetaData(getMetaData());
+            return t;
+        } catch (IOException e) {
+            throw new MintleafException(e);
+        }
+    }
+
+    @Override
+    public boolean isEmpty() {
+        return size() == 0;
+    }
+
+    @Override
+    public void clear() {
+        MintleafException.throwException("unsupported");
+    }
+
+    @Override
+    public int size() {
+        try {
+            return getCSVParser().getRecords().size();
+        } catch (IOException e) {
+            MintleafException.throwException(e);
+        } catch (MintleafException e) {
+            MintleafException.throwException(e);
+        }
+        return 0;
     }
 
     @Override
@@ -70,44 +107,68 @@ public class CsvRowListWrapper implements RowListWrapper {
         return this.metaDataCollection;
     }
 
-    @Override
-    public void resetAll() throws MintleafException {
-        iterator = null;
-    }
-
-    private Iterator<CSVRecord> getIterator() throws IOException, MintleafException {
-        if (iterator == null) {
+    private Iterator<CSVRecord> getIterator() throws MintleafException {
+        if (metaDataCollection.size() == 0) {
             for (String columnName : getCSVParser().getHeaderMap().keySet()) {
                 metaDataCollection.add(new Column(columnName));
             }
-            iterator = getCSVParser().iterator();
         }
-        return iterator;
+        return getCSVParser().iterator();
     }
 
+
     @Override
-    public boolean next() throws MintleafException {
+    public Iterator<T> iterator() {
         try {
-            if (getIterator().hasNext()) {
-                csvRowWrapper.setRecord(getIterator().next());
-                return true;
-            }
-            return false;
-        } catch (IOException e) {
-            throw new MintleafException(e);
+            return new CsvRowIterator<T>(this.getIterator(), getMetaData());
+        } catch (MintleafException e) {
+            MintleafException.throwException(e);
         }
-    }
-
-    @Override
-    public Row row() throws MintleafException {
-        csvRowWrapper.setMetaData(this.metaDataCollection);
-        return csvRowWrapper;
-    }
-
-
-    @Override
-    public Iterator<Row> iterator() {
-        MintleafException.throwException("un-implemented");
         return null;
+    }
+
+    private static final class CsvRowIterator<T extends Row> implements Iterator<T> {
+        private final Iterator<CSVRecord> iterator;
+        private final ColumnMetaDataCollection metaDataCollection;
+        private CSVRecord current;
+
+        public CsvRowIterator(Iterator<CSVRecord> iterator, ColumnMetaDataCollection metaDataCollection) {
+            this.iterator = iterator;
+            this.metaDataCollection = metaDataCollection;
+        }
+
+        private CSVRecord getNextRecord() {
+            CSVRecord record;
+            try {
+                record = this.iterator.next();
+            } catch (NoSuchElementException var2) {
+                record = null;
+            }
+            return record;
+        }
+
+        @Override
+        public boolean hasNext() {
+            if (this.current == null) {
+                this.current = this.getNextRecord();
+            }
+
+            return this.current != null;
+        }
+
+        @Override
+        public T next() {
+            CSVRecord next = this.current;
+            this.current = null;
+            if(next == null) {
+                next = this.getNextRecord();
+                if(next == null) {
+                    throw new NoSuchElementException("No more CSV records available");
+                }
+            }
+            T t = (T) new CsvRowWrapper<T>(next);
+            t.setMetaData(this.metaDataCollection);
+            return t;
+        }
     }
 }
