@@ -34,18 +34,11 @@ public class BinaryImportTest extends H2TestCase {
     @Test
     public void writeBinaryfile() throws MintleafException {
 
-        List<CityRecord> cities = new ArrayList<CityRecord>() {
-            {
-                add(new CityRecord(1, "West Chester", "PA", "USA"));
-                add(new CityRecord(2, "Cherry Hill", "NJ", "USA"));
-                add(new CityRecord(3, "New York", "NY", "USA"));
-
-            }
-        };
-
-        ObjectRowListWrapper rows = new ObjectRowListWrapper(cities, testMetaData());
-
-        //assertEquals("", rows.row().toString());
+        ObjectRowListWrapper rows = new ObjectRowListWrapper(testMetaData());
+        rows.add(new CityRecord(1, "West Chester", "PA", "USA"));
+        rows.add(new CityRecord(2, "Cherry Hill", "NJ", "USA"));
+        rows.add(new CityRecord(3, "New York", "NY", "USA"));
+        assertEquals("1***West*Chester****PAUSA*********", rows.get(0).toString());
 
     }
 

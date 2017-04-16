@@ -68,9 +68,7 @@ public class ObjectRowListWrapper<T extends Row> implements RowListWrapper<T>, L
 
     @Override
     public T getRow(int index) throws MintleafException {
-        Row row = this.list.get(index);
-        row.setMetaData(this.metaDataCollection);
-        return (T) row;
+        return (T) get(index);
     }
 
 
@@ -101,6 +99,7 @@ public class ObjectRowListWrapper<T extends Row> implements RowListWrapper<T>, L
 
     @Override
     public boolean add(T t) {
+        t.setMetaData(this.metaDataCollection);
         return list.add(t);
     }
 
@@ -141,7 +140,9 @@ public class ObjectRowListWrapper<T extends Row> implements RowListWrapper<T>, L
 
     @Override
     public T get(int index) {
-        return this.list.get(index);
+        Row row = this.list.get(index);
+        row.setMetaData(this.metaDataCollection);
+        return (T) row;
     }
 
     @Override
@@ -151,6 +152,7 @@ public class ObjectRowListWrapper<T extends Row> implements RowListWrapper<T>, L
 
     @Override
     public void add(int index, T element) {
+        element.setMetaData(this.metaDataCollection);
         this.list.add(index, element);
     }
 
