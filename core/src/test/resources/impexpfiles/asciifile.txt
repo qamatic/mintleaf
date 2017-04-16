@@ -1,0 +1,12 @@
+IT         Italy                                             1
+JP         Japan                                             3
+US         United States of America                          2
+CA         Canada                                            2
+CN         China                                             3
+IN         India                                             3
+AU         Australia                                         3
+ZW         Zimbabwe                                          4
+SG         Singapore                                         3
+UK         United Kingdom                                    1
+FR         France                                            1
+DE         Germany                                           1

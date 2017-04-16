@@ -56,6 +56,7 @@ public interface MetaDataCollection extends ResultSetMetaData {
 
     Column findColumn(String columnName);
 
+    Column getColumn(int index);
 
     default String getColumnNameByIndex(int column) throws MintleafException {
         try {

@@ -57,6 +57,13 @@ public class Column {
         this.dataType = Types.VARCHAR;
     }
 
+    public Column(String columnName, int columnSize, int dataType) {
+        this.columnName = columnName;
+        this.columnSize = columnSize;
+        this.dataType = dataType;
+    }
+
+
     public Column(String columnName, int dataType) {
         this.columnName = columnName;
         this.dataType = dataType;

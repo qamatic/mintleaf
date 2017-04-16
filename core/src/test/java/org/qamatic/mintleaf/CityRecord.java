@@ -35,18 +35,56 @@
 
 package org.qamatic.mintleaf;
 
-import java.util.Iterator;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
- * Created by qamatic on 3/4/16.
+ * Created by QAmatic Team on 3/11/17.
  */
-public interface RowListWrapper extends Iterable<Row> {
+public class CityRecord implements Row {
 
-    void resetAll() throws MintleafException;
+    private MetaDataCollection metaDataCollection;
+    private List<Object> rowData = new ArrayList<>();
 
-    boolean next() throws MintleafException;
+    public CityRecord(int id, String city, String state, String country) {
+        rowData.add(id);
+        rowData.add(city);
+        rowData.add(state);
+        rowData.add(country);
+    }
 
-    Row row() throws MintleafException;
+    @Override
+    public Object getValue(int columnIndex) throws MintleafException {
+        return rowData.get(columnIndex);
+    }
 
-    MetaDataCollection getMetaData() throws MintleafException;
+    @Override
+    public MetaDataCollection getMetaData() throws MintleafException {
+        return this.metaDataCollection;
+    }
+
+    @Override
+    public void setMetaData(MetaDataCollection metaDataCollection) {
+        this.metaDataCollection = metaDataCollection;
+    }
+
+    @Override
+    public String toString() {
+        StringBuffer sb = new StringBuffer();
+
+        try {
+            sb.append(formattedStr(0));
+            sb.append(formattedStr(1));
+            sb.append(formattedStr(2));
+            sb.append(formattedStr(3));
+
+        } catch (MintleafException e) {
+            MintleafException.throwException(e);
+        }
+        return sb.toString();
+    }
+
+    private String formattedStr(int idx) throws MintleafException {
+        return String.format("%-" + getMetaData().getColumn(idx).getColumnSize() + "s", getValue(idx).toString()).replace(' ', '*');
+    }
 }

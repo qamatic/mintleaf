@@ -95,6 +95,11 @@ public class ColumnMetaDataCollection extends ArrayList<Column> implements MetaD
         return null;
     }
 
+    @Override
+    public Column getColumn(int index) {
+        return get(index);
+    }
+
 
     public String getObjectName() {
         return objectName;

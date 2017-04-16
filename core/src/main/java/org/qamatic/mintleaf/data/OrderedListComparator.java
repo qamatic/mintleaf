@@ -75,9 +75,9 @@ public class OrderedListComparator implements DataComparer {
 
         this.sourceTable.resetAll();
         this.targetTable.resetAll();
-        while (this.sourceTable.moveNext()) {
+        while (this.sourceTable.next()) {
             sourceRowState.RowNumber++;
-            if (this.targetTable.moveNext()) {
+            if (this.targetTable.next()) {
                 beforeRowCompare(sourceRowState, targetRowState);
 
                 sourceRowState.Row = this.sourceTable.row();
@@ -102,7 +102,7 @@ public class OrderedListComparator implements DataComparer {
                 afterRowCompare(sourceRowState, targetRowState);
             }
         }
-        while (this.targetTable.moveNext()) {
+        while (this.targetTable.next()) {
 
             beforeRowCompare(sourceRowState, targetRowState);
             sourceRowState.Row = null;

@@ -54,15 +54,15 @@ public class CsvWrapperTest {
     public void testReader() throws MintleafException {
         InputStream csvStream = BaseSqlReader.getInputStreamFromFile("res:/users.csv");
         CsvRowListWrapper csvRowListWrapper = new CsvRowListWrapper(new InputStreamReader(csvStream));
-        assertTrue(csvRowListWrapper.moveNext());
+        assertTrue(csvRowListWrapper.next());
         assertEquals("1", csvRowListWrapper.row().asString("USERID"));
-        assertTrue(csvRowListWrapper.moveNext());
-        assertTrue(csvRowListWrapper.moveNext());
-        assertTrue(csvRowListWrapper.moveNext());
-        assertTrue(csvRowListWrapper.moveNext());
-        assertTrue(csvRowListWrapper.moveNext());
-        assertTrue(csvRowListWrapper.moveNext());
-        assertFalse(csvRowListWrapper.moveNext());
+        assertTrue(csvRowListWrapper.next());
+        assertTrue(csvRowListWrapper.next());
+        assertTrue(csvRowListWrapper.next());
+        assertTrue(csvRowListWrapper.next());
+        assertTrue(csvRowListWrapper.next());
+        assertTrue(csvRowListWrapper.next());
+        assertFalse(csvRowListWrapper.next());
         assertEquals("qamatic", csvRowListWrapper.row().asString("USERNAME"));
     }
 
@@ -70,7 +70,7 @@ public class CsvWrapperTest {
     public void testCSVMetaData() throws MintleafException, SQLException {
         InputStream csvStream = BaseSqlReader.getInputStreamFromFile("res:/users.csv");
         CsvRowListWrapper csvRowListWrapper = new CsvRowListWrapper(new InputStreamReader(csvStream));
-        assertTrue(csvRowListWrapper.moveNext());
+        assertTrue(csvRowListWrapper.next());
 
         assertEquals(4, csvRowListWrapper.row().getMetaData().getColumnCount());
         assertEquals("CREATE_TIME", csvRowListWrapper.row().getMetaData().getColumnName(3));

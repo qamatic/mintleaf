@@ -42,7 +42,7 @@ import org.qamatic.mintleaf.MintleafException;
 /**
  * Created by qamatic on 2/18/6/16.
  */
-public interface ImportFlavour {
+public interface ImportFlavour extends AutoCloseable {
 
 
     void doImport(DataRowListener listener) throws MintleafException;

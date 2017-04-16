@@ -96,6 +96,11 @@ public class ResultSetMetaDataCollection extends ArrayList<Column> implements Me
         return null;
     }
 
+    @Override
+    public Column getColumn(int index) {
+        return get(index);
+    }
+
 
     public String getObjectName() {
         return objectName;

@@ -39,6 +39,7 @@ import org.qamatic.mintleaf.*;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Iterator;
 
 /**
  * Created by qamatic on 3/4/16.
@@ -56,7 +57,7 @@ public class ResultSetRowListWrapper implements RowListWrapper {
     }
 
     @Override
-    public boolean moveNext() throws MintleafException {
+    public boolean next() throws MintleafException {
         try {
             return resultSet.next();
         } catch (SQLException e) {
@@ -83,5 +84,10 @@ public class ResultSetRowListWrapper implements RowListWrapper {
             }
         }
         return this.resultSetMetaData;
+    }
+
+    public Iterator<Row> iterator() {
+        MintleafException.throwException("un-implemented");
+        return null;
     }
 }

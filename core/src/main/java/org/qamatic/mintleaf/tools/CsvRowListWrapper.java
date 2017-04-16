@@ -86,7 +86,7 @@ public class CsvRowListWrapper implements RowListWrapper {
     }
 
     @Override
-    public boolean moveNext() throws MintleafException {
+    public boolean next() throws MintleafException {
         try {
             if (getIterator().hasNext()) {
                 csvRowWrapper.setRecord(getIterator().next());
@@ -105,4 +105,9 @@ public class CsvRowListWrapper implements RowListWrapper {
     }
 
 
+    @Override
+    public Iterator<Row> iterator() {
+        MintleafException.throwException("un-implemented");
+        return null;
+    }
 }

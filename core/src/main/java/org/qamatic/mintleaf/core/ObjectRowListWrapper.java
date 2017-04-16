@@ -40,6 +40,7 @@ import org.qamatic.mintleaf.MintleafException;
 import org.qamatic.mintleaf.Row;
 import org.qamatic.mintleaf.RowListWrapper;
 
+import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -63,7 +64,7 @@ public class ObjectRowListWrapper implements RowListWrapper {
     }
 
     @Override
-    public boolean moveNext() throws MintleafException {
+    public boolean next() throws MintleafException {
         current++;
         if (this.current >= this.list.size()) {
             return false;
@@ -87,4 +88,40 @@ public class ObjectRowListWrapper implements RowListWrapper {
         return this.metaDataCollection;
     }
 
+
+    @Override
+    public Iterator<Row> iterator() {
+        return new ObjectRowListWrapperIterator(list, this.metaDataCollection);
+    }
+
+    private static final class ObjectRowListWrapperIterator implements Iterator<Row>{
+
+        private List<? extends Row> list;
+        private int current = -1;
+        private MetaDataCollection metaDataCollection;
+
+        public ObjectRowListWrapperIterator(List<? extends Row> list, MetaDataCollection metaDataCollection) {
+
+            this.metaDataCollection = metaDataCollection;
+            this.list = list;
+        }
+
+        @Override
+        public boolean hasNext() {
+            if (this.current+1 < this.list.size()) {
+                return true;
+            }
+
+            return false;
+        }
+
+        @Override
+        public Row next() {
+            if (hasNext())
+            {
+                current++;
+            }
+            return list.get(current);
+        }
+    }
 }
