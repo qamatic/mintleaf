@@ -18,6 +18,15 @@ public class InMemoryRow implements Row {
     private MetaDataCollection metaDataCollection;
     private List<Object> rowValues = new ArrayList<>();
 
+    public InMemoryRow(){
+
+    }
+
+    public InMemoryRow(MetaDataCollection metaDataCollection){
+        this.metaDataCollection = metaDataCollection;
+    }
+
+
     @Override
     public Object getValue(int columnIndex) throws MintleafException {
         return rowValues.get(columnIndex);
@@ -34,20 +43,23 @@ public class InMemoryRow implements Row {
     }
 
 
+    @Override
     public void setValue(int columnIndex, Object value){
         getValues().add(value);//override if you need differently
     }
 
-    protected void setValue(int columnIndex, byte[] value, Charset charset){
+    @Override
+    public void setValue(int columnIndex, byte[] value, Charset charset){
         setValue(columnIndex, new String(value, charset).trim());
     }
 
-    public void setValues(byte[] cityRecordBytes, Charset charset) {
+    @Override
+    public void setValues(byte[] byteRecord, Charset charset) {
         int bstart = 0;
         try {
             for (int i = 0; i < getMetaData().getColumnCount(); i++) {
                 Column c = getMetaData().getColumn(i);
-                byte[] bytes = Arrays.copyOfRange(cityRecordBytes, bstart, bstart+c.getColumnSize());
+                byte[] bytes = Arrays.copyOfRange(byteRecord, bstart, bstart+c.getColumnSize());
                 bstart += bytes.length;
                 setValue(i, bytes, charset);
             }

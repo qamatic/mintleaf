@@ -150,7 +150,7 @@ public class BinaryImportTest extends H2TestCase {
 
 
     @Test
-    public void importCSVTest() throws SQLException, IOException, MintleafException, URISyntaxException {
+    public void importBinaryFileTest() throws SQLException, IOException, MintleafException, URISyntaxException {
 
         BinaryReader reader = new RecordFileReader(getTestFile(), 34);
 
@@ -158,8 +158,7 @@ public class BinaryImportTest extends H2TestCase {
                 withImportFlavour(new BinaryFileImportFlavour(reader){
                     @Override
                     protected Row createRowInstance(byte[] bytes) {
-                        CityRecord c = new CityRecord();
-                        c.setMetaData(cityRecordMetaData);
+                        CityRecord c = new CityRecord(cityRecordMetaData);
                         c.setValues(bytes, Charset.forName("Cp1047"));
                         return c;
                     }

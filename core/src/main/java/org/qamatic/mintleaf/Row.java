@@ -35,6 +35,7 @@
 
 package org.qamatic.mintleaf;
 
+import java.nio.charset.Charset;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 
@@ -76,4 +77,16 @@ public interface Row {
     ResultSetMetaData getMetaData() throws MintleafException;
 
     void setMetaData(MetaDataCollection metaDataCollection);
+
+    default void setValue(int columnIndex, Object value){
+
+    }
+
+    default void setValue(int columnIndex, byte[] value, Charset charset){
+
+    }
+
+    default void setValues(byte[] byteRecord, Charset charset){
+
+    }
 }

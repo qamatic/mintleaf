@@ -38,17 +38,17 @@ package org.qamatic.mintleaf;
 import org.qamatic.mintleaf.core.InMemoryRow;
 
 import java.nio.charset.Charset;
-import java.sql.SQLException;
-import java.util.Arrays;
 
 /**
  * Created by QAmatic Team on 3/11/17.
  */
 public class CityRecord extends InMemoryRow {
 
-    public CityRecord() {
 
+    public CityRecord(MetaDataCollection metaDataCollection){
+        super(metaDataCollection);
     }
+
 
     public CityRecord(int id, String city, String state, String country) {
         getValues().add(id);
@@ -82,4 +82,6 @@ public class CityRecord extends InMemoryRow {
     private String formattedStr(int idx) throws MintleafException {
         return String.format("%-" + getMetaData().getColumn(idx).getColumnSize() + "s", getValue(idx).toString()).replace(' ', '*');
     }
+
+
 }
