@@ -41,6 +41,9 @@ public class BinaryFileImportFlavour implements ImportFlavour, Iterable<byte[]> 
         Iterator<byte[]> iterator = iterator();
         while (iterator.hasNext()) {
             System.out.println(new String(iterator.next(), Charset.forName("Cp1047")));
+            if (!listener.canContinue()){
+                break;
+            }
         }
     }
 

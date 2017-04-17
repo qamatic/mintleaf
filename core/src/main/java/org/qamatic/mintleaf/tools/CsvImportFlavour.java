@@ -71,6 +71,10 @@ public class CsvImportFlavour implements ImportFlavour {
             for (CSVRecord record : parser) {
                 csvRowWrapper.setRecord(record);
                 listener.eachRow(i++, csvRowWrapper);
+                if (!listener.canContinue()){
+                    break;
+                }
+
             }
 
         } catch (IOException e) {

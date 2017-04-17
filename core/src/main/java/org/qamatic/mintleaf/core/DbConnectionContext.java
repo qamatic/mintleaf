@@ -200,6 +200,9 @@ public class DbConnectionContext<T extends DbQueryExtension> implements Connecti
             sqlResultSet.iterate((row, dr) -> {
                 try {
                     rows.add(listener.eachRow(row, dr));
+                    if (!listener.canContinue()){
+                        return rows;
+                    }
                 } catch (MintleafException e) {
                     logger.error("error iterating resultset", e);
                 }

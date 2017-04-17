@@ -64,6 +64,9 @@ public class DbImportFlavour implements ImportFlavour {
             while (this.resultSet.getResultSet().next()) {
                 dbRowWrapper.setResultSet(this.resultSet.getResultSet());
                 listener.eachRow(i++, dbRowWrapper);
+                if (!listener.canContinue()){
+                    break;
+                }
             }
         } catch (SQLException e) {
             throw new MintleafException(e);

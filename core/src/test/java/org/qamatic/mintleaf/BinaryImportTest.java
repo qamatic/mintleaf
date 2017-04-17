@@ -24,10 +24,13 @@ public class BinaryImportTest extends H2TestCase {
         File file = new File(url.toURI());
         BinaryFileImportFlavour reader = new BinaryFileImportFlavour(file, 10);
        reader.doImport(new DataRowListener() {
+
            @Override
            public Object eachRow(int rowNum, Row row) throws MintleafException {
                return null;
            }
+
+
        });
     }
 
