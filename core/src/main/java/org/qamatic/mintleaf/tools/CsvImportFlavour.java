@@ -64,13 +64,10 @@ public class CsvImportFlavour implements ImportFlavour {
         final CSVParser parser;
         try {
             parser = getCSVParser();
-
-
-            final CsvRowWrapper csvRowWrapper = new CsvRowWrapper();
             int i = 0;
             for (CSVRecord record : parser) {
-                csvRowWrapper.setRecord(record);
-                listener.eachRow(i++, csvRowWrapper);
+
+                listener.eachRow(i++, new CsvRowWrapper(record));
                 if (!listener.canContinue()){
                     break;
                 }

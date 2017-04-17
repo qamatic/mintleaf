@@ -50,7 +50,8 @@ public interface ConnectionContext<T extends DbQueryExtension> extends AutoClose
 
     boolean isCloseable();
 
-    void close() throws MintleafException;
+    @Override
+    void close();
 
     ConnectionContext beginTransaction() throws MintleafException;
 

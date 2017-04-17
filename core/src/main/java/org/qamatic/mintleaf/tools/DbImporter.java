@@ -66,7 +66,7 @@ public class DbImporter extends ImpExpBase implements Executable<Boolean> {
         }
     }
 
-    protected DbImportFlavour createFlavour(SqlResultSet sourceSqlResultSet) {
+    protected ImportFlavour createFlavour(SqlResultSet sourceSqlResultSet) {
         return new DbImportFlavour(sourceSqlResultSet);
     }
 

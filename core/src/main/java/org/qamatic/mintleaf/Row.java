@@ -43,6 +43,7 @@ import java.sql.SQLException;
  */
 public interface Row {
 
+    public static int INTERNAL_OBJECT_VALUE = -99999;
     Object getValue(int columnIndex) throws MintleafException;
 
     default Object getValue(String columnName) throws MintleafException {

@@ -35,37 +35,32 @@
 
 package org.qamatic.mintleaf;
 
-import java.util.ArrayList;
-import java.util.List;
+import org.qamatic.mintleaf.core.InMemoryRow;
+
+import java.nio.charset.Charset;
+import java.sql.SQLException;
+import java.util.Arrays;
 
 /**
  * Created by QAmatic Team on 3/11/17.
  */
-public class CityRecord implements Row {
+public class CityRecord extends InMemoryRow {
 
-    private MetaDataCollection metaDataCollection;
-    private List<Object> rowData = new ArrayList<>();
+    public CityRecord() {
+
+    }
 
     public CityRecord(int id, String city, String state, String country) {
-        rowData.add(id);
-        rowData.add(city);
-        rowData.add(state);
-        rowData.add(country);
+        getValues().add(id);
+        getValues().add(city);
+        getValues().add(state);
+        getValues().add(country);
     }
 
-    @Override
-    public Object getValue(int columnIndex) throws MintleafException {
-        return rowData.get(columnIndex);
-    }
 
     @Override
-    public MetaDataCollection getMetaData() throws MintleafException {
-        return this.metaDataCollection;
-    }
-
-    @Override
-    public void setMetaData(MetaDataCollection metaDataCollection) {
-        this.metaDataCollection = metaDataCollection;
+    public void setValue(int columnIndex, Object value) {
+        super.setValue(columnIndex, value.toString().replaceAll("\\*", ""));
     }
 
     @Override

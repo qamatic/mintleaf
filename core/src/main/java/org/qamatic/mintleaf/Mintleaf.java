@@ -37,9 +37,7 @@ package org.qamatic.mintleaf;
 
 import org.qamatic.mintleaf.core.*;
 import org.qamatic.mintleaf.data.*;
-import org.qamatic.mintleaf.tools.CsvExporter;
-import org.qamatic.mintleaf.tools.CsvImporter;
-import org.qamatic.mintleaf.tools.DbImporter;
+import org.qamatic.mintleaf.tools.*;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
@@ -174,6 +172,37 @@ public final class Mintleaf {
 
 
             return csvImporter;
+        }
+    }
+
+    public static final class AnyDataToDbDataTransferBuilder {
+
+        private Database targetDb;
+        private String targetSqlTemplate;
+        private ImportFlavour importFlavour;
+
+        public AnyDataToDbDataTransferBuilder withTargetDb(Database targetDb) {
+            this.targetDb = targetDb;
+            return this;
+        }
+
+        public AnyDataToDbDataTransferBuilder withTargetSqlTemplate(String targetSqlTemplate) {
+            this.targetSqlTemplate = targetSqlTemplate;
+            return this;
+        }
+
+        public AnyDataToDbDataTransferBuilder withImportFlavour(ImportFlavour importFlavour) {
+            this.importFlavour = importFlavour;
+            return this;
+        }
+
+        public Executable<Boolean> build() {
+            BinaryFileImporter binaryFileImporter = new BinaryFileImporter(
+                    this.importFlavour,
+                    targetDb.getNewConnection(),
+                    targetSqlTemplate);
+
+            return binaryFileImporter;
         }
     }
 

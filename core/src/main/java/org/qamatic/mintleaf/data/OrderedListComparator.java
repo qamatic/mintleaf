@@ -49,7 +49,7 @@ public class OrderedListComparator implements DataComparer {
     private ColumnMatcher columnMatcher;
 
 
-    public OrderedListComparator(RowListWrapper sourceTable, RowListWrapper targetTable) {
+    public OrderedListComparator(RowListWrapper<? extends Row> sourceTable, RowListWrapper<? extends Row> targetTable) {
         setSourceTable(sourceTable);
         setTargetTable(targetTable);
         setColumnMatcher(new OrderedColumnMatcher());
@@ -170,7 +170,7 @@ public class OrderedListComparator implements DataComparer {
     }
 
     @Override
-    public void setSourceTable(RowListWrapper sourceTable) {
+    public void setSourceTable(RowListWrapper<? extends Row> sourceTable) {
         this.sourceTable = sourceTable;
     }
 
@@ -180,7 +180,7 @@ public class OrderedListComparator implements DataComparer {
     }
 
     @Override
-    public void setTargetTable(RowListWrapper targetTable) {
+    public void setTargetTable(RowListWrapper<? extends Row> targetTable) {
         this.targetTable = targetTable;
     }
 

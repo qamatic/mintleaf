@@ -74,8 +74,12 @@ public class DbImportFlavour implements ImportFlavour {
     }
 
     @Override
-    public void close() throws MintleafException {
-        resultSet.close();
+    public void close()  {
+        try {
+            resultSet.close();
+        } catch (MintleafException e) {
+            MintleafException.throwException(e);
+        }
     }
 
 }

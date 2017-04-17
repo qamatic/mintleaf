@@ -47,7 +47,8 @@ public interface ImportFlavour extends AutoCloseable {
 
     void doImport(DataRowListener listener) throws MintleafException;
 
-    default void close() throws MintleafException {
+    @Override
+    default void close()  {
 
     }
 

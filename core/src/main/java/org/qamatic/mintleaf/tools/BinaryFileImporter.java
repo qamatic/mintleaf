@@ -33,24 +33,39 @@
  * /
  */
 
-package org.qamatic.mintleaf;
+package org.qamatic.mintleaf.tools;
 
-import org.qamatic.mintleaf.data.ComparerListener;
+import org.qamatic.mintleaf.ConnectionContext;
+import org.qamatic.mintleaf.Executable;
+import org.qamatic.mintleaf.MintleafException;
+import org.qamatic.mintleaf.MintleafLogger;
 
 /**
- * Created by qamatic on 3/5/16.
+ * Created by qamatic on 3/6/16.
  */
-public interface DataComparer extends Executable<Boolean> {
+public class BinaryFileImporter extends ImpExpBase implements Executable<Boolean> {
 
-    void setComparerListener(ComparerListener comparerListener);
+    private static final MintleafLogger logger = MintleafLogger.getLogger(BinaryFileImporter.class);
+    private ImportFlavour sourceFlavour;
+    private ConnectionContext targetDb;
+    private String targetSqlTemplate;
 
-    void setColumnMatcher(ColumnMatcher columnMatcher);
+    public BinaryFileImporter(ImportFlavour sourceFlavour, ConnectionContext targetDb,
+                              String targetSqlTemplate) {
+        this.sourceFlavour = sourceFlavour;
+        this.targetDb = targetDb;
+        this.targetSqlTemplate = targetSqlTemplate;
+    }
 
-    RowListWrapper getSourceTable();
+    @Override
+    public Boolean execute() throws MintleafException {
+        importDataFrom(this.sourceFlavour, this.targetSqlTemplate);
+        return true;
+    }
 
-    void setSourceTable(RowListWrapper<? extends Row> sourceTable);
 
-    RowListWrapper getTargetTable();
-
-    void setTargetTable(RowListWrapper<? extends Row> targetTable);
+    @Override
+    protected ConnectionContext getConnectionContext() {
+        return targetDb;
+    }
 }

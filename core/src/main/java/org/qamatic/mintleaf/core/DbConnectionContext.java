@@ -103,14 +103,15 @@ public class DbConnectionContext<T extends DbQueryExtension> implements Connecti
         return this.autoCloseable;
     }
 
-    public void close() throws MintleafException {
+    @Override
+    public void close() {
         if (isCloseable() && (this.connection != null)) {
             try {
                 commitTransaction();
                 this.connection.close();
                 this.connection = null;
-            } catch (SQLException e) {
-                throw new MintleafException(e);
+            } catch (Exception e) {
+                MintleafException.throwException(e);
             }
         }
     }
@@ -200,7 +201,7 @@ public class DbConnectionContext<T extends DbQueryExtension> implements Connecti
             sqlResultSet.iterate((row, dr) -> {
                 try {
                     rows.add(listener.eachRow(row, dr));
-                    if (!listener.canContinue()){
+                    if (!listener.canContinue()) {
                         return rows;
                     }
                 } catch (MintleafException e) {
@@ -213,12 +214,12 @@ public class DbConnectionContext<T extends DbQueryExtension> implements Connecti
     }
 
     @Override
-    public Executable<int[]> executeStoredProc(String procedureCall, StoredProcedure.CallType callType, ParameterBinding.Callable parameterBinding){
+    public Executable<int[]> executeStoredProc(String procedureCall, StoredProcedure.CallType callType, ParameterBinding.Callable parameterBinding) {
         return executeStoredProc(procedureCall, callType, parameterBinding, null);
     }
 
     @Override
-    public Executable<int[]> executeStoredProc(String procedureCall, StoredProcedure.CallType callType, ParameterBinding.Callable parameterBinding, ExecutionResultListener.Callable executionResultListener){
+    public Executable<int[]> executeStoredProc(String procedureCall, StoredProcedure.CallType callType, ParameterBinding.Callable parameterBinding, ExecutionResultListener.Callable executionResultListener) {
         StoredProcedure proc = new StoredProcedure(this, procedureCall, callType, parameterBinding);
         proc.setExecutionResultListener(executionResultListener);
         return proc;

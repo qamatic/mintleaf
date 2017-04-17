@@ -82,8 +82,12 @@ public class SqlChangeSets extends BaseSqlScript {
     }
 
     @Override
-    public void close() throws MintleafException {
-        connectionContext.close();
+    public void close() {
+        try {
+            connectionContext.close();
+        } catch (Exception e) {
+            MintleafException.throwException(e);
+        }
     }
 
     @Override
