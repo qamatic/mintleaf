@@ -470,7 +470,8 @@ It&rsquo;s very easy to add changeset definition on your exising sql files if yo
 </tbody></table>
 
 <h3 id="executestoredproc">executeStoredProc()</h3>
-<pre class="highlight plaintext"><code>Executable&lt;int[]&gt;   executeStoredProc(String procedureCall, StoredProcedure.CallType callType, ParameterBinding.Callable parameterBinding, ExecutionResultListener.Callable executionResultListener)
+<pre class="highlight plaintext"><code>Executable&lt;int[]&gt;   executeStoredProc(String procedureCall, StoredProcedure.CallType callType,
+  ParameterBinding.Callable parameterBinding, ExecutionResultListener.Callable executionResultListener)
 </code></pre>
 <table><thead>
 <tr>
@@ -1186,6 +1187,52 @@ Suitable for scalar queries like MAX(), MIN(), AVG(), COUNT() and so on  </p>
                 <span class="o">.</span><span class="na">build</span><span class="o">()</span>
 
 </code></pre>
+<h2 id="compare-with-binary-files">Compare with binary files</h2>
+
+<p>Binary files are basically accessed in bytes that are encoded in different charset. Mintleaf supports reading these binary files in terms of records.  Records basically a set of data which constitues several columns.   Mintleaf allows you to define your record structure for your binary files and read them.  These records can vary in size and it can be changed at different locations while reading the binary files!   So the record size anywhere from 1byte to &lsquo;n&rsquo; of bytes which spans across multiple columns.</p>
+
+<p>In order to define a record, you should define its metadata information as follows:</p>
+
+<p>&ldquo;java</p>
+
+<p>//example record structure,</p>
+
+<p>ColumnMetaDataCollection cityRecordMetaData = new ColumnMetaDataCollection(&quot;CITIES&rdquo;) {
+     {
+         add(new Column(&ldquo;Id&rdquo;, 4, Types.INTEGER));
+         add(new Column(&ldquo;City&rdquo;, 16, Types.CHAR));
+         add(new Column(&ldquo;State&rdquo;, 2, Types.CHAR));
+         add(new Column(&ldquo;Country&rdquo;, 12, Types.CHAR));
+     }
+   };</p>
+
+<p>&ldquo;</p>
+
+<p>below code snippets demostrates as how to read a binary file using the above record structure</p>
+
+<p>``java</p>
+
+<p>RowListWrapper<InMemoryRow> list = new ObjectRowListWrapper&lt;&gt;(cityRecordMetaData);
+URL url = Thread.currentThread().getContextClassLoader().getClass().getResource(&rdquo;/impexpfiles/cp1047-1.txt&quot;);
+File file = new File(url.toURI());
+try (BinaryReader reader = new RecordFileReader(file, 34)) {</p>
+
+<p>reader.iterate(Charset.forName(&ldquo;Cp1047&rdquo;), new DataRowListener() {
+        @Override
+        public Object eachRow(int rowNum, Row row) throws MintleafException {
+            list.add((InMemoryRow) row);
+            return row;
+        }</p>
+
+<p>@Override
+        public Row createRowInstance(Object&hellip; params) {
+            return new InMemoryRow(cityRecordMetaData);
+        }
+    });
+}</p>
+
+<p>&ldquo;</p>
+
       </div>
       <div class="dark-box">
       </div>
