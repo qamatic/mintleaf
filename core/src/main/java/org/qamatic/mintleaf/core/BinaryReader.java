@@ -1,6 +1,9 @@
 package org.qamatic.mintleaf.core;
 
+import org.qamatic.mintleaf.DataRowListener;
 import org.qamatic.mintleaf.MintleafException;
+
+import java.nio.charset.Charset;
 
 /**
  * Created by senips on 4/17/17.
@@ -18,4 +21,6 @@ public interface BinaryReader extends Iterable<byte[]>, AutoCloseable {
 
     @Override
     void close();
+
+    void iterate(Charset charset, DataRowListener listener) throws MintleafException;
 }

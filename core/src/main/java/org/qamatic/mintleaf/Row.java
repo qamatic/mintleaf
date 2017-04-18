@@ -45,17 +45,35 @@ import java.sql.SQLException;
 public interface Row {
 
     public static int INTERNAL_OBJECT_VALUE = -99999;
+
     Object getValue(int columnIndex) throws MintleafException;
 
     default Object getValue(String columnName) throws MintleafException {
         return getValue(getIndex(columnName));
     }
 
-    default String asString(String columnName) throws MintleafException {
-        return getValue(columnName).toString();
+    default String asString(String columnName) {
+        try {
+            return getValue(columnName).toString();
+        } catch (MintleafException e) {
+            MintleafException.throwException(e);
+        }
+        return null;
     }
 
-    default int asInt(String columnName) throws MintleafException {
+    default int asInt(String columnName) {
+        try {
+            Object o =getValue(columnName);
+            if (o instanceof String){
+                return new Integer(o.toString());
+            } else
+            if (o instanceof Integer){
+                return (int) o;
+            }
+        } catch (MintleafException e) {
+            MintleafException.throwException(e);
+        }
+        MintleafException.throwException(columnName+" is not of integer type");
         return -1;
     }
 
@@ -78,15 +96,15 @@ public interface Row {
 
     void setMetaData(MetaDataCollection metaDataCollection);
 
-    default void setValue(int columnIndex, Object value){
+    default void setValue(int columnIndex, Object value) {
 
     }
 
-    default void setValue(int columnIndex, byte[] value, Charset charset){
+    default void setValue(int columnIndex, byte[] value, Charset charset) {
 
     }
 
-    default void setValues(byte[] byteRecord, Charset charset){
+    default void setValues(byte[] byteRecord, Charset charset) {
 
     }
 }

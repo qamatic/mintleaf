@@ -1,6 +1,5 @@
 package org.qamatic.mintleaf;
 
-import org.junit.BeforeClass;
 import org.junit.Test;
 import org.qamatic.mintleaf.core.BinaryReader;
 import org.qamatic.mintleaf.core.ChangeSets;
@@ -17,6 +16,7 @@ import java.sql.Types;
 import java.util.Iterator;
 
 import static junit.framework.TestCase.assertEquals;
+import static junit.framework.TestCase.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 /**
@@ -24,10 +24,6 @@ import static org.junit.Assert.assertTrue;
  */
 public class BinaryImportTest extends H2TestCase {
 
-    @BeforeClass
-    public static void setup() throws MintleafException {
-        ChangeSets.migrate(testDb.getNewConnection(), "res:/binary-import-changesets.sql", "create schema");
-    }
 
     private final ColumnMetaDataCollection cityRecordMetaData = new ColumnMetaDataCollection("CITIES") {
         {
@@ -151,7 +147,7 @@ public class BinaryImportTest extends H2TestCase {
 
     @Test
     public void importBinaryFileTest() throws SQLException, IOException, MintleafException, URISyntaxException {
-
+        ChangeSets.migrate(testDb.getNewConnection(), "res:/binary-import-changesets.sql", "create schema");
         BinaryReader reader = new RecordFileReader(getTestFile(), 34);
 
         Executable action = new Mintleaf.AnyDataToDbDataTransferBuilder().
@@ -168,13 +164,58 @@ public class BinaryImportTest extends H2TestCase {
                 build();
 
         action.execute();
-        testDbQueries.query("SELECT * FROM BINARY_IMPDB.CITIES", (row, resultSet) -> {
 
+        testDbQueries.query("SELECT * FROM BINARY_IMPDB.CITIES", (row, resultSet) -> {
+            String columnName = cityRecordMetaData.getColumnName(2);
+            assertEquals(cityRecords.get(row).asString(columnName), resultSet.asString(columnName));
             return null;
         });
 
     }
 
+    @Test
+    public void binaryFileToListTest() throws SQLException, IOException, MintleafException, URISyntaxException {
+
+        RowListWrapper<CityRecord> list = new ObjectRowListWrapper<>(cityRecordMetaData);
+        try(BinaryReader reader = new RecordFileReader(getTestFile(), 34).recordAt(2)){
+
+           reader.iterate(Charset.forName("Cp1047"), new DataRowListener() {
+               @Override
+               public Object eachRow(int rowNum, Row row) throws MintleafException {
+                   list.add((CityRecord) row);
+                   return row;
+               }
+
+               @Override
+               public Row createRowInstance(Object... params) {
+                   return new CityRecord(cityRecordMetaData);
+               }
+           });
+        }
+
+        assertEquals(2, list.size());
+        assertEquals(3, list.getRow(1).getId());
+        assertEquals("NJ", list.getRow(0).asString("STATE"));
+
+    }
+
+
+    private RowListWrapper<CityRecord> getRecords() throws SQLException, IOException, MintleafException, URISyntaxException{
+        RowListWrapper<CityRecord> list = new ObjectRowListWrapper<CityRecord>(cityRecordMetaData);
+        try(BinaryReader reader = new RecordFileReader(getTestFile(), 34)){
+            for(byte[] record : reader.recordAt(2)){
+
+                list.add(new CityRecord(cityRecordMetaData){
+                    {
+                        setValues(record,  Charset.forName("Cp1047"));
+                    }
+                });
+
+            }
+
+        }
+        return list;
+    }
 
     private File getTestFile() throws URISyntaxException {
         URL url = Thread.currentThread().getContextClassLoader().getClass().getResource("/impexpfiles/cp1047-1.txt");

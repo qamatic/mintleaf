@@ -45,5 +45,8 @@ public interface DataRowListener<T> {
         return true;
     }
 
+    default Row createRowInstance(Object... params){
+        return null;
+    }
 
 }

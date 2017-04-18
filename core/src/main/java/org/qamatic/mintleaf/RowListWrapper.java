@@ -52,4 +52,9 @@ public interface RowListWrapper<T extends Row> extends Iterable<T> {
 
     MetaDataCollection getMetaData() throws MintleafException;
 
+    default boolean add(T t){
+        MintleafException.throwException("unimplemented");
+        return false;
+    }
+
 }

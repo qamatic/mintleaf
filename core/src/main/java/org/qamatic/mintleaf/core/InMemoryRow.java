@@ -1,9 +1,6 @@
 package org.qamatic.mintleaf.core;
 
-import org.qamatic.mintleaf.Column;
-import org.qamatic.mintleaf.MetaDataCollection;
-import org.qamatic.mintleaf.MintleafException;
-import org.qamatic.mintleaf.Row;
+import org.qamatic.mintleaf.*;
 
 import java.nio.charset.Charset;
 import java.sql.SQLException;
@@ -55,8 +52,12 @@ public class InMemoryRow implements Row {
 
     @Override
     public void setValues(byte[] byteRecord, Charset charset) {
+
         int bstart = 0;
         try {
+            if (getMetaData() == null){
+                MintleafException.throwException("metadata must be set on the object before calling this method");
+            }
             for (int i = 0; i < getMetaData().getColumnCount(); i++) {
                 Column c = getMetaData().getColumn(i);
                 byte[] bytes = Arrays.copyOfRange(byteRecord, bstart, bstart+c.getColumnSize());

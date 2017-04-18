@@ -1,16 +1,19 @@
 package org.qamatic.mintleaf.core;
 
+import org.qamatic.mintleaf.DataRowListener;
 import org.qamatic.mintleaf.MintleafException;
+import org.qamatic.mintleaf.Row;
 
 import java.io.File;
 import java.io.IOException;
 import java.io.RandomAccessFile;
+import java.nio.charset.Charset;
 import java.util.Iterator;
 
 /**
  * Created by QAmatic Team on 4/11/17.
  */
-public class RecordFileReader implements BinaryReader {
+public class RecordFileReader<T extends Row> implements BinaryReader {
 
     private int recordSize;
     private File filePath;
@@ -92,6 +95,22 @@ public class RecordFileReader implements BinaryReader {
             MintleafException.throwException(e);
         }
         return null;
+    }
+
+    public void iterate(Charset charset, DataRowListener listener) throws MintleafException {
+        int i = 0;
+        for (byte[] record : this) {
+            Row row = listener.createRowInstance(record);
+            listener.eachRow(i++, row);
+            row.setValues(record, charset);
+            if (!listener.canContinue()) {
+                break;
+            }
+        }
+    }
+
+    public void iterate(DataRowListener listener) throws MintleafException {
+        iterate(Charset.defaultCharset(), listener);
     }
 
     @Override

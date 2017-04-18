@@ -37,15 +37,16 @@ package org.qamatic.mintleaf;
 
 import org.qamatic.mintleaf.core.InMemoryRow;
 
-import java.nio.charset.Charset;
-
 /**
  * Created by QAmatic Team on 3/11/17.
  */
 public class CityRecord extends InMemoryRow {
 
+    public CityRecord() {
 
-    public CityRecord(MetaDataCollection metaDataCollection){
+    }
+
+    public CityRecord(MetaDataCollection metaDataCollection) {
         super(metaDataCollection);
     }
 
@@ -83,5 +84,10 @@ public class CityRecord extends InMemoryRow {
         return String.format("%-" + getMetaData().getColumn(idx).getColumnSize() + "s", getValue(idx).toString()).replace(' ', '*');
     }
 
+    public int getId() {
+
+        return asInt("Id");
+
+    }
 
 }

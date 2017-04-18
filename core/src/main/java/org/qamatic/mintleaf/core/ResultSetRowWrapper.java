@@ -88,12 +88,13 @@ public class ResultSetRowWrapper<T> implements Row {
     }
 
     @Override
-    public int asInt(String columnName) throws MintleafException {
+    public int asInt(String columnName) {
         try {
             return resultSet.getInt(columnName);
         } catch (SQLException e) {
-            throw new MintleafException(e);
+            MintleafException.throwException(e);
         }
+        return -1;
     }
 
     public void setResultSet(ResultSet resultSet) {
