@@ -1008,3 +1008,49 @@ For selected column comparison, use **withSelectedColumnMaps()**
                 .build()
 
 ```
+
+## Compare with binary files
+
+Binary files are basically accessed in bytes that are encoded in different charset. Mintleaf supports reading these binary files in terms of records.  Records basically a set of data which constitues several columns.   Mintleaf allows you to define your record structure for your binary files and read them.  These records can vary in size and it can be changed at different locations while reading the binary files!   So the record size anywhere from 1byte to 'n' of bytes which spans across multiple columns.
+
+In order to define a record, you should define its metadata information as follows:
+
+``java
+
+//example record structure,
+
+  ColumnMetaDataCollection cityRecordMetaData = new ColumnMetaDataCollection("CITIES") {
+     {
+         add(new Column("Id", 4, Types.INTEGER));
+         add(new Column("City", 16, Types.CHAR));
+         add(new Column("State", 2, Types.CHAR));
+         add(new Column("Country", 12, Types.CHAR));
+     }
+   };
+
+``
+
+below code snippets demostrates as how to read a binary file using the above record structure
+
+``java
+
+RowListWrapper<InMemoryRow> list = new ObjectRowListWrapper<>(cityRecordMetaData);
+URL url = Thread.currentThread().getContextClassLoader().getClass().getResource("/impexpfiles/cp1047-1.txt");
+File file = new File(url.toURI());
+try (BinaryReader reader = new RecordFileReader(file, 34)) {
+
+    reader.iterate(Charset.forName("Cp1047"), new DataRowListener() {
+        @Override
+        public Object eachRow(int rowNum, Row row) throws MintleafException {
+            list.add((InMemoryRow) row);
+            return row;
+        }
+
+        @Override
+        public Row createRowInstance(Object... params) {
+            return new InMemoryRow(cityRecordMetaData);
+        }
+    });
+}
+
+``
