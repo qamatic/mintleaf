@@ -1192,47 +1192,41 @@ Suitable for scalar queries like MAX(), MIN(), AVG(), COUNT() and so on  </p>
 <p>Binary files are basically accessed in bytes that are encoded in different charset. Mintleaf supports reading these binary files in terms of records.  Records basically a set of data which constitues several columns.   Mintleaf allows you to define your record structure for your binary files and read them.  These records can vary in size and it can be changed at different locations while reading the binary files!   So the record size anywhere from 1byte to &lsquo;n&rsquo; of bytes which spans across multiple columns.</p>
 
 <p>In order to define a record, you should define its metadata information as follows:</p>
+<pre class="highlight java tab-java"><code>
+<span class="c1">//example record structure,</span>
 
-<p>&ldquo;java</p>
+  <span class="n">ColumnMetaDataCollection</span> <span class="n">cityRecordMetaData</span> <span class="o">=</span> <span class="k">new</span> <span class="n">ColumnMetaDataCollection</span><span class="o">(</span><span class="s">"CITIES"</span><span class="o">)</span> <span class="o">{</span>
+     <span class="o">{</span>
+         <span class="n">add</span><span class="o">(</span><span class="k">new</span> <span class="n">Column</span><span class="o">(</span><span class="s">"Id"</span><span class="o">,</span> <span class="mi">4</span><span class="o">,</span> <span class="n">Types</span><span class="o">.</span><span class="na">INTEGER</span><span class="o">));</span>
+         <span class="n">add</span><span class="o">(</span><span class="k">new</span> <span class="n">Column</span><span class="o">(</span><span class="s">"City"</span><span class="o">,</span> <span class="mi">16</span><span class="o">,</span> <span class="n">Types</span><span class="o">.</span><span class="na">CHAR</span><span class="o">));</span>
+         <span class="n">add</span><span class="o">(</span><span class="k">new</span> <span class="n">Column</span><span class="o">(</span><span class="s">"State"</span><span class="o">,</span> <span class="mi">2</span><span class="o">,</span> <span class="n">Types</span><span class="o">.</span><span class="na">CHAR</span><span class="o">));</span>
+         <span class="n">add</span><span class="o">(</span><span class="k">new</span> <span class="n">Column</span><span class="o">(</span><span class="s">"Country"</span><span class="o">,</span> <span class="mi">12</span><span class="o">,</span> <span class="n">Types</span><span class="o">.</span><span class="na">CHAR</span><span class="o">));</span>
+     <span class="o">}</span>
+   <span class="o">};</span>
 
-<p>//example record structure,</p>
-
-<p>ColumnMetaDataCollection cityRecordMetaData = new ColumnMetaDataCollection(&quot;CITIES&rdquo;) {
-     {
-         add(new Column(&ldquo;Id&rdquo;, 4, Types.INTEGER));
-         add(new Column(&ldquo;City&rdquo;, 16, Types.CHAR));
-         add(new Column(&ldquo;State&rdquo;, 2, Types.CHAR));
-         add(new Column(&ldquo;Country&rdquo;, 12, Types.CHAR));
-     }
-   };</p>
-
-<p>&ldquo;</p>
-
+</code></pre>
 <p>below code snippets demostrates as how to read a binary file using the above record structure</p>
+<pre class="highlight java tab-java"><code>
+<span class="n">RowListWrapper</span><span class="o">&lt;</span><span class="n">InMemoryRow</span><span class="o">&gt;</span> <span class="n">list</span> <span class="o">=</span> <span class="k">new</span> <span class="n">ObjectRowListWrapper</span><span class="o">&lt;&gt;(</span><span class="n">cityRecordMetaData</span><span class="o">);</span>
+<span class="n">URL</span> <span class="n">url</span> <span class="o">=</span> <span class="n">Thread</span><span class="o">.</span><span class="na">currentThread</span><span class="o">().</span><span class="na">getContextClassLoader</span><span class="o">().</span><span class="na">getClass</span><span class="o">().</span><span class="na">getResource</span><span class="o">(</span><span class="s">"/impexpfiles/cp1047-1.txt"</span><span class="o">);</span>
+<span class="n">File</span> <span class="n">file</span> <span class="o">=</span> <span class="k">new</span> <span class="n">File</span><span class="o">(</span><span class="n">url</span><span class="o">.</span><span class="na">toURI</span><span class="o">());</span>
+<span class="k">try</span> <span class="o">(</span><span class="n">BinaryReader</span> <span class="n">reader</span> <span class="o">=</span> <span class="k">new</span> <span class="n">RecordFileReader</span><span class="o">(</span><span class="n">file</span><span class="o">,</span> <span class="mi">34</span><span class="o">))</span> <span class="o">{</span>
 
-<p>``java</p>
+    <span class="n">reader</span><span class="o">.</span><span class="na">iterate</span><span class="o">(</span><span class="n">Charset</span><span class="o">.</span><span class="na">forName</span><span class="o">(</span><span class="s">"Cp1047"</span><span class="o">),</span> <span class="k">new</span> <span class="n">DataRowListener</span><span class="o">()</span> <span class="o">{</span>
+        <span class="nd">@Override</span>
+        <span class="kd">public</span> <span class="n">Object</span> <span class="nf">eachRow</span><span class="o">(</span><span class="kt">int</span> <span class="n">rowNum</span><span class="o">,</span> <span class="n">Row</span> <span class="n">row</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">MintleafException</span> <span class="o">{</span>
+            <span class="n">list</span><span class="o">.</span><span class="na">add</span><span class="o">((</span><span class="n">InMemoryRow</span><span class="o">)</span> <span class="n">row</span><span class="o">);</span>
+            <span class="k">return</span> <span class="n">row</span><span class="o">;</span>
+        <span class="o">}</span>
 
-<p>RowListWrapper<InMemoryRow> list = new ObjectRowListWrapper&lt;&gt;(cityRecordMetaData);
-URL url = Thread.currentThread().getContextClassLoader().getClass().getResource(&rdquo;/impexpfiles/cp1047-1.txt&quot;);
-File file = new File(url.toURI());
-try (BinaryReader reader = new RecordFileReader(file, 34)) {</p>
+        <span class="nd">@Override</span>
+        <span class="kd">public</span> <span class="n">Row</span> <span class="nf">createRowInstance</span><span class="o">(</span><span class="n">Object</span><span class="o">...</span> <span class="n">params</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">return</span> <span class="k">new</span> <span class="nf">InMemoryRow</span><span class="o">(</span><span class="n">cityRecordMetaData</span><span class="o">);</span>
+        <span class="o">}</span>
+    <span class="o">});</span>
+<span class="o">}</span>
 
-<p>reader.iterate(Charset.forName(&ldquo;Cp1047&rdquo;), new DataRowListener() {
-        @Override
-        public Object eachRow(int rowNum, Row row) throws MintleafException {
-            list.add((InMemoryRow) row);
-            return row;
-        }</p>
-
-<p>@Override
-        public Row createRowInstance(Object&hellip; params) {
-            return new InMemoryRow(cityRecordMetaData);
-        }
-    });
-}</p>
-
-<p>&ldquo;</p>
-
+</code></pre>
       </div>
       <div class="dark-box">
       </div>
