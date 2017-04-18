@@ -48,6 +48,8 @@ import java.util.regex.Pattern;
 public abstract class ImpExpBase {
     private static final MintleafLogger logger = MintleafLogger.getLogger(ImpExpBase.class);
 
+    private DataRowListener dataRowListener;
+
     protected abstract ConnectionContext getConnectionContext();
 
 
@@ -58,18 +60,39 @@ public abstract class ImpExpBase {
         logger.info("importing using template:" + sqlTemplate);
         List<String> batchSqls = new ArrayList<>();
         final Executable<int[]> batchCall = getConnectionContext().executeBatchSqls(batchSqls);
-        dataImport.doImport((rowNum, row) -> {
+        dataImport.doImport(new DataRowListener() {
+            @Override
+            public Object eachRow(int rowNum, Row row) throws MintleafException {
 
-            StringBuffer buffer = new StringBuffer(sqlTemplate);
-            columns.reset();
-            while (columns.find()) {
-                int idx = buffer.indexOf("$" + columns.group(1));
-                buffer.replace(idx, idx + columns.group(1).length() + 2, row.asString(columns.group(1)));
+                StringBuffer buffer = new StringBuffer(sqlTemplate);
+                columns.reset();
+                while (columns.find()) {
+                    int idx = buffer.indexOf("$" + columns.group(1));
+                    buffer.replace(idx, idx + columns.group(1).length() + 2, row.asString(columns.group(1)));
+                }
+                batchSqls.add(buffer.toString());
+
+                if (ImpExpBase.this.dataRowListener != null){
+                    return ImpExpBase.this.dataRowListener.eachRow(rowNum, row);
+                }
+                return null;
             }
-            batchSqls.add(buffer.toString());
 
+            @Override
+            public boolean canContinue() {
+                if (ImpExpBase.this.dataRowListener != null){
+                    return ImpExpBase.this.dataRowListener.canContinue();
+                }
+                return true;
+            }
 
-            return null;
+            @Override
+            public Row createRowInstance(Object... params) {
+                if (ImpExpBase.this.dataRowListener != null){
+                    return ImpExpBase.this.dataRowListener.createRowInstance(params);
+                }
+                return null;
+            }
         });
         dataImport.close();
         try {
@@ -84,5 +107,9 @@ public abstract class ImpExpBase {
         try (SqlResultSet sqlResultSet = getConnectionContext().queryBuilder().withSql(sql).withParamValues(parameterBinding).buildSelect()) {
             dataExport.export(sqlResultSet.getResultSet());
         }
+    }
+
+    public void setDataRowListener(DataRowListener dataRowListener) {
+        this.dataRowListener = dataRowListener;
     }
 }
