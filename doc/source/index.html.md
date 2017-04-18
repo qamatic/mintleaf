@@ -1015,7 +1015,7 @@ Binary files are basically accessed in bytes that are encoded in different chars
 
 In order to define a record, you should define its metadata information as follows:
 
-``java
+```java
 
 //example record structure,
 
@@ -1028,11 +1028,11 @@ In order to define a record, you should define its metadata information as follo
      }
    };
 
-``
+```
 
 below code snippets demostrates as how to read a binary file using the above record structure
 
-``java
+```java
 
 RowListWrapper<InMemoryRow> list = new ObjectRowListWrapper<>(cityRecordMetaData);
 URL url = Thread.currentThread().getContextClassLoader().getClass().getResource("/impexpfiles/cp1047-1.txt");
@@ -1053,4 +1053,4 @@ try (BinaryReader reader = new RecordFileReader(file, 34)) {
     });
 }
 
-``
+```
