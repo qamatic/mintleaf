@@ -62,21 +62,21 @@ public class ImportExportTest extends H2TestCase {
 
     @Test
     public void writeCSVTest() throws SQLException, IOException, MintleafException {
-        File f = new File("users.csv");
+        File f = new File("target/users.csv");
         if (f.exists())
             f.delete();
 
-        assertFalse(new File("users.csv").exists());
+        assertFalse(new File("target/users.csv").exists());
 
         Executable dataAction = new Mintleaf.DbToCsvDataTransferBuilder().
                 withSourceDb(testDb).
                 withSourceSql("select * from HRDB.USERS").
-                withTargetCsvFile("users.csv").
+                withTargetCsvFile("target/users.csv").
                 build();
 
 
         dataAction.execute();
-        assertTrue(new File("users.csv").exists());
+        assertTrue(new File("target/users.csv").exists());
     }
 
 
@@ -85,7 +85,7 @@ public class ImportExportTest extends H2TestCase {
         writeCSVTest();//dependent..
 
         Executable action = new Mintleaf.CsvToDbDataTransferBuilder().
-                withSourceCsvFile("users.csv").
+                withSourceCsvFile("target/users.csv").
                 withTargetDb(testDb).
                 withTargetSqlTemplate("UPDATE HRDB.USERS SET USERNAME = '$USERNAME$-changed' WHERE USERID=$USERID$").
                 build();
