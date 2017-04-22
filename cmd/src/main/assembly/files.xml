@@ -31,6 +31,12 @@
             <lineEnding>unix</lineEnding>
             <filtered>true</filtered>
         </fileSet>
+        <fileSet>
+            <directory>src/main/assembly/examples</directory>
+            <outputDirectory>examples</outputDirectory>
+            <fileMode>644</fileMode>
+            <lineEnding>unix</lineEnding>
+        </fileSet>
     </fileSets>
 
     <dependencySets>
