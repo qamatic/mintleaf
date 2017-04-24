@@ -42,6 +42,19 @@ Welcome to the Mintleaf! Mintleaf is a light weight framework tool helps you to 
 ```
 
 
+## Download binaries
+
+||
+|--------- |
+|Command line tools|
+|* [Windows: mintleaf-cmd-1.8.25-rel.zip](http://search.maven.org/remotecontent?filepath=org/qamatic/mintleaf-cmd/1.8.25/mintleaf-cmd-1.8.25-rel.zip) |
+|* [Mac/Linux: mintleaf-cmd-1.8.25-rel.tar.gz](http://search.maven.org/remotecontent?filepath=org/qamatic/mintleaf-cmd/1.8.25/mintleaf-cmd-1.8.25-rel.tar.gz) |
+
+
+## Quick demo on command line tool
+
+[![asciicast](https://asciinema.org/a/116502.png)](https://asciinema.org/a/116502)
+
 
 # Understanding Mintleaf
 
@@ -1052,5 +1065,44 @@ try (BinaryReader reader = new RecordFileReader(file, 34)) {
         }
     });
 }
+
+```
+
+# User variables
+
+Mintleaf provides you various way to parameterize your sql queries and configuration options apart from the code. Mintleaf uses ANT style variable convention through out the system and the values can from system level or JVM arg level or user supplied properties.
+
+```code
+  ${variable}
+```
+
+To be precise, you could use it inside any sql scripts or dbconfig.xml.  For example, a file called h2ddl.sql content would look like the one below and the values of the ${SCHEMA_NAME} would be replaced at run time dynamically.
+
+```sql
+-- <ChangeSet id="create schema" delimiter=";" />
+
+  CREATE TABLE IF NOT EXISTS ${SCHEMA_NAME}.USERS
+  (
+    USERID      INT NOT NULL,
+    USERNAME    VARCHAR2(50),
+    CONSTRAINT PK_USERID PRIMARY KEY (USERID)
+  );
+
+```
+
+Similary, to have variables inside your configuration files would like below.  For example, the database name ${DB_NAME},  ${USER_NAME} and ${PASSWORD} can come from system variables or as part of JVM args
+
+```xml
+<mintleaf version="1.0">
+    <description>Database connections and Schema version configuration file</description>
+    <database>
+        <id>h2testdb</id>
+        <type>H2</type>
+        <url>jdbc:h2:file:./${DB_NAME};mv_store=false;</url>
+        <username>${USER_NAME}</username>
+        <password>${PASSWORD}</password>
+    </database>
+
+</mintleaf>
 
 ```

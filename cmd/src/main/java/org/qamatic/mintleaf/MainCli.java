@@ -57,7 +57,7 @@ public class MainCli {
     private CommandMigrate cc = new CommandMigrate();
 
 
-    public MainCli parse(String[] args) {
+    public MainCli parse(String[] args) throws MintleafException {
         jc.setColumnSize(160);
         jc.setProgramName("Mintleaf");
         jc.addCommand("migrate", cc);
@@ -68,6 +68,7 @@ public class MainCli {
                 throw new RuntimeException();
             }
             jc.parse(args);
+            run();
         } catch (RuntimeException e) {
             usage();
         }
@@ -93,7 +94,7 @@ public class MainCli {
 
     public static void main(String[] args) throws MintleafException {
         System.out.println("Mintleaf v1.26 command line tool");
-        new MainCli().parse(args).run();
+        new MainCli().parse(args);
     }
 
     @Parameters(separators = "=", commandDescription = "")
