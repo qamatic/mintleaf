@@ -32,7 +32,6 @@ Welcome to the Mintleaf! Mintleaf is a light weight framework tool helps you to 
 
 [![Maven Central](https://maven-badges.herokuapp.com/maven-central/org.qamatic/mintleaf-core/badge.svg?style=plastic)](https://maven-badges.herokuapp.com/maven-central/org.qamatic/mintleaf-core)
 
-
 ```xml
     <dependency>
         <groupId>org.qamatic</groupId>
@@ -40,7 +39,6 @@ Welcome to the Mintleaf! Mintleaf is a light weight framework tool helps you to 
         <version>1.8.25</version>
     </dependency>
 ```
-
 
 ## Download binaries
 

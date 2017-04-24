@@ -3,19 +3,16 @@
 ![logo](https://github.com/qamatic/mintleaf/blob/master/doc/source/images/logosimple.png)
 Welcome to the Mintleaf! Mintleaf is a light weight framework tool helps you to advance your database developement on continuous integration / continuous delivery model as easy as possible.
 
-
 - Database Migration
 - Ability to write automated tests and run them on migrated database schemas, objects, data integrity checks during CI/CD
 - Seamless Test life cycle management such as setup, teardown mock data, schema and database objects using changesets
 - Create mock data or transfer/copy data between databases for your tests
 - Nothing more but to use Plain old SQL that you know of
 
-
 ## Documentation
 
 - [Documentation](https://qamatic.github.io/mintleaf/)
 - [API Reference](https://qamatic.github.io/mintleaf/apidocs)
-
 
 ## Maven 
     <dependency>
@@ -26,12 +23,10 @@ Welcome to the Mintleaf! Mintleaf is a light weight framework tool helps you to 
     
 ## Download binaries
 
-
 Command line tools:
  
 - [Windows: mintleaf-cmd-1.8.25-rel.zip](http://search.maven.org/remotecontent?filepath=org/qamatic/mintleaf-cmd/1.8.25/mintleaf-cmd-1.8.25-rel.zip) 
 - [Mac/Linux: mintleaf-cmd-1.8.25-rel.tar.gz](http://search.maven.org/remotecontent?filepath=org/qamatic/mintleaf-cmd/1.8.25/mintleaf-cmd-1.8.25-rel.tar.gz) 
-
 
  
 ## License
