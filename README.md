@@ -10,10 +10,10 @@ Welcome to the Mintleaf! Mintleaf is a light weight framework tool helps you to 
 - Create mock data or transfer/copy data between databases for your tests
 - Nothing more but to use Plain old SQL that you know of
 
+
 ## Documentation
 
 - [Documentation](https://qamatic.github.io/mintleaf/)
-
 - [API Reference](https://qamatic.github.io/mintleaf/apidocs)
 
 
@@ -33,7 +33,7 @@ Command line tools:
 - [Mac/Linux: mintleaf-cmd-1.8.25-rel.tar.gz](http://search.maven.org/remotecontent?filepath=org/qamatic/mintleaf-cmd/1.8.25/mintleaf-cmd-1.8.25-rel.tar.gz) 
 
 
-<script type="text/javascript" src="https://asciinema.org/a/116502.js" id="asciicast-116502" async></script>
+ [![asciicast](https://asciinema.org/a/116502.png)](https://asciinema.org/a/116502)
 
 ## License
 
