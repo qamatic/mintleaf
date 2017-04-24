@@ -53,8 +53,7 @@ Welcome to the Mintleaf! Mintleaf is a light weight framework tool helps you to 
 
 ## Quick demo on command line tool
 
-[![asciicast](https://asciinema.org/a/116502.png)](https://asciinema.org/a/116502)
-
+<script type="text/javascript" src="https://asciinema.org/a/116502.js" id="asciicast-116502" async></script>
 
 # Understanding Mintleaf
 

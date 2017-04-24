@@ -26,13 +26,14 @@ Welcome to the Mintleaf! Mintleaf is a light weight framework tool helps you to 
     
 ## Download binaries
 
-|--------- |
-|Command line tools| 
-|* [Windows: mintleaf-cmd-1.8.25-rel.zip](http://search.maven.org/remotecontent?filepath=org/qamatic/mintleaf-cmd/1.8.25/mintleaf-cmd-1.8.25-rel.zip) |
-|* [Mac/Linux: mintleaf-cmd-1.8.25-rel.tar.gz](http://search.maven.org/remotecontent?filepath=org/qamatic/mintleaf-cmd/1.8.25/mintleaf-cmd-1.8.25-rel.tar.gz) |
+
+Command line tools:
+ 
+- [Windows: mintleaf-cmd-1.8.25-rel.zip](http://search.maven.org/remotecontent?filepath=org/qamatic/mintleaf-cmd/1.8.25/mintleaf-cmd-1.8.25-rel.zip) 
+- [Mac/Linux: mintleaf-cmd-1.8.25-rel.tar.gz](http://search.maven.org/remotecontent?filepath=org/qamatic/mintleaf-cmd/1.8.25/mintleaf-cmd-1.8.25-rel.tar.gz) 
 
 
-[![asciicast](https://asciinema.org/a/116502.png)](https://asciinema.org/a/116502)
+<script type="text/javascript" src="https://asciinema.org/a/116502.js" id="asciicast-116502" async></script>
 
 ## License
 
