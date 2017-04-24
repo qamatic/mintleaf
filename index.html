@@ -247,9 +247,31 @@
 <pre class="highlight xml tab-xml"><code>    <span class="nt">&lt;dependency&gt;</span>
         <span class="nt">&lt;groupId&gt;</span>org.qamatic<span class="nt">&lt;/groupId&gt;</span>
         <span class="nt">&lt;artifactId&gt;</span>mintleaf-core<span class="nt">&lt;/artifactId&gt;</span>
-        <span class="nt">&lt;version&gt;</span>1.8.22<span class="nt">&lt;/version&gt;</span>
+        <span class="nt">&lt;version&gt;</span>1.8.25<span class="nt">&lt;/version&gt;</span>
     <span class="nt">&lt;/dependency&gt;</span>
 </code></pre>
+<h2 id="download-binaries">Download binaries</h2>
+
+<table><thead>
+<tr>
+<th></th>
+</tr>
+</thead><tbody>
+<tr>
+<td>Command line tools</td>
+</tr>
+<tr>
+<td>* <a href="http://search.maven.org/remotecontent?filepath=org/qamatic/mintleaf-cmd/1.8.25/mintleaf-cmd-1.8.25-rel.zip">Windows: mintleaf-cmd-1.8.25-rel.zip</a></td>
+</tr>
+<tr>
+<td>* <a href="http://search.maven.org/remotecontent?filepath=org/qamatic/mintleaf-cmd/1.8.25/mintleaf-cmd-1.8.25-rel.tar.gz">Mac/Linux: mintleaf-cmd-1.8.25-rel.tar.gz</a></td>
+</tr>
+</tbody></table>
+
+<h2 id="quick-demo-on-command-line-tool">Quick demo on command line tool</h2>
+
+<script type="text/javascript" src="https://asciinema.org/a/116502.js" id="asciicast-116502" async></script>
+
 <h1 id="understanding-mintleaf">Understanding Mintleaf</h1>
 
 <h2 id="migration-at-a-glance">Migration at a glance</h2>
@@ -1225,6 +1247,36 @@ Suitable for scalar queries like MAX(), MIN(), AVG(), COUNT() and so on  </p>
         <span class="o">}</span>
     <span class="o">});</span>
 <span class="o">}</span>
+
+</code></pre>
+<h1 id="user-variables">User variables</h1>
+
+<p>Mintleaf provides you various way to parameterize your sql queries and configuration options apart from the code. Mintleaf uses ANT style variable convention through out the system and the values can from system level or JVM arg level or user supplied properties.</p>
+<pre class="highlight plaintext"><code>  ${variable}
+</code></pre>
+<p>To be precise, you could use it inside any sql scripts or dbconfig.xml.  For example, a file called h2ddl.sql content would look like the one below and the values of the ${SCHEMA_NAME} would be replaced at run time dynamically.</p>
+<pre class="highlight sql tab-sql"><code><span class="c1">-- &lt;ChangeSet id="create schema" delimiter=";" /&gt;</span>
+
+  <span class="k">CREATE</span> <span class="k">TABLE</span> <span class="n">IF</span> <span class="k">NOT</span> <span class="k">EXISTS</span> <span class="err">${</span><span class="k">SCHEMA_NAME</span><span class="err">}</span><span class="p">.</span><span class="n">USERS</span>
+  <span class="p">(</span>
+    <span class="n">USERID</span>      <span class="n">INT</span> <span class="k">NOT</span> <span class="k">NULL</span><span class="p">,</span>
+    <span class="n">USERNAME</span>    <span class="n">VARCHAR2</span><span class="p">(</span><span class="mi">50</span><span class="p">),</span>
+    <span class="k">CONSTRAINT</span> <span class="n">PK_USERID</span> <span class="k">PRIMARY</span> <span class="k">KEY</span> <span class="p">(</span><span class="n">USERID</span><span class="p">)</span>
+  <span class="p">);</span>
+
+</code></pre>
+<p>Similary, to have variables inside your configuration files would like below.  For example, the database name ${DB_NAME},  ${USER_NAME} and ${PASSWORD} can come from system variables or as part of JVM args</p>
+<pre class="highlight xml tab-xml"><code><span class="nt">&lt;mintleaf</span> <span class="na">version=</span><span class="s">"1.0"</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;description&gt;</span>Database connections and Schema version configuration file<span class="nt">&lt;/description&gt;</span>
+    <span class="nt">&lt;database&gt;</span>
+        <span class="nt">&lt;id&gt;</span>h2testdb<span class="nt">&lt;/id&gt;</span>
+        <span class="nt">&lt;type&gt;</span>H2<span class="nt">&lt;/type&gt;</span>
+        <span class="nt">&lt;url&gt;</span>jdbc:h2:file:./${DB_NAME};mv_store=false;<span class="nt">&lt;/url&gt;</span>
+        <span class="nt">&lt;username&gt;</span>${USER_NAME}<span class="nt">&lt;/username&gt;</span>
+        <span class="nt">&lt;password&gt;</span>${PASSWORD}<span class="nt">&lt;/password&gt;</span>
+    <span class="nt">&lt;/database&gt;</span>
+
+<span class="nt">&lt;/mintleaf&gt;</span>
 
 </code></pre>
       </div>
