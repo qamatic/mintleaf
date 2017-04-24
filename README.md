@@ -33,8 +33,7 @@ Command line tools:
 - [Mac/Linux: mintleaf-cmd-1.8.25-rel.tar.gz](http://search.maven.org/remotecontent?filepath=org/qamatic/mintleaf-cmd/1.8.25/mintleaf-cmd-1.8.25-rel.tar.gz) 
 
 
- [![asciicast](https://asciinema.org/a/116502.png)](https://asciinema.org/a/116502)
-
+ 
 ## License
 
 The MIT License (MIT)
