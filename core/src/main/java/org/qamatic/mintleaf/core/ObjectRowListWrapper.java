@@ -60,6 +60,10 @@ public class ObjectRowListWrapper<T extends Row> implements RowListWrapper<T>, L
         this.list = new ArrayList<>();
     }
 
+    public ObjectRowListWrapper(){
+        this.list = new ArrayList<>();
+    }
+
     @Override
     public MetaDataCollection getMetaData() throws MintleafException {
         return this.metaDataCollection;
@@ -99,7 +103,7 @@ public class ObjectRowListWrapper<T extends Row> implements RowListWrapper<T>, L
 
     @Override
     public boolean add(T t) {
-        t.setMetaData(this.metaDataCollection);
+        setMetaData(t);
         return list.add(t);
     }
 
@@ -140,8 +144,8 @@ public class ObjectRowListWrapper<T extends Row> implements RowListWrapper<T>, L
 
     @Override
     public T get(int index) {
-        Row row = this.list.get(index);
-        row.setMetaData(this.metaDataCollection);
+        T row = this.list.get(index);
+        setMetaData(row);
         return (T) row;
     }
 
@@ -181,6 +185,12 @@ public class ObjectRowListWrapper<T extends Row> implements RowListWrapper<T>, L
         return new ObjectListIterator<T>(this.list.listIterator(index), this.metaDataCollection);
     }
 
+    private void setMetaData(Row row){
+        if (this.metaDataCollection != null) {
+            row.setMetaData(this.metaDataCollection);
+        }
+    }
+
     @Override
     public List<T> subList(int fromIndex, int toIndex) {
         return this.list.subList(fromIndex, toIndex);
@@ -204,7 +214,7 @@ public class ObjectRowListWrapper<T extends Row> implements RowListWrapper<T>, L
 
         @Override
         public void add(T t) {
-            t.setMetaData(this.metaDataCollection);
+            setMetaData(t);
             listIterator.add(t);
         }
 
@@ -221,7 +231,7 @@ public class ObjectRowListWrapper<T extends Row> implements RowListWrapper<T>, L
         @Override
         public T next() {
             T t = listIterator.next();
-            t.setMetaData(this.metaDataCollection);
+            setMetaData(t);
             return t;
         }
 
@@ -233,7 +243,7 @@ public class ObjectRowListWrapper<T extends Row> implements RowListWrapper<T>, L
         @Override
         public T previous() {
             T  t = listIterator.previous();
-            t.setMetaData(this.metaDataCollection);
+            setMetaData(t);
             return t;
         }
 
@@ -249,8 +259,14 @@ public class ObjectRowListWrapper<T extends Row> implements RowListWrapper<T>, L
 
         @Override
         public void set(T t) {
-            t.setMetaData(this.metaDataCollection);
+            setMetaData(t);
             listIterator.set(t);
+        }
+
+        private void setMetaData(Row row){
+            if (this.metaDataCollection != null) {
+                row.setMetaData(this.metaDataCollection);
+            }
         }
     }
 }

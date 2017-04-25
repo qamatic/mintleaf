@@ -118,7 +118,7 @@ public class BinaryImportTest extends H2TestCase {
 
     @Test
     public void readBinaryByteReader() throws MintleafException, URISyntaxException {
-        BinaryFileImportFlavour reader = new BinaryFileImportFlavour(new RecordFileReader(getTestFile(), 34), Charset.forName("Cp1047")){
+        BinaryFileImportFlavour reader = new BinaryFileImportFlavour(new RecordFileReader(getTestFile(), 34), Charset.forName("Cp1047")) {
 
             @Override
             public Row createRowInstance() {
@@ -191,11 +191,32 @@ public class BinaryImportTest extends H2TestCase {
         }
 
         assertEquals(2, list.size());
-       // assertEquals(3, list.getRow(1).getId());
+        // assertEquals(3, list.getRow(1).getId());
         assertEquals("NJ", list.getRow(0).asString("STATE"));
 
     }
 
+    @Test
+    public void importFromExcelToObjectListTest() throws MintleafException, URISyntaxException {
+
+        ChangeSets.migrate(testDb.getNewConnection(), "res:/binary-import-changesets.sql", "create schema");
+        BinaryReader reader = new RecordFileReader(getTestFile(), 34);
+
+        Executable action = new Mintleaf.AnyDataToListTransferBuilder<>().
+                withSource(new BinaryFileImportFlavour(reader, Charset.forName("Cp1047")) {
+                    @Override
+                    public Row createRowInstance() {
+                        return new CityRecord(cityRecordMetaData);
+                    }
+                }).
+                build();
+
+        action.execute();
+        RowListWrapper<CityRecord> rows = (RowListWrapper<CityRecord>) action.execute();
+        assertEquals(3, rows.size());
+        assertEquals("CherryHill", rows.getRow(1).getValue(1));
+        assertEquals("CherryHill", rows.getRow(1).getValue("City"));
+    }
 
     private RowListWrapper<CityRecord> getRecords() throws SQLException, IOException, MintleafException, URISyntaxException {
         RowListWrapper<CityRecord> list = new ObjectRowListWrapper<CityRecord>(cityRecordMetaData);

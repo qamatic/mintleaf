@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by senips on 4/8/17.
+ * Created by QAmatic Team on 4/8/17.
  */
 public class FileFinder {
     private static final MintleafLogger logger = MintleafLogger.getLogger(FileFinder.class);

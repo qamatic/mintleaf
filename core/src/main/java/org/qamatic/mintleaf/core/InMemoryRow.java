@@ -9,7 +9,7 @@ import java.util.Arrays;
 import java.util.List;
 
 /**
- * Created by senips on 4/16/17.
+ * Created by QAmatic Team on 4/16/17.
  */
 public class InMemoryRow implements Row {
     private MetaDataCollection metaDataCollection;

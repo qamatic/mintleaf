@@ -4,7 +4,7 @@ import org.qamatic.mintleaf.MintleafException;
 import org.qamatic.mintleaf.Row;
 
 /**
- * Created by senips on 4/16/17.
+ * Created by QAmatic Team on 4/16/17.
  */
 public class ByteArrayRow extends InMemoryRow {
 

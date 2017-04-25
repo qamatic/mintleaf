@@ -206,6 +206,31 @@ public final class Mintleaf {
         }
     }
 
+    public static final class AnyDataToListTransferBuilder<T extends Row> {
+
+        private ImportFlavour importFlavour;
+
+        public AnyDataToListTransferBuilder withSource(ImportFlavour importFlavour) {
+            this.importFlavour = importFlavour;
+            return this;
+        }
+
+        public Executable<RowListWrapper<T>> build() throws MintleafException {
+            return new Executable<RowListWrapper<T>>() {
+                @Override
+                public RowListWrapper<T> execute() throws MintleafException {
+                    final RowListWrapper<T> list = new ObjectRowListWrapper<T>();
+
+                    importFlavour.doImport((rowNum, row) -> {
+                        list.add((T) row);
+                        return null;
+                    });
+                    return list;
+                }
+            };
+        }
+    }
+
     public static final class DataComparerBuilder {
         private static final MintleafLogger logger = MintleafLogger.getLogger(DataComparerBuilder.class);
         private RowListWrapper sourceTable;
