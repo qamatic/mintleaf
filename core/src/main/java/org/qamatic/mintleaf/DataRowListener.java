@@ -38,15 +38,9 @@ package org.qamatic.mintleaf;
 /**
  * Created by qamatic on 3/3/16.
  */
-public interface DataRowListener<T> {
+public interface DataRowListener<T> extends RowDelegate {
     T eachRow(int rowNum, Row row) throws MintleafException;
 
-    default boolean canContinue(){
-        return true;
-    }
 
-    default Row createRowInstance(Object... params){
-        return null;
-    }
 
 }

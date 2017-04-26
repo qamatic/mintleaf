@@ -14,11 +14,12 @@ import java.util.Iterator;
 /**
  * Created by senips on 4/25/17.
  */
-public class ExcelImportFlavour implements ImportFlavour {
+public class ExcelImportFlavour implements ImportFlavour, RowDelegate {
 
     private InputStream inputStream;
     private int activeWorkSheet;
     private int headerRowIndex;
+    private RowDelegate rowDelegate;
 
     public ExcelImportFlavour(InputStream inputStream) {
         this.inputStream = inputStream;
@@ -28,9 +29,9 @@ public class ExcelImportFlavour implements ImportFlavour {
         this.headerRowIndex = headerRowIndex;
     }
 
-    private MetaDataCollection getMetaData(Row row){
+    protected MetaDataCollection getMetaData(Row row) {
         ColumnMetaDataCollection metaDataCollection = new ColumnMetaDataCollection();
-        for(Cell cell : row){
+        for (Cell cell : row) {
             metaDataCollection.add(new Column(cell.getStringCellValue(), cell.getCellType()));
         }
         return metaDataCollection;
@@ -45,7 +46,7 @@ public class ExcelImportFlavour implements ImportFlavour {
             Iterator<Row> rowIterator = sheet.iterator();
             int i = 0;
             boolean headerRowFound = this.headerRowIndex == -1;
-            MetaDataCollection metaDataCollection =null;
+            MetaDataCollection metaDataCollection = null;
             while (rowIterator.hasNext()) {
                 if ((!headerRowFound) && (i == this.headerRowIndex)) {
                     headerRowFound = true;
@@ -57,8 +58,9 @@ public class ExcelImportFlavour implements ImportFlavour {
                 }
                 ExcelRow row = new ExcelRow(rowIterator.next());
                 row.setMetaData(metaDataCollection);
-                listener.eachRow(i++, row);
-                if (!listener.canContinue()) {
+                if (matches(row))
+                    listener.eachRow(i++, row);
+                if (!canContinue(row)) {
                     break;
                 }
 
@@ -75,5 +77,20 @@ public class ExcelImportFlavour implements ImportFlavour {
 
     public void setActiveWorkSheet(int activeWorkSheet) {
         this.activeWorkSheet = activeWorkSheet;
+    }
+
+
+    @Override
+    public boolean canContinue(org.qamatic.mintleaf.Row row) {
+        if (this.rowDelegate != null)
+            return this.rowDelegate.canContinue(row);
+        return true;
+    }
+
+    @Override
+    public boolean matches(org.qamatic.mintleaf.Row row) {
+        if (this.rowDelegate != null)
+            return this.rowDelegate.matches(row);
+        return true;
     }
 }

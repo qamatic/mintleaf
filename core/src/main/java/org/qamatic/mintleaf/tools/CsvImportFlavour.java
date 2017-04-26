@@ -39,7 +39,9 @@ import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVParser;
 import org.apache.commons.csv.CSVRecord;
 import org.qamatic.mintleaf.DataRowListener;
+import org.qamatic.mintleaf.RowDelegate;
 import org.qamatic.mintleaf.MintleafException;
+import org.qamatic.mintleaf.Row;
 
 import java.io.IOException;
 import java.io.Reader;
@@ -47,9 +49,10 @@ import java.io.Reader;
 /**
  * Created by qamatic on 2/18/6/16.
  */
-public class CsvImportFlavour implements ImportFlavour {
+public class CsvImportFlavour implements ImportFlavour, RowDelegate {
 
     private Reader afileReader;
+    private RowDelegate rowDelegate;
 
     public CsvImportFlavour(Reader afileReader) {
         this.afileReader = afileReader;
@@ -66,9 +69,10 @@ public class CsvImportFlavour implements ImportFlavour {
             parser = getCSVParser();
             int i = 0;
             for (CSVRecord record : parser) {
-
-                listener.eachRow(i++, new CsvRowWrapper(record));
-                if (!listener.canContinue()){
+                Row row =  createRowInstance(record);
+                if (matches(row))
+                    listener.eachRow(i++, row);
+                if (!canContinue(row)) {
                     break;
                 }
 
@@ -79,5 +83,22 @@ public class CsvImportFlavour implements ImportFlavour {
         }
     }
 
+    @Override
+    public Row createRowInstance(Object... params) {
+        return new CsvRowWrapper((CSVRecord) params[0]);
+    }
 
+    @Override
+    public boolean canContinue(Row row) {
+        if (this.rowDelegate != null)
+            return this.rowDelegate.canContinue(row);
+        return true;
+    }
+
+    @Override
+    public boolean matches(Row row) {
+        if (this.rowDelegate != null)
+            return this.rowDelegate.matches(row);
+        return true;
+    }
 }

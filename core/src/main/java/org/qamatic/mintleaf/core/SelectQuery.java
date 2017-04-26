@@ -146,8 +146,10 @@ public class SelectQuery implements Executable<SqlResultSet> {
             try {
                 int i = 0;
                 while (getResultSet().next()) {
-                    listener.eachRow(i++, new ResultSetRowWrapper<T>(getResultSet()));
-                    if (!listener.canContinue())
+                    Row row = new ResultSetRowWrapper<T>(getResultSet());
+                    if (listener.matches(row))
+                        listener.eachRow(i++, row);
+                    if (!listener.canContinue(row))
                         break;
                 }
             } catch (SQLException e) {

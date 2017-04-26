@@ -121,7 +121,7 @@ public class BinaryImportTest extends H2TestCase {
         BinaryFileImportFlavour reader = new BinaryFileImportFlavour(new RecordFileReader(getTestFile(), 34), Charset.forName("Cp1047")) {
 
             @Override
-            public Row createRowInstance() {
+            public Row createRowInstance(Object... params) {
                 return new InMemoryRow(cityRecordMetaData);
             }
         };
@@ -135,7 +135,7 @@ public class BinaryImportTest extends H2TestCase {
             }
 
             @Override
-            public boolean canContinue() {
+            public boolean canContinue(Row row) {
                 i[0]++;
                 return true;
             }
@@ -152,7 +152,7 @@ public class BinaryImportTest extends H2TestCase {
         Executable action = new Mintleaf.AnyDataToDbDataTransferBuilder().
                 withImportFlavour(new BinaryFileImportFlavour(reader, Charset.forName("Cp1047")) {
                     @Override
-                    public Row createRowInstance() {
+                    public Row createRowInstance(Object... params) {
                         return new CityRecord(cityRecordMetaData);
                     }
                 }).
@@ -205,7 +205,7 @@ public class BinaryImportTest extends H2TestCase {
         Executable action = new Mintleaf.AnyDataToListTransferBuilder<>().
                 withSource(new BinaryFileImportFlavour(reader, Charset.forName("Cp1047")) {
                     @Override
-                    public Row createRowInstance() {
+                    public Row createRowInstance(Object... params) {
                         return new CityRecord(cityRecordMetaData);
                     }
                 }).

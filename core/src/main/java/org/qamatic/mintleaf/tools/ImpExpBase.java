@@ -72,23 +72,24 @@ public abstract class ImpExpBase {
                 }
                 batchSqls.add(buffer.toString());
 
-                if (ImpExpBase.this.dataRowListener != null){
+                if (ImpExpBase.this.dataRowListener != null) {
                     return ImpExpBase.this.dataRowListener.eachRow(rowNum, row);
                 }
                 return null;
             }
 
             @Override
-            public boolean canContinue() {
-                if (ImpExpBase.this.dataRowListener != null){
-                    return ImpExpBase.this.dataRowListener.canContinue();
+            public boolean canContinue(Row row) {
+                if (ImpExpBase.this.dataRowListener != null) {
+                    if (ImpExpBase.this.dataRowListener.matches(row))
+                        return ImpExpBase.this.dataRowListener.canContinue(row);
                 }
                 return true;
             }
 
             @Override
             public Row createRowInstance(Object... params) {
-                if (ImpExpBase.this.dataRowListener != null){
+                if (ImpExpBase.this.dataRowListener != null) {
                     return ImpExpBase.this.dataRowListener.createRowInstance(params);
                 }
                 return null;

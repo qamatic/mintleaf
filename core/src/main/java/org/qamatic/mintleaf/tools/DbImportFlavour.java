@@ -35,10 +35,7 @@
 
 package org.qamatic.mintleaf.tools;
 
-import org.qamatic.mintleaf.DataRowListener;
-import org.qamatic.mintleaf.MintleafException;
-import org.qamatic.mintleaf.MintleafLogger;
-import org.qamatic.mintleaf.SqlResultSet;
+import org.qamatic.mintleaf.*;
 import org.qamatic.mintleaf.core.ResultSetRowWrapper;
 
 import java.sql.SQLException;
@@ -46,10 +43,11 @@ import java.sql.SQLException;
 /**
  * Created by qamatic on 2/18/6/16.
  */
-public class DbImportFlavour implements ImportFlavour {
+public class DbImportFlavour implements ImportFlavour, RowDelegate {
 
     private static final MintleafLogger logger = MintleafLogger.getLogger(DbImportFlavour.class);
     private SqlResultSet resultSet;
+    private RowDelegate rowDelegate;
 
     public DbImportFlavour(SqlResultSet resultSet) {
 
@@ -63,8 +61,9 @@ public class DbImportFlavour implements ImportFlavour {
         try {
             while (this.resultSet.getResultSet().next()) {
                 dbRowWrapper.setResultSet(this.resultSet.getResultSet());
-                listener.eachRow(i++, dbRowWrapper);
-                if (!listener.canContinue()){
+                if (matches(dbRowWrapper))
+                    listener.eachRow(i++, dbRowWrapper);
+                if (!canContinue(dbRowWrapper)) {
                     break;
                 }
             }
@@ -74,7 +73,7 @@ public class DbImportFlavour implements ImportFlavour {
     }
 
     @Override
-    public void close()  {
+    public void close() {
         try {
             resultSet.close();
         } catch (MintleafException e) {
@@ -82,4 +81,17 @@ public class DbImportFlavour implements ImportFlavour {
         }
     }
 
+    @Override
+    public boolean canContinue(Row row) {
+        if (this.rowDelegate != null)
+            return this.rowDelegate.canContinue(row);
+        return true;
+    }
+
+    @Override
+    public boolean matches(Row row) {
+        if (this.rowDelegate != null)
+            return this.rowDelegate.matches(row);
+        return true;
+    }
 }

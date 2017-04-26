@@ -101,9 +101,10 @@ public class RecordFileReader<T extends Row> implements BinaryReader {
         int i = 0;
         for (byte[] record : this) {
             Row row = listener.createRowInstance(record);
-            listener.eachRow(i++, row);
             row.setValues(record, charset);
-            if (!listener.canContinue()) {
+            if (listener.matches(row))
+                listener.eachRow(i++, row);
+            if (!listener.canContinue(row)) {
                 break;
             }
         }
