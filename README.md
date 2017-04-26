@@ -18,15 +18,15 @@ Welcome to the Mintleaf! Mintleaf is a light weight framework tool helps you to 
     <dependency>
         <groupId>org.qamatic</groupId>
         <artifactId>mintleaf-core</artifactId>
-        <version>1.8.26</version>
+        <version>1.8.27</version>
     </dependency>
     
 ## Download binaries
 
 Command line tools:
  
-- [Windows: mintleaf-cmd-1.8.26-rel.zip](http://search.maven.org/remotecontent?filepath=org/qamatic/mintleaf-cmd/1.8.26/mintleaf-cmd-1.8.26-rel.zip) 
-- [Mac/Linux: mintleaf-cmd-1.8.26-rel.tar.gz](http://search.maven.org/remotecontent?filepath=org/qamatic/mintleaf-cmd/1.8.26/mintleaf-cmd-1.8.26-rel.tar.gz) 
+- [Windows: mintleaf-cmd-1.8.27-rel.zip](http://search.maven.org/remotecontent?filepath=org/qamatic/mintleaf-cmd/1.8.27/mintleaf-cmd-1.8.27-rel.zip) 
+- [Mac/Linux: mintleaf-cmd-1.8.27-rel.tar.gz](http://search.maven.org/remotecontent?filepath=org/qamatic/mintleaf-cmd/1.8.27/mintleaf-cmd-1.8.27-rel.tar.gz) 
 
  
 ## License
