@@ -5,6 +5,7 @@ import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.qamatic.mintleaf.*;
+import org.qamatic.mintleaf.tools.BaseFileReader;
 import org.qamatic.mintleaf.tools.ImportReader;
 
 import java.io.IOException;
@@ -14,7 +15,7 @@ import java.util.Iterator;
 /**
  * Created by senips on 4/25/17.
  */
-public class ExcelImportReader<T> implements ImportReader<T> {
+public class ExcelImportReader<T> extends BaseFileReader implements ImportReader<T> {
 
     private InputStream inputStream;
     private int activeWorkSheet;
@@ -38,7 +39,7 @@ public class ExcelImportReader<T> implements ImportReader<T> {
     }
 
     @Override
-    public T read(MintleafReadListener listener) throws MintleafException {
+    public T read() throws MintleafException {
         HSSFWorkbook workbook = null;
         try {
             workbook = new HSSFWorkbook(this.inputStream);
@@ -58,9 +59,9 @@ public class ExcelImportReader<T> implements ImportReader<T> {
                 }
                 ExcelRow row = new ExcelRow(rowIterator.next());
                 row.setMetaData(metaDataCollection);
-                if (listener.matches(row))
-                    listener.eachRow(i++, row);
-                if (!listener.canContinue(row)) {
+                if (getReadListener().matches(row))
+                    getReadListener().eachRow(i++, row);
+                if (!getReadListener().canContinueRead(row)) {
                     break;
                 }
 

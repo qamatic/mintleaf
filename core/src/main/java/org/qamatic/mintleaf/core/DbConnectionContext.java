@@ -202,7 +202,7 @@ public class DbConnectionContext<T extends DbQueryExtension> implements Connecti
                 try {
                     if (listener.matches(dr))
                         rows.add(listener.eachRow(row, dr));
-                    if (!listener.canContinue(dr)) {
+                    if (!listener.canContinueRead(dr)) {
                         return rows;
                     }
                 } catch (MintleafException e) {

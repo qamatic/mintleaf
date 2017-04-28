@@ -149,7 +149,7 @@ public class SelectQuery implements Executable<SqlResultSet> {
                     Row row = new ResultSetRowWrapper<T>(getResultSet());
                     if (listener.matches(row))
                         listener.eachRow(i++, row);
-                    if (!listener.canContinue(row))
+                    if (!listener.canContinueRead(row))
                         break;
                 }
             } catch (SQLException e) {

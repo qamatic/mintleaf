@@ -11,13 +11,13 @@ import java.util.Iterator;
 /**
  * Created by QAmatic Team on 4/11/17.
  */
-public abstract class BinaryFileImportReader<T> implements ImportReader {
+public abstract class BinaryFileReader<T> extends BaseFileReader implements ImportReader {
 
     private BinaryReader binaryReader;
     private Charset charset;
 
 
-    public BinaryFileImportReader(BinaryReader binaryReader, Charset charset) {
+    public BinaryFileReader(BinaryReader binaryReader, Charset charset) {
         this.binaryReader = binaryReader;
         this.charset = charset;
     }
@@ -25,21 +25,20 @@ public abstract class BinaryFileImportReader<T> implements ImportReader {
     public abstract Row createRowInstance(Object... params);
 
     @Override
-    public T read(MintleafReadListener listener) throws MintleafException {
+    public T read() throws MintleafException {
         Iterator<byte[]> iterator = binaryReader.iterator();
         int i = 0;
         while (iterator.hasNext()) {
             byte[] bytes = iterator.next();
             Row row = createRowInstance(bytes);
             row.setValues(bytes, this.charset);
-            if (listener.matches(row))
-                listener.eachRow(i++, row);
-            if (!listener.canContinue(row)) {
+            if (getReadListener().matches(row))
+                getReadListener().eachRow(i++, row);
+            if (!getReadListener().canContinueRead(row)) {
                 break;
             }
         }
         return null;
     }
-
 
 }

@@ -35,56 +35,54 @@
 
 package org.qamatic.mintleaf.tools;
 
-import org.apache.commons.csv.CSVFormat;
-import org.apache.commons.csv.CSVParser;
-import org.apache.commons.csv.CSVRecord;
 import org.qamatic.mintleaf.MintleafException;
+import org.qamatic.mintleaf.MintleafLogger;
 import org.qamatic.mintleaf.MintleafReadListener;
-import org.qamatic.mintleaf.Row;
+import org.qamatic.mintleaf.SqlResultSet;
+import org.qamatic.mintleaf.core.ResultSetRowWrapper;
 
-import java.io.IOException;
-import java.io.Reader;
+import java.sql.SQLException;
 
 /**
  * Created by qamatic on 2/18/6/16.
  */
-public class CsvImportReader<T> implements ImportReader<T> {
+public class DbResultSetReader<T> extends BaseFileReader  implements ImportReader<T> {
 
-    private Reader afileReader;
+    private static final MintleafLogger logger = MintleafLogger.getLogger(DbResultSetReader.class);
+    private SqlResultSet resultSet;
 
-    public CsvImportReader(Reader afileReader) {
-        this.afileReader = afileReader;
+
+    public DbResultSetReader(SqlResultSet resultSet) {
+
+        this.resultSet = resultSet;
     }
 
-    protected CSVParser getCSVParser() throws IOException {
-        return new CSVParser(afileReader, CSVFormat.EXCEL.withHeader().withIgnoreEmptyLines());
-    }
-
-    public T read(MintleafReadListener listener) throws MintleafException {
-
-        final CSVParser parser;
+    public T read() throws MintleafException {
+        final ResultSetRowWrapper dbRowWrapper = new ResultSetRowWrapper();
+        int i = 0;
         try {
-            parser = getCSVParser();
-            int i = 0;
-            for (CSVRecord record : parser) {
-                Row row = createRowInstance(record);
-                if (listener.matches(row))
-                    listener.eachRow(i++, row);
-                if (!listener.canContinue(row)) {
+            while (this.resultSet.getResultSet().next()) {
+                dbRowWrapper.setResultSet(this.resultSet.getResultSet());
+                if (getReadListener().matches(dbRowWrapper))
+                    getReadListener().eachRow(i++, dbRowWrapper);
+                if (!getReadListener().canContinueRead(dbRowWrapper)) {
                     break;
                 }
-
             }
-
-        } catch (IOException e) {
+        } catch (SQLException e) {
             throw new MintleafException(e);
         }
         return null;
     }
 
-
-    public Row createRowInstance(Object... params) {
-        return new CsvRowWrapper((CSVRecord) params[0]);
+    @Override
+    public void close() {
+        try {
+            resultSet.close();
+        } catch (MintleafException e) {
+            MintleafException.throwException(e);
+        }
     }
+
 
 }

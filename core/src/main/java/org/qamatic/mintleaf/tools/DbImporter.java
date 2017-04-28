@@ -67,13 +67,14 @@ public class DbImporter extends ImpExpBase implements Executable<Boolean> {
     }
 
     protected ImportReader createFlavour(SqlResultSet sourceSqlResultSet) {
-        return new DbImportReader(sourceSqlResultSet);
+        return new DbResultSetReader(sourceSqlResultSet);
     }
 
     @Override
     protected ConnectionContext getConnectionContext() {
         return this.sourceDb;
     }
+
 
     public void setSourceSqlParamValueBindings(ParameterBinding sourceSqlParamValueBindings) {
         this.sourceSqlParamValueBindings = sourceSqlParamValueBindings;

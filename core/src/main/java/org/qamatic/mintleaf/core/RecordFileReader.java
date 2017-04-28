@@ -104,7 +104,7 @@ public class RecordFileReader<T extends Row> implements BinaryReader {
             row.setValues(record, charset);
             if (listener.matches(row))
                 listener.eachRow(i++, row);
-            if (!listener.canContinue(row)) {
+            if (!listener.canContinueRead(row)) {
                 break;
             }
         }

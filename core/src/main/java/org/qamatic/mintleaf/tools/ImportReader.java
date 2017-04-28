@@ -45,12 +45,16 @@ import org.qamatic.mintleaf.MintleafReadListener;
 public interface ImportReader<T> extends AutoCloseable {
 
 
-    T read(MintleafReadListener listener) throws MintleafException;
-
+    default T read() throws MintleafException{
+        return null;
+    };
 
     @Override
     default void close() {
 
     }
 
+    MintleafReadListener getReadListener();
+
+    void setReadListener(MintleafReadListener readListener);
 }

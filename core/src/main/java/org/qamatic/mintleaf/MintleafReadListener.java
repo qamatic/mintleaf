@@ -45,7 +45,7 @@ public interface MintleafReadListener<T> {
         return true;
     }
 
-    default boolean canContinue(Row row) {
+    default boolean canContinueRead(Row row) {
         return true;
     }
 

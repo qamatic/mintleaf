@@ -59,7 +59,7 @@ public abstract class ImpExpBase<T> {
         logger.info("importing using template:" + sqlTemplate);
         List<String> batchSqls = new ArrayList<>();
         final Executable<int[]> batchCall = getConnectionContext().executeBatchSqls(batchSqls);
-        dataImport.read(new MintleafReadListener() {
+        dataImport.setReadListener(new MintleafReadListener() {
 
             @Override
             public Object eachRow(int rowNum, Row row) throws MintleafException {
@@ -75,6 +75,8 @@ public abstract class ImpExpBase<T> {
                 return null;
             }
         });
+
+        dataImport.read();
         dataImport.close();
         try {
             batchCall.execute();
@@ -90,7 +92,15 @@ public abstract class ImpExpBase<T> {
         }
     }
 
-    public void setMatchingCriteria(MintleafReadListener<T> readListener) {
+
+    public MintleafReadListener<T> getReadListener() {
+        if (this.readListener == null){
+
+        }
+        return readListener;
+    }
+
+    public void setReadListener(MintleafReadListener<T> readListener) {
         this.readListener = readListener;
     }
 }

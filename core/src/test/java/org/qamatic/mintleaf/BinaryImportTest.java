@@ -2,7 +2,7 @@ package org.qamatic.mintleaf;
 
 import org.junit.Test;
 import org.qamatic.mintleaf.core.*;
-import org.qamatic.mintleaf.tools.BinaryFileImportReader;
+import org.qamatic.mintleaf.tools.BinaryFileReader;
 
 import java.io.*;
 import java.net.URISyntaxException;
@@ -118,7 +118,7 @@ public class BinaryImportTest extends H2TestCase {
 
     @Test
     public void readBinaryByteReader() throws MintleafException, URISyntaxException {
-        BinaryFileImportReader reader = new BinaryFileImportReader(new RecordFileReader(getTestFile(), 34), Charset.forName("Cp1047")) {
+        BinaryFileReader reader = new BinaryFileReader(new RecordFileReader(getTestFile(), 34), Charset.forName("Cp1047")) {
 
             @Override
             public Row createRowInstance(Object... params) {
@@ -126,7 +126,7 @@ public class BinaryImportTest extends H2TestCase {
             }
         };
         final int[] i = new int[]{0};
-        reader.read(new MintleafReadListener() {
+        reader.setReadListener(new MintleafReadListener() {
             @Override
             public Object eachRow(int rowNum, Row row) throws MintleafException {
 //                String actual = new String((byte[]) row.getValue(Row.INTERNAL_OBJECT_VALUE), Charset.forName("Cp1047"));
@@ -135,11 +135,12 @@ public class BinaryImportTest extends H2TestCase {
             }
 
             @Override
-            public boolean canContinue(Row row) {
+            public boolean canContinueRead(Row row) {
                 i[0]++;
                 return true;
             }
         });
+        reader.read();
         assertEquals(3, i[0]);
     }
 
@@ -150,7 +151,7 @@ public class BinaryImportTest extends H2TestCase {
         BinaryReader reader = new RecordFileReader(getTestFile(), 34);
 
         Executable action = new Mintleaf.AnyDataToDbDataTransferBuilder().
-                withImportFlavour(new BinaryFileImportReader(reader, Charset.forName("Cp1047")) {
+                withImportFlavour(new BinaryFileReader(reader, Charset.forName("Cp1047")) {
                     @Override
                     public Row createRowInstance(Object... params) {
                         return new CityRecord(cityRecordMetaData);
@@ -203,7 +204,7 @@ public class BinaryImportTest extends H2TestCase {
         BinaryReader reader = new RecordFileReader(getTestFile(), 34);
 
         Executable action = new Mintleaf.AnyDataToListTransferBuilder<>().
-                withSource(new BinaryFileImportReader(reader, Charset.forName("Cp1047")) {
+                withSource(new BinaryFileReader(reader, Charset.forName("Cp1047")) {
                     @Override
                     public Row createRowInstance(Object... params) {
                         return new CityRecord(cityRecordMetaData);
