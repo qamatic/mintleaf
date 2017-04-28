@@ -5,7 +5,7 @@ import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.qamatic.mintleaf.*;
-import org.qamatic.mintleaf.tools.ImportFlavour;
+import org.qamatic.mintleaf.tools.ImportReader;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -14,14 +14,14 @@ import java.util.Iterator;
 /**
  * Created by senips on 4/25/17.
  */
-public class ExcelImportFlavour implements ImportFlavour, RowDelegate {
+public class ExcelImportReader<T> implements ImportReader<T> {
 
     private InputStream inputStream;
     private int activeWorkSheet;
     private int headerRowIndex;
-    private RowDelegate rowDelegate;
 
-    public ExcelImportFlavour(InputStream inputStream) {
+
+    public ExcelImportReader(InputStream inputStream) {
         this.inputStream = inputStream;
     }
 
@@ -38,7 +38,7 @@ public class ExcelImportFlavour implements ImportFlavour, RowDelegate {
     }
 
     @Override
-    public void doImport(DataRowListener listener) throws MintleafException {
+    public T read(MintleafReadListener listener) throws MintleafException {
         HSSFWorkbook workbook = null;
         try {
             workbook = new HSSFWorkbook(this.inputStream);
@@ -58,13 +58,14 @@ public class ExcelImportFlavour implements ImportFlavour, RowDelegate {
                 }
                 ExcelRow row = new ExcelRow(rowIterator.next());
                 row.setMetaData(metaDataCollection);
-                if (matches(row))
+                if (listener.matches(row))
                     listener.eachRow(i++, row);
-                if (!canContinue(row)) {
+                if (!listener.canContinue(row)) {
                     break;
                 }
 
             }
+            return null;
 
         } catch (IOException e) {
             throw new MintleafException(e);
@@ -80,17 +81,4 @@ public class ExcelImportFlavour implements ImportFlavour, RowDelegate {
     }
 
 
-    @Override
-    public boolean canContinue(org.qamatic.mintleaf.Row row) {
-        if (this.rowDelegate != null)
-            return this.rowDelegate.canContinue(row);
-        return true;
-    }
-
-    @Override
-    public boolean matches(org.qamatic.mintleaf.Row row) {
-        if (this.rowDelegate != null)
-            return this.rowDelegate.matches(row);
-        return true;
-    }
 }

@@ -1,15 +1,11 @@
 package org.qamatic.mintleaf.dbexample.excel;
 
 import org.junit.Test;
-import org.qamatic.mintleaf.Executable;
-import org.qamatic.mintleaf.Mintleaf;
-import org.qamatic.mintleaf.MintleafException;
-import org.qamatic.mintleaf.RowListWrapper;
+import org.qamatic.mintleaf.*;
 import org.qamatic.mintleaf.core.BaseSqlReader;
-import org.qamatic.mintleaf.core.ObjectRowListWrapper;
-import org.qamatic.mintleaf.excel.ExcelImportFlavour;
+import org.qamatic.mintleaf.excel.ExcelImportReader;
 import org.qamatic.mintleaf.excel.ExcelRow;
-import org.qamatic.mintleaf.tools.ImportFlavour;
+import org.qamatic.mintleaf.tools.ImportReader;
 
 import static junit.framework.TestCase.assertEquals;
 
@@ -22,9 +18,9 @@ public class ExcelImportTest {
     @Test
     public void importFromExcelToObjectListTest() throws MintleafException {
 
-        ImportFlavour importFlavour = new ExcelImportFlavour(BaseSqlReader.getInputStreamFromFile("res:/users.xls"));
+        ImportReader importReader = new ExcelImportReader(BaseSqlReader.getInputStreamFromFile("res:/users.xls"));
         Executable<ExcelRow> importToList = new Mintleaf.AnyDataToListTransferBuilder<>().
-                withSource(importFlavour).
+                withSource(importReader).
                 build();
 
         RowListWrapper<ExcelRow> rows = (RowListWrapper<ExcelRow>) importToList.execute();
@@ -32,4 +28,26 @@ public class ExcelImportTest {
         assertEquals("qamatic", rows.getRow(6).getValue(1));
         assertEquals("qamatic", rows.getRow(6).getValue("USERNAME"));
     }
+
+//    @Test
+//    public void importFromExcelToObjectListTestMatches() throws MintleafException {
+//
+//        ImportReader importReader = new ExcelImportReader(BaseSqlReader.getInputStreamFromFile("res:/users.xls"));
+//        Executable<ExcelRow> importToList = new Mintleaf.AnyDataToListTransferBuilder<>().
+//                withSource(importReader).
+//                withMatchingCriteria(new MintleafReadListener() {
+//                    @Override
+//                    public Object eachRow(int rowNum, Row row) throws MintleafException {
+//                        return null;
+//                    }
+//
+//
+//                }).
+//                build();
+//
+//        RowListWrapper<ExcelRow> rows = (RowListWrapper<ExcelRow>) importToList.execute();
+//        assertEquals(7, rows.size());
+//        assertEquals("qamatic", rows.getRow(6).getValue(1));
+//        assertEquals("qamatic", rows.getRow(6).getValue("USERNAME"));
+//    }
 }

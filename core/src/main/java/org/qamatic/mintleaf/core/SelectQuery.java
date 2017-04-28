@@ -142,7 +142,7 @@ public class SelectQuery implements Executable<SqlResultSet> {
         }
 
         @Override
-        public <T> void iterate(DataRowListener<T> listener) throws MintleafException, MintleafException {
+        public <T> void iterate(MintleafReadListener<T> listener) throws MintleafException, MintleafException {
             try {
                 int i = 0;
                 while (getResultSet().next()) {

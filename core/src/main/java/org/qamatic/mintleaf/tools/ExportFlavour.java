@@ -42,9 +42,10 @@ import java.sql.ResultSet;
 /**
  * Created by qamatic on 2/18/6/16.
  */
-public interface ExportFlavour extends AutoCloseable{
+public interface ExportFlavour extends AutoCloseable {
 
     void export(ResultSet resultSet) throws MintleafException;
+
     default void close() throws MintleafException {
 
     }

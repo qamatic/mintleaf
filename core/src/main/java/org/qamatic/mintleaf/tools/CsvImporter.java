@@ -80,8 +80,8 @@ public class CsvImporter extends ImpExpBase implements Executable<Boolean> {
         }
     }
 
-    protected ImportFlavour createFlavour(File f) throws FileNotFoundException {
-        return new CsvImportFlavour(new FileReader(f));
+    protected ImportReader createFlavour(File f) throws FileNotFoundException {
+        return new CsvImportReader(new FileReader(f));
     }
 
 

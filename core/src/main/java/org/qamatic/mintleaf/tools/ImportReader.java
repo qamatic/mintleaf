@@ -36,20 +36,20 @@
 package org.qamatic.mintleaf.tools;
 
 
-import org.qamatic.mintleaf.DataRowListener;
 import org.qamatic.mintleaf.MintleafException;
+import org.qamatic.mintleaf.MintleafReadListener;
 
 /**
  * Created by qamatic on 2/18/6/16.
  */
-public interface ImportFlavour extends AutoCloseable {
+public interface ImportReader<T> extends AutoCloseable {
 
 
-    void doImport(DataRowListener listener) throws MintleafException;
+    T read(MintleafReadListener listener) throws MintleafException;
 
 
     @Override
-    default void close()  {
+    default void close() {
 
     }
 

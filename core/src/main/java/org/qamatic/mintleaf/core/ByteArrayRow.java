@@ -10,14 +10,14 @@ public class ByteArrayRow extends InMemoryRow {
 
     private byte[] bytes;
 
-    public ByteArrayRow(byte[] bytes){
+    public ByteArrayRow(byte[] bytes) {
 
         this.bytes = bytes;
     }
 
     @Override
     public Object getValue(int columnIndex) throws MintleafException {
-        if (columnIndex == Row.INTERNAL_OBJECT_VALUE){
+        if (columnIndex == Row.INTERNAL_OBJECT_VALUE) {
             return this.bytes;
         }
         return super.getValue(columnIndex);

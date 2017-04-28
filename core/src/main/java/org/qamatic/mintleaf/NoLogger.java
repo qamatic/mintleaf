@@ -3,7 +3,7 @@ package org.qamatic.mintleaf;
 /**
  * Created by QAmatic Team on 4/8/17.
  */
-public class NoLogger extends MintleafLogger  {
+public class NoLogger extends MintleafLogger {
 
     private Class<?> clazz;
 

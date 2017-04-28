@@ -47,9 +47,9 @@ import java.io.InputStreamReader;
 public class SqlStreamReader extends BaseSqlReader {
 
     private final static MintleafLogger logger = MintleafLogger.getLogger(SqlStreamReader.class);
+    protected final StringBuilder content = new StringBuilder();
     protected InputStream inputStream;
     protected String resource;
-    protected final StringBuilder content = new StringBuilder();
     protected boolean skipLineFeeds;
 
     public SqlStreamReader(InputStream stream) {

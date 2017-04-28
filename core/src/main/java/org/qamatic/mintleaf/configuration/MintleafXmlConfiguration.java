@@ -88,13 +88,13 @@ public class MintleafXmlConfiguration implements MintleafConfiguration {
         return databases;
     }
 
+    public void setDatabases(List<DbConnectionInfo> databases) {
+        this.databases = databases;
+    }
+
     @Override
     public List<SchemaVersionInfo> getSchemas() {
         return getSchemaVersions().getVersion();
-    }
-
-    public void setDatabases(List<DbConnectionInfo> databases) {
-        this.databases = databases;
     }
 
     public SchemaVersions getSchemaVersions() {

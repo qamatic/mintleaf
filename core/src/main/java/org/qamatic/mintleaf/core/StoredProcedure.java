@@ -108,15 +108,15 @@ public class StoredProcedure implements Executable<int[]> {
 
         private int dataType;
 
-        private CallType(int dataType){
+        private CallType(int dataType) {
             this.dataType = dataType;
         }
 
-        public int getReturnType(){
+        public int getReturnType() {
             return this.dataType;
         }
 
-        public CallType returnsType(int type){
+        public CallType returnsType(int type) {
             dataType = type;
             return this;
         }

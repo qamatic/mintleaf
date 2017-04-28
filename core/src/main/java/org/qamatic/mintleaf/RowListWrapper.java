@@ -35,8 +35,6 @@
 
 package org.qamatic.mintleaf;
 
-import java.util.Iterator;
-
 /**
  * Created by qamatic on 3/4/16.
  */
@@ -52,7 +50,7 @@ public interface RowListWrapper<T extends Row> extends Iterable<T> {
 
     MetaDataCollection getMetaData() throws MintleafException;
 
-    default boolean add(T t){
+    default boolean add(T t) {
         MintleafException.throwException("unimplemented");
         return false;
     }

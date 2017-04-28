@@ -64,9 +64,9 @@ public interface DbQueryExtension extends AutoCloseable {
         throw new NotImplementedException();
     }
 
-    <T> List<T> query(String sql, ParameterBinding parameterBinding, final DataRowListener<T> listener) throws MintleafException;
+    <T> List<T> query(String sql, ParameterBinding parameterBinding, final MintleafReadListener<T> listener) throws MintleafException;
 
-    default <T> List<T> query(String sql, final DataRowListener<T> listener) throws MintleafException {
+    default <T> List<T> query(String sql, final MintleafReadListener<T> listener) throws MintleafException {
         return query(sql, null, listener);
     }
 

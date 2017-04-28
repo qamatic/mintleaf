@@ -63,17 +63,16 @@ public interface Row {
 
     default int asInt(String columnName) {
         try {
-            Object o =getValue(columnName);
-            if (o instanceof String){
+            Object o = getValue(columnName);
+            if (o instanceof String) {
                 return new Integer(o.toString());
-            } else
-            if (o instanceof Integer){
+            } else if (o instanceof Integer) {
                 return (int) o;
             }
         } catch (MintleafException e) {
             MintleafException.throwException(e);
         }
-        MintleafException.throwException(columnName+" is not of integer type");
+        MintleafException.throwException(columnName + " is not of integer type");
         return -1;
     }
 

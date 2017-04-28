@@ -37,8 +37,8 @@ package org.qamatic.mintleaf.oracle;
 
 import org.qamatic.mintleaf.ApacheBasicDataSource;
 import org.qamatic.mintleaf.Database;
-import org.qamatic.mintleaf.MintleafException;
 import org.qamatic.mintleaf.Mintleaf;
+import org.qamatic.mintleaf.MintleafException;
 import org.qamatic.mintleaf.core.ChangeSets;
 
 /**

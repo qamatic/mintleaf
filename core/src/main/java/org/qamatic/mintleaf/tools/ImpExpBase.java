@@ -45,37 +45,25 @@ import java.util.regex.Pattern;
 /**
  * Created by qamatic on 3/6/16.
  */
-public abstract class ImpExpBase {
+public abstract class ImpExpBase<T> {
     private static final MintleafLogger logger = MintleafLogger.getLogger(ImpExpBase.class);
-
-    private RowDelegate rowDelegate;
+    private MintleafReadListener<T> readListener;
 
     protected abstract ConnectionContext getConnectionContext();
 
 
     //this is meant for testing purpose of loading data but for production side you should consider using param binds..
-    protected void importDataFrom(final ImportFlavour dataImport, final String sqlTemplate) throws MintleafException {
+    protected void importDataFrom(final ImportReader dataImport, final String sqlTemplate) throws MintleafException {
         final Pattern columnPattern = Pattern.compile("\\$(\\w+)\\$", Pattern.DOTALL | Pattern.MULTILINE | Pattern.CASE_INSENSITIVE);
         final Matcher columns = columnPattern.matcher(sqlTemplate);
         logger.info("importing using template:" + sqlTemplate);
         List<String> batchSqls = new ArrayList<>();
         final Executable<int[]> batchCall = getConnectionContext().executeBatchSqls(batchSqls);
-        dataImport.doImport(new DataRowListener() {
-
-            @Override
-            public boolean matches(Row row) {
-                if (ImpExpBase.this.rowDelegate != null) {
-                    return ImpExpBase.this.rowDelegate.matches(row);
-                }
-                return true;
-            }
+        dataImport.read(new MintleafReadListener() {
 
             @Override
             public Object eachRow(int rowNum, Row row) throws MintleafException {
 
-                if ((ImpExpBase.this.rowDelegate != null) && !ImpExpBase.this.rowDelegate.matches(row)) {
-                    return null;
-                }
                 StringBuffer buffer = new StringBuffer(sqlTemplate);
                 columns.reset();
                 while (columns.find()) {
@@ -84,22 +72,6 @@ public abstract class ImpExpBase {
                 }
                 batchSqls.add(buffer.toString());
 
-                return null;
-            }
-
-            @Override
-            public boolean canContinue(Row row) {
-                if (ImpExpBase.this.rowDelegate != null) {
-                    return ImpExpBase.this.rowDelegate.canContinue(row);
-                }
-                return true;
-            }
-
-            @Override
-            public Row createRowInstance(Object... params) {
-                if (ImpExpBase.this.rowDelegate != null) {
-                    return ImpExpBase.this.rowDelegate.createRowInstance(params);
-                }
                 return null;
             }
         });
@@ -118,7 +90,7 @@ public abstract class ImpExpBase {
         }
     }
 
-    public void setMatchingCriteria(RowDelegate rowDelegate) {
-        this.rowDelegate = rowDelegate;
+    public void setMatchingCriteria(MintleafReadListener<T> readListener) {
+        this.readListener = readListener;
     }
 }

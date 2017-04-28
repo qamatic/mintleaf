@@ -80,7 +80,7 @@ public class StandardQueries implements DbQueryExtension {
         return objectNames;
     }
 
-    public <T> List<T> query(String sql, ParameterBinding parameterBinding, final DataRowListener<T> listener) throws MintleafException {
+    public <T> List<T> query(String sql, ParameterBinding parameterBinding, final MintleafReadListener<T> listener) throws MintleafException {
         return this.connectionContext.query(sql, parameterBinding, listener);
     }
 

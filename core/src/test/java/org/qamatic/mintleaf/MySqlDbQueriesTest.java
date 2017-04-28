@@ -11,7 +11,7 @@ import static junit.framework.TestCase.assertEquals;
 /**
  * Created by QAmatic Team on 4/1/17.
  */
-public class MySqlDbQueriesTest extends MysqlTestCase{
+public class MySqlDbQueriesTest extends MysqlTestCase {
 
     private static Database employeesDb = createOracleDbContext("testuser1", "testpassword1");
 

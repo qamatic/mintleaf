@@ -94,7 +94,7 @@ public class ResultSetRowListWrapper<T extends Row> implements RowListWrapper<T>
 
             private ResultSet getNextRecord() {
                 try {
-                    if (ResultSetRowListWrapper.this.resultSet.next()){
+                    if (ResultSetRowListWrapper.this.resultSet.next()) {
                         return ResultSetRowListWrapper.this.resultSet;
                     }
                 } catch (SQLException e) {
@@ -117,9 +117,9 @@ public class ResultSetRowListWrapper<T extends Row> implements RowListWrapper<T>
             public T next() {
                 ResultSet next = this.current;
                 this.current = null;
-                if(next == null) {
+                if (next == null) {
                     next = this.getNextRecord();
-                    if(next == null) {
+                    if (next == null) {
                         MintleafException.throwException("reached end of records, no more elements");
                     }
                 }

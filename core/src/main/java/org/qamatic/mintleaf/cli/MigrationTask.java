@@ -2,7 +2,6 @@ package org.qamatic.mintleaf.cli;
 
 import org.qamatic.mintleaf.*;
 import org.qamatic.mintleaf.configuration.SchemaVersionInfo;
-import org.qamatic.mintleaf.core.ChangeSets;
 import org.qamatic.mintleaf.core.MultiChangeSetFileReader;
 import org.qamatic.mintleaf.core.SqlChangeSets;
 
@@ -27,8 +26,8 @@ public class MigrationTask implements MintleafCliTask {
     public int execute() throws MintleafException {
 
         SqlChangeSets changeSets = new SqlChangeSets(this.connectionContext,
-                    new MultiChangeSetFileReader(this.schemaVersionInfo.getScriptLocationAsList()),
-                    this.schemaVersionInfo.getChangeSetsAsList());
+                new MultiChangeSetFileReader(this.schemaVersionInfo.getScriptLocationAsList()),
+                this.schemaVersionInfo.getChangeSetsAsList());
         changeSets.apply();
 
         return 0;

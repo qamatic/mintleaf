@@ -35,70 +35,55 @@
 
 package org.qamatic.mintleaf.tools;
 
-import org.apache.commons.csv.CSVFormat;
-import org.apache.commons.csv.CSVParser;
-import org.apache.commons.csv.CSVRecord;
-import org.qamatic.mintleaf.DataRowListener;
-import org.qamatic.mintleaf.RowDelegate;
 import org.qamatic.mintleaf.MintleafException;
-import org.qamatic.mintleaf.Row;
+import org.qamatic.mintleaf.MintleafLogger;
+import org.qamatic.mintleaf.MintleafReadListener;
+import org.qamatic.mintleaf.SqlResultSet;
+import org.qamatic.mintleaf.core.ResultSetRowWrapper;
 
-import java.io.IOException;
-import java.io.Reader;
+import java.sql.SQLException;
 
 /**
  * Created by qamatic on 2/18/6/16.
  */
-public class CsvImportFlavour implements ImportFlavour, RowDelegate {
+public class DbImportReader<T> implements ImportReader<T> {
 
-    private Reader afileReader;
-    private RowDelegate rowDelegate;
+    private static final MintleafLogger logger = MintleafLogger.getLogger(DbImportReader.class);
+    private SqlResultSet resultSet;
 
-    public CsvImportFlavour(Reader afileReader) {
-        this.afileReader = afileReader;
+
+    public DbImportReader(SqlResultSet resultSet) {
+
+        this.resultSet = resultSet;
     }
 
-    protected CSVParser getCSVParser() throws IOException {
-        return new CSVParser(afileReader, CSVFormat.EXCEL.withHeader().withIgnoreEmptyLines());
-    }
-
-    public void doImport(DataRowListener listener) throws MintleafException {
-
-        final CSVParser parser;
+    @Override
+    public T read(MintleafReadListener listener) throws MintleafException {
+        final ResultSetRowWrapper dbRowWrapper = new ResultSetRowWrapper();
+        int i = 0;
         try {
-            parser = getCSVParser();
-            int i = 0;
-            for (CSVRecord record : parser) {
-                Row row =  createRowInstance(record);
-                if (matches(row))
-                    listener.eachRow(i++, row);
-                if (!canContinue(row)) {
+            while (this.resultSet.getResultSet().next()) {
+                dbRowWrapper.setResultSet(this.resultSet.getResultSet());
+                if (listener.matches(dbRowWrapper))
+                    listener.eachRow(i++, dbRowWrapper);
+                if (!listener.canContinue(dbRowWrapper)) {
                     break;
                 }
-
             }
-
-        } catch (IOException e) {
+        } catch (SQLException e) {
             throw new MintleafException(e);
+        }
+        return null;
+    }
+
+    @Override
+    public void close() {
+        try {
+            resultSet.close();
+        } catch (MintleafException e) {
+            MintleafException.throwException(e);
         }
     }
 
-    @Override
-    public Row createRowInstance(Object... params) {
-        return new CsvRowWrapper((CSVRecord) params[0]);
-    }
 
-    @Override
-    public boolean canContinue(Row row) {
-        if (this.rowDelegate != null)
-            return this.rowDelegate.canContinue(row);
-        return true;
-    }
-
-    @Override
-    public boolean matches(Row row) {
-        if (this.rowDelegate != null)
-            return this.rowDelegate.matches(row);
-        return true;
-    }
 }

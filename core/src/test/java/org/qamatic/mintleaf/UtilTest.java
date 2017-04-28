@@ -69,17 +69,17 @@ public class UtilTest {
     }
 
     @Test
-    public void testStoredProcReturnType(){
+    public void testStoredProcReturnType() {
         assertEquals(-1, StoredProcedure.CallType.PROC.getReturnType());
     }
 
     @Test
-    public void testStoredFunctionReturnType(){
+    public void testStoredFunctionReturnType() {
         assertEquals(Types.INTEGER, StoredProcedure.CallType.FUNCTION.getReturnType());
     }
 
     @Test
-    public void testStoredCustomCallReturnType(){
+    public void testStoredCustomCallReturnType() {
         assertEquals(-1, StoredProcedure.CallType.CUSTOMCALL.getReturnType());
     }
 

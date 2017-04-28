@@ -49,11 +49,11 @@ public class CsvRowWrapper<T> implements Row {
     private CSVRecord record;
     private MetaDataCollection metaDataCollection;
 
-    public CsvRowWrapper(){
+    public CsvRowWrapper() {
 
     }
 
-    public CsvRowWrapper(CSVRecord record){
+    public CsvRowWrapper(CSVRecord record) {
         this.record = record;
     }
 

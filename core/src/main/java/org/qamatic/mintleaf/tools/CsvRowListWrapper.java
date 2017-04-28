@@ -160,9 +160,9 @@ public class CsvRowListWrapper<T extends Row> implements RowListWrapper<T> {
         public T next() {
             CSVRecord next = this.current;
             this.current = null;
-            if(next == null) {
+            if (next == null) {
                 next = this.getNextRecord();
-                if(next == null) {
+                if (next == null) {
                     throw new NoSuchElementException("No more CSV records available");
                 }
             }

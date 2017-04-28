@@ -58,6 +58,11 @@ public class MigrationTest {
 
     private Database testDb;
 
+    private static void deleteFile(String fileName) {
+        File file = new File(fileName);
+        file.delete();
+    }
+
     @Before
     public void cleanDb() throws MintleafException {
         deleteFile("./target/h2testdb.h2.db");
@@ -97,7 +102,7 @@ public class MigrationTest {
         FileFinder fileFinder = new FileFinder("./target/test-classes/filefinder/*.sql");
 
         List<String> list = fileFinder.list();
-        for(String file : list){
+        for (String file : list) {
             System.out.println(file);
         }
         assertEquals(3, list.size());
@@ -110,13 +115,12 @@ public class MigrationTest {
         FileFinder fileFinder = new FileFinder("./target/regex:^.*\\b(filefinder)\\b.*$");
 
         List<String> list = fileFinder.list();
-        for(String file : list){
+        for (String file : list) {
             System.out.println(file);
         }
         assertEquals(3, list.size());
 
     }
-
 
     @Test
     public void fileScanTestWithExactFile() throws MintleafException {
@@ -133,7 +137,7 @@ public class MigrationTest {
 
     @Test
     public void testMultiFileChangeSets() throws MintleafException {
-        ChangeSetReader  changeSetReader = new MultiChangeSetFileReader(new String[]{"./target/test-classes/migrationtests/h2testdb/1.0/*.sql"});
+        ChangeSetReader changeSetReader = new MultiChangeSetFileReader(new String[]{"./target/test-classes/migrationtests/h2testdb/1.0/*.sql"});
         changeSetReader.read();
         assertEquals(2, changeSetReader.getChangeSets().size());
     }
@@ -153,18 +157,11 @@ public class MigrationTest {
         MintleafConfiguration newConfig = MintleafXmlConfiguration.deSerialize("res:/test-config.xml");
         Database db = newConfig.getDbConnectionInfo("h2testdb").getNewDatabaseInstance();
         try (ConnectionContext connectionContext = db.getNewConnection()) {
-            MintleafCliTask task = new MigrationTask(connectionContext, newConfig.getSchemaVersionInfo("1.0"), null );
+            MintleafCliTask task = new MigrationTask(connectionContext, newConfig.getSchemaVersionInfo("1.0"), null);
             assertEquals(0, task.execute());
             Assert.assertTrue(connectionContext.getDbQueries().isTableExists("BILLING.USERS"));
         }
 
-    }
-
-
-
-        private static void deleteFile(String fileName) {
-        File file = new File(fileName);
-        file.delete();
     }
 
 

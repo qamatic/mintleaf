@@ -1,5 +1,3 @@
-
-
 package org.qamatic.mintleaf.core;
 
 import org.qamatic.mintleaf.MintleafException;
@@ -25,23 +23,23 @@ public class BindingParameterSets implements ParameterSets, ParameterGets {
         this.statement = preparedStatement;
     }
 
-    private PreparedStatement getPreparedStatement(){
+    private PreparedStatement getPreparedStatement() {
         return (PreparedStatement) this.statement;
     }
-    
-    
+
+
     @Override
     public void setBlob(int parameterIndex, InputStream inputStream, long length) throws MintleafException {
         try {
 
-             getPreparedStatement().setBlob(parameterIndex, inputStream, length);
+            getPreparedStatement().setBlob(parameterIndex, inputStream, length);
 
         } catch (SQLException e) {
             throw new MintleafException(e);
         }
     }
 
-    
+
     @Override
     public void setBlob(int parameterIndex, Blob x) throws MintleafException {
         try {
@@ -51,7 +49,7 @@ public class BindingParameterSets implements ParameterSets, ParameterGets {
         }
     }
 
-    
+
     @Override
     public void setEscapeProcessing(boolean enable) throws MintleafException {
         try {
@@ -61,7 +59,7 @@ public class BindingParameterSets implements ParameterSets, ParameterGets {
         }
     }
 
-    
+
     @Override
     public void setURL(int parameterIndex, URL x) throws MintleafException {
         try {
@@ -72,7 +70,6 @@ public class BindingParameterSets implements ParameterSets, ParameterGets {
     }
 
 
-    
     @Override
     public void setNCharacterStream(int parameterIndex, Reader value) throws MintleafException {
         try {
@@ -82,7 +79,7 @@ public class BindingParameterSets implements ParameterSets, ParameterGets {
         }
     }
 
-    
+
     @Override
     public void setBytes(int parameterIndex, byte[] x) throws MintleafException {
         try {
@@ -92,7 +89,7 @@ public class BindingParameterSets implements ParameterSets, ParameterGets {
         }
     }
 
-    
+
     @Override
     @Deprecated
     public void setUnicodeStream(int parameterIndex, InputStream x, int length) throws MintleafException {
@@ -103,7 +100,7 @@ public class BindingParameterSets implements ParameterSets, ParameterGets {
         }
     }
 
-    
+
     @Override
     public void clearParameters() throws MintleafException {
         try {
@@ -113,7 +110,7 @@ public class BindingParameterSets implements ParameterSets, ParameterGets {
         }
     }
 
-    
+
     @Override
     public ParameterMetaData getParameterMetaData() throws MintleafException {
         try {
@@ -123,7 +120,7 @@ public class BindingParameterSets implements ParameterSets, ParameterGets {
         }
     }
 
-    
+
     @Override
     public void setByte(int parameterIndex, byte x) throws MintleafException {
         try {
@@ -133,7 +130,7 @@ public class BindingParameterSets implements ParameterSets, ParameterGets {
         }
     }
 
-    
+
     @Override
     public void setCharacterStream(int parameterIndex, Reader reader, long length) throws MintleafException {
         try {
@@ -143,7 +140,7 @@ public class BindingParameterSets implements ParameterSets, ParameterGets {
         }
     }
 
-    
+
     @Override
     public void setClob(int parameterIndex, Reader reader) throws MintleafException {
         try {
@@ -153,7 +150,7 @@ public class BindingParameterSets implements ParameterSets, ParameterGets {
         }
     }
 
-    
+
     @Override
     public void setNClob(int parameterIndex, NClob value) throws MintleafException {
         try {
@@ -163,7 +160,7 @@ public class BindingParameterSets implements ParameterSets, ParameterGets {
         }
     }
 
-    
+
     @Override
     public void setRowId(int parameterIndex, RowId x) throws MintleafException {
         try {
@@ -173,7 +170,7 @@ public class BindingParameterSets implements ParameterSets, ParameterGets {
         }
     }
 
-    
+
     @Override
     public void setLong(int parameterIndex, long x) throws MintleafException {
         try {
@@ -183,7 +180,7 @@ public class BindingParameterSets implements ParameterSets, ParameterGets {
         }
     }
 
-    
+
     @Override
     public void setRef(int parameterIndex, Ref x) throws MintleafException {
         try {
@@ -193,7 +190,7 @@ public class BindingParameterSets implements ParameterSets, ParameterGets {
         }
     }
 
-    
+
     @Override
     public void setTimestamp(int parameterIndex, Timestamp x) throws MintleafException {
         try {
@@ -203,7 +200,7 @@ public class BindingParameterSets implements ParameterSets, ParameterGets {
         }
     }
 
-    
+
     @Override
     public void setAsciiStream(int parameterIndex, InputStream x, long length) throws MintleafException {
         try {
@@ -213,7 +210,7 @@ public class BindingParameterSets implements ParameterSets, ParameterGets {
         }
     }
 
-    
+
     @Override
     public void setBinaryStream(int parameterIndex, InputStream x, int length) throws MintleafException {
         try {
@@ -223,7 +220,7 @@ public class BindingParameterSets implements ParameterSets, ParameterGets {
         }
     }
 
-    
+
     @Override
     public void setSQLXML(int parameterIndex, SQLXML xmlObject) throws MintleafException {
         try {
@@ -233,7 +230,7 @@ public class BindingParameterSets implements ParameterSets, ParameterGets {
         }
     }
 
-    
+
     @Override
     public void setInt(int parameterIndex, int x) throws MintleafException {
         try {
@@ -243,7 +240,7 @@ public class BindingParameterSets implements ParameterSets, ParameterGets {
         }
     }
 
-    
+
     @Override
     public void setBoolean(int parameterIndex, boolean x) throws MintleafException {
         try {
@@ -253,7 +250,7 @@ public class BindingParameterSets implements ParameterSets, ParameterGets {
         }
     }
 
-    
+
     @Override
     public void setString(int parameterIndex, String x) throws MintleafException {
         try {
@@ -263,7 +260,7 @@ public class BindingParameterSets implements ParameterSets, ParameterGets {
         }
     }
 
-    
+
     @Override
     public void setBinaryStream(int parameterIndex, InputStream x) throws MintleafException {
         try {
@@ -273,7 +270,7 @@ public class BindingParameterSets implements ParameterSets, ParameterGets {
         }
     }
 
-    
+
     @Override
     public void setNull(int parameterIndex, int sqlType) throws MintleafException {
         try {
@@ -283,7 +280,7 @@ public class BindingParameterSets implements ParameterSets, ParameterGets {
         }
     }
 
-    
+
     @Override
     public void setDouble(int parameterIndex, double x) throws MintleafException {
         try {
@@ -293,7 +290,7 @@ public class BindingParameterSets implements ParameterSets, ParameterGets {
         }
     }
 
-    
+
     @Override
     public void setArray(int parameterIndex, Array x) throws MintleafException {
         try {
@@ -303,7 +300,7 @@ public class BindingParameterSets implements ParameterSets, ParameterGets {
         }
     }
 
-    
+
     @Override
     public void setDate(int parameterIndex, Date x, Calendar cal) throws MintleafException {
         try {
@@ -313,7 +310,7 @@ public class BindingParameterSets implements ParameterSets, ParameterGets {
         }
     }
 
-    
+
     @Override
     public void setNull(int parameterIndex, int sqlType, String typeName) throws MintleafException {
         try {
@@ -323,7 +320,7 @@ public class BindingParameterSets implements ParameterSets, ParameterGets {
         }
     }
 
-    
+
     @Override
     public void setObject(int parameterIndex, Object x, SQLType targetSqlType) throws MintleafException {
         try {
@@ -333,7 +330,7 @@ public class BindingParameterSets implements ParameterSets, ParameterGets {
         }
     }
 
-    
+
     @Override
     public void setAsciiStream(int parameterIndex, InputStream x, int length) throws MintleafException {
         try {
@@ -343,7 +340,7 @@ public class BindingParameterSets implements ParameterSets, ParameterGets {
         }
     }
 
-    
+
     @Override
     public void setShort(int parameterIndex, short x) throws MintleafException {
         try {
@@ -353,7 +350,7 @@ public class BindingParameterSets implements ParameterSets, ParameterGets {
         }
     }
 
-    
+
     @Override
     public void setNClob(int parameterIndex, Reader reader) throws MintleafException {
         try {
@@ -363,7 +360,7 @@ public class BindingParameterSets implements ParameterSets, ParameterGets {
         }
     }
 
-    
+
     @Override
     public void setTime(int parameterIndex, Time x, Calendar cal) throws MintleafException {
         try {
@@ -373,7 +370,7 @@ public class BindingParameterSets implements ParameterSets, ParameterGets {
         }
     }
 
-    
+
     @Override
     public void setCharacterStream(int parameterIndex, Reader reader, int length) throws MintleafException {
         try {
@@ -383,7 +380,7 @@ public class BindingParameterSets implements ParameterSets, ParameterGets {
         }
     }
 
-    
+
     @Override
     public void setObject(int parameterIndex, Object x, SQLType targetSqlType, int scaleOrLength) throws MintleafException {
         try {
@@ -393,7 +390,7 @@ public class BindingParameterSets implements ParameterSets, ParameterGets {
         }
     }
 
-    
+
     @Override
     public void setNString(int parameterIndex, String value) throws MintleafException {
         try {
@@ -403,7 +400,7 @@ public class BindingParameterSets implements ParameterSets, ParameterGets {
         }
     }
 
-    
+
     @Override
     public void setBlob(int parameterIndex, InputStream inputStream) throws MintleafException {
         try {
@@ -413,7 +410,7 @@ public class BindingParameterSets implements ParameterSets, ParameterGets {
         }
     }
 
-    
+
     @Override
     public void setClob(int parameterIndex, Clob x) throws MintleafException {
         try {
@@ -423,7 +420,7 @@ public class BindingParameterSets implements ParameterSets, ParameterGets {
         }
     }
 
-    
+
     @Override
     public void setBigDecimal(int parameterIndex, BigDecimal x) throws MintleafException {
         try {
@@ -433,7 +430,7 @@ public class BindingParameterSets implements ParameterSets, ParameterGets {
         }
     }
 
-    
+
     @Override
     public void setNClob(int parameterIndex, Reader reader, long length) throws MintleafException {
         try {
@@ -443,7 +440,7 @@ public class BindingParameterSets implements ParameterSets, ParameterGets {
         }
     }
 
-    
+
     @Override
     public void setAsciiStream(int parameterIndex, InputStream x) throws MintleafException {
         try {
@@ -453,7 +450,7 @@ public class BindingParameterSets implements ParameterSets, ParameterGets {
         }
     }
 
-    
+
     @Override
     public void setTime(int parameterIndex, Time x) throws MintleafException {
         try {
@@ -463,7 +460,7 @@ public class BindingParameterSets implements ParameterSets, ParameterGets {
         }
     }
 
-    
+
     @Override
     public void setNCharacterStream(int parameterIndex, Reader value, long length) throws MintleafException {
         try {
@@ -473,7 +470,7 @@ public class BindingParameterSets implements ParameterSets, ParameterGets {
         }
     }
 
-    
+
     @Override
     public void setFloat(int parameterIndex, float x) throws MintleafException {
         try {
@@ -483,7 +480,7 @@ public class BindingParameterSets implements ParameterSets, ParameterGets {
         }
     }
 
-    
+
     @Override
     public void setClob(int parameterIndex, Reader reader, long length) throws MintleafException {
         try {
@@ -493,7 +490,7 @@ public class BindingParameterSets implements ParameterSets, ParameterGets {
         }
     }
 
-    
+
     @Override
     public void setObject(int parameterIndex, Object x) throws MintleafException {
         try {
@@ -503,7 +500,7 @@ public class BindingParameterSets implements ParameterSets, ParameterGets {
         }
     }
 
-    
+
     @Override
     public void setTimestamp(int parameterIndex, Timestamp x, Calendar cal) throws MintleafException {
         try {
@@ -513,7 +510,7 @@ public class BindingParameterSets implements ParameterSets, ParameterGets {
         }
     }
 
-    
+
     @Override
     public void setCharacterStream(int parameterIndex, Reader reader) throws MintleafException {
         try {
@@ -523,7 +520,7 @@ public class BindingParameterSets implements ParameterSets, ParameterGets {
         }
     }
 
-    
+
     @Override
     public void setObject(int parameterIndex, Object x, int targetSqlType) throws MintleafException {
         try {
@@ -533,7 +530,7 @@ public class BindingParameterSets implements ParameterSets, ParameterGets {
         }
     }
 
-    
+
     @Override
     public void setObject(int parameterIndex, Object x, int targetSqlType, int scaleOrLength) throws MintleafException {
         try {
@@ -543,7 +540,7 @@ public class BindingParameterSets implements ParameterSets, ParameterGets {
         }
     }
 
-    
+
     @Override
     public void setDate(int parameterIndex, Date x) throws MintleafException {
         try {
@@ -553,7 +550,7 @@ public class BindingParameterSets implements ParameterSets, ParameterGets {
         }
     }
 
-    
+
     @Override
     public void setBinaryStream(int parameterIndex, InputStream x, long length) throws MintleafException {
         try {
@@ -569,7 +566,7 @@ public class BindingParameterSets implements ParameterSets, ParameterGets {
         return this.batch;
     }
 
-    
+
     @Override
     public int getFetchDirection() throws MintleafException {
         try {
@@ -579,7 +576,7 @@ public class BindingParameterSets implements ParameterSets, ParameterGets {
         }
     }
 
-    
+
     @Override
     public int getFetchSize() throws MintleafException {
         try {
@@ -589,7 +586,7 @@ public class BindingParameterSets implements ParameterSets, ParameterGets {
         }
     }
 
-    
+
     @Override
     public ResultSet getGeneratedKeys() throws MintleafException {
         try {
@@ -599,7 +596,7 @@ public class BindingParameterSets implements ParameterSets, ParameterGets {
         }
     }
 
-    
+
     @Override
     public long getLargeMaxRows() throws MintleafException {
         try {
@@ -609,7 +606,7 @@ public class BindingParameterSets implements ParameterSets, ParameterGets {
         }
     }
 
-    
+
     @Override
     public long getLargeUpdateCount() throws MintleafException {
         try {
@@ -619,7 +616,7 @@ public class BindingParameterSets implements ParameterSets, ParameterGets {
         }
     }
 
-    
+
     @Override
     public int getMaxFieldSize() throws MintleafException {
         try {
@@ -629,7 +626,7 @@ public class BindingParameterSets implements ParameterSets, ParameterGets {
         }
     }
 
-    
+
     @Override
     public int getMaxRows() throws MintleafException {
         try {
@@ -639,7 +636,7 @@ public class BindingParameterSets implements ParameterSets, ParameterGets {
         }
     }
 
-    
+
     @Override
     public boolean getMoreResults() throws MintleafException {
         try {
@@ -649,7 +646,7 @@ public class BindingParameterSets implements ParameterSets, ParameterGets {
         }
     }
 
-    
+
     @Override
     public boolean getMoreResults(int current) throws MintleafException {
         try {
@@ -659,7 +656,7 @@ public class BindingParameterSets implements ParameterSets, ParameterGets {
         }
     }
 
-    
+
     @Override
     public int getQueryTimeout() throws MintleafException {
         try {
@@ -669,7 +666,7 @@ public class BindingParameterSets implements ParameterSets, ParameterGets {
         }
     }
 
-    
+
     @Override
     public ResultSet getResultSet() throws MintleafException {
         try {
@@ -679,7 +676,7 @@ public class BindingParameterSets implements ParameterSets, ParameterGets {
         }
     }
 
-    
+
     @Override
     public int getResultSetConcurrency() throws MintleafException {
         try {
@@ -689,7 +686,7 @@ public class BindingParameterSets implements ParameterSets, ParameterGets {
         }
     }
 
-    
+
     @Override
     public int getResultSetHoldability() throws MintleafException {
         try {
@@ -699,7 +696,7 @@ public class BindingParameterSets implements ParameterSets, ParameterGets {
         }
     }
 
-    
+
     @Override
     public int getResultSetType() throws MintleafException {
         try {
@@ -709,7 +706,7 @@ public class BindingParameterSets implements ParameterSets, ParameterGets {
         }
     }
 
-    
+
     @Override
     public int getUpdateCount() throws MintleafException {
         try {
@@ -719,7 +716,7 @@ public class BindingParameterSets implements ParameterSets, ParameterGets {
         }
     }
 
-    
+
     @Override
     public SQLWarning getWarnings() throws MintleafException {
         try {
@@ -729,7 +726,7 @@ public class BindingParameterSets implements ParameterSets, ParameterGets {
         }
     }
 
-    
+
     @Override
     public boolean isClosed() throws MintleafException {
         try {
@@ -739,7 +736,7 @@ public class BindingParameterSets implements ParameterSets, ParameterGets {
         }
     }
 
-    
+
     @Override
     public boolean isCloseOnCompletion() throws MintleafException {
         try {
@@ -749,7 +746,7 @@ public class BindingParameterSets implements ParameterSets, ParameterGets {
         }
     }
 
-    
+
     @Override
     public boolean isPoolable() throws MintleafException {
         try {
@@ -759,7 +756,7 @@ public class BindingParameterSets implements ParameterSets, ParameterGets {
         }
     }
 
-    
+
     @Override
     public void setPoolable(boolean poolable) throws MintleafException {
         try {

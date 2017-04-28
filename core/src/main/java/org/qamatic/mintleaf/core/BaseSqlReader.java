@@ -53,15 +53,6 @@ public abstract class BaseSqlReader implements MintleafReader {
     private String delimiter = "/";
     private Map<String, String> userVariableMapping;
 
-    protected boolean isDelimiter(String line) {
-        //external config needed.
-        return ((getDelimiter().equals("/") && line.equals("/")) ||
-                (getDelimiter().equals(";") && line.endsWith(";")) ||
-                (getDelimiter().equalsIgnoreCase("GO") && line.equalsIgnoreCase("GO"))
-        );
-    }
-
-
     public static InputStream getInputStreamFromFile(String resourceOrFileName) {
         InputStream stream = null;
         logger.info("reading file: " + resourceOrFileName);
@@ -80,6 +71,14 @@ public abstract class BaseSqlReader implements MintleafReader {
             }
         }
         return stream;
+    }
+
+    protected boolean isDelimiter(String line) {
+        //external config needed.
+        return ((getDelimiter().equals("/") && line.equals("/")) ||
+                (getDelimiter().equals(";") && line.endsWith(";")) ||
+                (getDelimiter().equalsIgnoreCase("GO") && line.equalsIgnoreCase("GO"))
+        );
     }
 
     @Override
@@ -105,8 +104,7 @@ public abstract class BaseSqlReader implements MintleafReader {
 
     @Override
     public Map<String, String> getUserVariableMapping() {
-        if (userVariableMapping == null)
-        {
+        if (userVariableMapping == null) {
             userVariableMapping = new HashMap<>();
         }
         return userVariableMapping;

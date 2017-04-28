@@ -78,10 +78,10 @@ public class OrderedListComparator implements DataComparer {
 
         while (sourceIterator.hasNext()) {
             sourceRowState.RowNumber++;
-            if ( targetIterator.hasNext() ) {
+            if (targetIterator.hasNext()) {
                 beforeRowCompare(sourceRowState, targetRowState);
 
-                if (!sourceIterator.hasNext()){
+                if (!sourceIterator.hasNext()) {
                     throw new MintleafException("source list does not have anymore elements to iterate thru");
                 }
                 sourceRowState.Row = sourceIterator.next();
@@ -96,7 +96,7 @@ public class OrderedListComparator implements DataComparer {
                 afterRowCompare(sourceRowState, targetRowState);
             } else {
                 beforeRowCompare(sourceRowState, targetRowState);
-                if (!sourceIterator.hasNext()){
+                if (!sourceIterator.hasNext()) {
                     throw new MintleafException("source list does not have anymore elements to iterate thru");
                 }
                 sourceRowState.Row = sourceIterator.next();
@@ -116,7 +116,7 @@ public class OrderedListComparator implements DataComparer {
             sourceRowState.IsSurplusRow = -1;
 
             targetRowState.RowNumber++;
-            targetRowState.Row =targetIterator.next();
+            targetRowState.Row = targetIterator.next();
             targetRowState.IsSurplusRow = 1;
             onRowCompare(sourceRowState, targetRowState);
             columnMatcher.match(sourceRowState, targetRowState, this.comparerListener);

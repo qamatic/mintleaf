@@ -46,11 +46,11 @@ import org.qamatic.mintleaf.MintleafLogger;
 public class BinaryFileImporter extends ImpExpBase implements Executable<Boolean> {
 
     private static final MintleafLogger logger = MintleafLogger.getLogger(BinaryFileImporter.class);
-    private ImportFlavour sourceFlavour;
+    private ImportReader sourceFlavour;
     private ConnectionContext targetDb;
     private String targetSqlTemplate;
 
-    public BinaryFileImporter(ImportFlavour sourceFlavour, ConnectionContext targetDb,
+    public BinaryFileImporter(ImportReader sourceFlavour, ConnectionContext targetDb,
                               String targetSqlTemplate) {
         this.sourceFlavour = sourceFlavour;
         this.targetDb = targetDb;

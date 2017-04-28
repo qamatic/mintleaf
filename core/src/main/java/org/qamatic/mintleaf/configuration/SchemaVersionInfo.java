@@ -85,17 +85,16 @@ public class SchemaVersionInfo {
         return String.join(", ", this.changeSets);
     }
 
+    public void setChangeSets(String changeSets) {
+        this.changeSets = splitItems(changeSets);
+    }
+
     public String[] getChangeSetsAsList() {
         return this.changeSets;
     }
 
     public String[] getScriptLocationAsList() {
         return this.paths;
-    }
-
-
-    public void setChangeSets(String changeSets) {
-        this.changeSets = splitItems(changeSets);
     }
 
     private String[] splitItems(String changeSets) {

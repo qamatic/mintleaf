@@ -56,7 +56,7 @@ public class TextContentStreamReader extends SqlStreamReader {
 
     @Override
     public void read() throws MintleafException {
-        skipLineFeeds=true;
+        skipLineFeeds = true;
         super.read();
         if (changeSetListener != null && content.length() != 0) {
             changeSetListener.onChangeSetRead(content, null);
@@ -70,7 +70,7 @@ public class TextContentStreamReader extends SqlStreamReader {
         };
     }
 
-    public String getContent(){
+    public String getContent() {
         ArgPatternHandler argPatternHandler = new ArgPatternHandler(content.toString());
         argPatternHandler.withUserProperties(getUserVariableMapping());
         return argPatternHandler.getText();
