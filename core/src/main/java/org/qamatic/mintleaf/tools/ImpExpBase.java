@@ -48,7 +48,7 @@ import java.util.regex.Pattern;
 public abstract class ImpExpBase {
     private static final MintleafLogger logger = MintleafLogger.getLogger(ImpExpBase.class);
 
-    private DataRowListener dataRowListener;
+    private RowDelegate rowDelegate;
 
     protected abstract ConnectionContext getConnectionContext();
 
@@ -61,9 +61,21 @@ public abstract class ImpExpBase {
         List<String> batchSqls = new ArrayList<>();
         final Executable<int[]> batchCall = getConnectionContext().executeBatchSqls(batchSqls);
         dataImport.doImport(new DataRowListener() {
+
+            @Override
+            public boolean matches(Row row) {
+                if (ImpExpBase.this.rowDelegate != null) {
+                    return ImpExpBase.this.rowDelegate.matches(row);
+                }
+                return true;
+            }
+
             @Override
             public Object eachRow(int rowNum, Row row) throws MintleafException {
 
+                if ((ImpExpBase.this.rowDelegate != null) && !ImpExpBase.this.rowDelegate.matches(row)) {
+                    return null;
+                }
                 StringBuffer buffer = new StringBuffer(sqlTemplate);
                 columns.reset();
                 while (columns.find()) {
@@ -72,25 +84,21 @@ public abstract class ImpExpBase {
                 }
                 batchSqls.add(buffer.toString());
 
-                if (ImpExpBase.this.dataRowListener != null) {
-                    return ImpExpBase.this.dataRowListener.eachRow(rowNum, row);
-                }
                 return null;
             }
 
             @Override
             public boolean canContinue(Row row) {
-                if (ImpExpBase.this.dataRowListener != null) {
-                    if (ImpExpBase.this.dataRowListener.matches(row))
-                        return ImpExpBase.this.dataRowListener.canContinue(row);
+                if (ImpExpBase.this.rowDelegate != null) {
+                    return ImpExpBase.this.rowDelegate.canContinue(row);
                 }
                 return true;
             }
 
             @Override
             public Row createRowInstance(Object... params) {
-                if (ImpExpBase.this.dataRowListener != null) {
-                    return ImpExpBase.this.dataRowListener.createRowInstance(params);
+                if (ImpExpBase.this.rowDelegate != null) {
+                    return ImpExpBase.this.rowDelegate.createRowInstance(params);
                 }
                 return null;
             }
@@ -110,7 +118,7 @@ public abstract class ImpExpBase {
         }
     }
 
-    public void setDataRowListener(DataRowListener dataRowListener) {
-        this.dataRowListener = dataRowListener;
+    public void setMatchingCriteria(RowDelegate rowDelegate) {
+        this.rowDelegate = rowDelegate;
     }
 }

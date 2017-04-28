@@ -109,7 +109,7 @@ public final class Mintleaf {
         private String sourceSql;
         private ParameterBinding sqlaramValueBindings;
         private Database sourceDb;
-
+        private RowDelegate rowDelegate;
         private String targetCsvFile;
 
         public DbToCsvDataTransferBuilder withSqlaramValueBindings(ParameterBinding sqlaramValueBindings) {
@@ -132,6 +132,11 @@ public final class Mintleaf {
             return this;
         }
 
+        public void withMatchingCriteria(RowDelegate rowDelegate) {
+            this.rowDelegate = rowDelegate;
+        }
+
+
         public Executable<Boolean> build() {
             CsvExporter csvExporter = new CsvExporter(
                     sourceDb.getNewConnection(),
@@ -139,6 +144,7 @@ public final class Mintleaf {
                     targetCsvFile
             );
             csvExporter.setSqlaramValueBindings(sqlaramValueBindings);
+            csvExporter.setMatchingCriteria(this.rowDelegate);
             return csvExporter;
         }
     }
@@ -148,11 +154,17 @@ public final class Mintleaf {
         private Database targetDb;
         private String targetSqlTemplate;
         private String sourceCsvFile;
+        private RowDelegate rowDelegate;
 
         public CsvToDbDataTransferBuilder withTargetDb(Database targetDb) {
             this.targetDb = targetDb;
             return this;
         }
+
+        public void withMatchingCriteria(RowDelegate rowDelegate) {
+            this.rowDelegate = rowDelegate;
+        }
+
 
         public CsvToDbDataTransferBuilder withTargetSqlTemplate(String targetSqlTemplate) {
             this.targetSqlTemplate = targetSqlTemplate;
@@ -170,7 +182,7 @@ public final class Mintleaf {
                     targetDb.getNewConnection(),
                     targetSqlTemplate);
 
-
+            csvImporter.setMatchingCriteria(this.rowDelegate);
             return csvImporter;
         }
     }
@@ -180,11 +192,17 @@ public final class Mintleaf {
         private Database targetDb;
         private String targetSqlTemplate;
         private ImportFlavour importFlavour;
+        private RowDelegate rowDelegate;
 
         public AnyDataToDbDataTransferBuilder withTargetDb(Database targetDb) {
             this.targetDb = targetDb;
             return this;
         }
+
+        public void withMatchingCriteria(RowDelegate rowDelegate) {
+            this.rowDelegate = rowDelegate;
+        }
+
 
         public AnyDataToDbDataTransferBuilder withTargetSqlTemplate(String targetSqlTemplate) {
             this.targetSqlTemplate = targetSqlTemplate;
@@ -200,8 +218,9 @@ public final class Mintleaf {
             BinaryFileImporter binaryFileImporter = new BinaryFileImporter(
                     this.importFlavour,
                     targetDb.getNewConnection(),
-                    targetSqlTemplate);
-
+                    targetSqlTemplate){
+            };
+            binaryFileImporter.setMatchingCriteria(this.rowDelegate);
             return binaryFileImporter;
         }
     }
@@ -209,10 +228,15 @@ public final class Mintleaf {
     public static final class AnyDataToListTransferBuilder<T extends Row> {
 
         private ImportFlavour importFlavour;
+        private RowDelegate rowDelegate;
 
         public AnyDataToListTransferBuilder withSource(ImportFlavour importFlavour) {
             this.importFlavour = importFlavour;
             return this;
+        }
+
+        public void withMatchingCriteria(RowDelegate rowDelegate) {
+            this.rowDelegate = rowDelegate;
         }
 
         public Executable<RowListWrapper<T>> build() throws MintleafException {
@@ -221,10 +245,37 @@ public final class Mintleaf {
                 public RowListWrapper<T> execute() throws MintleafException {
                     final RowListWrapper<T> list = new ObjectRowListWrapper<T>();
 
-                    importFlavour.doImport((rowNum, row) -> {
-                        list.add((T) row);
-                        return null;
+                    importFlavour.doImport(new DataRowListener<T>() {
+                        @Override
+                        public boolean matches(Row row) {
+                            if ((AnyDataToListTransferBuilder.this.rowDelegate != null)) {
+                                return AnyDataToListTransferBuilder.this.rowDelegate.matches(row);
+                            }
+                            return true;
+                        }
+
+                        @Override
+                        public boolean canContinue(Row row) {
+                            if ((AnyDataToListTransferBuilder.this.rowDelegate != null)) {
+                                return AnyDataToListTransferBuilder.this.rowDelegate.canContinue(row);
+                            }
+                            return true;
+                        }
+
+                        @Override
+                        public Row createRowInstance(Object... params) {
+                            MintleafException.throwException("un-implemented");
+                            return null;
+                        }
+
+                        @Override
+                        public T eachRow(int rowNum, Row row) throws MintleafException {
+                            list.add((T) row);
+                            return (T) row;
+                        }
                     });
+
+
                     return list;
                 }
             };
