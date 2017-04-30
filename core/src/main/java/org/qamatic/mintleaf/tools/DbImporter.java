@@ -61,7 +61,7 @@ public class DbImporter extends ImpExpBase implements Executable<Boolean> {
     @Override
     public Boolean execute() throws MintleafException {
         try (SqlResultSet sourceSqlResultSet = this.getConnectionContext().queryBuilder().withSql(sourceSql).withParamValues(sourceSqlParamValueBindings).buildSelect()) {
-            importDataFrom(createFlavour(sourceSqlResultSet), this.targetSqlTemplate);
+            importDataFrom(createFlavour(sourceSqlResultSet));
             return true;
         }
     }
@@ -75,6 +75,10 @@ public class DbImporter extends ImpExpBase implements Executable<Boolean> {
         return this.sourceDb;
     }
 
+    @Override
+    protected String getSqlTemplate() {
+        return this.targetSqlTemplate;
+    }
 
     public void setSourceSqlParamValueBindings(ParameterBinding sourceSqlParamValueBindings) {
         this.sourceSqlParamValueBindings = sourceSqlParamValueBindings;

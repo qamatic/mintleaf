@@ -1,7 +1,7 @@
 package org.qamatic.mintleaf.core;
 
 import org.qamatic.mintleaf.MintleafException;
-import org.qamatic.mintleaf.MintleafReadListener;
+import org.qamatic.mintleaf.ReadListener;
 import org.qamatic.mintleaf.Row;
 
 import java.io.File;
@@ -97,7 +97,7 @@ public class RecordFileReader<T extends Row> implements BinaryReader {
         return null;
     }
 
-    public void iterate(Charset charset, MintleafReadListener listener) throws MintleafException {
+    public void iterate(Charset charset, ReadListener listener) throws MintleafException {
         int i = 0;
         for (byte[] record : this) {
             Row row = listener.createRowInstance(record);
@@ -110,7 +110,7 @@ public class RecordFileReader<T extends Row> implements BinaryReader {
         }
     }
 
-    public void iterate(MintleafReadListener listener) throws MintleafException {
+    public void iterate(ReadListener listener) throws MintleafException {
         iterate(Charset.defaultCharset(), listener);
     }
 

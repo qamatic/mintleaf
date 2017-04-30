@@ -37,7 +37,6 @@ package org.qamatic.mintleaf.tools;
 
 import org.qamatic.mintleaf.MintleafException;
 import org.qamatic.mintleaf.MintleafLogger;
-import org.qamatic.mintleaf.MintleafReadListener;
 import org.qamatic.mintleaf.SqlResultSet;
 import org.qamatic.mintleaf.core.ResultSetRowWrapper;
 

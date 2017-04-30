@@ -35,10 +35,7 @@
 
 package org.qamatic.mintleaf.tools;
 
-import org.qamatic.mintleaf.ConnectionContext;
-import org.qamatic.mintleaf.Executable;
-import org.qamatic.mintleaf.MintleafException;
-import org.qamatic.mintleaf.ParameterBinding;
+import org.qamatic.mintleaf.*;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -47,7 +44,7 @@ import java.io.IOException;
 /**
  * Created by qamatic on 3/6/16.
  */
-public class CsvExporter extends ImpExpBase implements Executable<Boolean> {
+public class CsvExporter implements Executable<Boolean> {
 
     private ParameterBinding sqlaramValueBindings;
     private ConnectionContext sourceDb;
@@ -66,7 +63,9 @@ public class CsvExporter extends ImpExpBase implements Executable<Boolean> {
 
         try {
             File f = new File(this.targetCsvFile);
-            exportDataTo(createFlavour(f), this.sourceSql, this.sqlaramValueBindings);
+            try (SqlResultSet sqlResultSet = this.sourceDb.queryBuilder().withSql(sourceSql).withParamValues(sqlaramValueBindings).buildSelect()) {
+                createFlavour(f).export(sqlResultSet.getResultSet());
+            }
             return true;
         } catch (IOException e) {
             throw new MintleafException(e);
@@ -80,11 +79,5 @@ public class CsvExporter extends ImpExpBase implements Executable<Boolean> {
     public void setSqlaramValueBindings(ParameterBinding sqlaramValueBindings) {
         this.sqlaramValueBindings = sqlaramValueBindings;
     }
-
-    @Override
-    protected ConnectionContext getConnectionContext() {
-        return this.sourceDb;
-    }
-
 
 }

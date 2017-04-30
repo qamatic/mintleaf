@@ -126,7 +126,7 @@ public class BinaryImportTest extends H2TestCase {
             }
         };
         final int[] i = new int[]{0};
-        reader.setReadListener(new MintleafReadListener() {
+        reader.setReadListener(new ReadListener() {
             @Override
             public Object eachRow(int rowNum, Row row) throws MintleafException {
 //                String actual = new String((byte[]) row.getValue(Row.INTERNAL_OBJECT_VALUE), Charset.forName("Cp1047"));
@@ -177,7 +177,7 @@ public class BinaryImportTest extends H2TestCase {
         RowListWrapper<InMemoryRow> list = new ObjectRowListWrapper<>(cityRecordMetaData);
         try (BinaryReader reader = new RecordFileReader(getTestFile(), 34).recordAt(2)) {
 
-            reader.iterate(Charset.forName("Cp1047"), new MintleafReadListener() {
+            reader.iterate(Charset.forName("Cp1047"), new ReadListener() {
                 @Override
                 public Object eachRow(int rowNum, Row row) throws MintleafException {
                     list.add((InMemoryRow) row);

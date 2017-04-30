@@ -72,7 +72,7 @@ public interface ConnectionContext<T extends DbQueryExtension> extends AutoClose
 
     Executable<int[]> executeSql(String sql, Object[] parameterValues);
 
-    <T> List<T> query(String sql, ParameterBinding parameterBinding, final MintleafReadListener<T> listener) throws MintleafException;
+    <T> List<T> query(String sql, ParameterBinding parameterBinding, final ReadListener<T> listener) throws MintleafException;
 
     Executable<int[]> executeStoredProc(String procedureCall, StoredProcedure.CallType callType, ParameterBinding.Callable parameterBinding);
 

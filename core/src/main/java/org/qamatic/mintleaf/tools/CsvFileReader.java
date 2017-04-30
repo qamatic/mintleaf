@@ -39,7 +39,6 @@ import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVParser;
 import org.apache.commons.csv.CSVRecord;
 import org.qamatic.mintleaf.MintleafException;
-import org.qamatic.mintleaf.MintleafReadListener;
 import org.qamatic.mintleaf.Row;
 
 import java.io.IOException;

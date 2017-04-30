@@ -47,35 +47,19 @@ import java.util.regex.Pattern;
  */
 public abstract class ImpExpBase<T> {
     private static final MintleafLogger logger = MintleafLogger.getLogger(ImpExpBase.class);
-    private MintleafReadListener<T> readListener;
+    private ReadListener<T> readListener;
+    private List<String> batchSqls = new ArrayList<>();
 
     protected abstract ConnectionContext getConnectionContext();
 
+    protected abstract String getSqlTemplate();
 
     //this is meant for testing purpose of loading data but for production side you should consider using param binds..
-    protected void importDataFrom(final ImportReader dataImport, final String sqlTemplate) throws MintleafException {
-        final Pattern columnPattern = Pattern.compile("\\$(\\w+)\\$", Pattern.DOTALL | Pattern.MULTILINE | Pattern.CASE_INSENSITIVE);
-        final Matcher columns = columnPattern.matcher(sqlTemplate);
-        logger.info("importing using template:" + sqlTemplate);
-        List<String> batchSqls = new ArrayList<>();
+    protected void importDataFrom(final ImportReader dataImport) throws MintleafException {
+        logger.info("importing using template:" + getSqlTemplate());
+        batchSqls.clear();
         final Executable<int[]> batchCall = getConnectionContext().executeBatchSqls(batchSqls);
-        dataImport.setReadListener(new MintleafReadListener() {
-
-            @Override
-            public Object eachRow(int rowNum, Row row) throws MintleafException {
-
-                StringBuffer buffer = new StringBuffer(sqlTemplate);
-                columns.reset();
-                while (columns.find()) {
-                    int idx = buffer.indexOf("$" + columns.group(1));
-                    buffer.replace(idx, idx + columns.group(1).length() + 2, row.asString(columns.group(1)));
-                }
-                batchSqls.add(buffer.toString());
-
-                return null;
-            }
-        });
-
+        dataImport.setReadListener(getReadListener());
         dataImport.read();
         dataImport.close();
         try {
@@ -86,21 +70,33 @@ public abstract class ImpExpBase<T> {
 
     }
 
-    protected void exportDataTo(final ExportFlavour dataExport, String sql, ParameterBinding parameterBinding) throws MintleafException {
-        try (SqlResultSet sqlResultSet = getConnectionContext().queryBuilder().withSql(sql).withParamValues(parameterBinding).buildSelect()) {
-            dataExport.export(sqlResultSet.getResultSet());
-        }
-    }
-
-
-    public MintleafReadListener<T> getReadListener() {
-        if (this.readListener == null){
-
+    public ReadListener<T> getReadListener() {
+        if (this.readListener == null) {
+            this.readListener = new DbTemplateReadListener<>();
         }
         return readListener;
     }
 
-    public void setReadListener(MintleafReadListener<T> readListener) {
+    public void setReadListener(ReadListener<T> readListener) {
         this.readListener = readListener;
+    }
+
+    private class DbTemplateReadListener<T> implements ReadListener<T> {
+        final Pattern columnPattern = Pattern.compile("\\$(\\w+)\\$", Pattern.DOTALL | Pattern.MULTILINE | Pattern.CASE_INSENSITIVE);
+        final Matcher columns = columnPattern.matcher(getSqlTemplate());
+
+        @Override
+        public T eachRow(int rowNum, Row row) throws MintleafException {
+
+            StringBuffer buffer = new StringBuffer(getSqlTemplate());
+            columns.reset();
+            while (columns.find()) {
+                int idx = buffer.indexOf("$" + columns.group(1));
+                buffer.replace(idx, idx + columns.group(1).length() + 2, row.asString(columns.group(1)));
+            }
+            batchSqls.add(buffer.toString());
+
+            return null;
+        }
     }
 }

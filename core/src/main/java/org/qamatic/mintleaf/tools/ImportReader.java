@@ -37,7 +37,7 @@ package org.qamatic.mintleaf.tools;
 
 
 import org.qamatic.mintleaf.MintleafException;
-import org.qamatic.mintleaf.MintleafReadListener;
+import org.qamatic.mintleaf.ReadListener;
 
 /**
  * Created by qamatic on 2/18/6/16.
@@ -54,7 +54,7 @@ public interface ImportReader<T> extends AutoCloseable {
 
     }
 
-    MintleafReadListener getReadListener();
+    ReadListener getReadListener();
 
-    void setReadListener(MintleafReadListener readListener);
+    void setReadListener(ReadListener readListener);
 }

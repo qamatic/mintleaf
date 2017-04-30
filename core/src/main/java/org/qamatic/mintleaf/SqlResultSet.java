@@ -47,7 +47,7 @@ public interface SqlResultSet extends AutoCloseable {
 
     ResultSet first() throws MintleafException;
 
-    <T> void iterate(MintleafReadListener<T> listener) throws MintleafException, MintleafException;
+    <T> void iterate(ReadListener<T> listener) throws MintleafException, MintleafException;
 
     RowListWrapper asRowListWrapper() throws MintleafException;
 }

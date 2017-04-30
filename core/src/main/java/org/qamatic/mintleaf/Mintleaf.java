@@ -109,7 +109,6 @@ public final class Mintleaf {
         private String sourceSql;
         private ParameterBinding sqlaramValueBindings;
         private Database sourceDb;
-        private MintleafReadListener mintleafReadListener;
         private String targetCsvFile;
 
         public DbToCsvDataTransferBuilder withSqlaramValueBindings(ParameterBinding sqlaramValueBindings) {
@@ -132,10 +131,6 @@ public final class Mintleaf {
             return this;
         }
 
-        public DbToCsvDataTransferBuilder withMatchingCriteria(MintleafReadListener rowDelegate) {
-            this.mintleafReadListener = rowDelegate;
-            return this;
-        }
 
 
         public Executable<Boolean> build() {
@@ -145,7 +140,6 @@ public final class Mintleaf {
                     targetCsvFile
             );
             csvExporter.setSqlaramValueBindings(sqlaramValueBindings);
-            csvExporter.setReadListener(this.mintleafReadListener);
             return csvExporter;
         }
     }
@@ -155,15 +149,15 @@ public final class Mintleaf {
         private Database targetDb;
         private String targetSqlTemplate;
         private String sourceCsvFile;
-        private MintleafReadListener mintleafReadListener;
+        private ReadListener readListener;
 
         public CsvToDbDataTransferBuilder withTargetDb(Database targetDb) {
             this.targetDb = targetDb;
             return this;
         }
 
-        public CsvToDbDataTransferBuilder withMatchingCriteria(MintleafReadListener mintleafReadListener) {
-            this.mintleafReadListener = mintleafReadListener;
+        public CsvToDbDataTransferBuilder withMatchingCriteria(ReadListener readListener) {
+            this.readListener = readListener;
             return this;
         }
 
@@ -184,7 +178,7 @@ public final class Mintleaf {
                     targetDb.getNewConnection(),
                     targetSqlTemplate);
 
-            csvImporter.setReadListener(this.mintleafReadListener);
+            csvImporter.setReadListener(this.readListener);
             return csvImporter;
         }
     }
@@ -194,15 +188,15 @@ public final class Mintleaf {
         private Database targetDb;
         private String targetSqlTemplate;
         private ImportReader importReader;
-        private MintleafReadListener mintleafReadListener;
+        private ReadListener readListener;
 
         public AnyDataToDbDataTransferBuilder withTargetDb(Database targetDb) {
             this.targetDb = targetDb;
             return this;
         }
 
-        public AnyDataToDbDataTransferBuilder withMatchingCriteria(MintleafReadListener mintleafReadListener) {
-            this.mintleafReadListener = mintleafReadListener;
+        public AnyDataToDbDataTransferBuilder withMatchingCriteria(ReadListener readListener) {
+            this.readListener = readListener;
             return this;
         }
 
@@ -223,7 +217,7 @@ public final class Mintleaf {
                     targetDb.getNewConnection(),
                     targetSqlTemplate) {
             };
-            binaryFileImporter.setReadListener(this.mintleafReadListener);
+            binaryFileImporter.setReadListener(this.readListener);
             return binaryFileImporter;
         }
     }
@@ -231,15 +225,15 @@ public final class Mintleaf {
     public static final class AnyDataToListTransferBuilder<T extends Row> {
 
         private ImportReader importReader;
-        private MintleafReadListener mintleafReadListener;
+        private ReadListener readListener;
 
         public AnyDataToListTransferBuilder withSource(ImportReader importReader) {
             this.importReader = importReader;
             return this;
         }
 
-        public AnyDataToListTransferBuilder withMatchingCriteria(MintleafReadListener rowDelegate) {
-            this.mintleafReadListener = rowDelegate;
+        public AnyDataToListTransferBuilder withMatchingCriteria(ReadListener rowDelegate) {
+            this.readListener = rowDelegate;
             return this;
         }
 
@@ -249,7 +243,7 @@ public final class Mintleaf {
                 public RowListWrapper<T> execute() throws MintleafException {
                     final RowListWrapper<T> list = new ObjectRowListWrapper<T>();
 
-                    importReader.setReadListener(new MintleafReadListener<T>() {
+                    importReader.setReadListener(new ReadListener<T>() {
                         @Override
                         public T eachRow(int rowNum, Row row) throws MintleafException {
                             list.add((T) row);

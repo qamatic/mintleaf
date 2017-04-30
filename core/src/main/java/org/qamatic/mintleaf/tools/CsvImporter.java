@@ -72,7 +72,7 @@ public class CsvImporter extends ImpExpBase implements Executable<Boolean> {
                 logger.error("file not found " + sourceCsvFile);
                 throw new MintleafException("file not found " + sourceCsvFile);
             }
-            importDataFrom(createFlavour(f), this.targetSqlTemplate);
+            importDataFrom(createFlavour(f));
             return true;
 
         } catch (IOException e) {
@@ -84,6 +84,10 @@ public class CsvImporter extends ImpExpBase implements Executable<Boolean> {
         return new CsvFileReader(new FileReader(f));
     }
 
+    @Override
+    protected String getSqlTemplate() {
+        return this.targetSqlTemplate;
+    }
 
     @Override
     protected ConnectionContext getConnectionContext() {

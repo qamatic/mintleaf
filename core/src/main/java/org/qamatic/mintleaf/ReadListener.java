@@ -38,7 +38,7 @@ package org.qamatic.mintleaf;
 /**
  * Created by qamatic on 3/3/16.
  */
-public interface MintleafReadListener<T> {
+public interface ReadListener<T> {
     T eachRow(int rowNum, Row row) throws MintleafException;
 
     default boolean matches(Row row) {

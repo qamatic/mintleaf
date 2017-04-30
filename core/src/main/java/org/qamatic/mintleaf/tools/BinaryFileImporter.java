@@ -59,7 +59,7 @@ public class BinaryFileImporter extends ImpExpBase implements Executable<Boolean
 
     @Override
     public Boolean execute() throws MintleafException {
-        importDataFrom(this.sourceFlavour, this.targetSqlTemplate);
+        importDataFrom(this.sourceFlavour);
         return true;
     }
 
@@ -67,6 +67,11 @@ public class BinaryFileImporter extends ImpExpBase implements Executable<Boolean
     @Override
     protected ConnectionContext getConnectionContext() {
         return targetDb;
+    }
+
+    @Override
+    protected String getSqlTemplate() {
+        return this.targetSqlTemplate;
     }
 
 
