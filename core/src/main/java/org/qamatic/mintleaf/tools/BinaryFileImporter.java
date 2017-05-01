@@ -43,24 +43,18 @@ import org.qamatic.mintleaf.MintleafLogger;
 /**
  * Created by qamatic on 3/6/16.
  */
-public class BinaryFileImporter extends ImpExpBase implements Executable<Boolean> {
+public class BinaryFileImporter extends SqlTemplateBasedListener implements Executable<Boolean> {
 
     private static final MintleafLogger logger = MintleafLogger.getLogger(BinaryFileImporter.class);
-    private ImportReader sourceFlavour;
+    private ImportReader importReader;
     private ConnectionContext targetDb;
     private String targetSqlTemplate;
 
-    public BinaryFileImporter(ImportReader sourceFlavour, ConnectionContext targetDb,
+    public BinaryFileImporter(ImportReader importReader, ConnectionContext targetDb,
                               String targetSqlTemplate) {
-        this.sourceFlavour = sourceFlavour;
+        this.importReader = importReader;
         this.targetDb = targetDb;
         this.targetSqlTemplate = targetSqlTemplate;
-    }
-
-    @Override
-    public Boolean execute() throws MintleafException {
-        importDataFrom(this.sourceFlavour);
-        return true;
     }
 
 
@@ -72,6 +66,12 @@ public class BinaryFileImporter extends ImpExpBase implements Executable<Boolean
     @Override
     protected String getSqlTemplate() {
         return this.targetSqlTemplate;
+    }
+
+    @Override
+    public ImportReader getReader() throws MintleafException {
+        this.importReader.setReadListener(this);
+        return this.importReader;
     }
 
 

@@ -149,15 +149,9 @@ public final class Mintleaf {
         private Database targetDb;
         private String targetSqlTemplate;
         private String sourceCsvFile;
-        private ReadListener readListener;
 
         public CsvToDbDataTransferBuilder withTargetDb(Database targetDb) {
             this.targetDb = targetDb;
-            return this;
-        }
-
-        public CsvToDbDataTransferBuilder withMatchingCriteria(ReadListener readListener) {
-            this.readListener = readListener;
             return this;
         }
 
@@ -178,7 +172,6 @@ public final class Mintleaf {
                     targetDb.getNewConnection(),
                     targetSqlTemplate);
 
-            csvImporter.setReadListener(this.readListener);
             return csvImporter;
         }
     }
@@ -188,15 +181,10 @@ public final class Mintleaf {
         private Database targetDb;
         private String targetSqlTemplate;
         private ImportReader importReader;
-        private ReadListener readListener;
+
 
         public AnyDataToDbDataTransferBuilder withTargetDb(Database targetDb) {
             this.targetDb = targetDb;
-            return this;
-        }
-
-        public AnyDataToDbDataTransferBuilder withMatchingCriteria(ReadListener readListener) {
-            this.readListener = readListener;
             return this;
         }
 
@@ -217,7 +205,7 @@ public final class Mintleaf {
                     targetDb.getNewConnection(),
                     targetSqlTemplate) {
             };
-            binaryFileImporter.setReadListener(this.readListener);
+
             return binaryFileImporter;
         }
     }

@@ -48,7 +48,7 @@ import java.io.IOException;
 /**
  * Created by qamatic on 3/6/16.
  */
-public class CsvImporter extends ImpExpBase implements Executable<Boolean> {
+public class CsvImporter extends SqlTemplateBasedListener implements Executable<Boolean> {
 
     private static final MintleafLogger logger = MintleafLogger.getLogger(CsvImporter.class);
     private String sourceCsvFile;
@@ -63,22 +63,6 @@ public class CsvImporter extends ImpExpBase implements Executable<Boolean> {
         this.targetSqlTemplate = targetSqlTemplate;
     }
 
-    @Override
-    public Boolean execute() throws MintleafException {
-
-        try {
-            File f = new File(this.sourceCsvFile);
-            if (!f.exists()) {
-                logger.error("file not found " + sourceCsvFile);
-                throw new MintleafException("file not found " + sourceCsvFile);
-            }
-            importDataFrom(createFlavour(f));
-            return true;
-
-        } catch (IOException e) {
-            throw new MintleafException(e);
-        }
-    }
 
     protected ImportReader createFlavour(File f) throws FileNotFoundException {
         return new CsvFileReader(new FileReader(f));
@@ -87,6 +71,23 @@ public class CsvImporter extends ImpExpBase implements Executable<Boolean> {
     @Override
     protected String getSqlTemplate() {
         return this.targetSqlTemplate;
+    }
+
+    @Override
+    public ImportReader getReader() throws MintleafException {
+        try {
+            File f = new File(this.sourceCsvFile);
+            if (!f.exists()) {
+                logger.error("file not found " + sourceCsvFile);
+                throw new MintleafException("file not found " + sourceCsvFile);
+            }
+            ImportReader reader = new CsvFileReader(new FileReader(f));
+            reader.setReadListener(this);
+            return reader;
+
+        } catch (IOException e) {
+            throw new MintleafException(e);
+        }
     }
 
     @Override

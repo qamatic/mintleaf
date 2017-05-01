@@ -40,7 +40,7 @@ import org.qamatic.mintleaf.*;
 /**
  * Created by qamatic on 3/6/16.
  */
-public class DbImporter extends ImpExpBase implements Executable<Boolean> {
+public class DbImporter extends SqlTemplateBasedListener implements Executable<Boolean> {
     private static final MintleafLogger logger = MintleafLogger.getLogger(DbImporter.class);
 
     private ConnectionContext targetDb;
@@ -48,6 +48,7 @@ public class DbImporter extends ImpExpBase implements Executable<Boolean> {
     private ConnectionContext sourceDb;
     private String sourceSql;
     private ParameterBinding sourceSqlParamValueBindings;
+    private ImportReader reader;
 
     public DbImporter(ConnectionContext sourceDb, String sourceSql,
                       ConnectionContext targetDb,
@@ -58,17 +59,6 @@ public class DbImporter extends ImpExpBase implements Executable<Boolean> {
         this.targetSqlTemplate = targetSqlTemplate;
     }
 
-    @Override
-    public Boolean execute() throws MintleafException {
-        try (SqlResultSet sourceSqlResultSet = this.getConnectionContext().queryBuilder().withSql(sourceSql).withParamValues(sourceSqlParamValueBindings).buildSelect()) {
-            importDataFrom(createFlavour(sourceSqlResultSet));
-            return true;
-        }
-    }
-
-    protected ImportReader createFlavour(SqlResultSet sourceSqlResultSet) {
-        return new DbResultSetReader(sourceSqlResultSet);
-    }
 
     @Override
     protected ConnectionContext getConnectionContext() {
@@ -78,6 +68,14 @@ public class DbImporter extends ImpExpBase implements Executable<Boolean> {
     @Override
     protected String getSqlTemplate() {
         return this.targetSqlTemplate;
+    }
+
+    @Override
+    public ImportReader getReader() {
+        SqlResultSet sourceSqlResultSet = this.getConnectionContext().queryBuilder().withSql(sourceSql).withParamValues(sourceSqlParamValueBindings).buildSelect();
+        ImportReader reader = new DbResultSetReader(sourceSqlResultSet);
+        reader.setReadListener(this);
+        return reader;
     }
 
     public void setSourceSqlParamValueBindings(ParameterBinding sourceSqlParamValueBindings) {

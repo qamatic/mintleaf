@@ -45,58 +45,44 @@ import java.util.regex.Pattern;
 /**
  * Created by qamatic on 3/6/16.
  */
-public abstract class ImpExpBase<T> {
-    private static final MintleafLogger logger = MintleafLogger.getLogger(ImpExpBase.class);
-    private ReadListener<T> readListener;
+public abstract class SqlTemplateBasedListener<T> implements ReadListener<T> {
+    private static final MintleafLogger logger = MintleafLogger.getLogger(SqlTemplateBasedListener.class);
+    final Pattern columnPattern = Pattern.compile("\\$(\\w+)\\$", Pattern.DOTALL | Pattern.MULTILINE | Pattern.CASE_INSENSITIVE);
+    private Matcher columns;
     private List<String> batchSqls = new ArrayList<>();
 
     protected abstract ConnectionContext getConnectionContext();
 
     protected abstract String getSqlTemplate();
 
-    //this is meant for testing purpose of loading data but for production side you should consider using param binds..
-    protected void importDataFrom(final ImportReader dataImport) throws MintleafException {
+    public Boolean execute() throws MintleafException {
+        columns = columnPattern.matcher(getSqlTemplate());
         logger.info("importing using template:" + getSqlTemplate());
         batchSqls.clear();
         final Executable<int[]> batchCall = getConnectionContext().executeBatchSqls(batchSqls);
-        dataImport.setReadListener(getReadListener());
-        dataImport.read();
-        dataImport.close();
         try {
+            getReader().read();
+            getReader().close();
             batchCall.execute();
         } catch (Exception e) {
             throw new MintleafException(e);
         }
-
+        return true;
     }
 
-    public ReadListener<T> getReadListener() {
-        if (this.readListener == null) {
-            this.readListener = new DbTemplateReadListener<>();
+    public abstract ImportReader getReader() throws MintleafException;
+
+    @Override
+    public T eachRow(int rowNum, Row row) throws MintleafException {
+        StringBuffer buffer = new StringBuffer(getSqlTemplate());
+        columns.reset();
+        while (columns.find()) {
+            int idx = buffer.indexOf("$" + columns.group(1));
+            buffer.replace(idx, idx + columns.group(1).length() + 2, row.asString(columns.group(1)));
         }
-        return readListener;
+        batchSqls.add(buffer.toString());
+
+        return null;
     }
 
-    public void setReadListener(ReadListener<T> readListener) {
-        this.readListener = readListener;
-    }
-
-    private class DbTemplateReadListener<T> implements ReadListener<T> {
-        final Pattern columnPattern = Pattern.compile("\\$(\\w+)\\$", Pattern.DOTALL | Pattern.MULTILINE | Pattern.CASE_INSENSITIVE);
-        final Matcher columns = columnPattern.matcher(getSqlTemplate());
-
-        @Override
-        public T eachRow(int rowNum, Row row) throws MintleafException {
-
-            StringBuffer buffer = new StringBuffer(getSqlTemplate());
-            columns.reset();
-            while (columns.find()) {
-                int idx = buffer.indexOf("$" + columns.group(1));
-                buffer.replace(idx, idx + columns.group(1).length() + 2, row.asString(columns.group(1)));
-            }
-            batchSqls.add(buffer.toString());
-
-            return null;
-        }
-    }
 }
