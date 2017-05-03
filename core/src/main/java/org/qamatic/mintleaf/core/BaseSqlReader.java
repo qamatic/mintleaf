@@ -35,7 +35,6 @@
 
 package org.qamatic.mintleaf.core;
 
-import org.qamatic.mintleaf.ChangeSetListener;
 import org.qamatic.mintleaf.MintleafException;
 import org.qamatic.mintleaf.MintleafLogger;
 import org.qamatic.mintleaf.MintleafReader;
