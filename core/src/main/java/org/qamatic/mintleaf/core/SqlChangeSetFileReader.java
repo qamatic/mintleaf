@@ -75,11 +75,12 @@ public class SqlChangeSetFileReader extends SqlStreamReader implements ChangeSet
 
         String sql = content.toString().trim();
         if ((currentChangeSet != null) && (currentChangeSet.getId() != null) && (currentChangeSet.getId().length() != 0) && (sql.length() != 0)) {
-            if (changeSetListener != null) {
-                changeSetListener.onChangeSetRead(new StringBuilder(sql), null);
-            }
             currentChangeSet.setChangeSetSource(sql);
+
             getChangeSets().put(currentChangeSet.getId(), currentChangeSet);
+            if (getReadListener() != null) {
+                getReadListener().eachRow(getChangeSets().size()-1, currentChangeSet);
+            }
         }
     }
 
@@ -94,11 +95,12 @@ public class SqlChangeSetFileReader extends SqlStreamReader implements ChangeSet
                         withUserProperties(this.getUserVariableMapping()).
                         getText();
                 if (sql.length() != 0) {
-                    if (changeSetListener != null) {
-                        changeSetListener.onChangeSetRead(new StringBuilder(sql), currentChangeSet);
-                    }
                     currentChangeSet.setChangeSetSource(sql);
+
                     getChangeSets().put(currentChangeSet.getId(), currentChangeSet);
+                    if (getReadListener() != null) {
+                        getReadListener().eachRow(getChangeSets().size()-1, currentChangeSet);
+                    }
                     currentChangeSet = ChangeSet.xmlToChangeSet(line);
                 }
                 content.setLength(0);

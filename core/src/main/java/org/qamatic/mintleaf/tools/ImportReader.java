@@ -54,7 +54,7 @@ public interface ImportReader<T> extends AutoCloseable {
 
     }
 
-    ReadListener getReadListener();
+    ReadListener getReadListener()  throws MintleafException;;
 
     void setReadListener(ReadListener readListener);
 }

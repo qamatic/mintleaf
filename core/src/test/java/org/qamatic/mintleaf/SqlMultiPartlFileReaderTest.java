@@ -135,10 +135,23 @@ public class SqlMultiPartlFileReaderTest {
     @Test
     public void testSqlChangeSetReaderListnerTest() throws IOException, SQLException, MintleafException {
 
-        ChangeSetListener listner = new ChangeSetFileReadListner();
+
         InputStream iStream = this.getClass().getResourceAsStream("/multipart.sql");
         SqlChangeSetFileReader reader = new SqlChangeSetFileReader(iStream);
-        reader.setChangeSetListener(listner);
+        reader.setReadListener(new ReadListener() {
+            @Override
+            public Object eachRow(int rowNum, Row row) throws MintleafException {
+                ChangeSet changeSet = (ChangeSet) row;
+                if (actual_part1 == null) {
+                    actual_part1 = changeSet.getChangeSetSource().toString();
+                } else if (actual_part2 == null) {
+                    actual_part2 = changeSet.getChangeSetSource().toString();
+                } else if (actual_part3 == null) {
+                    actual_part3 = changeSet.getChangeSetSource().toString();
+                }
+                return null;
+            }
+        });
         actual_part1 = null;
         actual_part2 = null;
         actual_part3 = null;
@@ -153,18 +166,4 @@ public class SqlMultiPartlFileReaderTest {
     }
 
 
-    private class ChangeSetFileReadListner implements ChangeSetListener {
-
-        @Override
-        public void onChangeSetRead(StringBuilder sql, ChangeSet changeSet) throws MintleafException {
-            if (actual_part1 == null) {
-                actual_part1 = sql.toString();
-            } else if (actual_part2 == null) {
-                actual_part2 = sql.toString();
-            } else if (actual_part3 == null) {
-                actual_part3 = sql.toString();
-            }
-        }
-
-    }
 }

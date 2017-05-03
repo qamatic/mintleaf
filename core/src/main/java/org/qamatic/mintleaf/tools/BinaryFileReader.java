@@ -2,6 +2,7 @@ package org.qamatic.mintleaf.tools;
 
 import org.qamatic.mintleaf.MintleafException;
 import org.qamatic.mintleaf.Row;
+import org.qamatic.mintleaf.core.BaseFileReader;
 import org.qamatic.mintleaf.core.BinaryReader;
 
 import java.nio.charset.Charset;

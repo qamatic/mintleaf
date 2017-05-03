@@ -1,4 +1,4 @@
-package org.qamatic.mintleaf.tools;
+package org.qamatic.mintleaf.core;
 
 import org.qamatic.mintleaf.MintleafException;
 import org.qamatic.mintleaf.ReadListener;
@@ -9,10 +9,7 @@ import org.qamatic.mintleaf.ReadListener;
 public class BaseFileReader {
     private ReadListener readListener;
 
-    public ReadListener getReadListener() {
-        if (this.readListener == null) {
-            MintleafException.throwException("read listener can't be null");
-        }
+    public ReadListener getReadListener()  throws MintleafException {
         return readListener;
     }
 

@@ -71,9 +71,14 @@ public class MultiPartTest {
         reader.setDelimiter(";");
         final StringBuilder actual = new StringBuilder();
 
-        reader.setChangeSetListener((sql, changeSetInfo) -> {
-            actual.append(sql);
+        reader.setReadListener(new ReadListener() {
+            @Override
+            public Object eachRow(int rowNum, Row row) throws MintleafException {
+                actual.append(((ChangeSet) row).getChangeSetSource());
+                return null;
+            }
         });
+
         reader.read();
 
         assertEquals("INSERT INTO HRDB.USERS (USERID, USERNAME) VALUES (9, 'TN')", actual.toString());

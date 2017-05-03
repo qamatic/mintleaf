@@ -58,10 +58,11 @@ import javax.xml.bind.annotation.XmlType;
 import javax.xml.transform.stream.StreamSource;
 import java.io.StringReader;
 import java.io.StringWriter;
+import java.sql.ResultSetMetaData;
 
 @XmlRootElement
 @XmlType(propOrder = {"id", "delimiter"})
-public class ChangeSet {
+public class ChangeSet implements Row {
 
     private static final MintleafLogger logger = MintleafLogger.getLogger(ChangeSet.class);
     private String id = "";
@@ -138,5 +139,22 @@ public class ChangeSet {
             e.printStackTrace();
         }
         return null;
+    }
+
+    @Override
+    public Object getValue(int columnIndex) throws MintleafException {
+        MintleafException.throwException("un-supported");
+        return null;
+    }
+
+    @Override
+    public ResultSetMetaData getMetaData() throws MintleafException {
+        MintleafException.throwException("un-supported");
+        return null;
+    }
+
+    @Override
+    public void setMetaData(MetaDataCollection metaDataCollection) {
+        MintleafException.throwException("un-supported");
     }
 }

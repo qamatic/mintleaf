@@ -42,13 +42,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class MultiChangeSetFileReader implements ChangeSetReader {
+public class MultiChangeSetFileReader extends BaseFileReader implements ChangeSetReader {
 
     private static final MintleafLogger logger = MintleafLogger.getLogger(MultiChangeSetFileReader.class);
     private final HashMap<String, ChangeSet> changeSets = new HashMap<>();
     private Map<String, String> userVariableMapping;
     private String[] paths;
-    private ChangeSetListener changeSetListener;
 
     public MultiChangeSetFileReader(String[] paths) {
         this.paths = paths;
@@ -75,16 +74,6 @@ public class MultiChangeSetFileReader implements ChangeSetReader {
     }
 
     @Override
-    public ChangeSetListener getChangeSetListener() {
-        return this.changeSetListener;
-    }
-
-    @Override
-    public void setChangeSetListener(ChangeSetListener changeSetListener) {
-        this.changeSetListener = changeSetListener;
-    }
-
-    @Override
     public void read() throws MintleafException {
         for (String path : this.paths) {
             FileFinder fileFinder = new FileFinder(path);
@@ -96,7 +85,7 @@ public class MultiChangeSetFileReader implements ChangeSetReader {
                         return changeSets;
                     }
                 };
-                changeSetReader.setChangeSetListener(this.changeSetListener);
+                changeSetReader.setReadListener(this.getReadListener());
                 changeSetReader.setUserVariableMapping(getUserVariableMapping());
                 changeSetReader.read();
             }

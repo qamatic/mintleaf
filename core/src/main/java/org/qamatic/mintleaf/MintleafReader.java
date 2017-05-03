@@ -42,13 +42,18 @@ public interface MintleafReader {
 
     void setDelimiter(String delimStr);
 
-    ChangeSetListener getChangeSetListener();
-
-    void setChangeSetListener(ChangeSetListener changeSetListener);
+//    ChangeSetListener getChangeSetListener();
+//
+//    void setChangeSetListener(ChangeSetListener changeSetListener);
 
     void read() throws MintleafException;
 
     Map<String, String> getUserVariableMapping();
 
     void setUserVariableMapping(Map<String, String> userVariableMapping);
+
+
+    ReadListener getReadListener()  throws MintleafException;;
+
+    void setReadListener(ReadListener readListener);
 }

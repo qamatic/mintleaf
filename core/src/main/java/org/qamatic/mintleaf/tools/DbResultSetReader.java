@@ -38,6 +38,7 @@ package org.qamatic.mintleaf.tools;
 import org.qamatic.mintleaf.MintleafException;
 import org.qamatic.mintleaf.MintleafLogger;
 import org.qamatic.mintleaf.SqlResultSet;
+import org.qamatic.mintleaf.core.BaseFileReader;
 import org.qamatic.mintleaf.core.ResultSetRowWrapper;
 
 import java.sql.SQLException;
@@ -45,7 +46,7 @@ import java.sql.SQLException;
 /**
  * Created by qamatic on 2/18/6/16.
  */
-public class DbResultSetReader<T> extends BaseFileReader  implements ImportReader<T> {
+public class DbResultSetReader<T> extends BaseFileReader implements ImportReader<T> {
 
     private static final MintleafLogger logger = MintleafLogger.getLogger(DbResultSetReader.class);
     private SqlResultSet resultSet;

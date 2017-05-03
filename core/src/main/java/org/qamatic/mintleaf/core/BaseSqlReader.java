@@ -46,10 +46,10 @@ import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
 
-public abstract class BaseSqlReader implements MintleafReader {
+public abstract class BaseSqlReader extends BaseFileReader implements MintleafReader {
 
     private final static MintleafLogger logger = MintleafLogger.getLogger(BaseSqlReader.class);
-    protected ChangeSetListener changeSetListener;
+
     private String delimiter = "/";
     private Map<String, String> userVariableMapping;
 
@@ -94,13 +94,6 @@ public abstract class BaseSqlReader implements MintleafReader {
     @Override
     public abstract void read() throws MintleafException;
 
-    public ChangeSetListener getChangeSetListener() {
-        return changeSetListener;
-    }
-
-    public void setChangeSetListener(ChangeSetListener changeSetListener) {
-        this.changeSetListener = changeSetListener;
-    }
 
     @Override
     public Map<String, String> getUserVariableMapping() {

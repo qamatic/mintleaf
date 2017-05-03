@@ -35,6 +35,7 @@
 
 package org.qamatic.mintleaf.core;
 
+import org.qamatic.mintleaf.ChangeSet;
 import org.qamatic.mintleaf.MintleafException;
 import org.qamatic.mintleaf.MintleafLogger;
 import org.qamatic.mintleaf.configuration.ArgPatternHandler;
@@ -58,9 +59,11 @@ public class TextContentStreamReader extends SqlStreamReader {
     public void read() throws MintleafException {
         skipLineFeeds = true;
         super.read();
-        if (changeSetListener != null && content.length() != 0) {
-            changeSetListener.onChangeSetRead(content, null);
+
+        if (getReadListener() != null && content.length() != 0) {
+            getReadListener().eachRow(0, new ChangeSet("0", getDelimiter(), content.toString()));
         }
+
     }
 
     protected Readerline readLine() {

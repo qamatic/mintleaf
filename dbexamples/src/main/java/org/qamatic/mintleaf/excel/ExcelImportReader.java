@@ -5,7 +5,7 @@ import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.qamatic.mintleaf.*;
-import org.qamatic.mintleaf.tools.BaseFileReader;
+import org.qamatic.mintleaf.core.BaseFileReader;
 import org.qamatic.mintleaf.tools.ImportReader;
 
 import java.io.IOException;

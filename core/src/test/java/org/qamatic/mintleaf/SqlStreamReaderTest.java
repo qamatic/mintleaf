@@ -61,16 +61,16 @@ public class SqlStreamReaderTest {
     }
 
     @Test
-    public void testSqlReaderListnerDefault() {
+    public void testSqlReaderListnerDefault() throws MintleafException {
         SqlStreamReader reader = new SqlStreamReader("nofile");
-        assertNull(reader.getChangeSetListener());
+        assertNull(reader.getReadListener());
     }
 
     @Test
-    public void testSqlReaderListnerTest1() {
+    public void testSqlReaderListnerTest1() throws MintleafException {
         SqlStreamReader reader = new SqlStreamReader("nofile");
-        reader.setChangeSetListener(new EmptyPackageReadListner());
-        assertNotNull(reader.getChangeSetListener());
+        reader.setReadListener(new EmptyPackageReadListner());
+        assertNotNull(reader.getReadListener());
     }
 
     @Test
@@ -81,13 +81,17 @@ public class SqlStreamReaderTest {
 
 
         final StringBuilder actual = new StringBuilder();
-        ChangeSetListener listner = new EmptyPackageReadListner() {
+        ReadListener listner = new EmptyPackageReadListner() {
+
             @Override
-            public void onChangeSetRead(StringBuilder sql, ChangeSet changeSet) throws MintleafException {
-                actual.append(sql.toString());
+            public Object eachRow(int rowNum, Row row) throws MintleafException {
+                actual.append(((ChangeSet)row).getChangeSetSource());
+                return null;
             }
+
+
         };
-        reader.setChangeSetListener(listner);
+        reader.setReadListener(listner);
         reader.read();
 
         StringBuilder expected = new StringBuilder();
@@ -106,10 +110,10 @@ public class SqlStreamReaderTest {
     @Test
     public void testSqlReaderListnerTest2() throws MintleafException {
 
-        ChangeSetListener listner = new EmptyPackageReadListner();
+        ReadListener listner = new EmptyPackageReadListner();
         InputStream iStream = this.getClass().getResourceAsStream("/EmptyPackage.sql");
         SqlStreamReader reader = new SqlStreamReader(iStream);
-        reader.setChangeSetListener(listner);
+        reader.setReadListener(listner);
         actual_emptypackage_block1 = null;
         actual_emptypackage_block2 = null;
 
@@ -133,17 +137,18 @@ public class SqlStreamReaderTest {
 
     }
 
-    private class EmptyPackageReadListner implements ChangeSetListener {
+    private class EmptyPackageReadListner implements ReadListener {
+
 
         @Override
-        public void onChangeSetRead(StringBuilder sql, ChangeSet changeSet) throws MintleafException {
+        public Object eachRow(int rowNum, Row row) throws MintleafException {
+
             if (actual_emptypackage_block1 == null) {
-                actual_emptypackage_block1 = sql.toString();
+                actual_emptypackage_block1 = ((ChangeSet)row).getChangeSetSource();
             } else if (actual_emptypackage_block2 == null) {
-                actual_emptypackage_block2 = sql.toString();
+                actual_emptypackage_block2 = ((ChangeSet)row).getChangeSetSource();
             }
+            return null;
         }
-
-
     }
 }
