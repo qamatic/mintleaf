@@ -48,7 +48,7 @@ import java.io.IOException;
 /**
  * Created by qamatic on 3/6/16.
  */
-public class CsvImporter extends SqlTemplateBasedListener implements Executable<Boolean> {
+public class CsvImporter extends SqlReadListener implements Executable<Boolean> {
 
     private static final MintleafLogger logger = MintleafLogger.getLogger(CsvImporter.class);
     private String sourceCsvFile;
@@ -69,7 +69,7 @@ public class CsvImporter extends SqlTemplateBasedListener implements Executable<
     }
 
     @Override
-    protected String getSqlTemplate() {
+    protected String getSql() {
         return this.targetSqlTemplate;
     }
 

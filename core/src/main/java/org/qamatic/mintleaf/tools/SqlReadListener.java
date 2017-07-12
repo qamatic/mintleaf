@@ -45,19 +45,19 @@ import java.util.regex.Pattern;
 /**
  * Created by qamatic on 3/6/16.
  */
-public abstract class SqlTemplateBasedListener<T> implements ReadListener<T> {
-    private static final MintleafLogger logger = MintleafLogger.getLogger(SqlTemplateBasedListener.class);
+public abstract class SqlReadListener<T> implements ReadListener<T> {
+    private static final MintleafLogger logger = MintleafLogger.getLogger(SqlReadListener.class);
     final Pattern columnPattern = Pattern.compile("\\$(\\w+)\\$", Pattern.DOTALL | Pattern.MULTILINE | Pattern.CASE_INSENSITIVE);
     private Matcher columns;
     private List<String> batchSqls = new ArrayList<>();
 
     protected abstract ConnectionContext getConnectionContext();
 
-    protected abstract String getSqlTemplate();
+    protected abstract String getSql();
 
     public Boolean execute() throws MintleafException {
-        columns = columnPattern.matcher(getSqlTemplate());
-        logger.info("importing using template:" + getSqlTemplate());
+        columns = columnPattern.matcher(getSql());
+        logger.info("importing using template:" + getSql());
         batchSqls.clear();
         final Executable<int[]> batchCall = getConnectionContext().executeBatchSqls(batchSqls);
         try {
@@ -74,7 +74,7 @@ public abstract class SqlTemplateBasedListener<T> implements ReadListener<T> {
 
     @Override
     public T eachRow(int rowNum, Row row) throws MintleafException {
-        StringBuffer buffer = new StringBuffer(getSqlTemplate());
+        StringBuffer buffer = new StringBuffer(getSql());
         columns.reset();
         while (columns.find()) {
             int idx = buffer.indexOf("$" + columns.group(1));

@@ -40,7 +40,7 @@ import org.qamatic.mintleaf.*;
 /**
  * Created by qamatic on 3/6/16.
  */
-public class DbImporter extends SqlTemplateBasedListener implements Executable<Boolean> {
+public class DbImporter extends SqlReadListener implements Executable<Boolean> {
     private static final MintleafLogger logger = MintleafLogger.getLogger(DbImporter.class);
 
     private ConnectionContext targetDb;
@@ -66,7 +66,7 @@ public class DbImporter extends SqlTemplateBasedListener implements Executable<B
     }
 
     @Override
-    protected String getSqlTemplate() {
+    protected String getSql() {
         return this.targetSqlTemplate;
     }
 
