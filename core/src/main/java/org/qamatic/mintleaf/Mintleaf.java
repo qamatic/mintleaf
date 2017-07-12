@@ -336,15 +336,17 @@ public final class Mintleaf {
             return new OrderedColumnMatcher() {
                 @Override
                 protected ColumnState createSourceColumnStateInstance() {
-                    if (dbSourceColumnState)
-                        return new DbColumnState();
+                    if (dbSourceColumnState) {
+                        setColumnCountOffset(1);
+                    }
                     return super.createSourceColumnStateInstance();
                 }
 
                 @Override
                 protected ColumnState createTargetColumnStateInstance() {
-                    if (dbTargetColumnState)
-                        return new DbColumnState();
+                    if (dbTargetColumnState) {
+                        setColumnCountOffset(1);
+                    }
                     return super.createTargetColumnStateInstance();
                 }
             };
