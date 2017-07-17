@@ -5,7 +5,6 @@ import org.qamatic.mintleaf.*;
 import org.qamatic.mintleaf.core.BaseSqlReader;
 import org.qamatic.mintleaf.excel.ExcelImportReader;
 import org.qamatic.mintleaf.excel.ExcelRow;
-import org.qamatic.mintleaf.tools.ImportReader;
 
 import static junit.framework.TestCase.assertEquals;
 
@@ -18,7 +17,7 @@ public class ExcelImportTest {
     @Test
     public void importFromExcelToObjectListTest() throws MintleafException {
 
-        ImportReader importReader = new ExcelImportReader(BaseSqlReader.getInputStreamFromFile("res:/users.xls"));
+        MintleafReader importReader = new ExcelImportReader(BaseSqlReader.getInputStreamFromFile("res:/users.xls"));
         Executable<ExcelRow> importToList = new Mintleaf.AnyDataToListTransferBuilder<>().
                 withSource(importReader).
                 build();

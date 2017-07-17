@@ -39,6 +39,7 @@ import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVParser;
 import org.apache.commons.csv.CSVRecord;
 import org.qamatic.mintleaf.MintleafException;
+import org.qamatic.mintleaf.MintleafReader;
 import org.qamatic.mintleaf.Row;
 import org.qamatic.mintleaf.core.BaseFileReader;
 
@@ -48,7 +49,7 @@ import java.io.Reader;
 /**
  * Created by qamatic on 2/18/6/16.
  */
-public class CsvFileReader<T> extends BaseFileReader implements ImportReader<T> {
+public class CsvFileReader<T> extends BaseFileReader implements MintleafReader<T> {
 
     private Reader afileReader;
 

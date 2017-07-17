@@ -45,7 +45,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 
-public class SqlStreamReader extends BaseSqlReader {
+public class SqlStreamReader<T> extends BaseSqlReader<T> {
 
     private final static MintleafLogger logger = MintleafLogger.getLogger(SqlStreamReader.class);
     protected final StringBuilder content = new StringBuilder();
@@ -74,7 +74,7 @@ public class SqlStreamReader extends BaseSqlReader {
     }
 
     @Override
-    public void read() throws MintleafException {
+    public T read() throws MintleafException {
         this.content.setLength(0);
         BufferedReader input = null;
 
@@ -104,6 +104,7 @@ public class SqlStreamReader extends BaseSqlReader {
             logger.error(e);
             throw new MintleafException(e);
         }
+        return null;
     }
 
     protected Readerline readLine() {
@@ -124,7 +125,7 @@ public class SqlStreamReader extends BaseSqlReader {
                         getText();
 
                 if (getReadListener() != null && sql.length() != 0) {
-                    getReadListener().eachRow(readCount++, new ChangeSet(readCount+"", getDelimiter(), sql));
+                    getReadListener().eachRow(readCount++, new ChangeSet(readCount + "", getDelimiter(), sql));
                 }
                 content.setLength(0);
 

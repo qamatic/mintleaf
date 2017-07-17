@@ -40,7 +40,7 @@ import org.qamatic.mintleaf.MintleafException;
 /**
  * Created by qamatic on 3/5/16.
  */
-public class ColumnState {
+public class CompareColumnState {
 
     private int columnNumber = -1;
     private int rowNumber = -1;
@@ -48,7 +48,7 @@ public class ColumnState {
     private String columnName;
     private Object columnValue;
 
-    public ColumnState() {
+    public CompareColumnState() {
         reset();
     }
 

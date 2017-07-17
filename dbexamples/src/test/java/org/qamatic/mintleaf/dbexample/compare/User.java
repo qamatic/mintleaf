@@ -35,9 +35,9 @@
 
 package org.qamatic.mintleaf.dbexample.compare;
 
-import org.qamatic.mintleaf.Row;
 import org.qamatic.mintleaf.MetaDataCollection;
 import org.qamatic.mintleaf.MintleafException;
+import org.qamatic.mintleaf.Row;
 
 /**
  * Created by QAmatic Team on 3/11/17.

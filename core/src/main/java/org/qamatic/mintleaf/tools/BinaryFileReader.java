@@ -1,6 +1,7 @@
 package org.qamatic.mintleaf.tools;
 
 import org.qamatic.mintleaf.MintleafException;
+import org.qamatic.mintleaf.MintleafReader;
 import org.qamatic.mintleaf.Row;
 import org.qamatic.mintleaf.core.BaseFileReader;
 import org.qamatic.mintleaf.core.BinaryReader;
@@ -11,7 +12,7 @@ import java.util.Iterator;
 /**
  * Created by QAmatic Team on 4/11/17.
  */
-public abstract class BinaryFileReader<T> extends BaseFileReader implements ImportReader {
+public abstract class BinaryFileReader<T> extends BaseFileReader implements MintleafReader {
 
     private BinaryReader binaryReader;
     private Charset charset;
@@ -39,6 +40,14 @@ public abstract class BinaryFileReader<T> extends BaseFileReader implements Impo
             }
         }
         return null;
+    }
+
+    public Charset getCharset() {
+        return charset;
+    }
+
+    public BinaryReader getBinaryReader() {
+        return binaryReader;
     }
 
 }

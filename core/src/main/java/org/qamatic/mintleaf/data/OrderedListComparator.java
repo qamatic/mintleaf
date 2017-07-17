@@ -56,8 +56,8 @@ public class OrderedListComparator implements DataComparer {
     }
 
 
-    protected RowState getRowStateInstance() {
-        return new RowState();
+    protected CompareRowState getRowStateInstance() {
+        return new CompareRowState();
     }
 
     @Override
@@ -66,10 +66,10 @@ public class OrderedListComparator implements DataComparer {
         if (this.comparerListener != null) {
             this.comparerListener.OnBeginCompare(this.sourceTable, this.targetTable);
         }
-        final RowState sourceRowState = getRowStateInstance();
+        final CompareRowState sourceRowState = getRowStateInstance();
         sourceRowState.setMetaData(this.sourceTable.getMetaData());
 
-        final RowState targetRowState = getRowStateInstance();
+        final CompareRowState targetRowState = getRowStateInstance();
         targetRowState.setMetaData(this.targetTable.getMetaData());
 
 
@@ -137,19 +137,19 @@ public class OrderedListComparator implements DataComparer {
             throw new MintleafException("TargetTable is missing");
     }
 
-    private void onRowCompare(final RowState sourceRowState, final RowState targetRowState) throws MintleafException {
+    private void onRowCompare(final CompareRowState sourceRowState, final CompareRowState targetRowState) throws MintleafException {
         if (this.comparerListener != null) {
             this.comparerListener.OnRowCompare(sourceRowState, targetRowState);
         }
     }
 
-    private void beforeRowCompare(final RowState sourceRowState, final RowState targetRowState) throws MintleafException {
+    private void beforeRowCompare(final CompareRowState sourceRowState, final CompareRowState targetRowState) throws MintleafException {
         if (this.comparerListener != null) {
             this.comparerListener.onBeforeRowCompare(sourceRowState, targetRowState);
         }
     }
 
-    private void afterRowCompare(final RowState sourceRowState, final RowState targetRowState) throws MintleafException {
+    private void afterRowCompare(final CompareRowState sourceRowState, final CompareRowState targetRowState) throws MintleafException {
         if (this.comparerListener != null) {
             this.comparerListener.onAfterRowCompare(sourceRowState, targetRowState);
         }

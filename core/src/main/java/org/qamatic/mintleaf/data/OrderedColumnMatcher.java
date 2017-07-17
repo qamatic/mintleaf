@@ -45,16 +45,16 @@ import java.sql.SQLException;
  */
 public class OrderedColumnMatcher implements ColumnMatcher {
 
-    private int columnCountOffset=0;
+    private int columnCountOffset = 0;
 
     @Override
-    public void match(RowState leftRowState, RowState rightRowState, ComparerListener listener) throws MintleafException {
+    public void match(CompareRowState leftRowState, CompareRowState rightRowState, ComparerListener listener) throws MintleafException {
         if (listener == null) {
             return;
         }
 
-        final ColumnState sourceColumnState = createSourceColumnStateInstance();
-        final ColumnState targetColumnState = createTargetColumnStateInstance();
+        final CompareColumnState sourceColumnState = createSourceColumnStateInstance();
+        final CompareColumnState targetColumnState = createTargetColumnStateInstance();
 
         int sourceColumnNumber = sourceColumnState.getColumnNumber();
         int targetColumnNumber = targetColumnState.getColumnNumber();
@@ -76,7 +76,7 @@ public class OrderedColumnMatcher implements ColumnMatcher {
 
                 }
 
-                while (targetColumnNumber < rightRowState.Row.getMetaData().getColumnCount() - 1+ this.columnCountOffset) {
+                while (targetColumnNumber < rightRowState.Row.getMetaData().getColumnCount() - 1 + this.columnCountOffset) {
                     targetColumnNumber++;
 
                     sourceColumnState.reset(-1, -1, -1, null);
@@ -89,7 +89,7 @@ public class OrderedColumnMatcher implements ColumnMatcher {
 
             } else if ((leftRowState.Row != null) && (rightRowState.Row == null)) {
 
-                while (sourceColumnNumber < leftRowState.Row.getMetaData().getColumnCount() - 1+ this.columnCountOffset) {
+                while (sourceColumnNumber < leftRowState.Row.getMetaData().getColumnCount() - 1 + this.columnCountOffset) {
                     sourceColumnNumber++;
 
                     sourceColumnState.reset(leftRowState.RowNumber, sourceColumnNumber, 1,
@@ -102,7 +102,7 @@ public class OrderedColumnMatcher implements ColumnMatcher {
 
             } else if ((leftRowState.Row == null) && (rightRowState.Row != null)) {
 
-                while (targetColumnNumber < rightRowState.Row.getMetaData().getColumnCount() - 1+ this.columnCountOffset) {
+                while (targetColumnNumber < rightRowState.Row.getMetaData().getColumnCount() - 1 + this.columnCountOffset) {
                     targetColumnNumber++;
 
                     sourceColumnState.reset(-1, -1, -1, null);
@@ -117,28 +117,28 @@ public class OrderedColumnMatcher implements ColumnMatcher {
         }
     }
 
-    protected ColumnState createSourceColumnStateInstance() {
-        return new ColumnState(){
+    protected CompareColumnState createSourceColumnStateInstance() {
+        return new CompareColumnState() {
             {
-                setColumnNumber(getColumnCountOffset()-1);
+                setColumnNumber(getColumnCountOffset() - 1);
             }
         };
     }
 
-    protected ColumnState createTargetColumnStateInstance() {
-        return new ColumnState(){
+    protected CompareColumnState createTargetColumnStateInstance() {
+        return new CompareColumnState() {
             {
-                setColumnNumber(getColumnCountOffset()-1);
+                setColumnNumber(getColumnCountOffset() - 1);
             }
         };
-    }
-
-    public void setColumnCountOffset(int columnCountOffset) {
-        this.columnCountOffset = columnCountOffset;
     }
 
     public int getColumnCountOffset() {
         return columnCountOffset;
+    }
+
+    public void setColumnCountOffset(int columnCountOffset) {
+        this.columnCountOffset = columnCountOffset;
     }
 
 }

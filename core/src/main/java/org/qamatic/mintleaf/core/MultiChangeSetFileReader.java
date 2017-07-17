@@ -35,14 +35,17 @@
 
 package org.qamatic.mintleaf.core;
 
-import org.qamatic.mintleaf.*;
+import org.qamatic.mintleaf.ChangeSet;
+import org.qamatic.mintleaf.ChangeSetReader;
+import org.qamatic.mintleaf.MintleafException;
+import org.qamatic.mintleaf.MintleafLogger;
 import org.qamatic.mintleaf.tools.FileFinder;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class MultiChangeSetFileReader extends BaseFileReader implements ChangeSetReader {
+public class MultiChangeSetFileReader<T> extends BaseFileReader implements ChangeSetReader {
 
     private static final MintleafLogger logger = MintleafLogger.getLogger(MultiChangeSetFileReader.class);
     private final HashMap<String, ChangeSet> changeSets = new HashMap<>();
@@ -74,7 +77,7 @@ public class MultiChangeSetFileReader extends BaseFileReader implements ChangeSe
     }
 
     @Override
-    public void read() throws MintleafException {
+    public T read() throws MintleafException {
         for (String path : this.paths) {
             FileFinder fileFinder = new FileFinder(path);
             List<String> files = fileFinder.list();
@@ -90,6 +93,7 @@ public class MultiChangeSetFileReader extends BaseFileReader implements ChangeSe
                 changeSetReader.read();
             }
         }
+        return null;
     }
 
     @Override
@@ -101,7 +105,7 @@ public class MultiChangeSetFileReader extends BaseFileReader implements ChangeSe
     }
 
     @Override
-    public void setUserVariableMapping(Map<String, String> userVariableMapping) {
+    public void setUserVariableMapping(Map userVariableMapping) {
         this.userVariableMapping = userVariableMapping;
     }
 }

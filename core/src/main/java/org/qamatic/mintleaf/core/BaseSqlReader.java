@@ -45,7 +45,7 @@ import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
 
-public abstract class BaseSqlReader extends BaseFileReader implements MintleafReader {
+public abstract class BaseSqlReader<T> extends BaseFileReader implements MintleafReader<T> {
 
     private final static MintleafLogger logger = MintleafLogger.getLogger(BaseSqlReader.class);
 
@@ -91,7 +91,7 @@ public abstract class BaseSqlReader extends BaseFileReader implements MintleafRe
     }
 
     @Override
-    public abstract void read() throws MintleafException;
+    public abstract T read() throws MintleafException;
 
 
     @Override
@@ -102,8 +102,9 @@ public abstract class BaseSqlReader extends BaseFileReader implements MintleafRe
         return userVariableMapping;
     }
 
+
     @Override
-    public void setUserVariableMapping(Map<String, String> userVariableMapping) {
+    public void setUserVariableMapping(Map userVariableMapping) {
         this.userVariableMapping = userVariableMapping;
     }
 }

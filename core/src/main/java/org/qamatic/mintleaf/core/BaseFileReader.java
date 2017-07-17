@@ -9,7 +9,7 @@ import org.qamatic.mintleaf.ReadListener;
 public class BaseFileReader {
     private ReadListener readListener;
 
-    public ReadListener getReadListener()  throws MintleafException {
+    public ReadListener getReadListener() throws MintleafException {
         return readListener;
     }
 

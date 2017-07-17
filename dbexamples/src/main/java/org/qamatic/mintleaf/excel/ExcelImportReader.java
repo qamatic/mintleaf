@@ -6,7 +6,6 @@ import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.qamatic.mintleaf.*;
 import org.qamatic.mintleaf.core.BaseFileReader;
-import org.qamatic.mintleaf.tools.ImportReader;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -15,7 +14,7 @@ import java.util.Iterator;
 /**
  * Created by senips on 4/25/17.
  */
-public class ExcelImportReader<T> extends BaseFileReader implements ImportReader<T> {
+public class ExcelImportReader<T> extends BaseFileReader implements MintleafReader<T> {
 
     private InputStream inputStream;
     private int activeWorkSheet;

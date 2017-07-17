@@ -44,7 +44,7 @@ import org.qamatic.mintleaf.configuration.ArgPatternHandler;
 import java.io.InputStream;
 import java.util.HashMap;
 
-public class SqlChangeSetFileReader extends SqlStreamReader implements ChangeSetReader {
+public class SqlChangeSetFileReader<T> extends SqlStreamReader implements ChangeSetReader<T> {
 
     private static final MintleafLogger logger = MintleafLogger.getLogger(SqlChangeSetFileReader.class);
     private final HashMap<String, ChangeSet> changeSets = new HashMap<>();
@@ -69,7 +69,7 @@ public class SqlChangeSetFileReader extends SqlStreamReader implements ChangeSet
     }
 
     @Override
-    public void read() throws MintleafException {
+    public T read() throws MintleafException {
 
         super.read();
 
@@ -79,9 +79,10 @@ public class SqlChangeSetFileReader extends SqlStreamReader implements ChangeSet
 
             getChangeSets().put(currentChangeSet.getId(), currentChangeSet);
             if (getReadListener() != null) {
-                getReadListener().eachRow(getChangeSets().size()-1, currentChangeSet);
+                getReadListener().eachRow(getChangeSets().size() - 1, currentChangeSet);
             }
         }
+        return null;
     }
 
     @Override
@@ -99,7 +100,7 @@ public class SqlChangeSetFileReader extends SqlStreamReader implements ChangeSet
 
                     getChangeSets().put(currentChangeSet.getId(), currentChangeSet);
                     if (getReadListener() != null) {
-                        getReadListener().eachRow(getChangeSets().size()-1, currentChangeSet);
+                        getReadListener().eachRow(getChangeSets().size() - 1, currentChangeSet);
                     }
                     currentChangeSet = ChangeSet.xmlToChangeSet(line);
                 }

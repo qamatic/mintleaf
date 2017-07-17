@@ -35,10 +35,7 @@
 
 package org.qamatic.mintleaf.tools;
 
-import org.qamatic.mintleaf.ConnectionContext;
-import org.qamatic.mintleaf.Executable;
-import org.qamatic.mintleaf.MintleafException;
-import org.qamatic.mintleaf.MintleafLogger;
+import org.qamatic.mintleaf.*;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -48,7 +45,7 @@ import java.io.IOException;
 /**
  * Created by qamatic on 3/6/16.
  */
-public class CsvImporter extends SqlReadListener implements Executable<Boolean> {
+public class CsvImporter extends BaseSqlTemplateImporter implements Executable<Boolean> {
 
     private static final MintleafLogger logger = MintleafLogger.getLogger(CsvImporter.class);
     private String sourceCsvFile;
@@ -64,7 +61,7 @@ public class CsvImporter extends SqlReadListener implements Executable<Boolean> 
     }
 
 
-    protected ImportReader createFlavour(File f) throws FileNotFoundException {
+    protected MintleafReader createFlavour(File f) throws FileNotFoundException {
         return new CsvFileReader(new FileReader(f));
     }
 
@@ -74,14 +71,14 @@ public class CsvImporter extends SqlReadListener implements Executable<Boolean> 
     }
 
     @Override
-    public ImportReader getReader() throws MintleafException {
+    public MintleafReader getReader() throws MintleafException {
         try {
             File f = new File(this.sourceCsvFile);
             if (!f.exists()) {
                 logger.error("file not found " + sourceCsvFile);
                 throw new MintleafException("file not found " + sourceCsvFile);
             }
-            ImportReader reader = new CsvFileReader(new FileReader(f));
+            MintleafReader reader = new CsvFileReader(new FileReader(f));
             reader.setReadListener(this);
             return reader;
 

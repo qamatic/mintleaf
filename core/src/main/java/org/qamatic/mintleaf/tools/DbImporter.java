@@ -40,7 +40,7 @@ import org.qamatic.mintleaf.*;
 /**
  * Created by qamatic on 3/6/16.
  */
-public class DbImporter extends SqlReadListener implements Executable<Boolean> {
+public class DbImporter extends BaseSqlTemplateImporter implements Executable<Boolean> {
     private static final MintleafLogger logger = MintleafLogger.getLogger(DbImporter.class);
 
     private ConnectionContext targetDb;
@@ -48,7 +48,7 @@ public class DbImporter extends SqlReadListener implements Executable<Boolean> {
     private ConnectionContext sourceDb;
     private String sourceSql;
     private ParameterBinding sourceSqlParamValueBindings;
-    private ImportReader reader;
+    private MintleafReader reader;
 
     public DbImporter(ConnectionContext sourceDb, String sourceSql,
                       ConnectionContext targetDb,
@@ -71,9 +71,9 @@ public class DbImporter extends SqlReadListener implements Executable<Boolean> {
     }
 
     @Override
-    public ImportReader getReader() {
+    public MintleafReader getReader() {
         SqlResultSet sourceSqlResultSet = this.getConnectionContext().queryBuilder().withSql(sourceSql).withParamValues(sourceSqlParamValueBindings).buildSelect();
-        ImportReader reader = new DbResultSetReader(sourceSqlResultSet);
+        MintleafReader reader = new DbResultSetReader(sourceSqlResultSet);
         reader.setReadListener(this);
         return reader;
     }

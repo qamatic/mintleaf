@@ -37,23 +37,41 @@ package org.qamatic.mintleaf;
 
 import java.util.Map;
 
-public interface MintleafReader {
-    String getDelimiter();
-
-    void setDelimiter(String delimStr);
-
-//    ChangeSetListener getChangeSetListener();
-//
-//    void setChangeSetListener(ChangeSetListener changeSetListener);
-
-    void read() throws MintleafException;
-
-    Map<String, String> getUserVariableMapping();
-
-    void setUserVariableMapping(Map<String, String> userVariableMapping);
+public interface MintleafReader<T> extends AutoCloseable {
 
 
-    ReadListener getReadListener()  throws MintleafException;;
+    T read() throws MintleafException;
 
-    void setReadListener(ReadListener readListener);
+    default Map<String, String> getUserVariableMapping() {
+        MintleafException.throwException("not implemented");
+        return null;
+    }
+
+    default void setUserVariableMapping(Map userVariableMapping) {
+        MintleafException.throwException("not implemented");
+    }
+
+    default ReadListener getReadListener() throws MintleafException {
+        MintleafException.throwException("not implemented");
+        return null;
+    }
+
+    default void setReadListener(ReadListener readListener) {
+        MintleafException.throwException("not implemented");
+    }
+
+    default String getDelimiter() {
+        MintleafException.throwException("not implemented");
+        return null;
+    }
+
+    default void setDelimiter(String delimStr) {
+        MintleafException.throwException("not implemented");
+    }
+
+    @Override
+    default void close() {
+
+    }
+
 }

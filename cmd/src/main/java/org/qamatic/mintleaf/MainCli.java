@@ -56,6 +56,10 @@ public class MainCli {
     private JCommander jc = new JCommander(this);
     private CommandMigrate cc = new CommandMigrate();
 
+    public static void main(String[] args) throws MintleafException {
+        System.out.println("Mintleaf v1.26 command line tool");
+        new MainCli().parse(args);
+    }
 
     public MainCli parse(String[] args) throws MintleafException {
         jc.setColumnSize(160);
@@ -88,13 +92,8 @@ public class MainCli {
     public void run() throws MintleafException {
 
         if (jc.getCommands().containsKey("migrate")) {
-           cc.execute();
+            cc.execute();
         }
-    }
-
-    public static void main(String[] args) throws MintleafException {
-        System.out.println("Mintleaf v1.26 command line tool");
-        new MainCli().parse(args);
     }
 
     @Parameters(separators = "=", commandDescription = "")

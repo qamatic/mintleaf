@@ -38,9 +38,9 @@ package org.qamatic.mintleaf.dbexample.reportgenerator;
 import org.qamatic.mintleaf.MintleafException;
 import org.qamatic.mintleaf.MintleafLogger;
 import org.qamatic.mintleaf.RowListWrapper;
-import org.qamatic.mintleaf.data.ColumnState;
+import org.qamatic.mintleaf.data.CompareColumnState;
+import org.qamatic.mintleaf.data.CompareRowState;
 import org.qamatic.mintleaf.data.ComparerListener;
-import org.qamatic.mintleaf.data.RowState;
 
 import java.io.FileWriter;
 import java.io.IOException;
@@ -77,24 +77,24 @@ public class ComparisonResultReportGenerator implements ComparerListener {
     }
 
     @Override
-    public void onBeforeRowCompare(RowState sourceRow, RowState targetRow) throws MintleafException {
+    public void onBeforeRowCompare(CompareRowState sourceRow, CompareRowState targetRow) throws MintleafException {
 
     }
 
     @Override
-    public void onAfterRowCompare(RowState sourceRow, RowState targetRow) throws MintleafException {
+    public void onAfterRowCompare(CompareRowState sourceRow, CompareRowState targetRow) throws MintleafException {
 
     }
 
     @Override
-    public void OnRowCompare(RowState sourceRow, RowState targetRow) throws MintleafException {
+    public void OnRowCompare(CompareRowState sourceRow, CompareRowState targetRow) throws MintleafException {
         if (sourceRow.RowNumber == 0) {
 
         }
     }
 
     @Override
-    public void OnColumnCompare(final ColumnState sourceColumn, final ColumnState targetColumn) throws MintleafException {
+    public void OnColumnCompare(final CompareColumnState sourceColumn, final CompareColumnState targetColumn) throws MintleafException {
         try {
             if (sourceColumn.equals(targetColumn)) {
                 fileWriter.write(String.format("<td class='%s'>%s</td>", "pass", sourceColumn));
@@ -108,7 +108,7 @@ public class ComparisonResultReportGenerator implements ComparerListener {
     }
 
     @Override
-    public void OnEndCompare(RowState sourceRow, RowState targetRow) throws MintleafException {
+    public void OnEndCompare(CompareRowState sourceRow, CompareRowState targetRow) throws MintleafException {
         try {
             this.fileWriter.write("</table></body></html>");
             fileWriter.close();

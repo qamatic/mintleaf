@@ -39,16 +39,17 @@ import org.qamatic.mintleaf.ChangeSet;
 import org.qamatic.mintleaf.MintleafException;
 import org.qamatic.mintleaf.configuration.ArgPatternHandler;
 
-public class SqlStringReader extends BaseSqlReader {
+public class SqlStringReader<T> extends BaseSqlReader<T> {
 
     private final String mvSqlSource;
     private int readCount;
+
     public SqlStringReader(String sqlSource) {
         mvSqlSource = sqlSource;
     }
 
     @Override
-    public void read() throws MintleafException {
+    public T read() throws MintleafException {
 
         StringBuilder childContents = new StringBuilder();
 
@@ -75,7 +76,7 @@ public class SqlStringReader extends BaseSqlReader {
                             getText();
 
                     if (getReadListener() != null && sql.length() != 0) {
-                        getReadListener().eachRow(readCount++, new ChangeSet(readCount+"", getDelimiter(), sql));
+                        getReadListener().eachRow(readCount++, new ChangeSet(readCount + "", getDelimiter(), sql));
                     }
 
                     childContents.setLength(0);
@@ -90,6 +91,7 @@ public class SqlStringReader extends BaseSqlReader {
 
         }
         //return mvSqlSource;
+        return null;
     }
 
 }

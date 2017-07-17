@@ -47,24 +47,24 @@ public interface ComparerListener {
 
     }
 
-    default void OnEndCompare(final RowState sourceRow, final RowState targetRow) throws MintleafException {
+    default void OnEndCompare(final CompareRowState sourceRow, final CompareRowState targetRow) throws MintleafException {
 
     }
 
-    default void onBeforeRowCompare(final RowState sourceRow, final RowState targetRow) throws MintleafException {
+    default void onBeforeRowCompare(final CompareRowState sourceRow, final CompareRowState targetRow) throws MintleafException {
 
     }
 
-    default void onAfterRowCompare(final RowState sourceRow, final RowState targetRow) throws MintleafException {
+    default void onAfterRowCompare(final CompareRowState sourceRow, final CompareRowState targetRow) throws MintleafException {
 
     }
 
-    default void OnRowCompare(final RowState sourceRow, final RowState targetRow) throws MintleafException {
+    default void OnRowCompare(final CompareRowState sourceRow, final CompareRowState targetRow) throws MintleafException {
 
     }
 
 
-    void OnColumnCompare(final ColumnState sourceColumn, final ColumnState targetColumn) throws MintleafException;
+    void OnColumnCompare(final CompareColumnState sourceColumn, final CompareColumnState targetColumn) throws MintleafException;
 
 
 }

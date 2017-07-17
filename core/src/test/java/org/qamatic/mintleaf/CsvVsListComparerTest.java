@@ -37,9 +37,9 @@ package org.qamatic.mintleaf;
 
 import org.junit.Test;
 import org.qamatic.mintleaf.core.BaseSqlReader;
-import org.qamatic.mintleaf.data.ColumnState;
+import org.qamatic.mintleaf.data.CompareColumnState;
+import org.qamatic.mintleaf.data.CompareRowState;
 import org.qamatic.mintleaf.data.ComparerListener;
-import org.qamatic.mintleaf.data.RowState;
 import org.qamatic.mintleaf.tools.CsvRowListWrapper;
 
 import java.io.IOException;
@@ -96,13 +96,13 @@ public class CsvVsListComparerTest {
                 withMatchingResult(new ComparerListener() {
 
                     @Override
-                    public void OnRowCompare(RowState sourceRow, RowState targetRow) throws MintleafException {
+                    public void OnRowCompare(CompareRowState sourceRow, CompareRowState targetRow) throws MintleafException {
                         logger.info(String.format("[Source:%s] [Target:%s]", sourceRow, targetRow));
                         assertEquals(sourceRow.Row.getValue(1), targetRow.Row.getValue(0));
                     }
 
                     @Override
-                    public void OnColumnCompare(ColumnState sourceColumn, ColumnState targetColumn) throws MintleafException {
+                    public void OnColumnCompare(CompareColumnState sourceColumn, CompareColumnState targetColumn) throws MintleafException {
 
                     }
 

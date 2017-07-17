@@ -42,7 +42,7 @@ import org.qamatic.mintleaf.configuration.ArgPatternHandler;
 
 import java.io.InputStream;
 
-public class TextContentStreamReader extends SqlStreamReader {
+public class TextContentStreamReader<T> extends SqlStreamReader {
 
     private final static MintleafLogger logger = MintleafLogger.getLogger(TextContentStreamReader.class);
 
@@ -56,14 +56,14 @@ public class TextContentStreamReader extends SqlStreamReader {
 
 
     @Override
-    public void read() throws MintleafException {
+    public T read() throws MintleafException {
         skipLineFeeds = true;
         super.read();
 
         if (getReadListener() != null && content.length() != 0) {
             getReadListener().eachRow(0, new ChangeSet("0", getDelimiter(), content.toString()));
         }
-
+        return null;
     }
 
     protected Readerline readLine() {

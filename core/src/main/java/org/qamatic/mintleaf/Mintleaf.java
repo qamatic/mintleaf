@@ -37,7 +37,10 @@ package org.qamatic.mintleaf;
 
 import org.qamatic.mintleaf.core.*;
 import org.qamatic.mintleaf.data.*;
-import org.qamatic.mintleaf.tools.*;
+import org.qamatic.mintleaf.tools.BinaryFileImporter;
+import org.qamatic.mintleaf.tools.CsvExporter;
+import org.qamatic.mintleaf.tools.CsvImporter;
+import org.qamatic.mintleaf.tools.DbImporter;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
@@ -132,7 +135,6 @@ public final class Mintleaf {
         }
 
 
-
         public Executable<Boolean> build() {
             CsvExporter csvExporter = new CsvExporter(
                     sourceDb.getNewConnection(),
@@ -180,7 +182,7 @@ public final class Mintleaf {
 
         private Database targetDb;
         private String targetSqlTemplate;
-        private ImportReader importReader;
+        private MintleafReader importReader;
 
 
         public AnyDataToDbDataTransferBuilder withTargetDb(Database targetDb) {
@@ -194,7 +196,7 @@ public final class Mintleaf {
             return this;
         }
 
-        public AnyDataToDbDataTransferBuilder withImportFlavour(ImportReader importReader) {
+        public AnyDataToDbDataTransferBuilder withImportFlavour(MintleafReader importReader) {
             this.importReader = importReader;
             return this;
         }
@@ -212,10 +214,10 @@ public final class Mintleaf {
 
     public static final class AnyDataToListTransferBuilder<T extends Row> {
 
-        private ImportReader importReader;
+        private MintleafReader importReader;
         private ReadListener readListener;
 
-        public AnyDataToListTransferBuilder withSource(ImportReader importReader) {
+        public AnyDataToListTransferBuilder withSource(MintleafReader importReader) {
             this.importReader = importReader;
             return this;
         }
@@ -335,7 +337,7 @@ public final class Mintleaf {
         private OrderedColumnMatcher getOrderedColumnMatcher(final boolean dbSourceColumnState, final boolean dbTargetColumnState) {
             return new OrderedColumnMatcher() {
                 @Override
-                protected ColumnState createSourceColumnStateInstance() {
+                protected CompareColumnState createSourceColumnStateInstance() {
                     if (dbSourceColumnState) {
                         setColumnCountOffset(1);
                     }
@@ -343,7 +345,7 @@ public final class Mintleaf {
                 }
 
                 @Override
-                protected ColumnState createTargetColumnStateInstance() {
+                protected CompareColumnState createTargetColumnStateInstance() {
                     if (dbTargetColumnState) {
                         setColumnCountOffset(1);
                     }

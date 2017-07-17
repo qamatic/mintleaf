@@ -33,28 +33,39 @@
  * /
  */
 
-package org.qamatic.mintleaf.tools;
+package org.qamatic.mintleaf.data;
 
-
+import org.qamatic.mintleaf.MetaDataCollection;
 import org.qamatic.mintleaf.MintleafException;
-import org.qamatic.mintleaf.ReadListener;
 
 /**
- * Created by qamatic on 2/18/6/16.
+ * Created by qamatic on 3/5/16.
  */
-public interface ImportReader<T> extends AutoCloseable {
-
-
-    default T read() throws MintleafException{
-        return null;
-    };
+public class CompareRowState {
+    public int ColumnNumber = -1;
+    public int RowNumber = -1;
+    public int IsSurplusRow;
+    public org.qamatic.mintleaf.Row Row;
+    private MetaDataCollection metaDataCollection;
 
     @Override
-    default void close() {
-
+    public String toString() {
+        return String.format("RowNo:%d, ColumnNo:%d, Surplus:%d", RowNumber, ColumnNumber, IsSurplusRow);
     }
 
-    ReadListener getReadListener()  throws MintleafException;;
+    public Object getValue() throws MintleafException {
+        return Row.getValue(ColumnNumber);
+    }
 
-    void setReadListener(ReadListener readListener);
+    public String asString() throws MintleafException {
+        return getValue().toString();
+    }
+
+    public MetaDataCollection getMetaData() {
+        return metaDataCollection;
+    }
+
+    public void setMetaData(MetaDataCollection metaDataCollection) {
+        this.metaDataCollection = metaDataCollection;
+    }
 }

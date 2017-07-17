@@ -36,8 +36,8 @@
 package org.qamatic.mintleaf;
 
 
+import org.qamatic.mintleaf.data.CompareRowState;
 import org.qamatic.mintleaf.data.ComparerListener;
-import org.qamatic.mintleaf.data.RowState;
 
 /**
  * Created by qamatic on 2/18/6/16.
@@ -45,7 +45,7 @@ import org.qamatic.mintleaf.data.RowState;
 public interface ColumnMatcher {
 
 
-    void match(RowState leftRowState, RowState rightRowState, final ComparerListener listener) throws MintleafException;
+    void match(CompareRowState leftRowState, CompareRowState rightRowState, final ComparerListener listener) throws MintleafException;
 
 
 }

@@ -1,6 +1,5 @@
 package org.qamatic.mintleaf.excel;
 
-import org.qamatic.mintleaf.ColumnMetaDataCollection;
 import org.qamatic.mintleaf.MetaDataCollection;
 import org.qamatic.mintleaf.MintleafException;
 import org.qamatic.mintleaf.Row;
@@ -13,7 +12,7 @@ public class ExcelRow<T> implements Row {
     private MetaDataCollection metaDataCollection;
     private org.apache.poi.ss.usermodel.Row poiRow;
 
-    public ExcelRow(org.apache.poi.ss.usermodel.Row poiRow){
+    public ExcelRow(org.apache.poi.ss.usermodel.Row poiRow) {
         this.poiRow = poiRow;
     }
 

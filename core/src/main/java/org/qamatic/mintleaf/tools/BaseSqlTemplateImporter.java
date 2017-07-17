@@ -45,8 +45,8 @@ import java.util.regex.Pattern;
 /**
  * Created by qamatic on 3/6/16.
  */
-public abstract class SqlReadListener<T> implements ReadListener<T> {
-    private static final MintleafLogger logger = MintleafLogger.getLogger(SqlReadListener.class);
+public abstract class BaseSqlTemplateImporter<T> implements ReadListener<T> {
+    private static final MintleafLogger logger = MintleafLogger.getLogger(BaseSqlTemplateImporter.class);
     final Pattern columnPattern = Pattern.compile("\\$(\\w+)\\$", Pattern.DOTALL | Pattern.MULTILINE | Pattern.CASE_INSENSITIVE);
     private Matcher columns;
     private List<String> batchSqls = new ArrayList<>();
@@ -70,7 +70,7 @@ public abstract class SqlReadListener<T> implements ReadListener<T> {
         return true;
     }
 
-    public abstract ImportReader getReader() throws MintleafException;
+    public abstract MintleafReader getReader() throws MintleafException;
 
     @Override
     public T eachRow(int rowNum, Row row) throws MintleafException {

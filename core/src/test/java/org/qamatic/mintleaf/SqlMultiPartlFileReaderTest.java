@@ -66,13 +66,13 @@ public class SqlMultiPartlFileReaderTest {
         assertTrue(reader.getChangeSets().containsKey("part1"));
         assertTrue(reader.getChangeSets().containsKey("part2"));
         assertTrue(reader.getChangeSets().containsKey("part3"));
-        ChangeSet part1 = reader.getChangeSets().get("part1");
+        ChangeSet part1 = (ChangeSet) reader.getChangeSets().get("part1");
         assertEquals(getPart1Data(), part1.getChangeSetSource());
 
-        ChangeSet part2 = reader.getChangeSets().get("part2");
+        ChangeSet part2 = (ChangeSet) reader.getChangeSets().get("part2");
         assertEquals(getPart2Data(), part2.getChangeSetSource());
 
-        ChangeSet part3 = reader.getChangeSets().get("part3");
+        ChangeSet part3 = (ChangeSet) reader.getChangeSets().get("part3");
         assertEquals(getPart3Data(), part3.getChangeSetSource());
     }
 

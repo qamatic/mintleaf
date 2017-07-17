@@ -77,11 +77,11 @@ public class DbComparerTest extends H2TestCase {
                 add("[Source:RowNo:0, ColumnNo:1, Surplus:0, Value:1] [Target:RowNo:0, ColumnNo:1, Surplus:0, Value:1]");
                 add("[Source:RowNo:0, ColumnNo:2, Surplus:0, Value:Aiden] [Target:RowNo:0, ColumnNo:2, Surplus:0, Value:Aiden]");
                 add("[Source:RowNo:0, ColumnNo:3, Surplus:0, Value:NULL] [Target:RowNo:0, ColumnNo:3, Surplus:0, Value:NULL]");
-                add("[Source:RowNo:0, ColumnNo:4, Surplus:0, Value:2017-07-12] [Target:RowNo:0, ColumnNo:4, Surplus:0, Value:2017-07-12]");
+                add("[Source:RowNo:0, ColumnNo:4, Surplus:0, Value:NULL] [Target:RowNo:0, ColumnNo:4, Surplus:0, Value:NULL]");
                 add("[Source:RowNo:1, ColumnNo:1, Surplus:0, Value:2] [Target:RowNo:1, ColumnNo:1, Surplus:0, Value:2]");
                 add("[Source:RowNo:1, ColumnNo:2, Surplus:0, Value:qamatic] [Target:RowNo:1, ColumnNo:2, Surplus:0, Value:qamatic]");
                 add("[Source:RowNo:1, ColumnNo:3, Surplus:0, Value:NULL] [Target:RowNo:1, ColumnNo:3, Surplus:0, Value:NULL]");
-                add("[Source:RowNo:1, ColumnNo:4, Surplus:0, Value:2017-07-12] [Target:RowNo:1, ColumnNo:4, Surplus:0, Value:2017-07-12]");
+                add("[Source:RowNo:1, ColumnNo:4, Surplus:0, Value:NULL] [Target:RowNo:1, ColumnNo:4, Surplus:0, Value:NULL]");
             }
         };
 
