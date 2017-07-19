@@ -61,10 +61,6 @@ public class CsvImporter extends BaseSqlTemplateImporter implements Executable<B
     }
 
 
-    protected MintleafReader createFlavour(File f) throws FileNotFoundException {
-        return new CsvFileReader(new FileReader(f));
-    }
-
     @Override
     protected String getSql() {
         return this.targetSqlTemplate;

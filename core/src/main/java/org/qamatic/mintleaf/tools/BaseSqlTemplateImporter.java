@@ -59,6 +59,7 @@ public abstract class BaseSqlTemplateImporter<T> implements ReadListener<T> {
         columns = columnPattern.matcher(getSql());
         logger.info("importing using template:" + getSql());
         batchSqls.clear();
+        //Todo: handle chunks here later...
         final Executable<int[]> batchCall = getConnectionContext().executeBatchSqls(batchSqls);
         try {
             getReader().read();

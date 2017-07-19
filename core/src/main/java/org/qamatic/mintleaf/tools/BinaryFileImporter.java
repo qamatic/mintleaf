@@ -46,12 +46,14 @@ public class BinaryFileImporter extends BaseSqlTemplateImporter implements Execu
     private MintleafReader importReader;
     private ConnectionContext targetDb;
     private String targetSqlTemplate;
+    private ReadListener importReaderReadListener;
 
     public BinaryFileImporter(MintleafReader importReader, ConnectionContext targetDb,
                               String targetSqlTemplate) {
         this.importReader = importReader;
         this.targetDb = targetDb;
         this.targetSqlTemplate = targetSqlTemplate;
+
     }
 
 

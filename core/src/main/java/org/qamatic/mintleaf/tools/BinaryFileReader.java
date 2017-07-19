@@ -33,8 +33,13 @@ public abstract class BinaryFileReader<T> extends BaseFileReader implements Mint
             byte[] bytes = iterator.next();
             Row row = createRowInstance(bytes);
             row.setValues(bytes, this.charset);
-            if (getReadListener().matches(row))
+            if (getReadListener().matches(row)) {
                 getReadListener().eachRow(i++, row);
+                //ugly fix to be here, because of importer need but need to find a better implementation
+                if ((this.readListener != null) && (getReadListener() != this.readListener) ){
+                    this.readListener.eachRow(i++, row);
+                }
+            }
             if (!getReadListener().canContinueRead(row)) {
                 break;
             }
