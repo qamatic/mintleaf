@@ -35,6 +35,7 @@
 
 package org.qamatic.mintleaf;
 
+import java.nio.charset.Charset;
 import java.util.Map;
 
 public interface MintleafReader<T> extends AutoCloseable {
@@ -67,6 +68,10 @@ public interface MintleafReader<T> extends AutoCloseable {
 
     default void setDelimiter(String delimStr) {
         MintleafException.throwException("not implemented");
+    }
+
+    default Charset getCharset(){
+        return Charset.defaultCharset();
     }
 
     @Override

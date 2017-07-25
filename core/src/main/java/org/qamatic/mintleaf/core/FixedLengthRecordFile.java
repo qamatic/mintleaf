@@ -1,19 +1,17 @@
 package org.qamatic.mintleaf.core;
 
 import org.qamatic.mintleaf.MintleafException;
-import org.qamatic.mintleaf.ReadListener;
 import org.qamatic.mintleaf.Row;
 
 import java.io.File;
 import java.io.IOException;
 import java.io.RandomAccessFile;
-import java.nio.charset.Charset;
 import java.util.Iterator;
 
 /**
  * Created by QAmatic Team on 4/11/17.
  */
-public class RecordFileReader<T extends Row> implements BinaryReader {
+public class FixedLengthRecordFile<T extends Row> implements BinaryDataIterable {
 
     private int recordSize;
     private File filePath;
@@ -21,14 +19,14 @@ public class RecordFileReader<T extends Row> implements BinaryReader {
     private int recordNumber;
     private long offset;
 
-    public RecordFileReader(File filePath, int recordSize) {
+    public FixedLengthRecordFile(File filePath, int recordSize) {
         this.filePath = filePath;
         this.recordSize = recordSize;
         this.offset = 0;
     }
 
 
-    public RecordFileReader(File filePath) {
+    public FixedLengthRecordFile(File filePath) {
         this.filePath = filePath;
         this.recordSize = 1;
     }
@@ -58,25 +56,25 @@ public class RecordFileReader<T extends Row> implements BinaryReader {
 
 
     @Override
-    public BinaryReader recordAt(int recordNumber) throws MintleafException {
+    public BinaryDataIterable recordAt(int recordNumber) throws MintleafException {
         this.recordNumber = recordNumber - 1;
         return this;
     }
 
     @Override
-    public BinaryReader recordSize(int recordSize) throws MintleafException {
+    public BinaryDataIterable recordSize(int recordSize) throws MintleafException {
         this.recordSize = recordSize;
         return this;
     }
 
     @Override
-    public BinaryReader reset() throws MintleafException {
+    public BinaryDataIterable reset() throws MintleafException {
 
         return reset(0);
     }
 
     @Override
-    public BinaryReader reset(long bytesPos) throws MintleafException {
+    public BinaryDataIterable reset(long bytesPos) throws MintleafException {
         try {
             this.recordNumber = 0;
             getReader().seek(bytesPos);
@@ -97,22 +95,6 @@ public class RecordFileReader<T extends Row> implements BinaryReader {
         return null;
     }
 
-    public void iterate(Charset charset, ReadListener listener) throws MintleafException {
-        int i = 0;
-        for (byte[] record : this) {
-            Row row = listener.createRowInstance(record);
-            row.setValues(record, charset);
-            if (listener.matches(row))
-                listener.eachRow(i++, row);
-            if (!listener.canContinueRead(row)) {
-                break;
-            }
-        }
-    }
-
-    public void iterate(ReadListener listener) throws MintleafException {
-        iterate(Charset.defaultCharset(), listener);
-    }
 
     @Override
     public void close() {

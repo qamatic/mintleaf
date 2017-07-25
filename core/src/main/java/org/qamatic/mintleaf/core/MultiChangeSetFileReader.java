@@ -45,7 +45,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class MultiChangeSetFileReader<T> extends BaseFileReader implements ChangeSetReader {
+public class MultiChangeSetFileReader<T> extends BaseReader implements ChangeSetReader {
 
     private static final MintleafLogger logger = MintleafLogger.getLogger(MultiChangeSetFileReader.class);
     private final HashMap<String, ChangeSet> changeSets = new HashMap<>();

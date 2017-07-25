@@ -5,16 +5,16 @@ import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.qamatic.mintleaf.*;
-import org.qamatic.mintleaf.core.BaseFileReader;
+import org.qamatic.mintleaf.core.BaseReader;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Iterator;
 
 /**
- * Created by senips on 4/25/17.
+ * Created by QAmatic Team on 4/25/17.
  */
-public class ExcelImportReader<T> extends BaseFileReader implements MintleafReader<T> {
+public class ExcelImportReader<T> extends BaseReader implements MintleafReader<T> {
 
     private InputStream inputStream;
     private int activeWorkSheet;

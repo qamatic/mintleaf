@@ -39,7 +39,7 @@ import org.qamatic.mintleaf.MintleafException;
 import org.qamatic.mintleaf.MintleafLogger;
 import org.qamatic.mintleaf.MintleafReader;
 import org.qamatic.mintleaf.SqlResultSet;
-import org.qamatic.mintleaf.core.BaseFileReader;
+import org.qamatic.mintleaf.core.BaseReader;
 import org.qamatic.mintleaf.core.ResultSetRowWrapper;
 
 import java.sql.SQLException;
@@ -47,7 +47,7 @@ import java.sql.SQLException;
 /**
  * Created by qamatic on 2/18/6/16.
  */
-public class DbResultSetReader<T> extends BaseFileReader implements MintleafReader<T> {
+public class DbResultSetReader<T> extends BaseReader implements MintleafReader<T> {
 
     private static final MintleafLogger logger = MintleafLogger.getLogger(DbResultSetReader.class);
     private SqlResultSet resultSet;

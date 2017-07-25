@@ -41,7 +41,7 @@ import org.apache.commons.csv.CSVRecord;
 import org.qamatic.mintleaf.MintleafException;
 import org.qamatic.mintleaf.MintleafReader;
 import org.qamatic.mintleaf.Row;
-import org.qamatic.mintleaf.core.BaseFileReader;
+import org.qamatic.mintleaf.core.BaseReader;
 
 import java.io.IOException;
 import java.io.Reader;
@@ -49,11 +49,11 @@ import java.io.Reader;
 /**
  * Created by qamatic on 2/18/6/16.
  */
-public class CsvFileReader<T> extends BaseFileReader implements MintleafReader<T> {
+public class CsvReader<T> extends BaseReader implements MintleafReader<T> {
 
     private Reader afileReader;
 
-    public CsvFileReader(Reader afileReader) {
+    public CsvReader(Reader afileReader) {
         this.afileReader = afileReader;
     }
 

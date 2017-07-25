@@ -33,23 +33,47 @@
  * /
  */
 
-package org.qamatic.mintleaf;
+package org.qamatic.mintleaf.tools;
+
+import org.qamatic.mintleaf.*;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
- * Created by qamatic on 3/3/16.
+ * Created by qamatic on 3/6/16.
  */
-public interface ReadListener<T> {
-    T eachRow(int rowNum, Row row) throws MintleafException;
+public class SqlTemplateBasedReadListener<T> implements ReadListener<T> {
+    private static final MintleafLogger logger = MintleafLogger.getLogger(SqlTemplateBasedReadListener.class);
+    final Pattern columnPattern = Pattern.compile("\\$(\\w+)\\$", Pattern.DOTALL | Pattern.MULTILINE | Pattern.CASE_INSENSITIVE);
+    private Matcher columns;
 
-    default boolean matches(Row row) {
-        return true;
+    private List<String> batchSqls = new ArrayList<>();
+    private String templateSql;
+
+    public SqlTemplateBasedReadListener(String templateSql) {
+        this.templateSql = templateSql;
+        this.columns = columnPattern.matcher(this.templateSql);
     }
 
-    default boolean canContinueRead(Row row) {
-        return true;
+    public final List<String> getBatchSqls() {
+        return batchSqls;
     }
 
-//    default Row createRowInstance(Object... params) {
-//        return null;
-//    }
+    @Override
+    public T eachRow(int rowNum, Row row) throws MintleafException {
+
+        StringBuffer buffer = new StringBuffer(this.templateSql);
+        columns.reset();
+        while (columns.find()) {
+            int idx = buffer.indexOf("$" + columns.group(1));
+            buffer.replace(idx, idx + columns.group(1).length() + 2, row.asString(columns.group(1)));
+        }
+        batchSqls.add(buffer.toString());
+
+        return null;
+    }
+
 }

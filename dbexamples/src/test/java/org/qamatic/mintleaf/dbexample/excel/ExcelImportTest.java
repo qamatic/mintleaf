@@ -9,7 +9,7 @@ import org.qamatic.mintleaf.excel.ExcelRow;
 import static junit.framework.TestCase.assertEquals;
 
 /**
- * Created by senips on 4/25/17.
+ * Created by QAmatic Team on 4/25/17.
  */
 public class ExcelImportTest {
 

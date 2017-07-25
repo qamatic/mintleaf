@@ -45,7 +45,7 @@ import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
 
-public abstract class BaseSqlReader<T> extends BaseFileReader implements MintleafReader<T> {
+public abstract class BaseSqlReader<T> extends BaseReader implements MintleafReader<T> {
 
     private final static MintleafLogger logger = MintleafLogger.getLogger(BaseSqlReader.class);
 

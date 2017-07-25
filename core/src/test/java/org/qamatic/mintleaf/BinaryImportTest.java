@@ -2,7 +2,7 @@ package org.qamatic.mintleaf;
 
 import org.junit.Test;
 import org.qamatic.mintleaf.core.*;
-import org.qamatic.mintleaf.tools.BinaryFileReader;
+import org.qamatic.mintleaf.tools.BinaryDataReader;
 
 import java.io.*;
 import java.net.URISyntaxException;
@@ -39,7 +39,7 @@ public class BinaryImportTest extends H2TestCase {
 
     @Test
     public void recordFileReader() throws MintleafException, URISyntaxException {
-        try (BinaryReader reader = new RecordFileReader(getTestFile(), 34)) {
+        try (BinaryDataIterable reader = new FixedLengthRecordFile(getTestFile(), 34)) {
             int i = 0;
             for (byte[] record : reader.recordAt(1)) {
                 String actual = new String(record, Charset.forName("Cp1047"));
@@ -51,7 +51,7 @@ public class BinaryImportTest extends H2TestCase {
 
     @Test
     public void recordFileReaderStartAt() throws MintleafException, URISyntaxException {
-        try (BinaryReader reader = new RecordFileReader(getTestFile(), 34)) {
+        try (BinaryDataIterable reader = new FixedLengthRecordFile(getTestFile(), 34)) {
 
             String actual = getText(reader.recordAt(3).iterator().next());
             assertEquals(cityRecords.get(2).toString(), actual);
@@ -69,7 +69,7 @@ public class BinaryImportTest extends H2TestCase {
 
     @Test
     public void recordFileReaderNavigation() throws MintleafException, URISyntaxException {
-        try (BinaryReader reader = new RecordFileReader(getTestFile())) {
+        try (BinaryDataIterable reader = new FixedLengthRecordFile(getTestFile())) {
             assertEquals(0, reader.getCurrentPos());
             reader.recordSize(34).recordAt(2);
             assertEquals(cityRecords.get(1).toString(), getText(reader.iterator().next()));
@@ -118,10 +118,10 @@ public class BinaryImportTest extends H2TestCase {
 
     @Test
     public void readBinaryByteReader() throws MintleafException, URISyntaxException {
-        BinaryFileReader reader = new BinaryFileReader(new RecordFileReader(getTestFile(), 34), Charset.forName("Cp1047")) {
+        BinaryDataReader reader = new BinaryDataReader(new FixedLengthRecordFile(getTestFile(), 34), Charset.forName("Cp1047")) {
 
             @Override
-            public Row createRowInstance(Object... params) {
+            public Row createRowInstance(byte[] rowChunk) {
                 return new InMemoryRow(cityRecordMetaData);
             }
         };
@@ -148,12 +148,12 @@ public class BinaryImportTest extends H2TestCase {
     @Test
     public void importBinaryFileTest() throws SQLException, IOException, MintleafException, URISyntaxException {
         ChangeSets.migrate(testDb.getNewConnection(), "res:/binary-import-changesets.sql", "create schema");
-        BinaryReader reader = new RecordFileReader(getTestFile(), 34);
+        BinaryDataIterable reader = new FixedLengthRecordFile(getTestFile(), 34);
 
         Executable action = new Mintleaf.AnyDataToDbDataTransferBuilder().
-                withImportFlavour(new BinaryFileReader(reader, Charset.forName("Cp1047")) {
+                withImportFlavour(new BinaryDataReader(reader, Charset.forName("Cp1047")) {
                     @Override
-                    public Row createRowInstance(Object... params) {
+                    public Row createRowInstance(byte[] rowChunk) {
                         return new CityRecord(cityRecordMetaData);
                     }
                 }).
@@ -171,42 +171,18 @@ public class BinaryImportTest extends H2TestCase {
 
     }
 
-    @Test
-    public void binaryFileToListTest() throws SQLException, IOException, MintleafException, URISyntaxException {
 
-        RowListWrapper<InMemoryRow> list = new ObjectRowListWrapper<>(cityRecordMetaData);
-        try (BinaryReader reader = new RecordFileReader(getTestFile(), 34).recordAt(2)) {
-
-            reader.iterate(Charset.forName("Cp1047"), new ReadListener() {
-                @Override
-                public Object eachRow(int rowNum, Row row) throws MintleafException {
-                    list.add((InMemoryRow) row);
-                    return row;
-                }
-
-                @Override
-                public Row createRowInstance(Object... params) {
-                    return new InMemoryRow(cityRecordMetaData);
-                }
-            });
-        }
-
-        assertEquals(2, list.size());
-        // assertEquals(3, list.getRow(1).getId());
-        assertEquals("NJ", list.getRow(0).asString("STATE"));
-
-    }
 
     @Test
     public void importFromExcelToObjectListTest() throws MintleafException, URISyntaxException {
 
         ChangeSets.migrate(testDb.getNewConnection(), "res:/binary-import-changesets.sql", "create schema");
-        BinaryReader reader = new RecordFileReader(getTestFile(), 34);
+        BinaryDataIterable reader = new FixedLengthRecordFile(getTestFile(), 34);
 
         Executable action = new Mintleaf.AnyDataToListTransferBuilder<>().
-                withSource(new BinaryFileReader(reader, Charset.forName("Cp1047")) {
+                withSource(new BinaryDataReader(reader, Charset.forName("Cp1047")) {
                     @Override
-                    public Row createRowInstance(Object... params) {
+                    public Row createRowInstance(byte[] rowChunk) {
                         return new CityRecord(cityRecordMetaData);
                     }
                 }).
@@ -221,7 +197,7 @@ public class BinaryImportTest extends H2TestCase {
 
     private RowListWrapper<CityRecord> getRecords() throws SQLException, IOException, MintleafException, URISyntaxException {
         RowListWrapper<CityRecord> list = new ObjectRowListWrapper<CityRecord>(cityRecordMetaData);
-        try (BinaryReader reader = new RecordFileReader(getTestFile(), 34)) {
+        try (BinaryDataIterable reader = new FixedLengthRecordFile(getTestFile(), 34)) {
             for (byte[] record : reader.recordAt(2)) {
 
                 list.add(new CityRecord(cityRecordMetaData) {

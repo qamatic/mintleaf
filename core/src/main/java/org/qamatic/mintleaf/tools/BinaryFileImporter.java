@@ -40,7 +40,7 @@ import org.qamatic.mintleaf.*;
 /**
  * Created by qamatic on 3/6/16.
  */
-public class BinaryFileImporter extends BaseSqlTemplateImporter implements Executable<Boolean> {
+public class BinaryFileImporter extends SqlBatchInsertReadListener implements Executable<Boolean> {
 
     private static final MintleafLogger logger = MintleafLogger.getLogger(BinaryFileImporter.class);
     private MintleafReader importReader;
@@ -55,7 +55,6 @@ public class BinaryFileImporter extends BaseSqlTemplateImporter implements Execu
         this.targetSqlTemplate = targetSqlTemplate;
 
     }
-
 
     @Override
     protected ConnectionContext getConnectionContext() {

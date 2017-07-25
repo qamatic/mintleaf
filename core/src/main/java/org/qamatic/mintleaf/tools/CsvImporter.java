@@ -38,14 +38,13 @@ package org.qamatic.mintleaf.tools;
 import org.qamatic.mintleaf.*;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 
 /**
  * Created by qamatic on 3/6/16.
  */
-public class CsvImporter extends BaseSqlTemplateImporter implements Executable<Boolean> {
+public class CsvImporter extends SqlBatchInsertReadListener implements Executable<Boolean> {
 
     private static final MintleafLogger logger = MintleafLogger.getLogger(CsvImporter.class);
     private String sourceCsvFile;
@@ -74,7 +73,7 @@ public class CsvImporter extends BaseSqlTemplateImporter implements Executable<B
                 logger.error("file not found " + sourceCsvFile);
                 throw new MintleafException("file not found " + sourceCsvFile);
             }
-            MintleafReader reader = new CsvFileReader(new FileReader(f));
+            MintleafReader reader = new CsvReader(new FileReader(f));
             reader.setReadListener(this);
             return reader;
 
