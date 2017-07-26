@@ -49,7 +49,4 @@ public interface ReadListener<T> {
         return true;
     }
 
-//    default Row createRowInstance(Object... params) {
-//        return null;
-//    }
 }

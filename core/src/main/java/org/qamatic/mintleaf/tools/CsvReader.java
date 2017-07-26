@@ -70,12 +70,9 @@ public class CsvReader<T> extends BaseReader implements MintleafReader<T> {
             int i = 0;
             for (CSVRecord record : parser) {
                 Row row = createRowInstance(record);
-                if (getReadListener().matches(row))
-                    getReadListener().eachRow(i++, row);
-                if (!getReadListener().canContinueRead(row)) {
+                if (!listenerCast(i++, row)) {
                     break;
                 }
-
             }
 
         } catch (IOException e) {
@@ -85,8 +82,8 @@ public class CsvReader<T> extends BaseReader implements MintleafReader<T> {
     }
 
 
-    public Row createRowInstance(Object... params) {
-        return new CsvRowWrapper((CSVRecord) params[0]);
+    public Row createRowInstance(CSVRecord record) {
+        return new CsvRowWrapper(record);
     }
 
 }

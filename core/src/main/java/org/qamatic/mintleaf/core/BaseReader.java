@@ -8,10 +8,22 @@ import java.util.Iterator;
 /**
  * Created by QAmatic Team on 4/28/17.
  */
-public class BaseReader {
+public abstract class BaseReader  {
     private ReadListener readListener;
     private Charset charset;
 
+    protected Boolean listenerCast(int rowNum, Row row) throws MintleafException {
+        if (getReadListener() == null)
+            return true;
+
+        if (getReadListener().matches(row)) {
+            getReadListener().eachRow(rowNum, row);
+        }
+        if (!getReadListener().canContinueRead(row)) {
+            return false;
+        }
+        return true;
+    }
 
     public final ReadListener getReadListener() throws MintleafException {
         return readListener;
@@ -29,4 +41,6 @@ public class BaseReader {
     public final Charset getCharset() {
         return charset;
     }
+
+
 }
