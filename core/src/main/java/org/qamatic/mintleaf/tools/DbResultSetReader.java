@@ -52,22 +52,23 @@ public class DbResultSetReader<T> extends BaseReader implements MintleafReader<T
     private static final MintleafLogger logger = MintleafLogger.getLogger(DbResultSetReader.class);
     private SqlResultSet resultSet;
 
-
     public DbResultSetReader(SqlResultSet resultSet) {
-
         this.resultSet = resultSet;
     }
 
     public T read() throws MintleafException {
-        final ResultSetRowWrapper dbRowWrapper = new ResultSetRowWrapper();
         int i = 0;
         try {
             while (this.resultSet.getResultSet().next()) {
+                ResultSetRowWrapper dbRowWrapper = new ResultSetRowWrapper();
                 dbRowWrapper.setResultSet(this.resultSet.getResultSet());
-                if (getReadListener().matches(dbRowWrapper))
-                    getReadListener().eachRow(i++, dbRowWrapper);
-                if (!getReadListener().canContinueRead(dbRowWrapper)) {
-                    break;
+                if (getReadListener() != null) {
+                    if (getReadListener().matches(dbRowWrapper)) {
+                        getReadListener().eachRow(i++, dbRowWrapper);
+                    }
+                    if (!getReadListener().canContinueRead(dbRowWrapper)) {
+                        break;
+                    }
                 }
             }
         } catch (SQLException e) {

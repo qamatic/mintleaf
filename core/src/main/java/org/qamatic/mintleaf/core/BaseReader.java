@@ -1,29 +1,18 @@
 package org.qamatic.mintleaf.core;
 
-import org.qamatic.mintleaf.*;
+import org.qamatic.mintleaf.MintleafException;
+import org.qamatic.mintleaf.ReadListener;
+import org.qamatic.mintleaf.Row;
 
 import java.nio.charset.Charset;
-import java.util.Iterator;
 
 /**
  * Created by QAmatic Team on 4/28/17.
  */
-public abstract class BaseReader  {
+public abstract class BaseReader {
     private ReadListener readListener;
     private Charset charset;
 
-    protected Boolean listenerCast(int rowNum, Row row) throws MintleafException {
-        if (getReadListener() == null)
-            return true;
-
-        if (getReadListener().matches(row)) {
-            getReadListener().eachRow(rowNum, row);
-        }
-        if (!getReadListener().canContinueRead(row)) {
-            return false;
-        }
-        return true;
-    }
 
     public final ReadListener getReadListener() throws MintleafException {
         return readListener;
@@ -33,13 +22,12 @@ public abstract class BaseReader  {
         this.readListener = readListener;
     }
 
-    public void setCharset(Charset charset) {
-        this.charset = charset;
-    }
-
-
     public final Charset getCharset() {
         return charset;
+    }
+
+    public void setCharset(Charset charset) {
+        this.charset = charset;
     }
 
 

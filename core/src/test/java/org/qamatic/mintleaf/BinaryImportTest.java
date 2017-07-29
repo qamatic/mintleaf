@@ -154,7 +154,8 @@ public class BinaryImportTest extends H2TestCase {
                 withImportFlavour(new BinaryDataReader(reader, Charset.forName("Cp1047")) {
                     @Override
                     public Row createRowInstance(byte[] rowChunk) {
-                        return new CityRecord(cityRecordMetaData);
+                        CityRecord cr = new CityRecord(cityRecordMetaData);
+                        return cr;
                     }
                 }).
                 withTargetDb(testDb).
@@ -183,7 +184,10 @@ public class BinaryImportTest extends H2TestCase {
                 withSource(new BinaryDataReader(reader, Charset.forName("Cp1047")) {
                     @Override
                     public Row createRowInstance(byte[] rowChunk) {
-                        return new CityRecord(cityRecordMetaData);
+
+                        CityRecord cr = new CityRecord(cityRecordMetaData);
+                        cr.setValues(rowChunk, getCharset());
+                        return cr;
                     }
                 }).
                 build();

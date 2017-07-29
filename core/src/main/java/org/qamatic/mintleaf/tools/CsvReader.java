@@ -70,8 +70,14 @@ public class CsvReader<T> extends BaseReader implements MintleafReader<T> {
             int i = 0;
             for (CSVRecord record : parser) {
                 Row row = createRowInstance(record);
-                if (!listenerCast(i++, row)) {
-                    break;
+
+                if (getReadListener() != null) {
+                    if (getReadListener().matches(row)) {
+                        getReadListener().eachRow(i++, row);
+                    }
+                    if (!getReadListener().canContinueRead(row)) {
+                        break;
+                    }
                 }
             }
 

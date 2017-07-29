@@ -70,7 +70,7 @@ public interface MintleafReader<T> extends AutoCloseable {
         MintleafException.throwException("not implemented");
     }
 
-    default Charset getCharset(){
+    default Charset getCharset() {
         return Charset.defaultCharset();
     }
 

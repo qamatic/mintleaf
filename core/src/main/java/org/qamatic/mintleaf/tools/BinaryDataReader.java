@@ -31,8 +31,13 @@ public abstract class BinaryDataReader<T> extends BaseReader implements Mintleaf
             byte[] bytes = iterator.next();
             Row row = createRowInstance(bytes);
             row.setValues(bytes, getCharset());
-            if (!listenerCast(i++, row)) {
-                break;
+            if (getReadListener() != null) {
+                if (getReadListener().matches(row)) {
+                    getReadListener().eachRow(i++, row);
+                }
+                if (!getReadListener().canContinueRead(row)) {
+                    break;
+                }
             }
         }
         return null;
