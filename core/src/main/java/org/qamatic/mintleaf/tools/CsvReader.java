@@ -61,6 +61,7 @@ public class CsvReader<T> extends BaseReader implements MintleafReader<T> {
         return new CSVParser(afileReader, CSVFormat.EXCEL.withHeader().withIgnoreEmptyLines());
     }
 
+
     @Override
     public T read() throws MintleafException {
 
@@ -70,14 +71,7 @@ public class CsvReader<T> extends BaseReader implements MintleafReader<T> {
             int i = 0;
             for (CSVRecord record : parser) {
                 Row row = createRowInstance(record);
-
-                if (matches(row)) {
-                    eachRow(i++, row);
-                    if (getReadListener() != null) {
-                        getReadListener().eachRow(i++, row);
-                    }
-                }
-                if (!canContinueRead(row)) {
+                if (!readRow(i++, row)) {
                     break;
                 }
             }

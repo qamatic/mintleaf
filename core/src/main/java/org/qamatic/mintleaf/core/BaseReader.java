@@ -14,19 +14,19 @@ public abstract class BaseReader {
     private Charset charset;
 
 
-//    protected Boolean eachRow(int rowNum, Row row) throws MintleafException {
-//        if (getReadListener() == null)
-//            return true;
-//
-//        if (getReadListener().matches(row)) {
-//            getReadListener().eachRow(rowNum, row);
-//        }
-//        if (!getReadListener().canContinueRead(row)) {
-//            return false;
-//        }
-//        return true;
-//    }
-//
+    protected final boolean readRow(int rowNum, Row row) throws MintleafException {
+        if (matches(row)) {
+            eachRow(rowNum, row);
+            if (getReadListener() != null) {
+                getReadListener().eachRow(rowNum, row);
+            }
+        }
+        if (!canContinueRead(row)) {
+            return false;
+        }
+        return true;
+    }
+
     public final ReadListener getReadListener() throws MintleafException {
         return readListener;
     }

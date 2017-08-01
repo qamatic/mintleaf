@@ -62,17 +62,8 @@ public class DbResultSetReader<T> extends BaseReader implements MintleafReader<T
             while (this.resultSet.getResultSet().next()) {
                 ResultSetRowWrapper dbRowWrapper = new ResultSetRowWrapper();
                 dbRowWrapper.setResultSet(this.resultSet.getResultSet());
-                if (getReadListener() != null) {
-
-                    if (matches(dbRowWrapper)) {
-                        eachRow(i++, dbRowWrapper);
-                        if (getReadListener() != null) {
-                            getReadListener().eachRow(i++, dbRowWrapper);
-                        }
-                    }
-                    if (!canContinueRead(dbRowWrapper)) {
-                        break;
-                    }
+                if (!readRow(i++, dbRowWrapper)) {
+                    break;
                 }
             }
         } catch (SQLException e) {
