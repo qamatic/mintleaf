@@ -150,7 +150,7 @@ public class OracleQueries extends StandardQueries {
         final String typeCheckSql = String.format("SELECT DECODE(OBJECT_TYPE, 'TYPE', 1, 0) ISTYPEOBJECT FROM ALL_OBJECTS WHERE OWNER = UPPER('%s') AND OBJECT_NAME = UPPER(\n" +
                 "'%s')", objectNames[0], objectNames[1]);
         query(typeCheckSql,
-                (ReadListener) (row, resultSet) -> {
+                (RowMatchListener) (row, resultSet) -> {
                     if (resultSet.asInt("ISTYPEOBJECT") == 1) {
                         sql.setLength(0);
                         sql.append(String

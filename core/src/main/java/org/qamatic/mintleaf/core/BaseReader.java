@@ -14,6 +14,19 @@ public abstract class BaseReader {
     private Charset charset;
 
 
+//    protected Boolean eachRow(int rowNum, Row row) throws MintleafException {
+//        if (getReadListener() == null)
+//            return true;
+//
+//        if (getReadListener().matches(row)) {
+//            getReadListener().eachRow(rowNum, row);
+//        }
+//        if (!getReadListener().canContinueRead(row)) {
+//            return false;
+//        }
+//        return true;
+//    }
+//
     public final ReadListener getReadListener() throws MintleafException {
         return readListener;
     }
@@ -31,4 +44,15 @@ public abstract class BaseReader {
     }
 
 
+    public Object eachRow(int rowNum, Row row) throws MintleafException {
+        return null;
+    }
+
+    public boolean matches(Row row) {
+        return true;
+    }
+
+    public boolean canContinueRead(Row row) {
+        return true;
+    }
 }

@@ -35,19 +35,17 @@
 
 package org.qamatic.mintleaf;
 
-import java.sql.ResultSet;
-
 /**
- * Created by QAmatic Team on 3/16/17.
+ * Created by qamatic on 3/3/16.
  */
-public interface SqlResultSet extends AutoCloseable {
-    ResultSet getResultSet() throws MintleafException;
+public interface RowMatchListener<T> extends ReadListener<T> {
 
-    void close() throws MintleafException;
+    default boolean matches(Row row) {
+        return true;
+    }
 
-    ResultSet first() throws MintleafException;
+    default boolean canContinueRead(Row row) {
+        return true;
+    }
 
-    <T> void iterate(RowMatchListener<T> listener) throws MintleafException, MintleafException;
-
-    RowListWrapper asRowListWrapper() throws MintleafException;
 }

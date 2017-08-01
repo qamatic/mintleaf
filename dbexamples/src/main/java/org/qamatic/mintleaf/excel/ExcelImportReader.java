@@ -58,9 +58,13 @@ public class ExcelImportReader<T> extends BaseReader implements MintleafReader<T
                 }
                 ExcelRow row = new ExcelRow(rowIterator.next());
                 row.setMetaData(metaDataCollection);
-                if (getReadListener().matches(row))
-                    getReadListener().eachRow(i++, row);
-                if (!getReadListener().canContinueRead(row)) {
+                if (matches(row)) {
+                    eachRow(i++, row);
+                    if (getReadListener() != null) {
+                        getReadListener().eachRow(i++, row);
+                    }
+                }
+                if (!canContinueRead(row)) {
                     break;
                 }
 

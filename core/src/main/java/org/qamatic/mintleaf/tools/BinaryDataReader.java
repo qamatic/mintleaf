@@ -14,6 +14,7 @@ import java.util.Iterator;
  */
 public abstract class BinaryDataReader<T> extends BaseReader implements MintleafReader {
 
+
     private BinaryDataIterable binaryDataIterable;
 
     public BinaryDataReader(BinaryDataIterable binaryDataIterable, Charset charset) {
@@ -31,16 +32,22 @@ public abstract class BinaryDataReader<T> extends BaseReader implements Mintleaf
             byte[] bytes = iterator.next();
             Row row = createRowInstance(bytes);
             row.setValues(bytes, getCharset());
-            if (getReadListener() != null) {
-                if (getReadListener().matches(row)) {
+            if (matches(row)) {
+                eachRow(i++, row);
+                if (getReadListener() != null) {
                     getReadListener().eachRow(i++, row);
                 }
-                if (!getReadListener().canContinueRead(row)) {
-                    break;
-                }
+            }
+            if (!canContinueRead(row)) {
+                break;
             }
         }
         return null;
     }
+
+    public BinaryDataIterable getIterator() {
+        return binaryDataIterable;
+    }
+
 
 }

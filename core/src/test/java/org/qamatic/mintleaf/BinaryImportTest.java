@@ -118,20 +118,12 @@ public class BinaryImportTest extends H2TestCase {
 
     @Test
     public void readBinaryByteReader() throws MintleafException, URISyntaxException {
+        final int[] i = new int[]{0};
         BinaryDataReader reader = new BinaryDataReader(new FixedLengthRecordFile(getTestFile(), 34), Charset.forName("Cp1047")) {
 
             @Override
             public Row createRowInstance(byte[] rowChunk) {
                 return new InMemoryRow(cityRecordMetaData);
-            }
-        };
-        final int[] i = new int[]{0};
-        reader.setReadListener(new ReadListener() {
-            @Override
-            public Object eachRow(int rowNum, Row row) throws MintleafException {
-//                String actual = new String((byte[]) row.getValue(Row.INTERNAL_OBJECT_VALUE), Charset.forName("Cp1047"));
-//                assertEquals(cityRecords.get(rowNum).toString(), actual);
-                return null;
             }
 
             @Override
@@ -139,7 +131,8 @@ public class BinaryImportTest extends H2TestCase {
                 i[0]++;
                 return true;
             }
-        });
+        };
+
         reader.read();
         assertEquals(3, i[0]);
     }

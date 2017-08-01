@@ -192,7 +192,7 @@ public class DbConnectionContext<T extends DbQueryExtension> implements Connecti
         return queryBuilder().withSql(sql).withParamValues(parameterValues).buildExecute();
     }
 
-    public <T> List<T> query(String sql, ParameterBinding parameterBinding, final ReadListener<T> listener) throws MintleafException {
+    public <T> List<T> query(String sql, ParameterBinding parameterBinding, final RowMatchListener<T> listener) throws MintleafException {
 
         final List<T> rows = new ArrayList<T>();
 

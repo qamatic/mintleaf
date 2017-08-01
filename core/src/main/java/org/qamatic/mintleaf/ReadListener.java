@@ -40,13 +40,4 @@ package org.qamatic.mintleaf;
  */
 public interface ReadListener<T> {
     T eachRow(int rowNum, Row row) throws MintleafException;
-
-    default boolean matches(Row row) {
-        return true;
-    }
-
-    default boolean canContinueRead(Row row) {
-        return true;
-    }
-
 }
