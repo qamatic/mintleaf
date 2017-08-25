@@ -4,7 +4,7 @@ import org.junit.Test;
 import org.qamatic.mintleaf.configuration.ArgPatternHandler;
 import org.qamatic.mintleaf.configuration.DbConnectionInfo;
 import org.qamatic.mintleaf.configuration.MintleafXmlConfiguration;
-import org.qamatic.mintleaf.core.TextContentStreamReader;
+import org.qamatic.mintleaf.readers.TextContentStreamReader;
 
 import static junit.framework.TestCase.assertEquals;
 import static junit.framework.TestCase.assertTrue;

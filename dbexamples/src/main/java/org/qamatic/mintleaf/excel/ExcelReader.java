@@ -14,14 +14,14 @@ import java.util.Iterator;
 /**
  * Created by QAmatic Team on 4/25/17.
  */
-public class ExcelImportReader<T> extends BaseReader implements MintleafReader<T> {
+public class ExcelReader<T> extends BaseReader implements MintleafReader<T> {
 
     private InputStream inputStream;
     private int activeWorkSheet;
     private int headerRowIndex;
 
 
-    public ExcelImportReader(InputStream inputStream) {
+    public ExcelReader(InputStream inputStream) {
         this.inputStream = inputStream;
     }
 

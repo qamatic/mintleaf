@@ -38,6 +38,7 @@ package org.qamatic.mintleaf.core;
 import org.qamatic.mintleaf.ConnectionContext;
 import org.qamatic.mintleaf.MintleafLogger;
 import org.qamatic.mintleaf.MintleafReader;
+import org.qamatic.mintleaf.readers.SqlStreamReader;
 
 import java.io.InputStream;
 

@@ -40,6 +40,9 @@ import org.qamatic.mintleaf.ConnectionContext;
 import org.qamatic.mintleaf.MintleafException;
 import org.qamatic.mintleaf.MintleafReader;
 import org.qamatic.mintleaf.SqlScript;
+import org.qamatic.mintleaf.readers.MultiChangeSetFileReader;
+import org.qamatic.mintleaf.readers.SqlChangeSetFileReader;
+import org.qamatic.mintleaf.readers.SqlStringReader;
 
 public final class ChangeSets {
 

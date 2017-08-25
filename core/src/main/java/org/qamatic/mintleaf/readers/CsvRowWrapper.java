@@ -33,7 +33,7 @@
  * /
  */
 
-package org.qamatic.mintleaf.tools;
+package org.qamatic.mintleaf.readers;
 
 import org.apache.commons.csv.CSVRecord;
 import org.qamatic.mintleaf.MetaDataCollection;

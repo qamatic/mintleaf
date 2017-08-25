@@ -38,7 +38,7 @@ package org.qamatic.mintleaf.configuration;
 import org.qamatic.mintleaf.MintleafConfiguration;
 import org.qamatic.mintleaf.MintleafException;
 import org.qamatic.mintleaf.MintleafReader;
-import org.qamatic.mintleaf.core.TextContentStreamReader;
+import org.qamatic.mintleaf.readers.TextContentStreamReader;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;

@@ -2,7 +2,7 @@ package org.qamatic.mintleaf;
 
 import org.junit.Test;
 import org.qamatic.mintleaf.core.*;
-import org.qamatic.mintleaf.tools.BinaryDataReader;
+import org.qamatic.mintleaf.readers.BinaryDataReader;
 
 import java.io.*;
 import java.net.URISyntaxException;

@@ -33,12 +33,13 @@
  * /
  */
 
-package org.qamatic.mintleaf.core;
+package org.qamatic.mintleaf.readers;
 
 import org.qamatic.mintleaf.ChangeSet;
 import org.qamatic.mintleaf.ChangeSetReader;
 import org.qamatic.mintleaf.MintleafException;
 import org.qamatic.mintleaf.MintleafLogger;
+import org.qamatic.mintleaf.core.BaseReader;
 import org.qamatic.mintleaf.tools.FileFinder;
 
 import java.util.HashMap;

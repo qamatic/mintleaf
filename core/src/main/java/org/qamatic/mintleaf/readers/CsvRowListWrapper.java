@@ -33,12 +33,13 @@
  * /
  */
 
-package org.qamatic.mintleaf.tools;
+package org.qamatic.mintleaf.readers;
 
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVParser;
 import org.apache.commons.csv.CSVRecord;
 import org.qamatic.mintleaf.*;
+import org.qamatic.mintleaf.readers.CsvRowWrapper;
 
 import java.io.IOException;
 import java.io.Reader;

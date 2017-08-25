@@ -36,7 +36,7 @@
 package org.qamatic.mintleaf;
 
 import org.junit.Test;
-import org.qamatic.mintleaf.core.SqlStreamReader;
+import org.qamatic.mintleaf.readers.SqlStreamReader;
 
 import java.io.InputStream;
 

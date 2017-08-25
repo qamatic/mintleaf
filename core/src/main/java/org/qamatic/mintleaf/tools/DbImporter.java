@@ -36,6 +36,7 @@
 package org.qamatic.mintleaf.tools;
 
 import org.qamatic.mintleaf.*;
+import org.qamatic.mintleaf.readers.DbResultSetReader;
 
 /**
  * Created by qamatic on 3/6/16.

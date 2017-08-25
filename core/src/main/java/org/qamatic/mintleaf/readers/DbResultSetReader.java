@@ -33,7 +33,7 @@
  * /
  */
 
-package org.qamatic.mintleaf.tools;
+package org.qamatic.mintleaf.readers;
 
 import org.qamatic.mintleaf.MintleafException;
 import org.qamatic.mintleaf.MintleafLogger;

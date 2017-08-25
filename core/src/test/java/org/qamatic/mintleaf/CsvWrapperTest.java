@@ -37,7 +37,7 @@ package org.qamatic.mintleaf;
 
 import org.junit.Test;
 import org.qamatic.mintleaf.core.BaseSqlReader;
-import org.qamatic.mintleaf.tools.CsvRowListWrapper;
+import org.qamatic.mintleaf.readers.CsvRowListWrapper;
 
 import java.io.InputStream;
 import java.io.InputStreamReader;

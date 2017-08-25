@@ -44,7 +44,7 @@ import org.qamatic.mintleaf.configuration.MintleafXmlConfiguration;
 import org.qamatic.mintleaf.configuration.SchemaVersionInfo;
 import org.qamatic.mintleaf.core.ChangeSets;
 import org.qamatic.mintleaf.core.JdbcDriverSource;
-import org.qamatic.mintleaf.core.MultiChangeSetFileReader;
+import org.qamatic.mintleaf.readers.MultiChangeSetFileReader;
 import org.qamatic.mintleaf.tools.FileFinder;
 
 import java.io.File;

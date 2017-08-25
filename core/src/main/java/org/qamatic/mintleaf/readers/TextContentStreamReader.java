@@ -33,58 +33,56 @@
  * /
  */
 
-package org.qamatic.mintleaf.tools;
+package org.qamatic.mintleaf.readers;
 
-import org.apache.commons.csv.CSVFormat;
-import org.apache.commons.csv.CSVParser;
-import org.apache.commons.csv.CSVRecord;
+import org.qamatic.mintleaf.ChangeSet;
 import org.qamatic.mintleaf.MintleafException;
-import org.qamatic.mintleaf.MintleafReader;
-import org.qamatic.mintleaf.Row;
-import org.qamatic.mintleaf.core.BaseReader;
+import org.qamatic.mintleaf.MintleafLogger;
+import org.qamatic.mintleaf.configuration.ArgPatternHandler;
+import org.qamatic.mintleaf.core.Readerline;
 
-import java.io.IOException;
-import java.io.Reader;
+import java.io.InputStream;
 
-/**
- * Created by qamatic on 2/18/6/16.
- */
-public class CsvReader<T> extends BaseReader implements MintleafReader<T> {
+public class TextContentStreamReader<T> extends SqlStreamReader {
 
-    private Reader afileReader;
+    private final static MintleafLogger logger = MintleafLogger.getLogger(TextContentStreamReader.class);
 
-    public CsvReader(Reader afileReader) {
-        this.afileReader = afileReader;
+    public TextContentStreamReader(String resource) {
+        super(resource);
     }
 
-    protected CSVParser getCSVParser() throws IOException {
-        return new CSVParser(afileReader, CSVFormat.EXCEL.withHeader().withIgnoreEmptyLines());
+    public TextContentStreamReader(InputStream stream) {
+        super(stream);
     }
 
 
     @Override
     public T read() throws MintleafException {
+        skipLineFeeds = true;
+        super.read();
 
-        final CSVParser parser;
-        try {
-            parser = getCSVParser();
-            int i = 0;
-            for (CSVRecord record : parser) {
-                Row row = createRowInstance(record);
-                if (!readRow(i++, row)) {
-                    break;
-                }
-            }
-
-        } catch (IOException e) {
-            throw new MintleafException(e);
+        if (getReadListener() != null && content.length() != 0) {
+            getReadListener().eachRow(0, new ChangeSet("0", getDelimiter(), content.toString()));
         }
         return null;
     }
 
+    protected Readerline readLine() {
+        return line -> {
+            content.append(line);
+            return true;
+        };
+    }
 
-    public Row createRowInstance(CSVRecord record) {
-        return new CsvRowWrapper(record);
+    public String getContent() {
+        ArgPatternHandler argPatternHandler = new ArgPatternHandler(content.toString());
+        argPatternHandler.withUserProperties(getUserVariableMapping());
+        return argPatternHandler.getText();
+    }
+
+    @Override
+    public String toString() {
+        return getContent();
     }
 
 }

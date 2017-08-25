@@ -37,7 +37,7 @@ package org.qamatic.mintleaf;
 
 import org.junit.Assert;
 import org.junit.Test;
-import org.qamatic.mintleaf.core.SqlStringReader;
+import org.qamatic.mintleaf.readers.SqlStringReader;
 
 import static org.junit.Assert.assertEquals;
 

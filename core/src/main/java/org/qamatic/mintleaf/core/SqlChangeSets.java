@@ -36,6 +36,7 @@
 package org.qamatic.mintleaf.core;
 
 import org.qamatic.mintleaf.*;
+import org.qamatic.mintleaf.readers.SqlStringReader;
 
 /**
  * Created by qamatic on 7/18/16.

@@ -40,7 +40,7 @@ import org.qamatic.mintleaf.core.BaseSqlReader;
 import org.qamatic.mintleaf.data.CompareColumnState;
 import org.qamatic.mintleaf.data.CompareRowState;
 import org.qamatic.mintleaf.data.ComparerListener;
-import org.qamatic.mintleaf.tools.CsvRowListWrapper;
+import org.qamatic.mintleaf.readers.CsvRowListWrapper;
 
 import java.io.IOException;
 import java.io.InputStream;

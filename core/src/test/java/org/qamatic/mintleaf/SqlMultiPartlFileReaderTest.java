@@ -36,7 +36,7 @@
 package org.qamatic.mintleaf;
 
 import org.junit.Test;
-import org.qamatic.mintleaf.core.SqlChangeSetFileReader;
+import org.qamatic.mintleaf.readers.SqlChangeSetFileReader;
 
 import java.io.IOException;
 import java.io.InputStream;
