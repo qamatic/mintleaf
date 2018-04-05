@@ -24,7 +24,7 @@ public class MySqlDbQueriesTest extends MysqlTestCase {
         }
     }
 
-    @Test
+   // @Test
     public void mysqlDepartmentQueryTest() throws MintleafException, SQLException {
         try (ConnectionContext ctx = employeesDb.getNewConnection()) {
             SqlResultSet resultSet = ctx.queryBuilder().withSql("Select count(*) from employees.departments").buildSelect();
