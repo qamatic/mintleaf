@@ -48,7 +48,7 @@ public class MysqlTestCase {
     }
 
     protected static void initDb() {
-        Database sysDb = createOracleDbContext(System.getenv("MYSQL_DB_ADMIN_USERNAME"),
+        Database sysDb = createMySqlDbContext(System.getenv("MYSQL_DB_ADMIN_USERNAME"),
                 System.getenv("MYSQL_DB_ADMIN_PASSWORD"));
         try {
             ChangeSets.migrate(sysDb.getNewConnection(), "res:/mysql/mysql-db-setup.sql", "create database and users");
@@ -57,7 +57,7 @@ public class MysqlTestCase {
         }
     }
 
-    public static Database createOracleDbContext(String userName, String password) {
+    public static Database createMySqlDbContext(String userName, String password) {
         Database db = new Mintleaf.DatabaseBuilder().
                 withDriverSource(ApacheBasicDataSource.class).
                 withUrl(System.getenv("MYSQL_DB_URL")).

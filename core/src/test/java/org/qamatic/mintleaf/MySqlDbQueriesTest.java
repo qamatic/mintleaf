@@ -13,7 +13,7 @@ import static junit.framework.TestCase.assertEquals;
  */
 public class MySqlDbQueriesTest extends MysqlTestCase {
 
-    private static Database employeesDb = createOracleDbContext("testuser1", "testpassword1");
+    private static Database employeesDb = createMySqlDbContext("testuser1", "testpassword1");
 
     @BeforeClass
     public static void cleanDb() throws MintleafException {
@@ -27,7 +27,7 @@ public class MySqlDbQueriesTest extends MysqlTestCase {
     @Test
     public void mysqlDepartmentQueryTest() throws MintleafException, SQLException {
         try (ConnectionContext ctx = employeesDb.getNewConnection()) {
-            SqlResultSet resultSet = ctx.queryBuilder().withSql("Select count(*) from EMPLOYEES.DEPARTMENTS").buildSelect();
+            SqlResultSet resultSet = ctx.queryBuilder().withSql("Select count(*) from employees.departments").buildSelect();
             assertEquals(9, resultSet.first().getInt(1));
         }
     }
