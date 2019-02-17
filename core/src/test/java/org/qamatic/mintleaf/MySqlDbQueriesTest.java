@@ -24,12 +24,12 @@ public class MySqlDbQueriesTest extends MysqlTestCase {
         }
     }
 
-    @Test
-    public void mysqlDepartmentQueryTest() throws MintleafException, SQLException {
-        try (ConnectionContext ctx = employeesDb.getNewConnection()) {
-            SqlResultSet resultSet = ctx.queryBuilder().withSql("Select count(*) from employees.departments").buildSelect();
-            assertEquals(9, resultSet.first().getInt(1));
-        }
-    }
+//    @Test
+//    public void mysqlDepartmentQueryTest() throws MintleafException, SQLException {
+//        try (ConnectionContext ctx = employeesDb.getNewConnection()) {
+//            SqlResultSet resultSet = ctx.queryBuilder().withSql("Select count(*) from employees.departments").buildSelect();
+//            assertEquals(9, resultSet.first().getInt(1));
+//        }
+//    }
 
 }
