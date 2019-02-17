@@ -1,6 +1,7 @@
 package org.qamatic.mintleaf;
 
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.qamatic.mintleaf.core.ChangeSets;
 
@@ -11,6 +12,7 @@ import static junit.framework.TestCase.assertEquals;
 /**
  * Created by QAmatic Team on 4/1/17.
  */
+@Ignore
 public class MySqlDbQueriesTest extends MysqlTestCase {
 
     private static Database employeesDb = createMySqlDbContext("testuser1", "testpassword1");
@@ -24,12 +26,12 @@ public class MySqlDbQueriesTest extends MysqlTestCase {
         }
     }
 
-//    @Test
-//    public void mysqlDepartmentQueryTest() throws MintleafException, SQLException {
-//        try (ConnectionContext ctx = employeesDb.getNewConnection()) {
-//            SqlResultSet resultSet = ctx.queryBuilder().withSql("Select count(*) from employees.departments").buildSelect();
-//            assertEquals(9, resultSet.first().getInt(1));
-//        }
-//    }
+    @Test
+    public void mysqlDepartmentQueryTest() throws MintleafException, SQLException {
+        try (ConnectionContext ctx = employeesDb.getNewConnection()) {
+            SqlResultSet resultSet = ctx.queryBuilder().withSql("Select count(*) from employees.departments").buildSelect();
+            assertEquals(9, resultSet.first().getInt(1));
+        }
+    }
 
 }

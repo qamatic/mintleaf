@@ -36,6 +36,7 @@
 package org.qamatic.mintleaf.oracle;
 
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.qamatic.mintleaf.*;
 import org.qamatic.mintleaf.core.ChangeSets;
@@ -49,6 +50,7 @@ import static org.junit.Assert.assertEquals;
  * Created by qamatic on 3/4/16.
  */
 
+@Ignore
 public class OraStoredProcTest extends OracleTestCase {
 
     private static Database payrollDb = createOracleDbContext("PAYROLL1", "PAYROLL1");

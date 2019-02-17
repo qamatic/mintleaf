@@ -37,6 +37,7 @@ package org.qamatic.mintleaf.oracle;
 
 import org.junit.Assert;
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.qamatic.mintleaf.ColumnMetaDataCollection;
 import org.qamatic.mintleaf.Database;
@@ -50,7 +51,7 @@ import static org.junit.Assert.assertEquals;
 /**
  * Created by qamatic on 3/4/16.
  */
-
+@Ignore
 public class OraUtilityTest extends OracleTestCase {
 
     private static Database hrdb2 = createOracleDbContext("HRDB2", "HRDB2");
