@@ -42,11 +42,57 @@ public abstract class MintleafLogger {
 
     private static MintleafLogger mintLeafLogger;
 
+
+    private static boolean singletonLogger = true;
+    private static Class<? extends MintleafLogger> loggerType = NoLogger.class;
+
     public synchronized static MintleafLogger getLogger(Class<?> clazz) {
-        if (mintLeafLogger == null) {
-            mintLeafLogger = new ConsoleLogger(clazz);
+        MintleafLogger logger = null;
+        if (singletonLogger) {
+            if ((mintLeafLogger == null)) {
+                mintLeafLogger = getLoggerInstance(clazz);
+            }
+        } else {
+            logger = getLoggerInstance(clazz);
+            mintLeafLogger = logger;
+            return logger;
         }
         return mintLeafLogger;
+    }
+
+    private static MintleafLogger getLoggerInstance(Class<?> clazz) {
+        MintleafLogger logger = null;
+        try {
+            logger = loggerType.getDeclaredConstructor(Class.class).newInstance(clazz);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return logger;
+    }
+
+    public static void setLoggerType(Class<? extends MintleafLogger> loggerType) {
+        setLoggerType(loggerType, true);
+    }
+
+    public static void setLoggerType(Class<? extends MintleafLogger> loggerType, boolean singletonLogger) {
+
+        MintleafLogger.loggerType = loggerType;
+        MintleafLogger.mintLeafLogger = null;
+        MintleafLogger.singletonLogger = singletonLogger;
+
+        if (loggerType == null) {
+            loggerType = NoLogger.class;
+            singletonLogger = true;//force to be at app level
+            MintleafLogger.mintLeafLogger = getLoggerInstance(NoLogger.class);
+        }
+    }
+
+    public static boolean isSingletonLogger() {
+        return singletonLogger;
+    }
+
+    public static Class<? extends MintleafLogger> getLoggerType() {
+        return MintleafLogger.loggerType;
     }
 
     public abstract void error(Throwable e);
