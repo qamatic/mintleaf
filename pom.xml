@@ -6,7 +6,7 @@
     <groupId>org.qamatic</groupId>
     <artifactId>mintleaf</artifactId>
     <packaging>pom</packaging>
-    <version>1.8.42-SNAPSHOT</version>
+    <version>1.8.42</version>
 
     <name>Mintleaf</name>
     <description>Welcome to the Mintleaf! Database Migration and Testing simplified! Mintleaf is a light weight framework tool helps you to advance your database developement on continuous integration / continuous delivery model as easy as possible.</description>
@@ -64,7 +64,7 @@
         <connection>scm:git:https://github.com/qamatic/mintleaf.git</connection>
         <url>https://github.com/qamatic/mintleaf</url>
         <developerConnection>scm:git:https://github.com/qamatic/mintleaf.git</developerConnection>
-        <tag>v1.8.5-SNAPSHOT</tag>
+        <tag>v1.8.42</tag>
     </scm>
 
     <dependencyManagement>
