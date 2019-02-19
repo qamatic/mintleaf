@@ -2,8 +2,8 @@ package org.qamatic.mintleaf.cli;
 
 import org.qamatic.mintleaf.*;
 import org.qamatic.mintleaf.configuration.SchemaVersionInfo;
-import org.qamatic.mintleaf.readers.MultiChangeSetFileReader;
 import org.qamatic.mintleaf.core.SqlChangeSets;
+import org.qamatic.mintleaf.readers.MultiChangeSetFileReader;
 
 /**
  * Created by QAmatic team on 4/8/17.

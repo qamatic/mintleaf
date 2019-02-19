@@ -43,15 +43,15 @@ import org.qamatic.mintleaf.core.Readerline;
 
 import java.io.InputStream;
 
-public class TextContentStreamReader<T> extends SqlStreamReader {
+public class TextStreamReader<T> extends SqlStreamReader {
 
-    private final static MintleafLogger logger = MintleafLogger.getLogger(TextContentStreamReader.class);
+    private final static MintleafLogger logger = MintleafLogger.getLogger(TextStreamReader.class);
 
-    public TextContentStreamReader(String resource) {
+    public TextStreamReader(String resource) {
         super(resource);
     }
 
-    public TextContentStreamReader(InputStream stream) {
+    public TextStreamReader(InputStream stream) {
         super(stream);
     }
 

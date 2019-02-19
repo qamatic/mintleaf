@@ -38,7 +38,7 @@ package org.qamatic.mintleaf.configuration;
 import org.qamatic.mintleaf.MintleafConfiguration;
 import org.qamatic.mintleaf.MintleafException;
 import org.qamatic.mintleaf.MintleafReader;
-import org.qamatic.mintleaf.readers.TextContentStreamReader;
+import org.qamatic.mintleaf.readers.TextStreamReader;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
@@ -69,7 +69,7 @@ public class MintleafXmlConfiguration implements MintleafConfiguration {
     private SchemaVersions schemaVersions = new SchemaVersions();
 
     public static MintleafConfiguration deSerialize(String configFileName) throws MintleafException {
-        MintleafReader reader = new TextContentStreamReader(configFileName);
+        MintleafReader reader = new TextStreamReader(configFileName);
         reader.read();
         try {
             JAXBContext jc = JAXBContext.newInstance(MintleafXmlConfiguration.class);

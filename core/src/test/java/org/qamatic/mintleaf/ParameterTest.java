@@ -4,7 +4,7 @@ import org.junit.Test;
 import org.qamatic.mintleaf.configuration.ArgPatternHandler;
 import org.qamatic.mintleaf.configuration.DbConnectionInfo;
 import org.qamatic.mintleaf.configuration.MintleafXmlConfiguration;
-import org.qamatic.mintleaf.readers.TextContentStreamReader;
+import org.qamatic.mintleaf.readers.TextStreamReader;
 
 import static junit.framework.TestCase.assertEquals;
 import static junit.framework.TestCase.assertTrue;
@@ -45,7 +45,7 @@ public class ParameterTest {
 
     @Test
     public void dbconfigLoadFromXmlString() throws MintleafException {
-        MintleafReader reader = new TextContentStreamReader("") {
+        MintleafReader reader = new TextStreamReader("") {
             @Override
             public Void read() throws MintleafException {
                 MintleafXmlConfiguration dbConfiguration = new MintleafXmlConfiguration();

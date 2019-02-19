@@ -39,9 +39,6 @@ import org.qamatic.mintleaf.MintleafException;
 import org.qamatic.mintleaf.MintleafLogger;
 import org.qamatic.mintleaf.MintleafReader;
 
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -52,25 +49,6 @@ public abstract class BaseSqlReader<T> extends BaseReader implements MintleafRea
     private String delimiter = "/";
     private Map<String, String> userVariableMapping;
 
-    public static InputStream getInputStreamFromFile(String resourceOrFileName) {
-        InputStream stream = null;
-        logger.info("reading file: " + resourceOrFileName);
-        if (resourceOrFileName.startsWith("res:")) {
-            String resFile = resourceOrFileName.substring(4);
-
-            stream = Thread.currentThread().getContextClassLoader().getClass().getResourceAsStream(resFile);
-            if (stream == null) {
-                logger.error("file not found " + resourceOrFileName);
-            }
-        } else {
-            try {
-                stream = new FileInputStream(resourceOrFileName);
-            } catch (FileNotFoundException e) {
-                logger.error("file not found " + resourceOrFileName, e);
-            }
-        }
-        return stream;
-    }
 
     protected boolean isDelimiter(String line) {
         //external config needed.

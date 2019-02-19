@@ -70,10 +70,6 @@ public abstract class MintleafLogger {
         return logger;
     }
 
-    public static void setLoggerType(Class<? extends MintleafLogger> loggerType) {
-        setLoggerType(loggerType, true);
-    }
-
     public static void setLoggerType(Class<? extends MintleafLogger> loggerType, boolean singletonLogger) {
 
         MintleafLogger.loggerType = loggerType;
@@ -93,6 +89,10 @@ public abstract class MintleafLogger {
 
     public static Class<? extends MintleafLogger> getLoggerType() {
         return MintleafLogger.loggerType;
+    }
+
+    public static void setLoggerType(Class<? extends MintleafLogger> loggerType) {
+        setLoggerType(loggerType, true);
     }
 
     public abstract void error(Throwable e);

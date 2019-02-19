@@ -166,7 +166,6 @@ public class BinaryImportTest extends H2TestCase {
     }
 
 
-
     @Test
     public void importFromExcelToObjectListTest() throws MintleafException, URISyntaxException {
 

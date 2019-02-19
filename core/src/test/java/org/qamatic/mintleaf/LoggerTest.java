@@ -35,19 +35,13 @@
 
 package org.qamatic.mintleaf;
 
-import org.junit.Assert;
 import org.junit.Test;
 
-import java.sql.Date;
-import java.sql.Types;
-
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 public class LoggerTest {
     @Test
-    public void testDefaultLogger(){
+    public void testDefaultLogger() {
         MintleafLogger logger = MintleafLogger.getLogger(LoggerTest.class);
         assertEquals(logger.getClass(), NoLogger.class);
         assertTrue(MintleafLogger.isSingletonLogger());
@@ -55,23 +49,23 @@ public class LoggerTest {
 
 
     @Test
-    public void testInjectCustomLogger(){
+    public void testInjectCustomLogger() {
         MintleafLogger.setLoggerType(ConsoleLogger.class);
         MintleafLogger logger = MintleafLogger.getLogger(LoggerTest.class);
         assertEquals(logger.getClass(), ConsoleLogger.class);
         assertTrue(MintleafLogger.isSingletonLogger());
         MintleafLogger logger1 = MintleafLogger.getLogger(LoggerTest.class);
-        assertTrue("not of same logger instance", logger==logger1);
+        assertTrue("not of same logger instance", logger == logger1);
     }
 
     @Test
-    public void testInjectCustomLoggerPerClass(){
+    public void testInjectCustomLoggerPerClass() {
         MintleafLogger.setLoggerType(ConsoleLogger.class, false);
         MintleafLogger logger = MintleafLogger.getLogger(LoggerTest.class);
         assertEquals(logger.getClass(), ConsoleLogger.class);
         assertFalse(MintleafLogger.isSingletonLogger());
         MintleafLogger logger1 = MintleafLogger.getLogger(LoggerTest.class);
-        assertFalse("should be of different logger instance", logger==logger1);
+        assertFalse("should be of different logger instance", logger == logger1);
     }
 
 
