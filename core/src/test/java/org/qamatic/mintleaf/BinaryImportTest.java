@@ -2,6 +2,8 @@ package org.qamatic.mintleaf;
 
 import org.junit.Test;
 import org.qamatic.mintleaf.core.*;
+import org.qamatic.mintleaf.core.rows.InMemoryRow;
+import org.qamatic.mintleaf.core.tables.InMemoryTable;
 import org.qamatic.mintleaf.readers.BinaryDataReader;
 
 import java.io.*;
@@ -29,7 +31,7 @@ public class BinaryImportTest extends H2TestCase {
         }
     };
 
-    private final ObjectRowListWrapper<CityRecord> cityRecords = new ObjectRowListWrapper<CityRecord>(cityRecordMetaData) {
+    private final InMemoryTable<CityRecord> cityRecords = new InMemoryTable<CityRecord>(cityRecordMetaData) {
         {
             add(new CityRecord(1, "West Chester", "PA", "USA"));
             add(new CityRecord(2, "Cherry Hill", "NJ", "USA"));
@@ -160,7 +162,7 @@ public class BinaryImportTest extends H2TestCase {
         testDbQueries.query("SELECT * FROM BINARY_IMPDB.CITIES", (row, resultSet) -> {
             String columnName = cityRecordMetaData.getColumnName(2);
             assertEquals(cityRecords.get(row).asString(columnName), resultSet.asString(columnName));
-            return null;
+
         });
 
     }
@@ -185,14 +187,14 @@ public class BinaryImportTest extends H2TestCase {
                 build();
 
         action.execute();
-        RowListWrapper<CityRecord> rows = (RowListWrapper<CityRecord>) action.execute();
+        Table<CityRecord> rows = (Table<CityRecord>) action.execute();
         assertEquals(3, rows.size());
         assertEquals("CherryHill", rows.getRow(1).getValue(1));
         assertEquals("CherryHill", rows.getRow(1).getValue("City"));
     }
 
-    private RowListWrapper<CityRecord> getRecords() throws SQLException, IOException, MintleafException, URISyntaxException {
-        RowListWrapper<CityRecord> list = new ObjectRowListWrapper<CityRecord>(cityRecordMetaData);
+    private Table<CityRecord> getRecords() throws SQLException, IOException, MintleafException, URISyntaxException {
+        Table<CityRecord> list = new InMemoryTable<CityRecord>(cityRecordMetaData);
         try (BinaryDataIterable reader = new FixedLengthRecordFile(getTestFile(), 34)) {
             for (byte[] record : reader.recordAt(2)) {
 

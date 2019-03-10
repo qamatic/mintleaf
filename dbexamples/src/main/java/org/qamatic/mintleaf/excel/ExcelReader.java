@@ -14,7 +14,7 @@ import java.util.Iterator;
 /**
  * Created by QAmatic Team on 4/25/17.
  */
-public class ExcelReader<T> extends BaseReader implements MintleafReader<T> {
+public class ExcelReader<T> extends BaseReader  {
 
     private InputStream inputStream;
     private int activeWorkSheet;
@@ -38,7 +38,7 @@ public class ExcelReader<T> extends BaseReader implements MintleafReader<T> {
     }
 
     @Override
-    public T read() throws MintleafException {
+    public void read() throws MintleafException {
         HSSFWorkbook workbook = null;
         try {
             workbook = new HSSFWorkbook(this.inputStream);
@@ -63,7 +63,7 @@ public class ExcelReader<T> extends BaseReader implements MintleafReader<T> {
                 }
 
             }
-            return null;
+
 
         } catch (IOException e) {
             throw new MintleafException(e);

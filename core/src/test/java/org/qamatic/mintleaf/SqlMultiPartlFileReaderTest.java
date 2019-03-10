@@ -140,7 +140,7 @@ public class SqlMultiPartlFileReaderTest {
         SqlChangeSetFileReader reader = new SqlChangeSetFileReader(iStream);
         reader.setReadListener(new ReadListener() {
             @Override
-            public Object eachRow(int rowNum, Row row) throws MintleafException {
+            public void eachRow(int rowNum, Row row) throws MintleafException {
                 ChangeSet changeSet = (ChangeSet) row;
                 if (actual_part1 == null) {
                     actual_part1 = changeSet.getChangeSetSource().toString();
@@ -149,7 +149,7 @@ public class SqlMultiPartlFileReaderTest {
                 } else if (actual_part3 == null) {
                     actual_part3 = changeSet.getChangeSetSource().toString();
                 }
-                return null;
+
             }
         });
         actual_part1 = null;

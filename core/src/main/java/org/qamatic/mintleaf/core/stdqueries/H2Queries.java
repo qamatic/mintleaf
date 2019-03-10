@@ -80,7 +80,7 @@ public class H2Queries extends StandardQueries {
                 }
             });
 
-            return metaData.get(metaData.size() - 1);
+
         });
         return metaData;
     }

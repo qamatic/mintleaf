@@ -57,14 +57,13 @@ public class TextStreamReader<T> extends SqlStreamReader {
 
 
     @Override
-    public T read() throws MintleafException {
+    public void read() throws MintleafException {
         skipLineFeeds = true;
         super.read();
 
         if (getReadListener() != null && content.length() != 0) {
             getReadListener().eachRow(0, new ChangeSet("0", getDelimiter(), content.toString()));
         }
-        return null;
     }
 
     protected Readerline readLine() {

@@ -78,7 +78,7 @@ public class MultiChangeSetFileReader<T> extends BaseReader implements ChangeSet
     }
 
     @Override
-    public T read() throws MintleafException {
+    public void read() throws MintleafException {
         for (String path : this.paths) {
             FileFinder fileFinder = new FileFinder(path);
             List<String> files = fileFinder.list();
@@ -94,7 +94,6 @@ public class MultiChangeSetFileReader<T> extends BaseReader implements ChangeSet
                 changeSetReader.read();
             }
         }
-        return null;
     }
 
     @Override

@@ -76,7 +76,7 @@ public class SqlStreamReader<T> extends BaseSqlReader<T> {
     }
 
     @Override
-    public T read() throws MintleafException {
+    public void read() throws MintleafException {
         this.content.setLength(0);
         BufferedReader input = null;
 
@@ -106,7 +106,6 @@ public class SqlStreamReader<T> extends BaseSqlReader<T> {
             logger.error(e);
             throw new MintleafException(e);
         }
-        return null;
     }
 
     protected Readerline readLine() {
@@ -115,7 +114,7 @@ public class SqlStreamReader<T> extends BaseSqlReader<T> {
                 return false;
             }
 
-            if (isDelimiter(line)) {
+            if (isSqlDelimiter(line)) {
 
                 String[] splits = line.split(getDelimiter());
                 if (splits.length >= 1) {

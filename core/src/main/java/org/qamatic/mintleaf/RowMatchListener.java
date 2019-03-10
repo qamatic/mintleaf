@@ -38,7 +38,7 @@ package org.qamatic.mintleaf;
 /**
  * Created by qamatic on 3/3/16.
  */
-public interface RowMatchListener<T> extends ReadListener<T> {
+public interface RowMatchListener<T> extends ReadListener {
 
     default boolean matches(Row row) {
         return true;

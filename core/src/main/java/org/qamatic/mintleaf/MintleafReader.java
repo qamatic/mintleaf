@@ -38,10 +38,10 @@ package org.qamatic.mintleaf;
 import java.nio.charset.Charset;
 import java.util.Map;
 
-public interface MintleafReader<T> extends AutoCloseable {
+public interface MintleafReader<T extends Row> extends AutoCloseable {
 
 
-    T read() throws MintleafException;
+    void read() throws MintleafException;
 
     default Map<String, String> getUserVariableMapping() {
         MintleafException.throwException("not implemented");
@@ -78,5 +78,15 @@ public interface MintleafReader<T> extends AutoCloseable {
     default void close() {
 
     }
+
+    default boolean canContinueRead(Row row){
+        return true;
+    }
+
+    default boolean matches(T row) {
+        return true;
+    }
+
+
 
 }

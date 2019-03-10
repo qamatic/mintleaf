@@ -43,13 +43,13 @@ import java.util.Iterator;
  */
 public class OrderedListComparator implements DataComparer {
 
-    private RowListWrapper<? extends Row> sourceTable;
-    private RowListWrapper<? extends Row> targetTable;
+    private Table<? extends Row> sourceTable;
+    private Table<? extends Row> targetTable;
     private ComparerListener comparerListener;
     private ColumnMatcher columnMatcher;
 
 
-    public OrderedListComparator(RowListWrapper<? extends Row> sourceTable, RowListWrapper<? extends Row> targetTable) {
+    public OrderedListComparator(Table<? extends Row> sourceTable, Table<? extends Row> targetTable) {
         setSourceTable(sourceTable);
         setTargetTable(targetTable);
         setColumnMatcher(new OrderedColumnMatcher());
@@ -165,22 +165,22 @@ public class OrderedListComparator implements DataComparer {
     }
 
     @Override
-    public RowListWrapper getSourceTable() {
+    public Table getSourceTable() {
         return this.sourceTable;
     }
 
     @Override
-    public void setSourceTable(RowListWrapper<? extends Row> sourceTable) {
+    public void setSourceTable(Table<? extends Row> sourceTable) {
         this.sourceTable = sourceTable;
     }
 
     @Override
-    public RowListWrapper getTargetTable() {
+    public Table getTargetTable() {
         return this.targetTable;
     }
 
     @Override
-    public void setTargetTable(RowListWrapper<? extends Row> targetTable) {
+    public void setTargetTable(Table<? extends Row> targetTable) {
         this.targetTable = targetTable;
     }
 

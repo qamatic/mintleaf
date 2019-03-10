@@ -35,7 +35,8 @@
 
 package org.qamatic.mintleaf;
 
-import org.qamatic.mintleaf.core.InMemoryRow;
+
+import org.qamatic.mintleaf.core.rows.InMemoryRow;
 
 /**
  * Created by QAmatic Team on 3/11/17.

@@ -46,11 +46,11 @@ public interface DataComparer extends Executable<Boolean> {
 
     void setColumnMatcher(ColumnMatcher columnMatcher);
 
-    RowListWrapper getSourceTable();
+    Table getSourceTable();
 
-    void setSourceTable(RowListWrapper<? extends Row> sourceTable);
+    void setSourceTable(Table<? extends Row> sourceTable);
 
-    RowListWrapper getTargetTable();
+    Table getTargetTable();
 
-    void setTargetTable(RowListWrapper<? extends Row> targetTable);
+    void setTargetTable(Table<? extends Row> targetTable);
 }

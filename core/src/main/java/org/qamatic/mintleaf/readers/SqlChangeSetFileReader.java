@@ -70,7 +70,7 @@ public class SqlChangeSetFileReader<T> extends SqlStreamReader implements Change
     }
 
     @Override
-    public T read() throws MintleafException {
+    public void read() throws MintleafException {
 
         super.read();
 
@@ -83,7 +83,6 @@ public class SqlChangeSetFileReader<T> extends SqlStreamReader implements Change
                 getReadListener().eachRow(getChangeSets().size() - 1, currentChangeSet);
             }
         }
-        return null;
     }
 
     @Override

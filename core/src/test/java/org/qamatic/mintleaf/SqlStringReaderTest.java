@@ -78,7 +78,7 @@ public class SqlStringReaderTest {
             } else if (actual_emptypackage_block2 == null) {
                 actual_emptypackage_block2 = ((ChangeSet) row).getChangeSetSource();
             }
-            return null;
+
         });
 
 

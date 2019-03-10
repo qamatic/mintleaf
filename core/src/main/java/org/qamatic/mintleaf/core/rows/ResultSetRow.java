@@ -33,7 +33,7 @@
  * /
  */
 
-package org.qamatic.mintleaf.core;
+package org.qamatic.mintleaf.core.rows;
 
 import org.qamatic.mintleaf.MetaDataCollection;
 import org.qamatic.mintleaf.MintleafException;
@@ -47,18 +47,18 @@ import java.sql.SQLException;
 /**
  * Created by qamatic on 3/3/16.
  */
-public class ResultSetRowWrapper<T> implements Row {
+public class ResultSetRow<T> implements Row {
 
-    private static final MintleafLogger logger = MintleafLogger.getLogger(ResultSetRowWrapper.class);
+    private static final MintleafLogger logger = MintleafLogger.getLogger(ResultSetRow.class);
     private ResultSet resultSet;
     private ResultSetMetaData resultSetMetaData;
 
 
-    public ResultSetRowWrapper() {
+    public ResultSetRow() {
 
     }
 
-    public ResultSetRowWrapper(ResultSet resultSet) {
+    public ResultSetRow(ResultSet resultSet) {
         this.resultSet = resultSet;
 
     }

@@ -37,17 +37,16 @@ package org.qamatic.mintleaf.readers;
 
 import org.qamatic.mintleaf.MintleafException;
 import org.qamatic.mintleaf.MintleafLogger;
-import org.qamatic.mintleaf.MintleafReader;
 import org.qamatic.mintleaf.SqlResultSet;
 import org.qamatic.mintleaf.core.BaseReader;
-import org.qamatic.mintleaf.core.ResultSetRowWrapper;
+import org.qamatic.mintleaf.core.rows.ResultSetRow;
 
 import java.sql.SQLException;
 
 /**
  * Created by qamatic on 2/18/6/16.
  */
-public class DbResultSetReader<T> extends BaseReader implements MintleafReader<T> {
+public class DbResultSetReader<T> extends BaseReader {
 
     private static final MintleafLogger logger = MintleafLogger.getLogger(DbResultSetReader.class);
     private SqlResultSet resultSet;
@@ -56,11 +55,11 @@ public class DbResultSetReader<T> extends BaseReader implements MintleafReader<T
         this.resultSet = resultSet;
     }
 
-    public T read() throws MintleafException {
+    public void read() throws MintleafException {
         int i = 0;
         try {
             while (this.resultSet.getResultSet().next()) {
-                ResultSetRowWrapper dbRowWrapper = new ResultSetRowWrapper();
+                ResultSetRow dbRowWrapper = new ResultSetRow();
                 dbRowWrapper.setResultSet(this.resultSet.getResultSet());
                 if (!readRow(i++, dbRowWrapper)) {
                     break;
@@ -69,7 +68,6 @@ public class DbResultSetReader<T> extends BaseReader implements MintleafReader<T
         } catch (SQLException e) {
             throw new MintleafException(e);
         }
-        return null;
     }
 
     @Override

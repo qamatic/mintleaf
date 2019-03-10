@@ -36,14 +36,14 @@
 package org.qamatic.mintleaf.data;
 
 import org.qamatic.mintleaf.MintleafException;
-import org.qamatic.mintleaf.RowListWrapper;
+import org.qamatic.mintleaf.Table;
 
 /**
  * Created by qamatic on 3/4/16.
  */
 public interface ComparerListener {
 
-    default void OnBeginCompare(RowListWrapper sourceTable, RowListWrapper targetTable) throws MintleafException {
+    default void OnBeginCompare(Table sourceTable, Table targetTable) throws MintleafException {
 
     }
 

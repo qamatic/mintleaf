@@ -36,6 +36,8 @@
 package org.qamatic.mintleaf.core;
 
 import org.qamatic.mintleaf.*;
+import org.qamatic.mintleaf.core.rows.ResultSetRow;
+import org.qamatic.mintleaf.core.tables.SqlQueryTable;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -142,11 +144,11 @@ public class SelectQuery implements Executable<SqlResultSet> {
         }
 
         @Override
-        public <T> void iterate(RowMatchListener<T> listener) throws MintleafException, MintleafException {
+        public  void iterate(RowMatchListener listener) throws MintleafException, MintleafException {
             try {
                 int i = 0;
                 while (getResultSet().next()) {
-                    Row row = new ResultSetRowWrapper<T>(getResultSet());
+                    Row row = new ResultSetRow(getResultSet());
                     if (listener.matches(row))
                         listener.eachRow(i++, row);
                     if (!listener.canContinueRead(row))
@@ -160,8 +162,8 @@ public class SelectQuery implements Executable<SqlResultSet> {
         }
 
         @Override
-        public RowListWrapper asRowListWrapper() throws MintleafException {
-            ResultSetRowListWrapper rowListWrapper = new ResultSetRowListWrapper();
+        public Table asRowListWrapper() throws MintleafException {
+            SqlQueryTable rowListWrapper = new SqlQueryTable();
             rowListWrapper.setResultSet(this.getResultSet());
             return rowListWrapper;
         }

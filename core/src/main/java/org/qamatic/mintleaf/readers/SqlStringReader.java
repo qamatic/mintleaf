@@ -50,7 +50,7 @@ public class SqlStringReader<T> extends BaseSqlReader<T> {
     }
 
     @Override
-    public T read() throws MintleafException {
+    public void read() throws MintleafException {
 
         StringBuilder childContents = new StringBuilder();
 
@@ -65,7 +65,7 @@ public class SqlStringReader<T> extends BaseSqlReader<T> {
                     continue;
                 }
 
-                if (isDelimiter(line)) {
+                if (isSqlDelimiter(line)) {
 
                     String[] splits = line.split(getDelimiter());
                     if (splits.length >= 1) {
@@ -91,8 +91,7 @@ public class SqlStringReader<T> extends BaseSqlReader<T> {
         } finally {
 
         }
-        //return mvSqlSource;
-        return null;
+
     }
 
 }

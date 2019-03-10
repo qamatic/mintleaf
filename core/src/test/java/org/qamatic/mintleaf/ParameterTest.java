@@ -47,12 +47,12 @@ public class ParameterTest {
     public void dbconfigLoadFromXmlString() throws MintleafException {
         MintleafReader reader = new TextStreamReader("") {
             @Override
-            public Void read() throws MintleafException {
+            public void read() throws MintleafException {
                 MintleafXmlConfiguration dbConfiguration = new MintleafXmlConfiguration();
                 dbConfiguration.getDatabases().add(new DbConnectionInfo("abcdb", DbType.ORACLE,
                         "jdbc:oracle:thin:${url}", "${user-name}", "${password}"));
                 content.append(dbConfiguration.toString());
-                return null;
+
             }
         };
         reader.read();

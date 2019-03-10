@@ -49,7 +49,7 @@ import java.io.Reader;
 /**
  * Created by qamatic on 2/18/6/16.
  */
-public class CsvReader<T> extends BaseReader implements MintleafReader<T> {
+public class CsvReader<T> extends BaseReader {
 
     private Reader afileReader;
 
@@ -63,7 +63,7 @@ public class CsvReader<T> extends BaseReader implements MintleafReader<T> {
 
 
     @Override
-    public T read() throws MintleafException {
+    public void read() throws MintleafException {
 
         final CSVParser parser;
         try {
@@ -79,7 +79,6 @@ public class CsvReader<T> extends BaseReader implements MintleafReader<T> {
         } catch (IOException e) {
             throw new MintleafException(e);
         }
-        return null;
     }
 
 

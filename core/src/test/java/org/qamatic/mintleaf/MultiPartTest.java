@@ -73,9 +73,9 @@ public class MultiPartTest {
 
         reader.setReadListener(new ReadListener() {
             @Override
-            public Object eachRow(int rowNum, Row row) throws MintleafException {
+            public void eachRow(int rowNum, Row row) throws MintleafException {
                 actual.append(((ChangeSet) row).getChangeSetSource());
-                return null;
+
             }
         });
 

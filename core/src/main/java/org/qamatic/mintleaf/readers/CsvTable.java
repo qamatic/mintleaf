@@ -48,13 +48,13 @@ import java.util.NoSuchElementException;
 /**
  * Created by QAmatic on 3/10/2017.
  */
-public class CsvRowListWrapper<T extends Row> implements RowListWrapper<T> {
+public class CsvTable<T extends Row> implements Table<T> {
     protected CSVParser parser;
     private Reader afileReader;
     private ColumnMetaDataCollection metaDataCollection = new ColumnMetaDataCollection("CSV");
 
 
-    public CsvRowListWrapper(Reader afileReader) {
+    public CsvTable(Reader afileReader) {
         this.afileReader = afileReader;
     }
 

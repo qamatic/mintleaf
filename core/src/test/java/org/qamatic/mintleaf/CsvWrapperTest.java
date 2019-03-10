@@ -37,7 +37,7 @@ package org.qamatic.mintleaf;
 
 import org.junit.Test;
 import org.qamatic.mintleaf.core.BaseSqlReader;
-import org.qamatic.mintleaf.readers.CsvRowListWrapper;
+import org.qamatic.mintleaf.readers.CsvTable;
 
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -54,7 +54,7 @@ public class CsvWrapperTest {
     @Test
     public void testReader() throws MintleafException {
         InputStream csvStream = BaseSqlReader.getInputStreamFromFile("res:/users.csv");
-        CsvRowListWrapper<Row> csvRowListWrapper = new CsvRowListWrapper<Row>(new InputStreamReader(csvStream));
+        CsvTable<Row> csvRowListWrapper = new CsvTable<Row>(new InputStreamReader(csvStream));
         Row row = csvRowListWrapper.iterator().next();
         assertNotNull(row);
         assertEquals("1", row.asString("USERID"));
@@ -71,7 +71,7 @@ public class CsvWrapperTest {
     @Test
     public void testCSVMetaData() throws MintleafException, SQLException {
         InputStream csvStream = BaseSqlReader.getInputStreamFromFile("res:/users.csv");
-        CsvRowListWrapper<Row> csvRowListWrapper = new CsvRowListWrapper<Row>(new InputStreamReader(csvStream));
+        CsvTable<Row> csvRowListWrapper = new CsvTable<Row>(new InputStreamReader(csvStream));
         Row row = csvRowListWrapper.iterator().next();
         assertNotNull(csvRowListWrapper.iterator().next());
 

@@ -1,4 +1,4 @@
-package org.qamatic.mintleaf.core;
+package org.qamatic.mintleaf.core.rows;
 
 import org.qamatic.mintleaf.Column;
 import org.qamatic.mintleaf.MetaDataCollection;

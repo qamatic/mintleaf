@@ -39,18 +39,14 @@ import org.qamatic.mintleaf.MintleafException;
 import org.qamatic.mintleaf.MintleafLogger;
 import org.qamatic.mintleaf.MintleafReader;
 
-import java.util.HashMap;
-import java.util.Map;
 
-public abstract class BaseSqlReader<T> extends BaseReader implements MintleafReader<T> {
+
+public abstract class BaseSqlReader<T> extends BaseReader  {
 
     private final static MintleafLogger logger = MintleafLogger.getLogger(BaseSqlReader.class);
 
-    private String delimiter = "/";
-    private Map<String, String> userVariableMapping;
 
-
-    protected boolean isDelimiter(String line) {
+    protected boolean isSqlDelimiter(String line) {
         //external config needed.
         return ((getDelimiter().equals("/") && line.equals("/")) ||
                 (getDelimiter().equals(";") && line.endsWith(";")) ||
@@ -58,31 +54,5 @@ public abstract class BaseSqlReader<T> extends BaseReader implements MintleafRea
         );
     }
 
-    @Override
-    public String getDelimiter() {
-        return delimiter;
-    }
 
-    @Override
-    public void setDelimiter(String delimStr) {
-        this.delimiter = delimStr.toUpperCase();
-    }
-
-    @Override
-    public abstract T read() throws MintleafException;
-
-
-    @Override
-    public Map<String, String> getUserVariableMapping() {
-        if (userVariableMapping == null) {
-            userVariableMapping = new HashMap<>();
-        }
-        return userVariableMapping;
-    }
-
-
-    @Override
-    public void setUserVariableMapping(Map userVariableMapping) {
-        this.userVariableMapping = userVariableMapping;
-    }
 }

@@ -84,9 +84,9 @@ public class SqlStreamReaderTest {
         ReadListener listner = new EmptyPackageReadListner() {
 
             @Override
-            public Object eachRow(int rowNum, Row row) throws MintleafException {
+            public void eachRow(int rowNum, Row row) throws MintleafException {
                 actual.append(((ChangeSet) row).getChangeSetSource());
-                return null;
+
             }
 
 
@@ -141,14 +141,14 @@ public class SqlStreamReaderTest {
 
 
         @Override
-        public Object eachRow(int rowNum, Row row) throws MintleafException {
+        public void eachRow(int rowNum, Row row) throws MintleafException {
 
             if (actual_emptypackage_block1 == null) {
                 actual_emptypackage_block1 = ((ChangeSet) row).getChangeSetSource();
             } else if (actual_emptypackage_block2 == null) {
                 actual_emptypackage_block2 = ((ChangeSet) row).getChangeSetSource();
             }
-            return null;
+
         }
     }
 }

@@ -33,34 +33,34 @@
  * /
  */
 
-package org.qamatic.mintleaf.core;
+package org.qamatic.mintleaf.core.tables;
 
 import org.qamatic.mintleaf.MetaDataCollection;
 import org.qamatic.mintleaf.MintleafException;
 import org.qamatic.mintleaf.Row;
-import org.qamatic.mintleaf.RowListWrapper;
+import org.qamatic.mintleaf.Table;
 
 import java.util.*;
 
 /**
  * Created by qamatic on 3/4/16.
  */
-public class ObjectRowListWrapper<T extends Row> implements RowListWrapper<T>, List<T> {
+public class InMemoryTable<T extends Row> implements Table<T>, List<T> {
 
     private final List<T> list;
     private MetaDataCollection metaDataCollection;
 
-    public ObjectRowListWrapper(List<T> list, MetaDataCollection metaDataCollection) {
+    public InMemoryTable(List<T> list, MetaDataCollection metaDataCollection) {
         this.metaDataCollection = metaDataCollection;
         this.list = list;
     }
 
-    public ObjectRowListWrapper(MetaDataCollection metaDataCollection) {
+    public InMemoryTable(MetaDataCollection metaDataCollection) {
         this.metaDataCollection = metaDataCollection;
         this.list = new ArrayList<>();
     }
 
-    public ObjectRowListWrapper() {
+    public InMemoryTable() {
         this.list = new ArrayList<>();
     }
 

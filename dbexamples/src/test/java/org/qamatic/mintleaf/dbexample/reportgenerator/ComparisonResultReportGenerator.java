@@ -37,7 +37,7 @@ package org.qamatic.mintleaf.dbexample.reportgenerator;
 
 import org.qamatic.mintleaf.MintleafException;
 import org.qamatic.mintleaf.MintleafLogger;
-import org.qamatic.mintleaf.RowListWrapper;
+import org.qamatic.mintleaf.Table;
 import org.qamatic.mintleaf.data.CompareColumnState;
 import org.qamatic.mintleaf.data.CompareRowState;
 import org.qamatic.mintleaf.data.ComparerListener;
@@ -60,7 +60,7 @@ public class ComparisonResultReportGenerator implements ComparerListener {
     }
 
     @Override
-    public void OnBeginCompare(RowListWrapper sourceTable, RowListWrapper targetTable) throws MintleafException {
+    public void OnBeginCompare(Table sourceTable, Table targetTable) throws MintleafException {
         try {
             this.fileWriter.write("<html><head><style> tr,td,table{border:1px silver solid} .pass{ background-color:green;color:white} .fail {background-color:red;color:white} </style></head><body><table>");
             fileWriter.write("<tr>");

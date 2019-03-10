@@ -38,6 +38,6 @@ package org.qamatic.mintleaf;
 /**
  * Created by qamatic on 3/3/16.
  */
-public interface ReadListener<T> {
-    T eachRow(int rowNum, Row row) throws MintleafException;
+public interface ReadListener {
+    void eachRow(int rowNum, Row row) throws MintleafException;
 }

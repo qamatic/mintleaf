@@ -36,6 +36,8 @@
 package org.qamatic.mintleaf;
 
 import org.qamatic.mintleaf.core.*;
+import org.qamatic.mintleaf.core.tables.InMemoryTable;
+import org.qamatic.mintleaf.core.tables.SqlQueryTable;
 import org.qamatic.mintleaf.data.*;
 import org.qamatic.mintleaf.tools.BinaryFileImporter;
 import org.qamatic.mintleaf.tools.CsvExporter;
@@ -227,17 +229,16 @@ public final class Mintleaf {
             return this;
         }
 
-        public Executable<RowListWrapper<T>> build() throws MintleafException {
-            return new Executable<RowListWrapper<T>>() {
+        public Executable<Table<T>> build() throws MintleafException {
+            return new Executable<Table<T>>() {
                 @Override
-                public RowListWrapper<T> execute() throws MintleafException {
-                    final RowListWrapper<T> list = new ObjectRowListWrapper<T>();
+                public Table<T> execute() throws MintleafException {
+                    final Table<T> list = new InMemoryTable<T>();
 
-                    importReader.setReadListener(new ReadListener<T>() {
+                    importReader.setReadListener(new ReadListener() {
                         @Override
-                        public T eachRow(int rowNum, Row row) throws MintleafException {
+                        public void eachRow(int rowNum, Row row) throws MintleafException {
                             list.add((T) row);
-                            return (T) row;
                         }
                     });
                     importReader.read();
@@ -250,28 +251,28 @@ public final class Mintleaf {
 
     public static final class DataComparerBuilder {
         private static final MintleafLogger logger = MintleafLogger.getLogger(DataComparerBuilder.class);
-        private RowListWrapper sourceTable;
-        private RowListWrapper targetTable;
+        private Table sourceTable;
+        private Table targetTable;
         private ComparerListener comparerListener;//= new ConsoleComparerListener();
         private ColumnMatcher columnMatcher;
         private String selectedColumnMaps;
 
         public DataComparerBuilder withSourceTable(List<? extends Row> sourceTable, MetaDataCollection metaDataCollection) {
-            this.sourceTable = new ObjectRowListWrapper(sourceTable, metaDataCollection);
+            this.sourceTable = new InMemoryTable(sourceTable, metaDataCollection);
             return this;
         }
 
-        public DataComparerBuilder withSourceTable(RowListWrapper sourceTable) {
+        public DataComparerBuilder withSourceTable(Table sourceTable) {
             this.sourceTable = sourceTable;
             return this;
         }
 
         public DataComparerBuilder withTargetTable(List<? extends Row> targetTable, MetaDataCollection metaDataCollection) {
-            this.targetTable = new ObjectRowListWrapper(targetTable, metaDataCollection);
+            this.targetTable = new InMemoryTable(targetTable, metaDataCollection);
             return this;
         }
 
-        public DataComparerBuilder withTargetTable(RowListWrapper targetTable) {
+        public DataComparerBuilder withTargetTable(Table targetTable) {
             this.targetTable = targetTable;
             return this;
         }
@@ -299,15 +300,15 @@ public final class Mintleaf {
             DataComparer listComparator = null;
             try {
                 Constructor constructor =
-                        dataComparerClazz.getConstructor(new Class[]{RowListWrapper.class, RowListWrapper.class});
+                        dataComparerClazz.getConstructor(new Class[]{Table.class, Table.class});
                 listComparator = (DataComparer) constructor.newInstance(this.sourceTable, this.targetTable);
                 if (this.columnMatcher != null) {
                     listComparator.setColumnMatcher(this.columnMatcher);
                 } else {
 
                     if (this.selectedColumnMaps == null) {
-                        listComparator.setColumnMatcher(getOrderedColumnMatcher(sourceTable instanceof ResultSetRowListWrapper,
-                                targetTable instanceof ResultSetRowListWrapper));
+                        listComparator.setColumnMatcher(getOrderedColumnMatcher(sourceTable instanceof SqlQueryTable,
+                                targetTable instanceof SqlQueryTable));
                     } else {
                         listComparator.setColumnMatcher(new SelectedColumnMatcher(this.selectedColumnMaps));
                     }

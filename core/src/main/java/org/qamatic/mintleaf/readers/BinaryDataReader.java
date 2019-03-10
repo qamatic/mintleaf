@@ -25,7 +25,7 @@ public abstract class BinaryDataReader<T> extends BaseReader implements Mintleaf
     public abstract Row createRowInstance(byte[] rowChunk);
 
     @Override
-    public T read() throws MintleafException {
+    public void read() throws MintleafException {
         Iterator<byte[]> iterator = this.binaryDataIterable.iterator();
         int i = 0;
         while (iterator.hasNext()) {
@@ -36,7 +36,7 @@ public abstract class BinaryDataReader<T> extends BaseReader implements Mintleaf
                 break;
             }
         }
-        return null;
+
     }
 
     public BinaryDataIterable getIterator() {

@@ -22,7 +22,7 @@ public class ExcelImportTest {
                 withSource(importReader).
                 build();
 
-        RowListWrapper<ExcelRow> rows = (RowListWrapper<ExcelRow>) importToList.execute();
+        Table<ExcelRow> rows = (Table<ExcelRow>) importToList.execute();
         assertEquals(7, rows.size());
         assertEquals("qamatic", rows.getRow(6).getValue(1));
         assertEquals("qamatic", rows.getRow(6).getValue("USERNAME"));
@@ -44,7 +44,7 @@ public class ExcelImportTest {
 //                }).
 //                build();
 //
-//        RowListWrapper<ExcelRow> rows = (RowListWrapper<ExcelRow>) importToList.execute();
+//        Table<ExcelRow> rows = (Table<ExcelRow>) importToList.execute();
 //        assertEquals(7, rows.size());
 //        assertEquals("qamatic", rows.getRow(6).getValue(1));
 //        assertEquals("qamatic", rows.getRow(6).getValue("USERNAME"));

@@ -192,7 +192,8 @@ public class DbConnectionContext<T extends DbQueryExtension> implements Connecti
         return queryBuilder().withSql(sql).withParamValues(parameterValues).buildExecute();
     }
 
-    public <T> List<T> query(String sql, ParameterBinding parameterBinding, final RowMatchListener<T> listener) throws MintleafException {
+    @Override
+    public <T> List<T> query(String sql, ParameterBinding parameterBinding, final RowMatchListener listener) throws MintleafException {
 
         final List<T> rows = new ArrayList<T>();
 
@@ -200,15 +201,16 @@ public class DbConnectionContext<T extends DbQueryExtension> implements Connecti
 
             sqlResultSet.iterate((row, dr) -> {
                 try {
+                    listener.eachRow(row, dr);
                     if (listener.matches(dr))
-                        rows.add(listener.eachRow(row, dr));
-                    if (!listener.canContinueRead(dr)) {
-                        return rows;
-                    }
+                        rows.add((T) dr);
+//                    if (!listener.canContinueRead(dr)) {
+//                        return rows;
+//                    }
                 } catch (MintleafException e) {
                     logger.error("error iterating resultset", e);
                 }
-                return null;
+
             });
         }
         return rows;

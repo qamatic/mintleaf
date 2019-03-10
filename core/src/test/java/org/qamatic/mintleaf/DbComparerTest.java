@@ -99,7 +99,7 @@ public class DbComparerTest extends H2TestCase {
     }
 
 
-    private List<String> assertCompareTable(RowListWrapper sourceList, RowListWrapper targetListList) throws MintleafException {
+    private List<String> assertCompareTable(Table sourceList, Table targetListList) throws MintleafException {
         final List<String> actuals = new ArrayList<>();
 
         DataComparer dataComparer = new Mintleaf.DataComparerBuilder().

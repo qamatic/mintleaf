@@ -1,22 +1,25 @@
 package org.qamatic.mintleaf.core;
 
-import org.qamatic.mintleaf.MintleafException;
-import org.qamatic.mintleaf.MintleafLogger;
-import org.qamatic.mintleaf.ReadListener;
-import org.qamatic.mintleaf.Row;
+import org.qamatic.mintleaf.*;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
+import java.lang.reflect.ParameterizedType;
 import java.nio.charset.Charset;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created by QAmatic Team on 4/28/17.
  */
-public abstract class BaseReader {
+public abstract class BaseReader<T  extends Row> implements MintleafReader {
     private final static MintleafLogger logger = MintleafLogger.getLogger(BaseReader.class);
     private ReadListener readListener;
     private Charset charset;
+    private String delimiter = "/";
+    private Map<String, String> userVariableMapping;
+    private Class<T> rowClassType;
 
     public static InputStream getInputStreamFromFile(String resourceOrFileName) {
         InputStream stream = null;
@@ -35,12 +38,13 @@ public abstract class BaseReader {
                 logger.error("file not found " + resourceOrFileName, e);
             }
         }
+
         return stream;
     }
 
     protected final boolean readRow(int rowNum, Row row) throws MintleafException {
         if (matches(row)) {
-            eachRow(rowNum, row);
+            eachRow(rowNum,  row);
             if (getReadListener() != null) {
                 getReadListener().eachRow(rowNum, row);
             }
@@ -67,15 +71,42 @@ public abstract class BaseReader {
         this.charset = charset;
     }
 
-    public Object eachRow(int rowNum, Row row) throws MintleafException {
-        return null;
+
+    @Override
+    public Map<String, String> getUserVariableMapping() {
+        if (userVariableMapping == null) {
+            userVariableMapping = new HashMap<>();
+        }
+        return userVariableMapping;
     }
 
-    public boolean matches(Row row) {
-        return true;
+    @Override
+    public void setUserVariableMapping(Map userVariableMapping) {
+        this.userVariableMapping = userVariableMapping;
     }
 
-    public boolean canContinueRead(Row row) {
-        return true;
+    @Override
+    public String getDelimiter() {
+        return delimiter;
+    }
+
+    @Override
+    public void setDelimiter(String delimStr) {
+        this.delimiter = delimStr.toUpperCase();
+    }
+
+    @Override
+    public abstract void read() throws MintleafException;
+
+    public Class<T > getRowClassType() {
+        return rowClassType;
+    }
+
+    public void setRowClassType(Class<T> rowClassType) {
+        this.rowClassType = rowClassType;
+    }
+
+    public T eachRow(int rowNum, Row row) throws MintleafException {
+        return (T) row;
     }
 }

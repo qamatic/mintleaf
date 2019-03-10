@@ -33,9 +33,10 @@
  * /
  */
 
-package org.qamatic.mintleaf.core;
+package org.qamatic.mintleaf.core.tables;
 
 import org.qamatic.mintleaf.*;
+import org.qamatic.mintleaf.core.rows.ResultSetRow;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -44,7 +45,7 @@ import java.util.Iterator;
 /**
  * Created by qamatic on 3/4/16.
  */
-public class ResultSetRowListWrapper<T extends Row> implements RowListWrapper<T> {
+public class SqlQueryTable<T extends Row> implements Table<T> {
 
     private ResultSet resultSet;
     private MetaDataCollection resultSetMetaData;
@@ -94,8 +95,8 @@ public class ResultSetRowListWrapper<T extends Row> implements RowListWrapper<T>
 
             private ResultSet getNextRecord() {
                 try {
-                    if (ResultSetRowListWrapper.this.resultSet.next()) {
-                        return ResultSetRowListWrapper.this.resultSet;
+                    if (SqlQueryTable.this.resultSet.next()) {
+                        return SqlQueryTable.this.resultSet;
                     }
                 } catch (SQLException e) {
                     MintleafException.throwException(e);
@@ -123,7 +124,7 @@ public class ResultSetRowListWrapper<T extends Row> implements RowListWrapper<T>
                         MintleafException.throwException("reached end of records, no more elements");
                     }
                 }
-                T t = (T) new ResultSetRowWrapper<T>(next);
+                T t = (T) new ResultSetRow<T>(next);
                 return t;
             }
         };

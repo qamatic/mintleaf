@@ -38,7 +38,7 @@ package org.qamatic.mintleaf;
 /**
  * Created by qamatic on 3/4/16.
  */
-public interface RowListWrapper<T extends Row> extends Iterable<T> {
+public interface Table<T extends Row> extends Iterable<T> {
 
     T getRow(int index) throws MintleafException;
 

@@ -159,7 +159,7 @@ public class OracleQueries extends StandardQueries {
                                         objectNames[0], objectNames[1]));
                     }
 
-                    return null;
+
                 });
 
         return sql.toString();
@@ -201,7 +201,6 @@ public class OracleQueries extends StandardQueries {
                 });
 
 
-                return metaData.get(metaData.size() - 1);
             });
 
         } catch (SQLException e) {
