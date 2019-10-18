@@ -41,6 +41,7 @@ package org.qamatic.mintleaf;
 public enum DbType {
     H2("H2 Database", "jdbc:h2:"),
     MYSQL("MySQL database", "jdbc:mysql:"),
+    POSTGRESQL("Postgres database", "jdbc:postgresql:"),
     ORACLE("Oracle database", "jdbc:oracle:"),
     MSSQL("Microsoft SQL Server database", "jdbc:sqlserver:");
 
