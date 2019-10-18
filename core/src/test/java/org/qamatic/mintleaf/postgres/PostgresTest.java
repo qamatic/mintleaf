@@ -5,7 +5,7 @@ import org.testcontainers.containers.PostgreSQLContainer;
 
 import static org.junit.Assert.assertTrue;
 
-@Ignore
+
 public class PostgresTest {
 
     @Rule
