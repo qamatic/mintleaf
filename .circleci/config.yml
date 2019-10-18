@@ -38,4 +38,5 @@ jobs:
           key: v1-dependencies-{{ checksum "pom.xml" }}
 
       # run tests!
+      - run: mvn -P install-drivers initialize
       - run: mvn test
