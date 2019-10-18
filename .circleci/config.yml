@@ -23,6 +23,9 @@ jobs:
     steps:
       - checkout
 
+     # run tests!
+      - run: mvn initialize -P install-drivers
+
       # Download and cache dependencies
       - restore_cache:
           keys:
@@ -37,5 +40,4 @@ jobs:
             - ~/.m2
           key: v1-dependencies-{{ checksum "pom.xml" }}
 
-      # run tests!
-      - run: mvn initialize -P install-drivers
+
