@@ -18,8 +18,6 @@ jobs:
 
     steps:
       - checkout
-
-     # run tests!
       - run: mvn initialize -P install-drivers
       - run: mvn clean test
 

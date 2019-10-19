@@ -33,47 +33,17 @@
  * /
  */
 
-package org.qamatic.mintleaf;
+package org.qamatic.mintleaf.core.stdqueries;
 
-import org.junit.Rule;
-import org.qamatic.mintleaf.core.ChangeSets;
-import org.testcontainers.containers.MySQLContainer;
+import org.qamatic.mintleaf.ConnectionContext;
 
 /**
- * Created by qamatic on 3/4/16.
+ * Created by qamatic on 3/6/16.
  */
-public class MysqlTestCase {
-
-    @Rule
-    public MySQLContainer mySQLContainer = new MySQLContainer().withDatabaseName("employees");
-
-    private static boolean isRunning=false;
-
-    protected  void initDb() {
-        if (isRunning) {
-            return;
-        }
-        mySQLContainer.start();
-        isRunning = true;
-        Database sysDb = createMySqlDbContext("root", "test");
-
-
-        try {
-            ChangeSets.migrate(sysDb.getNewConnection(), "res:/mysql/mysql-db-setup.sql", "create database and users");
-        } catch (MintleafException e) {
-            MintleafException.throwException(e.getMessage());
-        }
+public class PostgresQueries extends StandardQueries {
+    public PostgresQueries(ConnectionContext connectionContext) {
+        super(connectionContext);
     }
 
-    public  Database createMySqlDbContext(String userName, String password) {
 
-        Database db = new Mintleaf.DatabaseBuilder().
-                withDriverSource(ApacheBasicDataSource.class).
-                withUrl(mySQLContainer.getJdbcUrl()).
-                withUsername(userName).
-                withPassword(password).
-                build();
-
-        return db;
-    }
 }

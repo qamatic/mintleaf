@@ -54,6 +54,7 @@ public class StandardQueries implements DbQueryExtension {
         StandardQueries.registerQueryImplementation(DbType.MSSQL.getJdbcUrlPrefix(), MSSqlQueries.class);
         StandardQueries.registerQueryImplementation(DbType.MYSQL.getJdbcUrlPrefix(), MySqlQueries.class);
         StandardQueries.registerQueryImplementation(DbType.ORACLE.getJdbcUrlPrefix(), OracleQueries.class);
+        StandardQueries.registerQueryImplementation(DbType.POSTGRESQL.getJdbcUrlPrefix(), PostgresQueries.class);
     }
 
     protected final ConnectionContext connectionContext;

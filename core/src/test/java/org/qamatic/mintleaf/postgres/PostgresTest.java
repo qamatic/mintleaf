@@ -10,9 +10,9 @@ public class PostgresTest {
 
     @Rule
     public PostgreSQLContainer postgres = new PostgreSQLContainer()
-            .withDatabaseName("mydb")
-            .withUsername("user")
-            .withPassword("secret");
+            .withDatabaseName("mypgdb")
+            .withUsername("myuser")
+            .withPassword("mysecret");
 
     @Before
     public void before() {
