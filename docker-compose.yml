@@ -1,0 +1,22 @@
+version: '3.3'
+
+services:
+
+  mysql-dev:
+    image: mysql:8.0.2
+    environment:
+      MYSQL_ROOT_PASSWORD: password
+      MYSQL_PASSWORD: password
+      MYSQL_DATABASE: mysqldb
+    ports:
+      - "3308:3306"
+    volumes:
+      - "./data:/var/lib/mysql:rw"
+
+  pgdb:
+    image: postgres
+    environment:
+      POSTGRES_USER: root
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: pgdb
+
