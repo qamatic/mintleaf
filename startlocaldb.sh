@@ -8,7 +8,7 @@ export POSTGRES_DB_URL=jdbc:postgresql://localhost:5432/
 
 mkdir -p ./data/mysqldata
 docker-compose up -d
-
+echo $POSTGRES_DB_URL
 while ! curl http://localhost:5432/ 2>&1 | grep '52'
 do
   sleep 20s
