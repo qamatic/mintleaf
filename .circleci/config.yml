@@ -12,11 +12,7 @@ jobs:
           POSTGRES_DB: pgdb
           POSTGRES_PASSWORD: password
 
-      - image: circleci/openjdk:8-jdk
-        environment:
-          POSTGRES_DB_URL: jdbc:postgresql://localhost:5432/
-          POSTGRES_DB_ADMIN_USERNAME: root
-          POSTGRES_DB_ADMIN_PASSWORD: password
+
 
     working_directory: ~/repo
 
