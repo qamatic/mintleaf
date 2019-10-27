@@ -1,4 +1,4 @@
-package org.qamatic.mintleaf.configuration;
+package org.qamatic.mintleaf.core;
 
 import org.qamatic.mintleaf.MintleafLogger;
 

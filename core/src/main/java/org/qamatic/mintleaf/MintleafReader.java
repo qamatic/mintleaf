@@ -79,14 +79,13 @@ public interface MintleafReader<T extends Row> extends AutoCloseable {
 
     }
 
-    default boolean canContinueRead(Row row){
+    default boolean canContinueRead(Row row) {
         return true;
     }
 
     default boolean matches(T row) {
         return true;
     }
-
 
 
 }

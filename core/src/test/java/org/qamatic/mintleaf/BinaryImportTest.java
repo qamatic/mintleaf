@@ -1,7 +1,9 @@
 package org.qamatic.mintleaf;
 
 import org.junit.Test;
-import org.qamatic.mintleaf.core.*;
+import org.qamatic.mintleaf.core.BinaryDataIterable;
+import org.qamatic.mintleaf.core.ChangeSets;
+import org.qamatic.mintleaf.core.FixedLengthRecordFile;
 import org.qamatic.mintleaf.core.rows.InMemoryRow;
 import org.qamatic.mintleaf.core.tables.InMemoryTable;
 import org.qamatic.mintleaf.readers.BinaryDataReader;

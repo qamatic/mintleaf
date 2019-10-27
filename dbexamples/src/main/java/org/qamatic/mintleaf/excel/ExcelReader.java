@@ -4,7 +4,10 @@ import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
-import org.qamatic.mintleaf.*;
+import org.qamatic.mintleaf.Column;
+import org.qamatic.mintleaf.ColumnMetaDataCollection;
+import org.qamatic.mintleaf.MetaDataCollection;
+import org.qamatic.mintleaf.MintleafException;
 import org.qamatic.mintleaf.core.BaseReader;
 
 import java.io.IOException;
@@ -14,7 +17,7 @@ import java.util.Iterator;
 /**
  * Created by QAmatic Team on 4/25/17.
  */
-public class ExcelReader<T> extends BaseReader  {
+public class ExcelReader<T> extends BaseReader {
 
     private InputStream inputStream;
     private int activeWorkSheet;

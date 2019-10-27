@@ -183,7 +183,7 @@ public class OracleQueries extends StandardQueries {
                 metaData.add(new Column() {
                     {
                         setColumnName(rs.asString("COLUMN_NAME"));
-                        setTypeName(rs.asString("TYPE_NAME"));
+
 
                         if (rs.asString("TYPE_NAME").equals("CHAR")) {
 

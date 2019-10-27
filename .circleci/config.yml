@@ -3,17 +3,24 @@
 # Check https://circleci.com/docs/2.0/language-java/ for more details
 #
 version: 2
-executorType: machine
 jobs:
   build:
     docker:
-    machine:
-      image: ubuntu-1604:201903-01    # pins image to specific version
+      - image: circleci/postgres:9.6.2-alpine
+        environment:
+          POSTGRES_USER: root
+          POSTGRES_DB: pgdb
+          POSTGRES_PASSWORD: password
+
+      - image: circleci/openjdk:8-jdk
+        environment:
+          POSTGRES_DB_URL: jdbc:postgresql://localhost:5432/
+          POSTGRES_DB_ADMIN_USERNAME: root
+          POSTGRES_DB_ADMIN_PASSWORD: password
 
     working_directory: ~/repo
 
     environment:
-      # Customize the JVM maximum heap limit
       MAVEN_OPTS: -Xmx3200m
 
     steps:

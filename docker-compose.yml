@@ -11,10 +11,12 @@ services:
     ports:
       - "3308:3306"
     volumes:
-      - "./data:/var/lib/mysql:rw"
+      - "./data/mysqldata:/var/lib/mysql:rw"
 
   pgdb:
     image: postgres
+    ports:
+      - "5432:5432"
     environment:
       POSTGRES_USER: root
       POSTGRES_PASSWORD: password

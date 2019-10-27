@@ -33,55 +33,41 @@
  * /
  */
 
-package org.qamatic.mintleaf.readers;
+package org.qamatic.mintleaf.mysql;
 
-import org.qamatic.mintleaf.ChangeSet;
+import org.qamatic.mintleaf.ApacheBasicDataSource;
+import org.qamatic.mintleaf.Database;
+import org.qamatic.mintleaf.Mintleaf;
 import org.qamatic.mintleaf.MintleafException;
-import org.qamatic.mintleaf.MintleafLogger;
-import org.qamatic.mintleaf.core.ArgPatternHandler;
-import org.qamatic.mintleaf.core.Readerline;
+import org.qamatic.mintleaf.core.ChangeSets;
 
-import java.io.InputStream;
+/**
+ * Created by qamatic on 3/4/16.
+ */
+public class MysqlTestCase {
 
-public class TextStreamReader<T> extends SqlStreamReader {
 
-    private final static MintleafLogger logger = MintleafLogger.getLogger(TextStreamReader.class);
-
-    public TextStreamReader(String resource) {
-        super(resource);
+    static {
+        initDb();
     }
 
-    public TextStreamReader(InputStream stream) {
-        super(stream);
-    }
-
-
-    @Override
-    public void read() throws MintleafException {
-        skipLineFeeds = true;
-        super.read();
-
-        if (getReadListener() != null && content.length() != 0) {
-            getReadListener().eachRow(0, new ChangeSet("0", getDelimiter(), content.toString()));
+    protected static void initDb() {
+        Database sysDb = createDbContext(System.getenv("MYSQL_DB_ADMIN_USERNAME"),
+                System.getenv("MYSQL_DB_ADMIN_PASSWORD"));
+        try {
+            ChangeSets.migrate(sysDb.getNewConnection(), "res:/mysql/mysql-db-setup.sql", "create database and users");
+        } catch (MintleafException e) {
+            MintleafException.throwException(e.getMessage());
         }
     }
 
-    protected Readerline readLine() {
-        return line -> {
-            content.append(line);
-            return true;
-        };
+    public static Database createDbContext(String userName, String password) {
+        Database db = new Mintleaf.DatabaseBuilder().
+                withDriverSource(ApacheBasicDataSource.class).
+                withUrl(System.getenv("MYSQL_DB_URL")).
+                withUsername(userName).
+                withPassword(password).
+                build();
+        return db;
     }
-
-    public String getContent() {
-        ArgPatternHandler argPatternHandler = new ArgPatternHandler(content.toString());
-        argPatternHandler.withUserProperties(getUserVariableMapping());
-        return argPatternHandler.getText();
-    }
-
-    @Override
-    public String toString() {
-        return getContent();
-    }
-
 }

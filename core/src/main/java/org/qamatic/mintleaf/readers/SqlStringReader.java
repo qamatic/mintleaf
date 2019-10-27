@@ -37,7 +37,7 @@ package org.qamatic.mintleaf.readers;
 
 import org.qamatic.mintleaf.ChangeSet;
 import org.qamatic.mintleaf.MintleafException;
-import org.qamatic.mintleaf.configuration.ArgPatternHandler;
+import org.qamatic.mintleaf.core.ArgPatternHandler;
 import org.qamatic.mintleaf.core.BaseSqlReader;
 
 public class SqlStringReader<T> extends BaseSqlReader<T> {

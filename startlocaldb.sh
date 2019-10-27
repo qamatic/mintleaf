@@ -1,2 +1,2 @@
-mkdir -p ./data
+mkdir -p ./data/mysqldata
 docker-compose up

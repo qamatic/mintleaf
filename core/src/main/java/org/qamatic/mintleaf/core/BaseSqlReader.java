@@ -35,13 +35,10 @@
 
 package org.qamatic.mintleaf.core;
 
-import org.qamatic.mintleaf.MintleafException;
 import org.qamatic.mintleaf.MintleafLogger;
-import org.qamatic.mintleaf.MintleafReader;
 
 
-
-public abstract class BaseSqlReader<T> extends BaseReader  {
+public abstract class BaseSqlReader<T> extends BaseReader {
 
     private final static MintleafLogger logger = MintleafLogger.getLogger(BaseSqlReader.class);
 

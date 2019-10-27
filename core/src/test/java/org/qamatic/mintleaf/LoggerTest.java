@@ -43,16 +43,16 @@ public class LoggerTest {
     @Test
     public void testDefaultLogger() {
         MintleafLogger logger = MintleafLogger.getLogger(LoggerTest.class);
-        assertEquals(logger.getClass(), NoLogger.class);
+        assertEquals(logger.getClass(), ConsoleLogger.class);
         assertTrue(MintleafLogger.isSingletonLogger());
     }
 
 
     @Test
     public void testInjectCustomLogger() {
-        MintleafLogger.setLoggerType(ConsoleLogger.class);
+        MintleafLogger.setLoggerType(NoLogger.class);
         MintleafLogger logger = MintleafLogger.getLogger(LoggerTest.class);
-        assertEquals(logger.getClass(), ConsoleLogger.class);
+        assertEquals(logger.getClass(), NoLogger.class);
         assertTrue(MintleafLogger.isSingletonLogger());
         MintleafLogger logger1 = MintleafLogger.getLogger(LoggerTest.class);
         assertTrue("not of same logger instance", logger == logger1);

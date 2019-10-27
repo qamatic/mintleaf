@@ -44,7 +44,7 @@ public abstract class MintleafLogger {
 
 
     private static boolean singletonLogger = true;
-    private static Class<? extends MintleafLogger> loggerType = NoLogger.class;
+    private static Class<? extends MintleafLogger> loggerType = ConsoleLogger.class;
 
     public synchronized static MintleafLogger getLogger(Class<?> clazz) {
         MintleafLogger logger = null;
@@ -79,7 +79,9 @@ public abstract class MintleafLogger {
         if (loggerType == null) {
             loggerType = NoLogger.class;
             singletonLogger = true;//force to be at app level
-            MintleafLogger.mintLeafLogger = getLoggerInstance(NoLogger.class);
+        }
+        if (singletonLogger){
+            MintleafLogger.mintLeafLogger = getLoggerInstance(loggerType);
         }
     }
 

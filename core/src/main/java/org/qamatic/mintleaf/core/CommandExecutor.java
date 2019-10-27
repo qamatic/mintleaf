@@ -37,7 +37,7 @@ package org.qamatic.mintleaf.core;
 
 import org.qamatic.mintleaf.*;
 
-public class CommandExecutor  implements ReadListener {
+public class CommandExecutor implements ReadListener {
 
     private static final MintleafLogger logger = MintleafLogger.getLogger(CommandExecutor.class);
     protected final ConnectionContext connectionContext;

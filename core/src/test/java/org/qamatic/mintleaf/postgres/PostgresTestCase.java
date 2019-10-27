@@ -33,47 +33,39 @@
  * /
  */
 
-package org.qamatic.mintleaf;
+package org.qamatic.mintleaf.postgres;
 
-import org.junit.Rule;
+import org.qamatic.mintleaf.*;
 import org.qamatic.mintleaf.core.ChangeSets;
-import org.testcontainers.containers.MySQLContainer;
 
 /**
  * Created by qamatic on 3/4/16.
  */
-public class MysqlTestCase {
-
-    @Rule
-    public MySQLContainer mySQLContainer = new MySQLContainer().withDatabaseName("employees");
-
-    private static boolean isRunning=false;
-
-    protected  void initDb() {
-        if (isRunning) {
-            return;
-        }
-        mySQLContainer.start();
-        isRunning = true;
-        Database sysDb = createMySqlDbContext("root", "test");
+public class PostgresTestCase {
 
 
+    static {
+        MintleafLogger.setLoggerType(ConsoleLogger.class, true);
+        initDb();
+    }
+
+    protected static void initDb() {
+        Database sysDb = createDbContext(System.getenv("POSTGRES_DB_ADMIN_USERNAME"),
+                System.getenv("POSTGRES_DB_ADMIN_PASSWORD"), "postgres");
         try {
-            ChangeSets.migrate(sysDb.getNewConnection(), "res:/mysql/mysql-db-setup.sql", "create database and users");
+            ChangeSets.migrate(sysDb.getNewConnection(), "res:/postgres/postgres-db-setup.sql", "create northwind database");
         } catch (MintleafException e) {
             MintleafException.throwException(e.getMessage());
         }
     }
 
-    public  Database createMySqlDbContext(String userName, String password) {
-
+    public static Database createDbContext(String userName, String password, String dbName) {
         Database db = new Mintleaf.DatabaseBuilder().
                 withDriverSource(ApacheBasicDataSource.class).
-                withUrl(mySQLContainer.getJdbcUrl()).
+                withUrl(System.getenv("POSTGRES_DB_URL")+dbName).
                 withUsername(userName).
                 withPassword(password).
                 build();
-
         return db;
     }
 }

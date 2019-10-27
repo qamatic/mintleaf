@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://maven.apache.org/POM/4.0.0"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>org.qamatic</groupId>
@@ -9,7 +10,10 @@
     <version>1.8.43-SNAPSHOT</version>
 
     <name>Mintleaf</name>
-    <description>Welcome to the Mintleaf! Database Migration and Testing simplified! Mintleaf is a light weight framework tool helps you to advance your database developement on continuous integration / continuous delivery model as easy as possible.</description>
+    <description>Welcome to the Mintleaf! Database Migration and Testing simplified! Mintleaf is a light weight
+        framework tool helps you to advance your database developement on continuous integration / continuous delivery
+        model as easy as possible.
+    </description>
     <url>http://www.mintleafdata.org</url>
 
     <modules>
@@ -152,24 +156,6 @@
                 <version>3.14</version>
             </dependency>
             <dependency>
-                <groupId>org.testcontainers</groupId>
-                <artifactId>postgresql</artifactId>
-                <version>1.12.2</version>
-                <scope>test</scope>
-            </dependency>
-            <dependency>
-                <groupId>org.testcontainers</groupId>
-                <artifactId>oracle-xe</artifactId>
-                <version>1.12.2</version>
-                <scope>test</scope>
-            </dependency>
-            <dependency>
-                <groupId>org.testcontainers</groupId>
-                <artifactId>mysql</artifactId>
-                <version>1.12.2</version>
-                <scope>test</scope>
-            </dependency>
-            <dependency>
                 <groupId>org.postgresql</groupId>
                 <artifactId>postgresql</artifactId>
                 <version>42.2.5</version>
@@ -219,7 +205,7 @@
                         <format>html</format>
                         <format>xml</format>
                     </formats>
-                    <check />
+                    <check/>
                 </configuration>
             </plugin>
 
@@ -310,7 +296,7 @@
                                     <head>Example :</head>
                                 </tag>
                             </tags>
-                            <excludePackageNames />
+                            <excludePackageNames/>
                         </configuration>
                     </plugin>
                     <plugin>

@@ -8,9 +8,22 @@
         <type>H2</type>
         <url>jdbc:h2:file:./target/h2testdb1;mv_store=false;</url>
     </database>
+    <database>
+        <id>h2testdb</id>
+        <type>H2</type>
+        <url>jdbc:h2:file:./target/h2testdb1;mv_store=false;</url>
+    </database>
     <schemaVersions>
         <version>
             <id>1.0</id>
+            <changeSets>
+                create schema,
+                load seed data
+            </changeSets>
+            <scriptLocation>changesets/1.0/*.sql</scriptLocation>
+        </version>
+        <version>
+            <id>2.0</id>
             <changeSets>
                 create schema,
                 load seed data

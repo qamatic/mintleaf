@@ -1,35 +1,38 @@
 package org.qamatic.mintleaf.postgres;
 
-import org.junit.*;
-import org.testcontainers.containers.PostgreSQLContainer;
+import org.junit.Before;
+import org.junit.Test;
+import org.qamatic.mintleaf.ConnectionContext;
+import org.qamatic.mintleaf.Database;
+import org.qamatic.mintleaf.MintleafException;
+import org.qamatic.mintleaf.SqlResultSet;
+import org.qamatic.mintleaf.core.ChangeSets;
 
-import static org.junit.Assert.assertTrue;
+import java.sql.SQLException;
 
+import static junit.framework.TestCase.assertEquals;
+import static junit.framework.TestCase.assertNotNull;
 
-public class PostgresTest {
+public class PostgresTest extends PostgresTestCase {
 
-    @Rule
-    public PostgreSQLContainer postgres = new PostgreSQLContainer()
-            .withDatabaseName("mypgdb")
-            .withUsername("myuser")
-            .withPassword("mysecret");
 
     @Before
-    public void before() {
-        postgres.start();
-    }
-
-    @After
-    public void after() {
-        postgres.stop();
+    public void setup() {
+        initDb();
     }
 
     @Test
-    public void testConnect(){
-        System.out.printf("postgres db running, db-name: '%s', user: '%s', jdbc-url: '%s'%n ",
-                postgres.getDatabaseName(),
-                postgres.getUsername(),
-                postgres.getJdbcUrl());
-        assertTrue(postgres.isRunning());
+    public void checkCategroiesCount() throws MintleafException, SQLException {
+        Database employeesDb = createDbContext("northwind_user", "thewindisblowing", "northwind");
+        try (ConnectionContext ctx = employeesDb.getNewConnection()) {
+
+                 ChangeSets.migrate(ctx, "res:/postgres/postgres-northwind-db.sql", "create tables, load categories");
+
+        }
+        try (ConnectionContext ctx = employeesDb.getNewConnection()) {
+            SqlResultSet resultSet = ctx.queryBuilder().withSql("Select count(*) from categories").buildSelect();
+            assertEquals(7, resultSet.first().getInt(1));
+        }
     }
+
 }

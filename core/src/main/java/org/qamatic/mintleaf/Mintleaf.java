@@ -35,7 +35,9 @@
 
 package org.qamatic.mintleaf;
 
-import org.qamatic.mintleaf.core.*;
+import org.qamatic.mintleaf.core.BasicDatabase;
+import org.qamatic.mintleaf.core.FluentJdbc;
+import org.qamatic.mintleaf.core.JdbcDriverSource;
 import org.qamatic.mintleaf.core.tables.InMemoryTable;
 import org.qamatic.mintleaf.core.tables.SqlQueryTable;
 import org.qamatic.mintleaf.data.*;

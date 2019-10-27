@@ -1,9 +1,12 @@
-package org.qamatic.mintleaf;
+package org.qamatic.mintleaf.mysql;
 
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Ignore;
 import org.junit.Test;
+import org.qamatic.mintleaf.ConnectionContext;
+import org.qamatic.mintleaf.Database;
+import org.qamatic.mintleaf.MintleafException;
+import org.qamatic.mintleaf.SqlResultSet;
 import org.qamatic.mintleaf.core.ChangeSets;
 
 import java.sql.SQLException;
@@ -17,15 +20,15 @@ import static junit.framework.TestCase.assertEquals;
 public class MySqlDbQueriesTest extends MysqlTestCase {
 
 
-@Before
-    public void setup(){
+    @Before
+    public void setup() {
         initDb();
     }
 
 
-    @Test
+    @Ignore
     public void mysqlDepartmentQueryTest() throws MintleafException, SQLException {
-        Database employeesDb = createMySqlDbContext("testuser1", "testpassword1");
+        Database employeesDb = createDbContext("testuser1", "testpassword1");
         try (ConnectionContext ctx = employeesDb.getNewConnection()) {
             ChangeSets.migrate(ctx, "res:/mysql/mysql-sample-db-employees.sql", "create employees sample database");
             ChangeSets.migrate(ctx, "res:/mysql/mysql_load_departments.dump", "load departments");

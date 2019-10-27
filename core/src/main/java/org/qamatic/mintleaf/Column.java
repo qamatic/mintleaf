@@ -40,7 +40,6 @@ import java.sql.Types;
 
 public class Column {
     protected String columnName;
-    protected String typeName;
     protected int dataType;
     protected boolean nullable;
     protected int columnSize;
@@ -78,13 +77,6 @@ public class Column {
         this.columnName = columnName;
     }
 
-    public String getTypeName() {
-        return typeName;
-    }
-
-    public void setTypeName(String dataType) {
-        typeName = dataType;
-    }
 
     public int getDatatype() {
         return dataType;
@@ -98,12 +90,12 @@ public class Column {
         return nullable;
     }
 
-    public void setNullable(int nullable) {
-        this.nullable = nullable == 1;
-    }
-
     public void setNullable(boolean nullable) {
         this.nullable = nullable;
+    }
+
+    public void setNullable(int nullable) {
+        this.nullable = nullable == 1;
     }
 
     public int getColumnSize() {
@@ -159,8 +151,8 @@ public class Column {
         return ignoreColumn;
     }
 
-    public void setIgnoreForTypeObjectCreation(boolean ignoreForTypeObjectCreation) {
-        ignoreColumn = ignoreForTypeObjectCreation;
+    public void setIgnoreColumn(boolean ignore) {
+        ignoreColumn = ignore;
     }
 
 }

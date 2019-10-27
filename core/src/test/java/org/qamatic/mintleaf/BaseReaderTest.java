@@ -4,7 +4,6 @@ import org.junit.Test;
 import org.qamatic.mintleaf.core.BaseReader;
 import org.qamatic.mintleaf.core.rows.InMemoryRow;
 
-
 import java.sql.*;
 import java.time.Duration;
 import java.time.Instant;
@@ -46,21 +45,20 @@ public class BaseReaderTest {
         Class.forName("org.sqlite.JDBC");
 
         Connection connection = null;
-        try
-        {
+        try {
             // create a database connection
-            connection = DriverManager.getConnection("jdbc:sqlite:mem:");
+            connection = DriverManager.getConnection("jdbc:sqlite:target/h2testdb1013");
             Statement statement = connection.createStatement();
             statement.setQueryTimeout(30);  // set timeout to 30 sec.
             Instant start = Instant.now();
             statement.executeUpdate("drop table if exists person");
-          //  statement.executeUpdate("create table person (ID NUMBER (18)  NOT NULL, NAME VARCHAR2 (60 CHAR)  NOT NULL)");
-           statement.executeUpdate("create table person (id integer, name string)");
-         statement.executeUpdate("begin transaction");
-            for (int i=0;i<1000;i++) {
+            //  statement.executeUpdate("create table person (ID NUMBER (18)  NOT NULL, NAME VARCHAR2 (60 CHAR)  NOT NULL)");
+            statement.executeUpdate("create table person (id integer, name string)");
+            statement.executeUpdate("begin transaction");
+            for (int i = 0; i < 1000; i++) {
                 statement.executeUpdate(String.format("insert into person values(%s, 'leo-%s')", i, i));
             }
-           statement.executeUpdate("end transaction");
+            statement.executeUpdate("end transaction");
             ResultSet rs = statement.executeQuery("select * from person order by name desc");
 //            while(rs.next())
 //            {
@@ -72,14 +70,11 @@ public class BaseReaderTest {
 
             long timeElapsed = Duration.between(start, finish).toMillis();  //in millis
             System.out.println(timeElapsed);
-        }
-        catch(SQLException e)
-        {
+        } catch (SQLException e) {
             // if the error message is "out of memory",
             // it probably means no database file is found
             System.err.println(e.getMessage());
-        }
-        finally {
+        } finally {
             try {
                 if (connection != null)
                     connection.close();
@@ -117,24 +112,23 @@ public class BaseReaderTest {
         reader.read();
     }
 
-    private class CustomReader<T extends Row> extends BaseReader<T>{
-
+    private class CustomReader<T extends Row> extends BaseReader<T> {
 
 
         @Override
         public void read() throws MintleafException {
 
-            for(int i=0;i<3;i++){
+            for (int i = 0; i < 3; i++) {
 
 
-                    try {
-                        T r =  getRowClassType().newInstance();
-                        if (!readRow(0, r)){
-                            break;
-                        }
-                    } catch ( Exception e) {
-                        e.printStackTrace();
+                try {
+                    T r = getRowClassType().newInstance();
+                    if (!readRow(0, r)) {
+                        break;
                     }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
 
             }
         }

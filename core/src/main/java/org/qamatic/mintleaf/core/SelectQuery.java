@@ -144,7 +144,7 @@ public class SelectQuery implements Executable<SqlResultSet> {
         }
 
         @Override
-        public  void iterate(RowMatchListener listener) throws MintleafException, MintleafException {
+        public void iterate(RowMatchListener listener) throws MintleafException, MintleafException {
             try {
                 int i = 0;
                 while (getResultSet().next()) {

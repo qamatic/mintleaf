@@ -5,7 +5,6 @@ import org.qamatic.mintleaf.*;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
-import java.lang.reflect.ParameterizedType;
 import java.nio.charset.Charset;
 import java.util.HashMap;
 import java.util.Map;
@@ -13,7 +12,7 @@ import java.util.Map;
 /**
  * Created by QAmatic Team on 4/28/17.
  */
-public abstract class BaseReader<T  extends Row> implements MintleafReader {
+public abstract class BaseReader<T extends Row> implements MintleafReader {
     private final static MintleafLogger logger = MintleafLogger.getLogger(BaseReader.class);
     private ReadListener readListener;
     private Charset charset;
@@ -44,7 +43,7 @@ public abstract class BaseReader<T  extends Row> implements MintleafReader {
 
     protected final boolean readRow(int rowNum, Row row) throws MintleafException {
         if (matches(row)) {
-            eachRow(rowNum,  row);
+            eachRow(rowNum, row);
             if (getReadListener() != null) {
                 getReadListener().eachRow(rowNum, row);
             }
@@ -98,7 +97,7 @@ public abstract class BaseReader<T  extends Row> implements MintleafReader {
     @Override
     public abstract void read() throws MintleafException;
 
-    public Class<T > getRowClassType() {
+    public Class<T> getRowClassType() {
         return rowClassType;
     }
 
