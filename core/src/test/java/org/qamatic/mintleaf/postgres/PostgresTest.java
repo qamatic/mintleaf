@@ -1,7 +1,6 @@
 package org.qamatic.mintleaf.postgres;
 
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.qamatic.mintleaf.ConnectionContext;
 import org.qamatic.mintleaf.Database;
@@ -22,7 +21,7 @@ public class PostgresTest extends PostgresTestCase {
         initDb();
     }
 
-    @Ignore
+    @Test
     public void checkCategroiesCount() throws MintleafException, SQLException {
         Database employeesDb = createDbContext("northwind_user", "thewindisblowing", "northwind");
         try (ConnectionContext ctx = employeesDb.getNewConnection()) {
