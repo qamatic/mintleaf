@@ -1,4 +1,4 @@
-
+-- https://github.com/pthom/northwind_psql
 -- <ChangeSet id="create northwind database" delimiter=";" />
 
 DROP DATABASE IF EXISTS northwind;

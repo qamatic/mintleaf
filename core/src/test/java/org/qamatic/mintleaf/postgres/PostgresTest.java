@@ -18,7 +18,7 @@ public class PostgresTest extends PostgresTestCase {
 
     @Before
     public void setup() {
-        initDb();
+        initDb("northwind");
     }
 
     @Test

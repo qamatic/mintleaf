@@ -46,14 +46,13 @@ public class PostgresTestCase {
 
     static {
         MintleafLogger.setLoggerType(ConsoleLogger.class, true);
-        initDb();
     }
 
-    protected static void initDb() {
+    protected static void initDb(String db) {
         Database sysDb = createDbContext(System.getenv("POSTGRES_DB_ADMIN_USERNAME"),
                 System.getenv("POSTGRES_DB_ADMIN_PASSWORD"), "postgres");
         try {
-            ChangeSets.migrate(sysDb.getNewConnection(), "res:/postgres/postgres-db-setup.sql", "create northwind database");
+            ChangeSets.migrate(sysDb.getNewConnection(), String.format("res:/postgres/postgres-db-setup-%s.sql", db), "create northwind database");
         } catch (MintleafException e) {
             MintleafException.throwException(e.getMessage());
         }
