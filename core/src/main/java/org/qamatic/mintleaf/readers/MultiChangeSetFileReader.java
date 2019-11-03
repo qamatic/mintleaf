@@ -50,7 +50,7 @@ public class MultiChangeSetFileReader<T> extends BaseReader implements ChangeSet
 
     private static final MintleafLogger logger = MintleafLogger.getLogger(MultiChangeSetFileReader.class);
     private final HashMap<String, ChangeSet> changeSets = new HashMap<>();
-    private Map<String, String> userVariableMapping;
+    private Map<String, Object> userVariableMapping;
     private String[] paths;
 
     public MultiChangeSetFileReader(String[] paths) {
@@ -97,7 +97,7 @@ public class MultiChangeSetFileReader<T> extends BaseReader implements ChangeSet
     }
 
     @Override
-    public Map<String, String> getUserVariableMapping() {
+    public Map<String, Object> getUserVariableMapping() {
         if (userVariableMapping == null) {
             userVariableMapping = new HashMap<>();
         }
@@ -105,7 +105,7 @@ public class MultiChangeSetFileReader<T> extends BaseReader implements ChangeSet
     }
 
     @Override
-    public void setUserVariableMapping(Map userVariableMapping) {
+    public void setUserVariableMapping(Map  userVariableMapping) {
         this.userVariableMapping = userVariableMapping;
     }
 }

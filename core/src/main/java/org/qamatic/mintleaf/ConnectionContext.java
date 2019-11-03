@@ -40,6 +40,7 @@ import org.qamatic.mintleaf.core.StoredProcedure;
 
 import java.sql.Connection;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by QAmatic Team on 3/19/17.
@@ -61,6 +62,8 @@ public interface ConnectionContext<T extends DbQueryExtension> extends AutoClose
 
     T getDbQueries();
 
+    void setUserVariableMapping(Map<String, Object> userVariableMapping);
+    Map<String, Object> getUserVariableMapping();
 
     FluentJdbc.Builder queryBuilder();
 

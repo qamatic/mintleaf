@@ -33,9 +33,11 @@
  * /
  */
 
-package org.qamatic.mintleaf;
+package org.qamatic.mintleaf.core;
 
 
+import org.qamatic.mintleaf.MetaDataCollection;
+import org.qamatic.mintleaf.MintleafException;
 import org.qamatic.mintleaf.core.rows.InMemoryRow;
 
 /**

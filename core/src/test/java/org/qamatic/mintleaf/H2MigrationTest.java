@@ -35,57 +35,29 @@
 
 package org.qamatic.mintleaf;
 
-import java.nio.charset.Charset;
-import java.util.Map;
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.Test;
+import org.qamatic.mintleaf.core.ChangeSets;
 
-public interface MintleafReader<T extends Row> extends AutoCloseable {
+import java.io.IOException;
+import java.sql.SQLException;
 
+public class H2MigrationTest extends H2TestCase {
 
-    void read() throws MintleafException;
-
-    default Map<String, Object> getUserVariableMapping() {
-        MintleafException.throwException("not implemented");
-        return null;
+    @Before
+    public void cleanDb() throws MintleafException {
+        ChangeSets.migrate(testDb.getNewConnection(), "res:/Testddl.sql", "clean db");
+        Assert.assertFalse(testDbQueries.isTableExists("mintleaf.TABLE2"));
     }
 
-    default void setUserVariableMapping(Map<String, Object>  userVariableMapping) {
-        MintleafException.throwException("not implemented");
-    }
+    @Test
+    public void testMintleafLog() throws SQLException, IOException, MintleafException {
 
-    default ReadListener getReadListener() throws MintleafException {
-        MintleafException.throwException("not implemented");
-        return null;
-    }
-
-    default void setReadListener(ReadListener readListener) {
-        MintleafException.throwException("not implemented");
-    }
-
-    default String getDelimiter() {
-        MintleafException.throwException("not implemented");
-        return null;
-    }
-
-    default void setDelimiter(String delimStr) {
-        MintleafException.throwException("not implemented");
-    }
-
-    default Charset getCharset() {
-        return Charset.defaultCharset();
-    }
-
-    @Override
-    default void close() {
+        Assert.assertTrue(testDbQueries.isTableExists("mintleaf_logs"));
 
     }
 
-    default boolean canContinueRead(Row row) {
-        return true;
-    }
-
-    default boolean matches(T row) {
-        return true;
-    }
 
 
 

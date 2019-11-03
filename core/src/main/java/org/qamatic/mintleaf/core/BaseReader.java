@@ -17,7 +17,7 @@ public abstract class BaseReader<T extends Row> implements MintleafReader {
     private ReadListener readListener;
     private Charset charset;
     private String delimiter = "/";
-    private Map<String, String> userVariableMapping;
+    private Map<String, Object> userVariableMapping;
     private Class<T> rowClassType;
 
     public static InputStream getInputStreamFromFile(String resourceOrFileName) {
@@ -72,7 +72,7 @@ public abstract class BaseReader<T extends Row> implements MintleafReader {
 
 
     @Override
-    public Map<String, String> getUserVariableMapping() {
+    public Map<String, Object> getUserVariableMapping() {
         if (userVariableMapping == null) {
             userVariableMapping = new HashMap<>();
         }

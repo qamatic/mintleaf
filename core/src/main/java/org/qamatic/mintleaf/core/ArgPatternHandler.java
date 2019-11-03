@@ -16,21 +16,21 @@ public class ArgPatternHandler {
 
     private final static Pattern p = Pattern.compile("\\$\\{(.+?)\\}", Pattern.CASE_INSENSITIVE | Pattern.MULTILINE);
     private String text;
-    private Map<String, String> userProperties;
+    private Map<String, Object> userProperties;
     private boolean bDone;
 
     public ArgPatternHandler(String text) {
         this.text = text;
     }
 
-    public Map<String, String> getUserProperties() {
+    public Map<String, Object> getUserProperties() {
         if (userProperties == null) {
             userProperties = new HashMap<>();
         }
         return userProperties;
     }
 
-    public ArgPatternHandler withUserProperties(Map<String, String> userProperties) {
+    public ArgPatternHandler withUserProperties(Map<String, Object> userProperties) {
         this.userProperties = userProperties;
         return this;
     }
@@ -74,7 +74,7 @@ public class ArgPatternHandler {
         StringBuffer sb = new StringBuffer();
         while (m.find()) {
             if (getUserProperties().containsKey(m.group(1))) {
-                m.appendReplacement(sb, getUserProperties().get(m.group(1)));
+                m.appendReplacement(sb, String.valueOf(getUserProperties().get(m.group(1))));
             }
         }
         m.appendTail(sb);

@@ -74,11 +74,15 @@ public class StandardQueries implements DbQueryExtension {
     }
 
     public static String[] utilsSplitDottedObjectNames(String objectName) throws MintleafException {
-        final String[] objectNames = objectName.split(Pattern.quote("."));
+        final String[] objectNames = cleanObjectName(objectName);
         if (objectNames.length != 2) {
             throw new MintleafException(String.format("getMetaData expects objectName parameter to be <SCHEMA NAME>.<OBJECT NAME> for example HRDB.COUNTRIES.  Invalid value: %s", objectName));
         }
         return objectNames;
+    }
+
+    public static String[] cleanObjectName(String objectName) throws MintleafException {
+        return objectName.toUpperCase().split(Pattern.quote("."));
     }
 
     public <T> List<T> query(String sql, ParameterBinding parameterBinding, final RowMatchListener<T> listener) throws MintleafException {

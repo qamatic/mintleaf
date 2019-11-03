@@ -33,10 +33,13 @@
  * /
  */
 
-package org.qamatic.mintleaf;
+package org.qamatic.mintleaf.core;
 
 import org.junit.Assert;
 import org.junit.Test;
+import org.qamatic.mintleaf.Column;
+import org.qamatic.mintleaf.ColumnMetaDataCollection;
+import org.qamatic.mintleaf.MintleafException;
 
 import java.sql.Date;
 import java.sql.Types;

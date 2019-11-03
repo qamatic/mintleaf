@@ -47,4 +47,6 @@ public interface SqlScript extends AutoCloseable {
     }
 
     MintleafReader getReader();
+
+    ConnectionContext getConnectionContext();
 }

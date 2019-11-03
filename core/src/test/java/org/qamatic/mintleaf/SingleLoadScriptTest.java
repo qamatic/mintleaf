@@ -43,6 +43,8 @@ import org.qamatic.mintleaf.core.SqlScriptFile;
 import java.io.IOException;
 import java.sql.SQLException;
 
+import static junit.framework.TestCase.assertEquals;
+
 /**
  * Created by qamatic on 3/6/16.
  */
@@ -69,6 +71,20 @@ public class SingleLoadScriptTest extends H2TestCase {
         script.getReader().getUserVariableMapping().put("user_name", "TINTIN");
         script.apply();
         Assert.assertTrue(testDbQueries.isTableExists("HRDB.USERS"));
+    }
+
+
+    @Test
+    public void checkScriptUsesConnectionPropertyVars() throws MintleafException {
+
+        SqlScript script = new SqlScriptFile(testDb.getNewConnection(), "res:/connection-prop-variable.sql", ";");
+
+        script.getConnectionContext().getUserVariableMapping().put("DEFAULT_SCHEMA", "HRDB");
+        String schemaName = (String) script.getReader().getUserVariableMapping().get("DEFAULT_SCHEMA");
+        assertEquals("HRDB", schemaName);
+
+//        script.apply();
+//        Assert.assertTrue(testDbQueries.isTableExists("HRDB.USERS"));
     }
 
 

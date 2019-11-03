@@ -1,4 +1,4 @@
-package org.qamatic.mintleaf;
+package org.qamatic.mintleaf.core;
 
 public class Apple {
     private String color;

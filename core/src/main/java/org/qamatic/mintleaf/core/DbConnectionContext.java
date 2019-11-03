@@ -43,7 +43,9 @@ import java.lang.reflect.InvocationTargetException;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by QAmatic Team on 3/19/17.
@@ -56,6 +58,7 @@ public class DbConnectionContext<T extends DbQueryExtension> implements Connecti
     private DriverSource driverSource;
     private boolean autoCloseable = true;
     private boolean inTransaction = false;
+    private Map<String, Object> userVariableMapping;
 
     public DbConnectionContext(DriverSource driverSource, boolean autoCloseable) {
         this.driverSource = driverSource;
@@ -226,5 +229,16 @@ public class DbConnectionContext<T extends DbQueryExtension> implements Connecti
         StoredProcedure proc = new StoredProcedure(this, procedureCall, callType, parameterBinding);
         proc.setExecutionResultListener(executionResultListener);
         return proc;
+    }
+
+    public Map<String, Object> getUserVariableMapping() {
+        if (userVariableMapping == null) {
+            userVariableMapping = new HashMap<>();
+        }
+        return userVariableMapping;
+    }
+
+    public void setUserVariableMapping(Map<String, Object> userVariableMapping) {
+        this.userVariableMapping = userVariableMapping;
     }
 }

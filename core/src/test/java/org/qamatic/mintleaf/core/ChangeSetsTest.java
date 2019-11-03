@@ -33,11 +33,13 @@
  * /
  */
 
-package org.qamatic.mintleaf;
+package org.qamatic.mintleaf.core;
 
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import org.qamatic.mintleaf.H2TestCase;
+import org.qamatic.mintleaf.MintleafException;
 import org.qamatic.mintleaf.core.ChangeSets;
 
 import java.io.IOException;

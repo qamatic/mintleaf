@@ -40,8 +40,6 @@ import org.qamatic.mintleaf.ColumnMetaDataCollection;
 import org.qamatic.mintleaf.ConnectionContext;
 import org.qamatic.mintleaf.MintleafException;
 
-import java.util.regex.Pattern;
-
 /**
  * Created by qamatic on 3/6/16.
  */
@@ -55,13 +53,10 @@ public class H2Queries extends StandardQueries {
     @Override
     public ColumnMetaDataCollection getMetaData(String objectName) throws MintleafException {
         final ColumnMetaDataCollection metaData = new ColumnMetaDataCollection(objectName);
-        if (objectName != null) {
-            objectName = objectName.toUpperCase();
-        }
 
-        String[] splits = objectName.split(Pattern.quote("."));
+        String[] splits = cleanObjectName(objectName);
 
-
+        final String select = "select * from information_schema.columns ";
         String sql = String.format("select * from information_schema.columns where TABLE_SCHEMA ='%s' and TABLE_NAME='%s'", splits[0], splits[1]);
         query(sql, (rowNum, rs) -> {
             metaData.add(new Column() {

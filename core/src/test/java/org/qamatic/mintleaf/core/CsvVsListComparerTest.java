@@ -33,10 +33,10 @@
  * /
  */
 
-package org.qamatic.mintleaf;
+package org.qamatic.mintleaf.core;
 
 import org.junit.Test;
-import org.qamatic.mintleaf.core.BaseSqlReader;
+import org.qamatic.mintleaf.*;
 import org.qamatic.mintleaf.data.CompareColumnState;
 import org.qamatic.mintleaf.data.CompareRowState;
 import org.qamatic.mintleaf.data.ComparerListener;

@@ -33,9 +33,12 @@
  * /
  */
 
-package org.qamatic.mintleaf;
+package org.qamatic.mintleaf.core;
 
 import org.junit.Test;
+import org.qamatic.mintleaf.ColumnMetaDataCollection;
+import org.qamatic.mintleaf.MintleafException;
+import org.qamatic.mintleaf.Row;
 import org.qamatic.mintleaf.core.BaseSqlReader;
 import org.qamatic.mintleaf.readers.CsvTable;
 

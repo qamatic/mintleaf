@@ -1,7 +1,9 @@
-package org.qamatic.mintleaf;
+package org.qamatic.mintleaf.core;
 
 import org.junit.Test;
-import org.qamatic.mintleaf.core.BaseReader;
+import org.qamatic.mintleaf.MintleafException;
+import org.qamatic.mintleaf.ReadListener;
+import org.qamatic.mintleaf.Row;
 import org.qamatic.mintleaf.core.rows.InMemoryRow;
 
 import java.sql.*;
