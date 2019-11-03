@@ -72,10 +72,10 @@ public class DbImporter extends SqlBatchInsertReadListener implements Executable
     }
 
     @Override
-    public MintleafReader getReader() {
+    public MintleafReader getReader() throws MintleafException {
         SqlResultSet sourceSqlResultSet = this.getConnectionContext().queryBuilder().withSql(sourceSql).withParamValues(sourceSqlParamValueBindings).buildSelect();
         MintleafReader reader = new DbResultSetReader(sourceSqlResultSet);
-        reader.setReadListener(this);
+        reader.getReadListener().add(this);
         return reader;
     }
 

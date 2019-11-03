@@ -72,13 +72,12 @@ public class SqlStringReaderTest {
 
         SqlStringReader reader = new SqlStringReader(getSamplePackageData());
 
-        reader.setReadListener((rowNum, row) -> {
+        reader.getReadListener().add((ReadListener) (rowNum, row) -> {
             if (actual_emptypackage_block1 == null) {
                 actual_emptypackage_block1 = ((ChangeSet) row).getChangeSetSource();
             } else if (actual_emptypackage_block2 == null) {
                 actual_emptypackage_block2 = ((ChangeSet) row).getChangeSetSource();
             }
-
         });
 
 

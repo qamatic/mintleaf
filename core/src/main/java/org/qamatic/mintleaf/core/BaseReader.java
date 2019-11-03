@@ -6,7 +6,9 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.nio.charset.Charset;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -14,7 +16,7 @@ import java.util.Map;
  */
 public abstract class BaseReader<T extends Row> implements MintleafReader {
     private final static MintleafLogger logger = MintleafLogger.getLogger(BaseReader.class);
-    private ReadListener readListener;
+    private List<ReadListener> readListener = new ArrayList<>();
     private Charset charset;
     private String delimiter = "/";
     private Map<String, Object> userVariableMapping;
@@ -44,8 +46,8 @@ public abstract class BaseReader<T extends Row> implements MintleafReader {
     protected final boolean readRow(int rowNum, Row row) throws MintleafException {
         if (matches(row)) {
             eachRow(rowNum, row);
-            if (getReadListener() != null) {
-                getReadListener().eachRow(rowNum, row);
+            for (ReadListener listener : getReadListener()) {
+                listener.eachRow(rowNum, row);
             }
         }
         if (!canContinueRead(row)) {
@@ -54,13 +56,10 @@ public abstract class BaseReader<T extends Row> implements MintleafReader {
         return true;
     }
 
-    public final ReadListener getReadListener() throws MintleafException {
+    public final List<ReadListener> getReadListener() throws MintleafException {
         return readListener;
     }
 
-    public void setReadListener(ReadListener readListener) {
-        this.readListener = readListener;
-    }
 
     public final Charset getCharset() {
         return charset;

@@ -36,6 +36,7 @@
 package org.qamatic.mintleaf;
 
 import java.nio.charset.Charset;
+import java.util.List;
 import java.util.Map;
 
 public interface MintleafReader<T extends Row> extends AutoCloseable {
@@ -52,14 +53,12 @@ public interface MintleafReader<T extends Row> extends AutoCloseable {
         MintleafException.throwException("not implemented");
     }
 
-    default ReadListener getReadListener() throws MintleafException {
+    default List<ReadListener> getReadListener() throws MintleafException {
         MintleafException.throwException("not implemented");
         return null;
     }
 
-    default void setReadListener(ReadListener readListener) {
-        MintleafException.throwException("not implemented");
-    }
+
 
     default String getDelimiter() {
         MintleafException.throwException("not implemented");

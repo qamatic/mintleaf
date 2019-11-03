@@ -63,13 +63,13 @@ public class SqlStreamReaderTest {
     @Test
     public void testSqlReaderListnerDefault() throws MintleafException {
         SqlStreamReader reader = new SqlStreamReader("nofile");
-        assertNull(reader.getReadListener());
+        assertEquals(0, reader.getReadListener().size());
     }
 
     @Test
     public void testSqlReaderListnerTest1() throws MintleafException {
         SqlStreamReader reader = new SqlStreamReader("nofile");
-        reader.setReadListener(new EmptyPackageReadListner());
+        reader.getReadListener().add(new EmptyPackageReadListner());
         assertNotNull(reader.getReadListener());
     }
 
@@ -91,7 +91,7 @@ public class SqlStreamReaderTest {
 
 
         };
-        reader.setReadListener(listner);
+        reader.getReadListener().add(listner);
         reader.read();
 
         StringBuilder expected = new StringBuilder();
@@ -113,7 +113,7 @@ public class SqlStreamReaderTest {
         ReadListener listner = new EmptyPackageReadListner();
         InputStream iStream = this.getClass().getResourceAsStream("/EmptyPackage.sql");
         SqlStreamReader reader = new SqlStreamReader(iStream);
-        reader.setReadListener(listner);
+        reader.getReadListener().add(listner);
         actual_emptypackage_block1 = null;
         actual_emptypackage_block2 = null;
 

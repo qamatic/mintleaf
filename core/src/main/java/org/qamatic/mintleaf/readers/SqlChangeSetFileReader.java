@@ -79,9 +79,8 @@ public class SqlChangeSetFileReader<T> extends SqlStreamReader implements Change
             currentChangeSet.setChangeSetSource(sql);
 
             getChangeSets().put(currentChangeSet.getId(), currentChangeSet);
-            if (getReadListener() != null) {
-                getReadListener().eachRow(getChangeSets().size() - 1, currentChangeSet);
-            }
+            readRow(getChangeSets().size() - 1, currentChangeSet);
+
         }
     }
 
@@ -99,9 +98,8 @@ public class SqlChangeSetFileReader<T> extends SqlStreamReader implements Change
                     currentChangeSet.setChangeSetSource(sql);
 
                     getChangeSets().put(currentChangeSet.getId(), currentChangeSet);
-                    if (getReadListener() != null) {
-                        getReadListener().eachRow(getChangeSets().size() - 1, currentChangeSet);
-                    }
+
+                    readRow(getChangeSets().size() - 1, currentChangeSet);
                     currentChangeSet = ChangeSet.xmlToChangeSet(line);
                 }
                 content.setLength(0);

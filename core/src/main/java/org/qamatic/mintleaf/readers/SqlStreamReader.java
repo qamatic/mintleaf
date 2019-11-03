@@ -125,9 +125,8 @@ public class SqlStreamReader<T> extends BaseSqlReader<T> {
                         withUserProperties(this.getUserVariableMapping()).
                         getText();
 
-                if (getReadListener() != null && sql.length() != 0) {
-                    getReadListener().eachRow(readCount++, new ChangeSet(readCount + "", getDelimiter(), sql));
-                }
+                readRow(readCount++, new ChangeSet(readCount + "", getDelimiter(), sql));
+
                 content.setLength(0);
 
             } else {

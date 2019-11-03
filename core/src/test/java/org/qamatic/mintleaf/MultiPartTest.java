@@ -71,7 +71,7 @@ public class MultiPartTest {
         reader.setDelimiter(";");
         final StringBuilder actual = new StringBuilder();
 
-        reader.setReadListener(new ReadListener() {
+        reader.getReadListener().add(new ReadListener() {
             @Override
             public void eachRow(int rowNum, Row row) throws MintleafException {
                 actual.append(((ChangeSet) row).getChangeSetSource());

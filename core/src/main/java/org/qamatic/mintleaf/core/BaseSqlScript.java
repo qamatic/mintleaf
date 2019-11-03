@@ -47,7 +47,7 @@ public abstract class BaseSqlScript implements SqlScript {
     }
 
     protected ConnectionContext connectionContext;
-    protected ReadListener readListener;
+
 
     public BaseSqlScript(ConnectionContext connectionContext) {
         this.connectionContext = connectionContext;
@@ -61,17 +61,14 @@ public abstract class BaseSqlScript implements SqlScript {
     }
 
 
-    public ReadListener getReadListener() {
-        if (readListener == null) {
-            readListener = new CommandExecutor(connectionContext);
-        }
-        return readListener;
-    }
-
     protected void execute(MintleafReader reader) throws MintleafException {
-        reader.setReadListener(getReadListener());
+        prepareListeners(reader);
         reader.read();
     }
 
+
+    protected void prepareListeners(MintleafReader reader) throws MintleafException{
+        reader.getReadListener().add(new CommandExecutor(connectionContext));
+    }
 
 }

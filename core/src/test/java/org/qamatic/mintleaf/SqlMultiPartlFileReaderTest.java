@@ -138,7 +138,7 @@ public class SqlMultiPartlFileReaderTest {
 
         InputStream iStream = this.getClass().getResourceAsStream("/multipart.sql");
         SqlChangeSetFileReader reader = new SqlChangeSetFileReader(iStream);
-        reader.setReadListener(new ReadListener() {
+        reader.getReadListener().add(new ReadListener() {
             @Override
             public void eachRow(int rowNum, Row row) throws MintleafException {
                 ChangeSet changeSet = (ChangeSet) row;

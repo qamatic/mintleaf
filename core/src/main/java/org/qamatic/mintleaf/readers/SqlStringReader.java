@@ -76,8 +76,8 @@ public class SqlStringReader<T> extends BaseSqlReader<T> {
                             withUserProperties(this.getUserVariableMapping()).
                             getText();
 
-                    if (getReadListener() != null && sql.length() != 0) {
-                        getReadListener().eachRow(readCount++, new ChangeSet(readCount + "", getDelimiter(), sql));
+                    if (getReadListener().size() != 0 && sql.length() != 0) {
+                        readRow(readCount++, new ChangeSet(readCount + "", getDelimiter(), sql));
                     }
 
                     childContents.setLength(0);

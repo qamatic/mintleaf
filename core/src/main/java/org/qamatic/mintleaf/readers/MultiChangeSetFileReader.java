@@ -89,8 +89,6 @@ public class MultiChangeSetFileReader<T> extends BaseReader implements ChangeSet
                         return changeSets;
                     }
                 };
-                changeSetReader.setReadListener(this.getReadListener());
-                changeSetReader.setUserVariableMapping(getUserVariableMapping());
                 changeSetReader.read();
             }
         }

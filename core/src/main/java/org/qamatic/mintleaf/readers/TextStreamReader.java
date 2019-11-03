@@ -61,8 +61,8 @@ public class TextStreamReader<T> extends SqlStreamReader {
         skipLineFeeds = true;
         super.read();
 
-        if (getReadListener() != null && content.length() != 0) {
-            getReadListener().eachRow(0, new ChangeSet("0", getDelimiter(), content.toString()));
+        if (getReadListener().size() != 0 && content.length() != 0) {
+            readRow(0, new ChangeSet("0", getDelimiter(), content.toString()));
         }
     }
 

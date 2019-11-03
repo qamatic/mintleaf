@@ -237,7 +237,7 @@ public final class Mintleaf {
                 public Table<T> execute() throws MintleafException {
                     final Table<T> list = new InMemoryTable<T>();
 
-                    importReader.setReadListener(new ReadListener() {
+                    importReader.getReadListener().add(new ReadListener() {
                         @Override
                         public void eachRow(int rowNum, Row row) throws MintleafException {
                             list.add((T) row);
