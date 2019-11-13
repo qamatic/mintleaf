@@ -75,7 +75,7 @@ public class CsvImporter extends SqlBatchInsertReadListener implements Executabl
                 throw new MintleafException("file not found " + sourceCsvFile);
             }
             MintleafReader reader = new CsvReader(new FileReader(f));
-            reader.getReadListener().add(this);
+            reader.getPreProcessors().add(this);
             return reader;
 
         } catch (IOException e) {

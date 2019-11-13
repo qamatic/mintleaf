@@ -35,33 +35,30 @@
 
 package org.qamatic.mintleaf.readers;
 
-import org.qamatic.mintleaf.ChangeSet;
-import org.qamatic.mintleaf.MintleafException;
-import org.qamatic.mintleaf.MintleafLogger;
+import org.qamatic.mintleaf.*;
 import org.qamatic.mintleaf.core.ArgPatternHandler;
 import org.qamatic.mintleaf.core.BaseSqlReader;
-import org.qamatic.mintleaf.core.Readerline;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 
-public class SqlStreamReader<T> extends BaseSqlReader<T> {
+public class SqlFileStreamReader<T> extends BaseSqlReader<T> {
 
-    private final static MintleafLogger logger = MintleafLogger.getLogger(SqlStreamReader.class);
+    private final static MintleafLogger logger = MintleafLogger.getLogger(SqlFileStreamReader.class);
     protected final StringBuilder content = new StringBuilder();
     protected InputStream inputStream;
     protected String resource;
     protected boolean skipLineFeeds;
-    private int readCount;
+    private int rowCount;
 
-    public SqlStreamReader(InputStream stream) {
+    public SqlFileStreamReader(InputStream stream) {
         this.inputStream = stream;
 
     }
 
-    public SqlStreamReader(String resource) {
+    public SqlFileStreamReader(String resource) {
         this.resource = resource;
 
     }
@@ -73,6 +70,38 @@ public class SqlStreamReader<T> extends BaseSqlReader<T> {
             this.inputStream = BaseSqlReader.getInputStreamFromFile(this.resource);
         }
         return this.inputStream;
+    }
+
+    protected Row createRow(Object rowData) {
+        return new ChangeSet(rowCount + "", getDelimiter(), (String) rowData);
+    }
+
+    protected int onReadData(Object data) throws MintleafException {
+        String line = (String) data;
+        if (line.startsWith("show err") || line.startsWith("--") && !line.contains("--@")) {
+            return MintleafReader.READ_SKIP;
+        }
+
+        if (isSqlDelimiter(line)) {
+
+            String[] splits = line.split(getDelimiter());
+            if (splits.length >= 1) {
+                content.append(splits[0]);
+            }
+
+            String sql = new ArgPatternHandler(content.toString().trim()).
+                    withUserProperties(this.getUserVariableMapping()).
+                    getText();
+
+            readRow(rowCount++, new ChangeSet(rowCount + "", getDelimiter(), sql));
+
+            content.setLength(0);
+
+        } else {
+            content.append(line);
+            content.append("\n");
+        }
+        return MintleafReader.READ_PROCEED;
     }
 
     @Override
@@ -91,10 +120,15 @@ public class SqlStreamReader<T> extends BaseSqlReader<T> {
                             continue;
                         }
                     }
-
-                    if (!readLine().processInternal(line)) {
+                    int readState = onReadData(line);
+                    if (readState == MintleafReader.READ_SKIP) {
                         continue;
+                    } else if (readState == MintleafReader.READ_STOP) {
+                        break;
                     }
+
+                    //Row newRow = createRow()
+
 
                 }
             } finally {
@@ -108,33 +142,5 @@ public class SqlStreamReader<T> extends BaseSqlReader<T> {
         }
     }
 
-    protected Readerline readLine() {
-        return line -> {
-            if (line.startsWith("show err") || line.startsWith("--") && !line.contains("--@")) {
-                return false;
-            }
-
-            if (isSqlDelimiter(line)) {
-
-                String[] splits = line.split(getDelimiter());
-                if (splits.length >= 1) {
-                    content.append(splits[0]);
-                }
-
-                String sql = new ArgPatternHandler(content.toString().trim()).
-                        withUserProperties(this.getUserVariableMapping()).
-                        getText();
-
-                readRow(readCount++, new ChangeSet(readCount + "", getDelimiter(), sql));
-
-                content.setLength(0);
-
-            } else {
-                content.append(line);
-                content.append("\n");
-            }
-            return true;
-        };
-    }
 
 }

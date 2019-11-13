@@ -61,7 +61,7 @@ public class PostgresTestCase {
     public static Database createDbContext(String userName, String password, String dbName) {
         Database db = new Mintleaf.DatabaseBuilder().
                 withDriverSource(ApacheBasicDataSource.class).
-                withUrl(System.getenv("POSTGRES_DB_URL")+dbName).
+                withUrl(System.getenv("POSTGRES_DB_URL") + dbName).
                 withUsername(userName).
                 withPassword(password).
                 build();

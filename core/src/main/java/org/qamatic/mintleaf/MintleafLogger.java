@@ -80,7 +80,7 @@ public abstract class MintleafLogger {
             loggerType = NoLogger.class;
             singletonLogger = true;//force to be at app level
         }
-        if (singletonLogger){
+        if (singletonLogger) {
             MintleafLogger.mintLeafLogger = getLoggerInstance(loggerType);
         }
     }

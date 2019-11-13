@@ -36,48 +36,49 @@
 package org.qamatic.mintleaf;
 
 import org.junit.Test;
-import org.qamatic.mintleaf.readers.SqlStreamReader;
+import org.qamatic.mintleaf.readers.SqlFileStreamReader;
 
 import java.io.InputStream;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
-public class SqlStreamReaderTest {
+public class SqlFileStreamReaderTest {
 
     private String actual_emptypackage_block1;
     private String actual_emptypackage_block2;
 
     @Test
     public void testDelimiterString() {
-        SqlStreamReader reader = new SqlStreamReader("nofile");
+        SqlFileStreamReader reader = new SqlFileStreamReader("nofile");
         reader.setDelimiter(";");
         assertEquals(";", reader.getDelimiter());
     }
 
     @Test
     public void testDelimiterStringDefault() {
-        SqlStreamReader reader = new SqlStreamReader("nofile");
+        SqlFileStreamReader reader = new SqlFileStreamReader("nofile");
         assertEquals("/", reader.getDelimiter());
     }
 
     @Test
     public void testSqlReaderListnerDefault() throws MintleafException {
-        SqlStreamReader reader = new SqlStreamReader("nofile");
-        assertEquals(0, reader.getReadListener().size());
+        SqlFileStreamReader reader = new SqlFileStreamReader("nofile");
+        assertEquals(0, reader.getPreProcessors().size());
     }
 
     @Test
     public void testSqlReaderListnerTest1() throws MintleafException {
-        SqlStreamReader reader = new SqlStreamReader("nofile");
-        reader.getReadListener().add(new EmptyPackageReadListner());
-        assertNotNull(reader.getReadListener());
+        SqlFileStreamReader reader = new SqlFileStreamReader("nofile");
+        reader.getPreProcessors().add(new EmptyPackageReadListner());
+        assertNotNull(reader.getPreProcessors());
     }
 
     @Test
     public void testSqlReaderReadTest() throws MintleafException {
 
         InputStream iStream = this.getClass().getResourceAsStream("/EmptyPackage.sql");
-        SqlStreamReader reader = new SqlStreamReader(iStream);
+        SqlFileStreamReader reader = new SqlFileStreamReader(iStream);
 
 
         final StringBuilder actual = new StringBuilder();
@@ -91,7 +92,7 @@ public class SqlStreamReaderTest {
 
 
         };
-        reader.getReadListener().add(listner);
+        reader.getPreProcessors().add(listner);
         reader.read();
 
         StringBuilder expected = new StringBuilder();
@@ -112,8 +113,8 @@ public class SqlStreamReaderTest {
 
         ReadListener listner = new EmptyPackageReadListner();
         InputStream iStream = this.getClass().getResourceAsStream("/EmptyPackage.sql");
-        SqlStreamReader reader = new SqlStreamReader(iStream);
-        reader.getReadListener().add(listner);
+        SqlFileStreamReader reader = new SqlFileStreamReader(iStream);
+        reader.getPreProcessors().add(listner);
         actual_emptypackage_block1 = null;
         actual_emptypackage_block2 = null;
 

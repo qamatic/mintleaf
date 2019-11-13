@@ -62,8 +62,9 @@ public interface ConnectionContext<T extends DbQueryExtension> extends AutoClose
 
     T getDbQueries();
 
-    void setUserVariableMapping(Map<String, Object> userVariableMapping);
     Map<String, Object> getUserVariableMapping();
+
+    void setUserVariableMapping(Map<String, Object> userVariableMapping);
 
     FluentJdbc.Builder queryBuilder();
 

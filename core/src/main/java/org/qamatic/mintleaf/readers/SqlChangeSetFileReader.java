@@ -35,17 +35,13 @@
 
 package org.qamatic.mintleaf.readers;
 
-import org.qamatic.mintleaf.ChangeSet;
-import org.qamatic.mintleaf.ChangeSetReader;
-import org.qamatic.mintleaf.MintleafException;
-import org.qamatic.mintleaf.MintleafLogger;
+import org.qamatic.mintleaf.*;
 import org.qamatic.mintleaf.core.ArgPatternHandler;
-import org.qamatic.mintleaf.core.Readerline;
 
 import java.io.InputStream;
 import java.util.HashMap;
 
-public class SqlChangeSetFileReader<T> extends SqlStreamReader implements ChangeSetReader<T> {
+public class SqlChangeSetFileReader<T> extends SqlFileStreamReader implements ChangeSetReader<T> {
 
     private static final MintleafLogger logger = MintleafLogger.getLogger(SqlChangeSetFileReader.class);
     private final HashMap<String, ChangeSet> changeSets = new HashMap<>();
@@ -85,30 +81,31 @@ public class SqlChangeSetFileReader<T> extends SqlStreamReader implements Change
     }
 
     @Override
-    protected Readerline readLine() {
-        return line -> {
-            if ((line.trim().contains("<ChangeSet")) && ChangeSet.xmlToChangeSet(line) != null) {
-                if (currentChangeSet == null) {
-                    currentChangeSet = ChangeSet.xmlToChangeSet(line);
-                }
-                String sql = new ArgPatternHandler(content.toString().trim()).
-                        withUserProperties(this.getUserVariableMapping()).
-                        getText();
-                if (sql.length() != 0) {
-                    currentChangeSet.setChangeSetSource(sql);
-
-                    getChangeSets().put(currentChangeSet.getId(), currentChangeSet);
-
-                    readRow(getChangeSets().size() - 1, currentChangeSet);
-                    currentChangeSet = ChangeSet.xmlToChangeSet(line);
-                }
-                content.setLength(0);
-                return false;
+    protected int onReadData(Object data) throws MintleafException {
+        String line = (String) data;
+        if ((line.trim().contains("<ChangeSet")) && ChangeSet.xmlToChangeSet(line) != null) {
+            if (currentChangeSet == null) {
+                currentChangeSet = ChangeSet.xmlToChangeSet(line);
             }
-            content.append(line);
-            content.append("\n");
-            return true;
-        };
+            String sql = new ArgPatternHandler(content.toString().trim()).
+                    withUserProperties(this.getUserVariableMapping()).
+                    getText();
+            if (sql.length() != 0) {
+                currentChangeSet.setChangeSetSource(sql);
+
+                getChangeSets().put(currentChangeSet.getId(), currentChangeSet);
+
+                boolean bContinue = readRow(getChangeSets().size() - 1, currentChangeSet);
+
+                currentChangeSet = ChangeSet.xmlToChangeSet(line);
+            }
+            content.setLength(0);
+            return MintleafReader.READ_PROCEED;
+
+        }
+        content.append(line);
+        content.append("\n");
+        return MintleafReader.READ_PROCEED;
     }
 
     @Override

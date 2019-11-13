@@ -68,7 +68,7 @@ public class BinaryFileImporter extends SqlBatchInsertReadListener implements Ex
 
     @Override
     public MintleafReader getReader() throws MintleafException {
-        this.importReader.getReadListener().add(this);
+        this.importReader.getPreProcessors().add(this);
         return this.importReader;
     }
 

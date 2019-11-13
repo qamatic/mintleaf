@@ -16,7 +16,8 @@ import java.util.Map;
  */
 public abstract class BaseReader<T extends Row> implements MintleafReader {
     private final static MintleafLogger logger = MintleafLogger.getLogger(BaseReader.class);
-    private List<ReadListener> readListener = new ArrayList<>();
+    private List<ReadListener> preProcessors = new ArrayList<>();
+    private List<ReadListener> postProcessors = new ArrayList<>();
     private Charset charset;
     private String delimiter = "/";
     private Map<String, Object> userVariableMapping;
@@ -46,18 +47,32 @@ public abstract class BaseReader<T extends Row> implements MintleafReader {
     protected final boolean readRow(int rowNum, Row row) throws MintleafException {
         if (matches(row)) {
             eachRow(rowNum, row);
-            for (ReadListener listener : getReadListener()) {
-                listener.eachRow(rowNum, row);
+            if (!canContinueRead(row)) {
+                return false;
             }
-        }
-        if (!canContinueRead(row)) {
-            return false;
+            for (ReadListener listener : getPreProcessors()) {
+                listener.eachRow(rowNum, row);
+                if (!canContinueRead(row)) {
+                    return false;
+                }
+            }
+            for (ReadListener listener : getPostProcessors()) {
+                listener.eachRow(rowNum, row);
+                if (!canContinueRead(row)) {
+                    return false;
+                }
+            }
         }
         return true;
     }
 
-    public final List<ReadListener> getReadListener() throws MintleafException {
-        return readListener;
+    public final List<ReadListener> getPreProcessors() throws MintleafException {
+        return preProcessors;
+    }
+
+
+    public final List<ReadListener> getPostProcessors() throws MintleafException {
+        return postProcessors;
     }
 
 

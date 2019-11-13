@@ -78,7 +78,6 @@ public class SingleLoadScriptTest extends H2TestCase {
     public void checkScriptUsesConnectionPropertyVars() throws MintleafException {
 
         SqlScript script = new SqlScriptFile(testDb.getNewConnection(), "res:/connection-prop-variable.sql", ";");
-
         script.getConnectionContext().getUserVariableMapping().put("DEFAULT_SCHEMA", "HRDB");
         String schemaName = (String) script.getReader().getUserVariableMapping().get("DEFAULT_SCHEMA");
         assertEquals("HRDB", schemaName);

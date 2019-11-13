@@ -38,12 +38,12 @@ package org.qamatic.mintleaf.readers;
 import org.qamatic.mintleaf.ChangeSet;
 import org.qamatic.mintleaf.MintleafException;
 import org.qamatic.mintleaf.MintleafLogger;
+import org.qamatic.mintleaf.MintleafReader;
 import org.qamatic.mintleaf.core.ArgPatternHandler;
-import org.qamatic.mintleaf.core.Readerline;
 
 import java.io.InputStream;
 
-public class TextStreamReader<T> extends SqlStreamReader {
+public class TextStreamReader<T> extends SqlFileStreamReader {
 
     private final static MintleafLogger logger = MintleafLogger.getLogger(TextStreamReader.class);
 
@@ -61,17 +61,18 @@ public class TextStreamReader<T> extends SqlStreamReader {
         skipLineFeeds = true;
         super.read();
 
-        if (getReadListener().size() != 0 && content.length() != 0) {
+        if (content.length() != 0) {
             readRow(0, new ChangeSet("0", getDelimiter(), content.toString()));
         }
     }
 
-    protected Readerline readLine() {
-        return line -> {
-            content.append(line);
-            return true;
-        };
+    @Override
+    protected int onReadData(Object data) throws MintleafException {
+        String line = (String) data;
+        content.append(line);
+        return MintleafReader.READ_PROCEED;
     }
+
 
     public String getContent() {
         ArgPatternHandler argPatternHandler = new ArgPatternHandler(content.toString());

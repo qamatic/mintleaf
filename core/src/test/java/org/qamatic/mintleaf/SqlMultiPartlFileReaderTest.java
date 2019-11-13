@@ -77,6 +77,48 @@ public class SqlMultiPartlFileReaderTest {
     }
 
     @Test
+    public void testReadCanContinue() throws IOException, SQLException, MintleafException {
+
+
+        ChangeSetReader reader = new SqlChangeSetFileReader("res:/multipart2.sql") {
+            @Override
+            public boolean canContinueRead(Row row) {
+                ChangeSet changeSet = (ChangeSet) row;
+                return changeSet.getId() == "part1";
+            }
+        };
+        reader.read();
+
+        assertTrue(reader.getChangeSets().containsKey("part1"));
+        assertFalse(reader.getChangeSets().containsKey("part2"));
+        assertFalse(reader.getChangeSets().containsKey("part3"));
+        ChangeSet part1 = (ChangeSet) reader.getChangeSets().get("part1");
+        assertEquals(getPart1Data(), part1.getChangeSetSource());
+
+    }
+
+    @Test
+    public void testReadMatches() throws IOException, SQLException, MintleafException {
+
+
+        ChangeSetReader reader = new SqlChangeSetFileReader("res:/multipart2.sql") {
+            @Override
+            public boolean matches(Row row) {
+                ChangeSet changeSet = (ChangeSet) row;
+                return changeSet.getId() == "part3";
+            }
+        };
+        reader.read();
+
+        assertTrue(reader.getChangeSets().containsKey("part1"));
+        assertFalse(reader.getChangeSets().containsKey("part2"));
+        assertFalse(reader.getChangeSets().containsKey("part3"));
+        ChangeSet part1 = (ChangeSet) reader.getChangeSets().get("part1");
+        assertEquals(getPart1Data(), part1.getChangeSetSource());
+
+    }
+
+    @Test
     public void testgetSectionDetail() {
         String json = "ffccc";
         ChangeSet detail = ChangeSet.xmlToChangeSet(json);
@@ -138,7 +180,7 @@ public class SqlMultiPartlFileReaderTest {
 
         InputStream iStream = this.getClass().getResourceAsStream("/multipart.sql");
         SqlChangeSetFileReader reader = new SqlChangeSetFileReader(iStream);
-        reader.getReadListener().add(new ReadListener() {
+        reader.getPreProcessors().add(new ReadListener() {
             @Override
             public void eachRow(int rowNum, Row row) throws MintleafException {
                 ChangeSet changeSet = (ChangeSet) row;

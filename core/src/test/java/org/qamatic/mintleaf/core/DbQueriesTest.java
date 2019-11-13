@@ -38,9 +38,6 @@ package org.qamatic.mintleaf.core;
 import org.junit.Before;
 import org.junit.Test;
 import org.qamatic.mintleaf.*;
-import org.qamatic.mintleaf.core.ChangeSets;
-import org.qamatic.mintleaf.core.DbConnectionContext;
-import org.qamatic.mintleaf.core.ExecuteQuery;
 import org.qamatic.mintleaf.core.stdqueries.StandardQueries;
 
 import java.io.IOException;

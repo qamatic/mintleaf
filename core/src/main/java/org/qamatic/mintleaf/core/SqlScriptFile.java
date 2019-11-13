@@ -38,7 +38,7 @@ package org.qamatic.mintleaf.core;
 import org.qamatic.mintleaf.ConnectionContext;
 import org.qamatic.mintleaf.MintleafLogger;
 import org.qamatic.mintleaf.MintleafReader;
-import org.qamatic.mintleaf.readers.SqlStreamReader;
+import org.qamatic.mintleaf.readers.SqlFileStreamReader;
 
 import java.io.InputStream;
 
@@ -62,7 +62,7 @@ public class SqlScriptFile extends BaseSqlScript {
     public MintleafReader getReader() {
         if (this.reader == null) {
             InputStream stream = BaseSqlReader.getInputStreamFromFile(this.filename);
-            this.reader = new SqlStreamReader(stream);
+            this.reader = new SqlFileStreamReader(stream);
             this.reader.setDelimiter(this.delimiter);
         }
         return this.reader;

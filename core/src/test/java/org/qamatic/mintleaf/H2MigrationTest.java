@@ -59,6 +59,4 @@ public class H2MigrationTest extends H2TestCase {
     }
 
 
-
-
 }

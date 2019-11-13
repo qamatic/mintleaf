@@ -2,7 +2,6 @@ package org.qamatic.mintleaf.mysql;
 
 import org.junit.Before;
 import org.junit.Ignore;
-import org.junit.Test;
 import org.qamatic.mintleaf.ConnectionContext;
 import org.qamatic.mintleaf.Database;
 import org.qamatic.mintleaf.MintleafException;

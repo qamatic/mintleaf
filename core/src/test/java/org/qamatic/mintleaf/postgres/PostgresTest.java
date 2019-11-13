@@ -11,7 +11,6 @@ import org.qamatic.mintleaf.core.ChangeSets;
 import java.sql.SQLException;
 
 import static junit.framework.TestCase.assertEquals;
-import static junit.framework.TestCase.assertNotNull;
 
 public class PostgresTest extends PostgresTestCase {
 
@@ -26,7 +25,7 @@ public class PostgresTest extends PostgresTestCase {
         Database employeesDb = createDbContext("northwind_user", "thewindisblowing", "northwind");
         try (ConnectionContext ctx = employeesDb.getNewConnection()) {
 
-                 ChangeSets.migrate(ctx, "res:/postgres/postgres-northwind-db.sql", "create tables, load categories");
+            ChangeSets.migrate(ctx, "res:/postgres/postgres-northwind-db.sql", "create tables, load categories");
 
         }
         try (ConnectionContext ctx = employeesDb.getNewConnection()) {

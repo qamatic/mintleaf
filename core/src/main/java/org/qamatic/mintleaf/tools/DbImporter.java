@@ -75,7 +75,7 @@ public class DbImporter extends SqlBatchInsertReadListener implements Executable
     public MintleafReader getReader() throws MintleafException {
         SqlResultSet sourceSqlResultSet = this.getConnectionContext().queryBuilder().withSql(sourceSql).withParamValues(sourceSqlParamValueBindings).buildSelect();
         MintleafReader reader = new DbResultSetReader(sourceSqlResultSet);
-        reader.getReadListener().add(this);
+        reader.getPreProcessors().add(this);
         return reader;
     }
 

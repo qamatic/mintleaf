@@ -41,6 +41,9 @@ import java.util.Map;
 
 public interface MintleafReader<T extends Row> extends AutoCloseable {
 
+    public static final int READ_PROCEED = 1;
+    public static final int READ_STOP = 2;
+    public static final int READ_SKIP = 3;
 
     void read() throws MintleafException;
 
@@ -49,15 +52,20 @@ public interface MintleafReader<T extends Row> extends AutoCloseable {
         return null;
     }
 
-    default void setUserVariableMapping(Map<String, Object>  userVariableMapping) {
+    default void setUserVariableMapping(Map<String, Object> userVariableMapping) {
         MintleafException.throwException("not implemented");
     }
 
-    default List<ReadListener> getReadListener() throws MintleafException {
-        MintleafException.throwException("not implemented");
+    default List<ReadListener> getPreProcessors() throws MintleafException {
+        MintleafException.throwException("preprocessors not implemented");
         return null;
     }
 
+
+    default List<ReadListener> getPostProcessors() throws MintleafException {
+        MintleafException.throwException("post procssors not implemented");
+        return null;
+    }
 
 
     default String getDelimiter() {
@@ -85,7 +93,6 @@ public interface MintleafReader<T extends Row> extends AutoCloseable {
     default boolean matches(T row) {
         return true;
     }
-
 
 
 }

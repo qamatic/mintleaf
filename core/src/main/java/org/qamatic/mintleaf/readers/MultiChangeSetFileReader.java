@@ -103,7 +103,7 @@ public class MultiChangeSetFileReader<T> extends BaseReader implements ChangeSet
     }
 
     @Override
-    public void setUserVariableMapping(Map  userVariableMapping) {
+    public void setUserVariableMapping(Map userVariableMapping) {
         this.userVariableMapping = userVariableMapping;
     }
 }

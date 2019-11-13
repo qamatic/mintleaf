@@ -91,7 +91,7 @@ public class BaseReaderTest {
     public void testCustomRowGeneric() throws MintleafException {
         CustomReader<InMemoryRow> reader = new CustomReader<>();
         reader.setRowClassType(InMemoryRow.class);
-        reader.getReadListener().add(new ReadListener() {
+        reader.getPreProcessors().add(new ReadListener() {
             @Override
             public void eachRow(int rowNum, Row row) throws MintleafException {
                 assertTrue(row instanceof InMemoryRow);
@@ -104,7 +104,7 @@ public class BaseReaderTest {
     public void testCustomRowGenericChangingInRowType() throws MintleafException {
         CustomReader<CustomInMemoryRow> reader = new CustomReader<>();
         reader.setRowClassType(CustomInMemoryRow.class);
-        reader.getReadListener().add(new ReadListener() {
+        reader.getPreProcessors().add(new ReadListener() {
             @Override
             public void eachRow(int rowNum, Row row) throws MintleafException {
                 assertTrue(row instanceof CustomInMemoryRow);
