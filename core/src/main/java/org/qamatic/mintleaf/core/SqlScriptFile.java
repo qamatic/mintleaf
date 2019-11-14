@@ -61,7 +61,7 @@ public class SqlScriptFile extends BaseSqlScript {
     @Override
     public MintleafReader getReader() {
         if (this.reader == null) {
-            InputStream stream = BaseSqlReader.getInputStreamFromFile(this.filename);
+            InputStream stream = BaseReader.getInputStreamFromFile(this.filename);
             this.reader = new SqlFileStreamReader(stream);
             this.reader.setDelimiter(this.delimiter);
         }

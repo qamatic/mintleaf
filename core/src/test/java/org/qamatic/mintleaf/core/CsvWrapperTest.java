@@ -55,7 +55,7 @@ public class CsvWrapperTest {
 
     @Test
     public void testReader() throws MintleafException {
-        InputStream csvStream = BaseSqlReader.getInputStreamFromFile("res:/users.csv");
+        InputStream csvStream = BaseReader.getInputStreamFromFile("res:/users.csv");
         CsvTable<Row> csvRowListWrapper = new CsvTable<Row>(new InputStreamReader(csvStream));
         Row row = csvRowListWrapper.iterator().next();
         assertNotNull(row);
@@ -72,7 +72,7 @@ public class CsvWrapperTest {
 
     @Test
     public void testCSVMetaData() throws MintleafException, SQLException {
-        InputStream csvStream = BaseSqlReader.getInputStreamFromFile("res:/users.csv");
+        InputStream csvStream = BaseReader.getInputStreamFromFile("res:/users.csv");
         CsvTable<Row> csvRowListWrapper = new CsvTable<Row>(new InputStreamReader(csvStream));
         Row row = csvRowListWrapper.iterator().next();
         assertNotNull(csvRowListWrapper.iterator().next());

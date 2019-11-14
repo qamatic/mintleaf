@@ -6,10 +6,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.nio.charset.Charset;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Created by QAmatic Team on 4/28/17.
@@ -121,5 +118,10 @@ public abstract class BaseReader<T extends Row> implements MintleafReader {
 
     public T eachRow(int rowNum, Row row) throws MintleafException {
         return (T) row;
+    }
+
+    @Override
+    public Iterator iterator() {
+        return null;
     }
 }

@@ -39,7 +39,7 @@ import java.nio.charset.Charset;
 import java.util.List;
 import java.util.Map;
 
-public interface MintleafReader<T extends Row> extends AutoCloseable {
+public interface MintleafReader<T extends Row> extends Iterable<T>, AutoCloseable {
 
     public static final int READ_PROCEED = 1;
     public static final int READ_STOP = 2;

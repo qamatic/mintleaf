@@ -37,14 +37,14 @@ package org.qamatic.mintleaf.readers;
 
 import org.qamatic.mintleaf.*;
 import org.qamatic.mintleaf.core.ArgPatternHandler;
-import org.qamatic.mintleaf.core.BaseSqlReader;
-
+import org.qamatic.mintleaf.core.BaseReader;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 
-public class SqlFileStreamReader<T> extends BaseSqlReader<T> {
+
+public class SqlFileStreamReader<T extends Row> extends BaseReader<T> {
 
     private final static MintleafLogger logger = MintleafLogger.getLogger(SqlFileStreamReader.class);
     protected final StringBuilder content = new StringBuilder();
@@ -67,10 +67,20 @@ public class SqlFileStreamReader<T> extends BaseSqlReader<T> {
     protected InputStream getInputStream() throws IOException {
         if (this.inputStream == null) {
             //logger.info(String.format("reading resource : %s", this.resource));
-            this.inputStream = BaseSqlReader.getInputStreamFromFile(this.resource);
+            this.inputStream = BaseReader.getInputStreamFromFile(this.resource);
         }
         return this.inputStream;
     }
+
+
+    protected boolean isSqlDelimiter(String line) {
+        //external config needed.
+        return ((getDelimiter().equals("/") && line.equals("/")) ||
+                (getDelimiter().equals(";") && line.endsWith(";")) ||
+                (getDelimiter().equalsIgnoreCase("GO") && line.equalsIgnoreCase("GO"))
+        );
+    }
+
 
     protected Row createRow(Object rowData) {
         return new ChangeSet(rowCount + "", getDelimiter(), (String) rowData);
@@ -93,7 +103,7 @@ public class SqlFileStreamReader<T> extends BaseSqlReader<T> {
                     withUserProperties(this.getUserVariableMapping()).
                     getText();
 
-            readRow(rowCount++, new ChangeSet(rowCount + "", getDelimiter(), sql));
+            readRow(rowCount++, createRow(sql));
 
             content.setLength(0);
 
@@ -127,9 +137,6 @@ public class SqlFileStreamReader<T> extends BaseSqlReader<T> {
                         break;
                     }
 
-                    //Row newRow = createRow()
-
-
                 }
             } finally {
                 if (input != null) {
@@ -141,6 +148,7 @@ public class SqlFileStreamReader<T> extends BaseSqlReader<T> {
             throw new MintleafException(e);
         }
     }
+
 
 
 }

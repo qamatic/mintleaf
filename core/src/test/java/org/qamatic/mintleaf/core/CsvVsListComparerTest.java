@@ -73,7 +73,7 @@ public class CsvVsListComparerTest {
     @Test
     public void compareList() throws SQLException, IOException, MintleafException {
 
-        InputStream csvStream = BaseSqlReader.getInputStreamFromFile("res:/users.csv");
+        InputStream csvStream = BaseReader.getInputStreamFromFile("res:/users.csv");
         CsvTable csvRowListWrapper = new CsvTable(new InputStreamReader(csvStream));
 
 

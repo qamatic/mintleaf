@@ -37,10 +37,11 @@ package org.qamatic.mintleaf.readers;
 
 import org.qamatic.mintleaf.ChangeSet;
 import org.qamatic.mintleaf.MintleafException;
+import org.qamatic.mintleaf.Row;
 import org.qamatic.mintleaf.core.ArgPatternHandler;
-import org.qamatic.mintleaf.core.BaseSqlReader;
+import org.qamatic.mintleaf.core.BaseReader;
 
-public class SqlStringReader<T> extends BaseSqlReader<T> {
+public class SqlStringReader<T extends Row> extends BaseReader<T> {
 
     private final String mvSqlSource;
     private int readCount;
@@ -48,6 +49,16 @@ public class SqlStringReader<T> extends BaseSqlReader<T> {
     public SqlStringReader(String sqlSource) {
         mvSqlSource = sqlSource;
     }
+
+
+    protected boolean isSqlDelimiter(String line) {
+        //external config needed.
+        return ((getDelimiter().equals("/") && line.equals("/")) ||
+                (getDelimiter().equals(";") && line.endsWith(";")) ||
+                (getDelimiter().equalsIgnoreCase("GO") && line.equalsIgnoreCase("GO"))
+        );
+    }
+
 
     @Override
     public void read() throws MintleafException {
