@@ -63,7 +63,7 @@ public class SqlChangeSets extends BaseSqlScript {
                 SqlScript script = new BaseSqlScript(connectionContext) {
                     @Override
                     public MintleafReader getReader() {
-                        MintleafReader reader = new SqlStringReader(section.getChangeSetSource());
+                        SqlStringReader reader = new SqlStringReader(section.getChangeSetSource());
                         reader.setDelimiter(section.getDelimiter());
                         return reader;
                     }

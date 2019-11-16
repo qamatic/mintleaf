@@ -95,12 +95,12 @@ public abstract class BaseReader<T extends Row> implements MintleafReader {
         this.userVariableMapping = userVariableMapping;
     }
 
-    @Override
+
     public String getDelimiter() {
         return delimiter;
     }
 
-    @Override
+
     public void setDelimiter(String delimStr) {
         this.delimiter = delimStr.toUpperCase();
     }

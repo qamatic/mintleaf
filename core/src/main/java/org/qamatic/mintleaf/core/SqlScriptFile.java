@@ -63,7 +63,7 @@ public class SqlScriptFile extends BaseSqlScript {
         if (this.reader == null) {
             InputStream stream = BaseReader.getInputStreamFromFile(this.filename);
             this.reader = new SqlFileStreamReader(stream);
-            this.reader.setDelimiter(this.delimiter);
+            ((SqlFileStreamReader)this.reader).setDelimiter(this.delimiter);
         }
         return this.reader;
     }

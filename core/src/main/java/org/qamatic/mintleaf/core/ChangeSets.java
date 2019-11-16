@@ -51,7 +51,7 @@ public final class ChangeSets {
         SqlScript sqlScript = new BaseSqlScript(connectionContext) {
             @Override
             public MintleafReader getReader() {
-                MintleafReader reader = new SqlStringReader(script);
+                SqlStringReader reader = new SqlStringReader(script);
                 reader.setDelimiter(delimiter);
                 return reader;
             }

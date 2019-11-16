@@ -68,14 +68,6 @@ public interface MintleafReader<T extends Row> extends Iterable<T>, AutoCloseabl
     }
 
 
-    default String getDelimiter() {
-        MintleafException.throwException("not implemented");
-        return null;
-    }
-
-    default void setDelimiter(String delimStr) {
-        MintleafException.throwException("not implemented");
-    }
 
     default Charset getCharset() {
         return Charset.defaultCharset();

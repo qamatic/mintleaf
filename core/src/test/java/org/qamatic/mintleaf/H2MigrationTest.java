@@ -54,7 +54,7 @@ public class H2MigrationTest extends H2TestCase {
     @Test
     public void testMintleafLog() throws SQLException, IOException, MintleafException {
 
-        Assert.assertTrue(testDbQueries.isTableExists("mintleaf_logs"));
+        Assert.assertTrue(testDbQueries.isTableExists("mintleaf.mintleaf_logs"));
 
     }
 

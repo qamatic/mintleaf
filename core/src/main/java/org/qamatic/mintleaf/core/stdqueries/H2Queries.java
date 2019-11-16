@@ -57,7 +57,8 @@ public class H2Queries extends StandardQueries {
         String[] splits = cleanObjectName(objectName);
 
         final String select = "select * from information_schema.columns ";
-        String sql = String.format("select * from information_schema.columns where TABLE_SCHEMA ='%s' and TABLE_NAME='%s'", splits[0], splits[1]);
+        String sql = splits.length == 2? String.format("%s WHERE TABLE_SCHEMA ='%s' and  TABLE_NAME='%s'", select, splits[0], splits[1]) :
+                String.format("%s WHERE  TABLE_NAME='%s'", select, objectName);
         query(sql, (rowNum, rs) -> {
             metaData.add(new Column() {
                 {
