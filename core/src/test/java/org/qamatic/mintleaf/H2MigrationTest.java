@@ -47,15 +47,13 @@ public class H2MigrationTest extends H2TestCase {
 
     @Before
     public void cleanDb() throws MintleafException {
-        ChangeSets.migrate(testDb.getNewConnection(), "res:/Testddl.sql", "clean db");
-        Assert.assertFalse(testDbQueries.isTableExists("mintleaf.TABLE2"));
+        ChangeSets.migrate(testDb.getNewConnection(), "res:/testddl.sql", "create schema");
+        ChangeSets.migrate(testDb.getNewConnection(), "res:/internal-core-mintleaf-logs.sql", "delete-mintleaf-logs, h2-core-mintleaf-logs");
     }
 
     @Test
     public void testMintleafLog() throws SQLException, IOException, MintleafException {
-
-        Assert.assertTrue(testDbQueries.isTableExists("mintleaf.mintleaf_logs"));
-
+       Assert.assertTrue("MINTLEAF_LOGS table not found", testDbQueries.isTableExists("mintleaf.MINTLEAF_LOGS"));
     }
 
 

@@ -71,4 +71,8 @@ public enum DbType {
         return this.jdbcUrlPrefix;
     }
 
+    public String getLogName(){
+        return String.format("%s-core-mintleaf-logs", this.toString().toLowerCase());
+    }
+
 }

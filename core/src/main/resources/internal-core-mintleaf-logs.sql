@@ -1,7 +1,10 @@
+-- <ChangeSet id="delete-mintleaf-logs" delimiter=";" />
+
+drop table if exists mintleaf.mintleaf_logs
 
 -- <ChangeSet id="h2-core-mintleaf-logs" delimiter=";" />
 
-CREATE TABLE mintleaf_logs
+CREATE TABLE if not exists mintleaf.mintleaf_logs
     (
 
      id INT  NOT NULL ,
@@ -14,9 +17,11 @@ CREATE TABLE mintleaf_logs
     )
 ;
 
--- <ChangeSet id="postgress-core-mintleaf-logs" delimiter=";" />
 
-CREATE TABLE mintleaf_logs (
+
+-- <ChangeSet id="postgres-core-mintleaf-logs" delimiter=";" />
+
+CREATE TABLE mintleaf.mintleaf_logs (
   id              SERIAL PRIMARY KEY,
   version         VARCHAR(20) NOT NULL,
   change_sets     VARCHAR(250) NOT NULL,

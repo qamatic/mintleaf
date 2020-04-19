@@ -53,6 +53,12 @@ public class UtilTest {
     BasicDatabase builder = new BasicDatabase(null, null, null, null);
 
     @Test
+    public void testDbLogNaming() {
+        assertEquals("h2-core-mintleaf-logs", DbType.H2.getLogName());
+    }
+
+
+    @Test
     public void testDbType() {
         assertEquals(DbType.H2, DbType.getDbType("jdbc:H2:/"));
         assertEquals(DbType.MYSQL, DbType.getDbType("jdbc:MySql:/"));

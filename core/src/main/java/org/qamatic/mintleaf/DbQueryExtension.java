@@ -35,15 +35,13 @@
 
 package org.qamatic.mintleaf;
 
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
-
 import java.util.List;
 
 public interface DbQueryExtension extends AutoCloseable {
 
 
     default boolean isSqlObjectExists(String objectName, String objectType, boolean ignoreValidity) throws MintleafException {
-        throw new NotImplementedException();
+      return false;
     }
 
     default int getCount(String tableName) throws MintleafException {
@@ -51,7 +49,7 @@ public interface DbQueryExtension extends AutoCloseable {
     }
 
     default boolean isTableExists(String tableName) throws MintleafException {
-        throw new NotImplementedException();
+        return false;
     }
 
     default void close() throws MintleafException {
@@ -61,7 +59,7 @@ public interface DbQueryExtension extends AutoCloseable {
     ;
 
     default boolean isDbOptionExists(String optionName) throws MintleafException {
-        throw new NotImplementedException();
+        return false;
     }
 
     <T> List<T> query(String sql, ParameterBinding parameterBinding, final RowMatchListener<T> listener) throws MintleafException;
@@ -78,31 +76,31 @@ public interface DbQueryExtension extends AutoCloseable {
     int queryInt(String sql, ParameterBinding parameterBinding) throws MintleafException;
 
     default void truncateTable(String tableName) throws MintleafException {
-        throw new NotImplementedException();
+         
     }
 
     default boolean isUserExists(String userName) throws MintleafException {
-        throw new NotImplementedException();
+        return false;
     }
 
     default List<String> getSqlObjects(String objectType) throws MintleafException {
-        throw new NotImplementedException();
+        return null;
     }
 
     default List<String> getPrimaryKeys(String ownerName, String tableName) throws MintleafException {
-        throw new NotImplementedException();
+        return null;
     }
 
     default ColumnMetaDataCollection getMetaData(String objectName) throws MintleafException {
-        throw new NotImplementedException();
+        return null;
     }
 
     default boolean isPrivilegeExists(String granteeName, String privilegeName, String objectName) throws MintleafException {
-        throw new NotImplementedException();
+        return false;
     }
 
     default boolean isColumnExists(String tableName, String columnName) throws MintleafException {
-        throw new NotImplementedException();
+        return false;
     }
 
 

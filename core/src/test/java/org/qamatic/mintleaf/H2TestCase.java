@@ -53,7 +53,7 @@ public class H2TestCase {
 
         testDb = new Mintleaf.DatabaseBuilder().
                 withDriverSource(JdbcDriverSource.class).
-                withUrl("jdbc:h2:file:./target/h2testdb;mv_store=false;").
+                withUrl("jdbc:h2:./target/h2testdb;mv_store=false;").
                 build();
         testDbQueries = testDb.getNewConnection().getDbQueries();
 
