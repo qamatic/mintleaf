@@ -2,7 +2,6 @@ package org.qamatic.mintleaf.dbexample.excel;
 
 import org.junit.Test;
 import org.qamatic.mintleaf.*;
-import org.qamatic.mintleaf.core.BaseSqlReader;
 import org.qamatic.mintleaf.excel.ExcelReader;
 import org.qamatic.mintleaf.excel.ExcelRow;
 
@@ -17,7 +16,7 @@ public class ExcelImportTest {
     @Test
     public void importFromExcelToObjectListTest() throws MintleafException {
 
-        MintleafReader importReader = new ExcelReader(BaseSqlReader.getInputStreamFromFile("res:/users.xls"));
+        MintleafReader importReader = new ExcelReader(org.qamatic.mintleaf.core.BaseReader.getInputStreamFromFile("res:/users.xls"));
         Executable<ExcelRow> importToList = new Mintleaf.AnyDataToListTransferBuilder<>().
                 withSource(importReader).
                 build();

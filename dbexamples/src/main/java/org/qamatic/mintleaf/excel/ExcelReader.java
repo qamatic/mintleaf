@@ -60,6 +60,7 @@ public class ExcelReader<T> extends BaseReader {
                     continue;
                 }
                 ExcelRow row = new ExcelRow(rowIterator.next());
+
                 row.setMetaData(metaDataCollection);
                 if (!readRow(i++, row)) {
                     break;

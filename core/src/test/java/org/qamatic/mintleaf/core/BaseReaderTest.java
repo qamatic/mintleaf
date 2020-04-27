@@ -117,6 +117,8 @@ public class BaseReaderTest {
     private class CustomReader<T extends Row> extends BaseReader<T> {
 
 
+
+
         @Override
         public void read() throws MintleafException {
 
@@ -124,7 +126,7 @@ public class BaseReaderTest {
 
 
                 try {
-                    T r = getRowClassType().newInstance();
+                    Row r = getRowInstance();
                     if (!readRow(0, r)) {
                         break;
                     }

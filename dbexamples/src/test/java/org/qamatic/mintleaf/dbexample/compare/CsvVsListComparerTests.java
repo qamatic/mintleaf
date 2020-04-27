@@ -37,7 +37,6 @@ package org.qamatic.mintleaf.dbexample.compare;
 
 import org.junit.Test;
 import org.qamatic.mintleaf.*;
-import org.qamatic.mintleaf.core.BaseSqlReader;
 import org.qamatic.mintleaf.data.CompareColumnState;
 import org.qamatic.mintleaf.data.CompareRowState;
 import org.qamatic.mintleaf.data.ComparerListener;
@@ -72,7 +71,7 @@ public class CsvVsListComparerTests {
     @Test
     public void compareList() throws SQLException, IOException, MintleafException {
 
-        InputStream csvStream = BaseSqlReader.getInputStreamFromFile("res:/users.csv");
+        InputStream csvStream = org.qamatic.mintleaf.core.BaseReader.getInputStreamFromFile("res:/users.csv");
         CsvTable csvRowListWrapper = new CsvTable(new InputStreamReader(csvStream));
 
 

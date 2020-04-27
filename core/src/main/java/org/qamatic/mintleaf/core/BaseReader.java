@@ -108,6 +108,13 @@ public abstract class BaseReader<T extends Row> implements MintleafReader {
     @Override
     public abstract void read() throws MintleafException;
 
+    protected Row getRowInstance() throws IllegalAccessException, InstantiationException {
+        if (this.rowClassType != null){
+            return getRowClassType().newInstance();
+        }
+        return null;
+    }
+
     public Class<T> getRowClassType() {
         return rowClassType;
     }
