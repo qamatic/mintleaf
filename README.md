@@ -1,9 +1,10 @@
 [![CircleCI](https://circleci.com/gh/qamatic/mintleaf.svg?style=svg)](https://circleci.com/gh/qamatic/mintleaf)   [![Maven Central](https://maven-badges.herokuapp.com/maven-central/org.qamatic/mintleaf-core/badge.svg?style=plastic)](https://maven-badges.herokuapp.com/maven-central/org.qamatic/mintleaf-core)
 
 ![logo](https://github.com/qamatic/mintleaf/blob/master/doc/source/images/logosimple.png)
-Welcome to the Mintleaf! Mintleaf is a light weight framework tool helps you to advance your database developement on continuous integration / continuous delivery model as easy as possible.
+Welcome to the Mintleaf! Mintleaf is a light weight framework tool helps you to advance your database developement for ETL Jobs,  continuous integration / continuous delivery model as easy as possible.
 
 - Database Migration
+- ETL jobs to transfer data between different sources.
 - Ability to write automated tests and run them on migrated database schemas, objects, data integrity checks during CI/CD
 - Seamless Test life cycle management such as setup, teardown mock data, schema and database objects using changesets
 - Create mock data or transfer/copy data between databases for your tests
