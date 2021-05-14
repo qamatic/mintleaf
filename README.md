@@ -5,6 +5,7 @@ Welcome to the Mintleaf! Mintleaf is a light weight framework tool helps you to 
 
 - Database Migration
 - ETL jobs to transfer data between different sources.
+- Data pipelines
 - Ability to write automated tests and run them on migrated database schemas, objects, data integrity checks during CI/CD
 - Seamless Test life cycle management such as setup, teardown mock data, schema and database objects using changesets
 - Create mock data or transfer/copy data between databases for your tests
